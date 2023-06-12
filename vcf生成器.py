@@ -32,8 +32,9 @@ def generateContent(textContent: str):
     content = ""
     textContent = textContent.replace("\t", " ")
     for lineText in textContent.split("\n"):
+        lineText = lineText.strip()
         # 空行跳过
-        if lineText.strip() == "":
+        if lineText == "":
             continue
         lineContent = lineText.rsplit(" ", 1)
         if len(lineContent) != 2:
@@ -41,10 +42,11 @@ def generateContent(textContent: str):
             continue
         name = lineContent[0].strip()
         phone = lineContent[1].strip()
+        print(f"name = {name}, phone = {phone}")
+
         if not phone.isnumeric():
             print_error(f"\"{lineText}\" 电话号码不合法")
             continue
-        print(f"name = {name}, phone = {phone}")
         content += f"""BEGIN:VCARD
 VERSION:2.1
 FN;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{str_to_hex(name)}
@@ -65,13 +67,13 @@ def str_to_hex(str_to_chg):
 
 top = Tk()
 top.title("VCF 生成器")
-label=Label(top,text="""1. 把名字和电话以下面的格式复制到编辑框内
+label = Label(top, text="""1. 把名字和电话以下面的格式复制到编辑框内
 2. 点击“生成”，软件会创建名为“phones.vcf”的文件
 3. 将“phones.vcf”复制到手机内，打开文件时选择使用“通讯录”，然后选择“确定”
-4. 等待导入完成""",justify=LEFT)
-label.pack(fill=X,padx=5,pady=5)
+4. 等待导入完成""", justify=LEFT)
+label.pack(fill=X, padx=5, pady=5)
 button = Button(top, text="生成", command=generateFile)
-button.pack(padx=5,pady=5)
+button.pack(padx=5, pady=5)
 
 textInput = Text(top)
 textInput.insert(0.0, """名字1	13345367789
@@ -79,6 +81,6 @@ textInput.insert(0.0, """名字1	13345367789
 名字3	13154678907
 名字4	13145436748
 """)
-textInput.pack(fill=BOTH,padx=5,pady=5)
+textInput.pack(fill=BOTH, padx=5, pady=5)
 
 top.mainloop()
