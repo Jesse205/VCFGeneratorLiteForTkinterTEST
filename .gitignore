@@ -1,7 +1,12 @@
-# created by virtualenv automatically
-build
-.idea
-dist
-Lib
-Scripts
+/.idea
+/.venv
+
+# Build
 phones.vcf
+/build
+/*.build
+/dist
+/*.dist
+
+__pycache__
+*.egg-info

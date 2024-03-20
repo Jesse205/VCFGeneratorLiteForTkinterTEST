@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['vcf生成器.pyw'],
+    ['vcf-generator.pyw'],
     pathex=[],
     binaries=[],
     datas=[],
