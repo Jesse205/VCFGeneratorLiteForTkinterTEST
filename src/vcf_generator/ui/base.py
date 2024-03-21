@@ -5,7 +5,6 @@ from vcf_generator.util.display import get_window_dpi_scaling
 
 __all__ = ["BaseWindow"]
 
-
 default_font_list = [
     ("Microsoft YaHei UI", 9)
 ]

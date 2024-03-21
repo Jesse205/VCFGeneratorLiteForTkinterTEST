@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
-from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import *
+from tkinter.scrolledtext import ScrolledText
 from typing import IO
 
 from vcf_generator import constants
@@ -11,7 +11,6 @@ from vcf_generator.util.widget import get_auto_wrap_event
 
 MAX_INVALID_COUNT = 1000
 
-LabeledScale
 
 class MainWindow(BaseWindow):
     def __init__(self):
@@ -19,12 +18,13 @@ class MainWindow(BaseWindow):
         self.title(constants.APP_NAME)
         self.set_minsize(200, 400)
         self.set_size(600, 600)
-        sizegrip = Sizegrip(self)
-        sizegrip.place(relx=1, rely=1, anchor=SE)
+        # sizegrip = Sizegrip(self)
+        # sizegrip.place(relx=1, rely=1, anchor=SE)
         description_label = Label(self, text=constants.USAGE, justify=LEFT)
         description_label.bind("<Configure>", get_auto_wrap_event(description_label, 300))
         description_label.pack(fill=X, padx=10, pady=10)
         self.text_input = ScrolledText(self, undo=True, tabs=True, height=0, borderwidth=0)
+        self.text_input.vbar.configure(relief="flat")
         self.text_input.insert(0.0, constants.DEFAULT_INPUT_CONTENT)
         self.text_input.pack(fill=BOTH, expand=True)
         self.generate_button = Button(self, text="生成", default=ACTIVE)
