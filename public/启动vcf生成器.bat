@@ -1,1 +1,0 @@
-start vcf生成器\vcf生成器.exe
