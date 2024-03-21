@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vcf-generator"
-version = "1.1.0"
+version = "2.0.0"
 description = "A simple VCF generator"
 authors = ["Jesse205 <2055675594@qq.com>"]
 license = "MIT"
@@ -9,12 +9,11 @@ package-mode = false
 repository = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
 
 [tool.poetry.scripts]
-build-app = "vcf_generator.console.buildApp:main"
+build-app = "src.vcf_generator.console.buildApp:main"
 
 [tool.poetry.dependencies]
 python = "^3.11"
 nuitka = "^2.1.2"
-sv-ttk = "^2.6.0"
 
 [build-system]
 requires = ["poetry-core"]

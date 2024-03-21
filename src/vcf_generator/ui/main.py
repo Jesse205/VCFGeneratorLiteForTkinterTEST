@@ -11,6 +11,7 @@ from vcf_generator.util.widget import get_auto_wrap_event
 
 MAX_INVALID_COUNT = 1000
 
+LabeledScale
 
 class MainWindow(BaseWindow):
     def __init__(self):
