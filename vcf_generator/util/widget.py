@@ -17,4 +17,4 @@ def get_auto_wrap_event(label: Label | TtkLabel, min_width: int = 0) -> Callable
     """
     window = label.master
     real_min_width = window.get_scaled(min_width) if isinstance(window, BaseWindow) else min_width
-    return lambda event: label.config(wraplength=max(event.width, real_min_width))
+    return lambda event: label.configure(wraplength=max(event.width, real_min_width))

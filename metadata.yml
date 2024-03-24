@@ -1,0 +1,11 @@
+# VERSION
+Version: 2.0.0.0
+# END-VERSION
+CompanyName: Jesse205
+InternalName: VCF Generator
+LegalCopyright: Copyright (c) 2023-2024 Jesse205
+OriginalFilename: vcf_generator.exe
+ProductName: VCF Generator
+Translation:
+  - langID: 0x0804
+    charsetID: 1200
