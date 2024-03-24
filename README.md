@@ -68,7 +68,7 @@ Go to the [Release][ReleaseInGitee] to download and run the installation program
 
 ### Building
 
-1. Install [Python 3.8+](https://www.python.org/), [Poetry](https://python-poetry.org/), [UPX](https://upx.github.io/)
+1. Install [Python 3.8+](https://www.python.org/), [Poetry](https://python-poetry.org/), [UPX](https://upx.github.io/), [InnoSetup](https://jrsoftware.org/isinfo.php)
 2. Install project: `poetry install`
 3. Generate `file_version_info.txt`：`poetry run generate-version-file`
 4. Generate app binary: `poetry run build-app`
