@@ -8,6 +8,7 @@ from vcf_generator import constants
 from vcf_generator.ui import about
 from vcf_generator.ui.base import BaseWindow
 from vcf_generator.util import logger, dialog, vcard
+from vcf_generator.util.phone import is_china_phone
 from vcf_generator.util.widget import get_auto_wrap_event
 from vcf_generator.widget.menu import TextContextMenu
 from vcf_generator.widget.scrolledtext import ScrolledText
@@ -113,7 +114,7 @@ class MainController:
                 invalid_lines.append(line_text)
                 continue
             name, phone = person_info[0].strip(), person_info[1].strip()
-            if not phone.isnumeric():
+            if not phone.isnumeric() or is_china_phone(phone):
                 logger.error("电话号码不合法", f'"{line_text}"')
                 invalid_lines.append(line_text)
                 continue
