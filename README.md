@@ -1,4 +1,4 @@
-<p align="center">
+<div align="center">
 <img src="assets/icon.png" width="192"/>
 
 # VCF Generator Lite
@@ -13,7 +13,7 @@
 
 _The application currently only supports Chinese language_
 
-</p>
+</div>
 
 VCF generator, input name and phone number to automatically generate VCF files for batch import into the address book.
 

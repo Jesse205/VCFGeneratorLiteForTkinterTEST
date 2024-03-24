@@ -1,4 +1,4 @@
-<p align="center">
+<div align="center">
 <img src="assets/icon.png" width="192"/>
 
 # VCF 生成器 Lite
@@ -13,7 +13,7 @@
 
 _应用程序暂时只支持中文_
 
-</p>
+</div>
 
 VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通讯录内的 VCF 文件。
 
