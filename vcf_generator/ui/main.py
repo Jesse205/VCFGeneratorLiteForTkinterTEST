@@ -1,9 +1,11 @@
+import webbrowser
 from tkinter import *
 from tkinter import filedialog
 from tkinter.ttk import *
 from typing import IO
 
 from vcf_generator import constants
+from vcf_generator.ui import about
 from vcf_generator.ui.base import BaseWindow
 from vcf_generator.util import logger, dialog, vcard
 from vcf_generator.util.widget import get_auto_wrap_event
@@ -16,6 +18,11 @@ MAX_INVALID_COUNT = 1000
 class MainWindow(BaseWindow):
     generate_button = None
     text_input = None
+    text_context_menu = None
+
+    def __init__(self):
+        self.controller = MainController(self)
+        super().__init__()
 
     def on_init_widgets(self):
         self.anchor(CENTER)
@@ -30,15 +37,50 @@ class MainWindow(BaseWindow):
         self.text_input = ScrolledText(self, undo=True, tabs=True, height=0, borderwidth=1, relief=FLAT)
         self.text_input.insert(0.0, constants.DEFAULT_INPUT_CONTENT)
         self.text_input.pack(fill=BOTH, expand=True)
-        TextContextMenu(self.text_input).bind_to_widget()
-        self.generate_button = Button(self, text="生成", default=ACTIVE)
+        self.text_context_menu = TextContextMenu(self.text_input)
+        self.text_context_menu.bind_to_widget()
+        self.generate_button = Button(self, text="生成", default=ACTIVE, command=self.controller.generate_file)
         self.generate_button.pack(padx=10, pady=10, side=RIGHT)
+
+    def on_init_menus(self, menu_bar: Menu):
+        edit_menu = Menu(menu_bar, tearoff=False)
+        edit_menu.add_command(
+            label='剪切',
+            command=self.text_context_menu.cut,
+            accelerator="Ctrl + X",
+        )
+        edit_menu.add_command(
+            label='复制',
+            command=self.text_context_menu.copy,
+            accelerator="Ctrl + C",
+        )
+        edit_menu.add_command(
+            label='粘贴',
+            command=self.text_context_menu.paste,
+            accelerator="Ctrl + V"
+        )
+        edit_menu.add_command(
+            label='删除',
+            command=self.text_context_menu.clear,
+            accelerator="Ctrl + D",
+        )
+        menu_bar.add_cascade(label="编辑", menu=edit_menu)
+
+        help_menu = Menu(menu_bar, tearoff=False)
+        help_menu.add_command(
+            label="源代码",
+            command=lambda: webbrowser.open('https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter')
+        )
+        help_menu.add_command(
+            label="发行版",
+            command=lambda: webbrowser.open('https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases')
+        )
+        menu_bar.add_cascade(label="关于", menu=help_menu)
 
 
 class MainController:
     def __init__(self, window: MainWindow):
         self.window = window
-        window.generate_button.configure(command=self.generate_file)
 
     def generate_file(self):
         text_content = self.window.text_input.get(0.0, "end")
@@ -87,8 +129,10 @@ class MainController:
             message += f"... 等{count - MAX_INVALID_COUNT}个。"
         dialog.show_error("无法识别电话号码", message)
 
+    def show_about_dialog(self):
+        about.main()
+
 
 def main():
     window = MainWindow()
-    MainController(window)
     window.mainloop()

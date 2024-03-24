@@ -24,6 +24,10 @@ class BaseWindow(Tk):
         self._apply_default_icon()
         self._apply_default_font()
         self.on_init_widgets()
+        menu_bar = Menu(self, tearoff=False)
+        self.on_init_menus(menu_bar)
+        if menu_bar.children:
+            self.config(menu=menu_bar)
         self.deiconify()
 
     def _apply_default_icon(self):
@@ -39,6 +43,9 @@ class BaseWindow(Tk):
                 break
 
     def on_init_widgets(self):
+        pass
+
+    def on_init_menus(self, menu_bar: Menu):
         pass
 
     def get_scaled(self, size: int):

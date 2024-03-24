@@ -6,7 +6,7 @@ class TextContextMenu(Menu):
     master: Union[Text, Entry]
 
     def __init__(self, master: Union[Text, Entry], **kw):
-        super().__init__(master, tearoff=False, **kw,)
+        super().__init__(master, tearoff=False, **kw, )
 
     def is_selected(self):
         try:
@@ -33,24 +33,24 @@ class TextContextMenu(Menu):
         self.delete(0, END)
         self.add_command(
             label='剪切',
-            command=lambda: self.cut(),
+            command=self.cut,
             accelerator="Ctrl + X",
             state=menu_state_with_selected
         )
         self.add_command(
             label='复制',
-            command=lambda: self.copy(),
+            command=self.copy,
             accelerator="Ctrl + C",
             state=menu_state_with_selected
         )
         self.add_command(
             label='粘贴',
-            command=lambda: self.paste(),
+            command=self.paste,
             accelerator="Ctrl + V"
         )
         self.add_command(
             label='删除',
-            command=lambda: self.clear(),
+            command=self.clear,
             accelerator="Ctrl + D",
             state=menu_state_with_selected
         )
