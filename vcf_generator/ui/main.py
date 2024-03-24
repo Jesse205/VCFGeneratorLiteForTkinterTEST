@@ -7,6 +7,7 @@ from vcf_generator import constants
 from vcf_generator.ui.base import BaseWindow
 from vcf_generator.util import logger, dialog, vcard
 from vcf_generator.util.widget import get_auto_wrap_event
+from vcf_generator.widget.menu import TextContextMenu
 from vcf_generator.widget.scrolledtext import ScrolledText
 
 MAX_INVALID_COUNT = 1000
@@ -29,6 +30,7 @@ class MainWindow(BaseWindow):
         self.text_input = ScrolledText(self, undo=True, tabs=True, height=0, borderwidth=1, relief=FLAT)
         self.text_input.insert(0.0, constants.DEFAULT_INPUT_CONTENT)
         self.text_input.pack(fill=BOTH, expand=True)
+        TextContextMenu(self.text_input).bind_to_widget()
         self.generate_button = Button(self, text="生成", default=ACTIVE)
         self.generate_button.pack(padx=10, pady=10, side=RIGHT)
 
