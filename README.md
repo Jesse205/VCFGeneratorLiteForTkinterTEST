@@ -1,46 +1,91 @@
+<p align="center">
+<img src="assets/icon.png" width="192"/>
+
 # VCF Generator Lite
 
-![license：MIT](https://img.shields.io/badge/license-MIT-green)
+[![Gitee repository](https://img.shields.io/badge/Gitee-repository-C71D23?logo=gitee)](https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter)
 
-VCF Generator, enter your name and cell phone number to automatically generate VCF files for batch import.
+[![Windows](https://img.shields.io/badge/Windows-exe-%232863C5?logo=windows)][ReleaseInGitee]
 
-## Screenshots
+[中文](./README.zh.md) |
+**English** |
+<small>More translations are welcome!</small>
 
-![Screenshot](./screenshots/Snipaste_2023-11-25_23-57-38.png)
+_The application currently only supports Chinese language_
+
+</p>
+
+VCF generator, input name and phone number to automatically generate VCF files for batch import into the address book.
+
+![License：MIT](https://img.shields.io/badge/license-MIT-green)
+
+## Screenshot
+
+![Screenshot](./screenshots/Snipaste_2024-03-25_05-27-52.png)
 
 ## Usage
 
-Run `vcf生成器.pyw` with a Python parser or `启动vcf生成器.bat` in the distribution root directory to start the program.
+Go to the [Release][ReleaseInGitee] to download and run the installation program (file name is usually `VCFGenerator_<Version>_<PythonVersion>_<Architecture>_64_setup.exe`).
 
-1. Copy the name and phone number in the format below into the edit box.
+1. Copy the name and phone number in the format of "name and phone number" on each line into the editing box below;
    ```text
-   Name1	13345367789
-   Name2	13245467890
-   Name3	13154678907
-   Name4	13145436748
+   Hardy Buck 13445467890
+   Alva Mackintosh 13554678907
+   Hobart Baker 13645436748
    ```
-2. Click "Generate" and the software will create a file named `phones.vcf`.
-3. Copy `phones.vcf` to your cell phone, open the file and select "Contacts", then select "OK".
-4. Wait for the import to complete.
+2. Click "Generate", select a path to save the file;
+3. Copy the generated VCF file to your phone, select "Address Book" when opening the file, and then follow the prompts.
+4. Wait for import to complete
 
-> [!TIP]
+>[! TIP]
 >
-> - Tabs will be automatically converted to spaces. 
-> - The program will automatically remove extra spaces in the input box. 
-> - If there is more than one space in a line, all characters before the last space will be treated as names.\
->   For example, `Wang lei 1333333333333` will be recognized as
+> - Tabs will be automatically converted to spaces for processing.
+> - The program will automatically remove excess spaces from the input box.
+> - If there are multiple spaces in each line, all characters before the last space will be treated as names.\
+>   For example, `Hardy Buck 13333333333` will be recognized as
 >   ```text
->   Name: Wang lei
->   Phone: 1333333333333
+>   Name: Hardy Buck
+>   Phone: 13333333333
 >   ```
+
 
 ## Architecture
 
-- `vcf生成器.pyw`: entry file.
+- `vcf_generator`: Source code directory
+    - `console`: Developing CLI
+    - `ui`: GUI
+    - `util`: Tool classes
+    - `widget`: Tkinter widget
+    - `constants.py`: Constants
+- `assets`: Resource file directory
+- `main.py`: Program entry
 
-## Build
+## Developing
 
-Run `build.bat` directly.
+> [!NOTE]
+>
+> The development environment currently only supports 64 bits Windows 7+and does not currently support macOS and Linux.
 
-> [!WARNING]\
-> For unknown reasons, packaging as a single file can result in a very slow runtime. It is therefore recommended not to package as a single file.
+### Building
+
+1. Install [Python 3.8+](https://www.python.org/), [Poetry](https://python-poetry.org/), [UPX](https://upx.github.io/)
+2. Install project: `poetry install`
+3. Generate `file_version_info.txt`：`poetry run generate-version-file`
+4. Generate app binary: `poetry run build-app`
+5. Generate installer：`poetry run build-setup`
+
+### Change version
+
+Run `poetry run change-version <Version>`
+
+## License
+
+This project is open source under the [MIT license](./LICENSE)
+
+- LOGO：[Fluent Emoji](https://github.com/microsoft/fluentui-emoji) `MIT license`
+- [Python](https://www.python.org/) [`Python license`](https://docs.python.org/3/license.html)
+- [UPX](https://upx.github.io/) `GPL-2.0 licenses`
+- [PyInstaller](https://pyinstaller.org/en/stable/) [`PyInstaller license`](https://pyinstaller.org/en/stable/license.html)
+- [Nuitka](https://nuitka.net/) `Apache-2.0 license`
+
+[ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest

@@ -1,33 +1,47 @@
+<p align="center">
+<img src="assets/icon.png" width="192"/>
+
 # VCF 生成器 Lite
+
+[![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee)](https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter)
+
+[![Windows](https://img.shields.io/badge/Windows-exe-%232863C5?logo=windows)][ReleaseInGitee]
+
+**中文** |
+[English](./README.md) |
+<small>期待你的翻译！</small>
+
+_应用程序暂时只支持中文_
+
+</p>
+
+VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通讯录内的 VCF 文件。
 
 ![许可证：MIT](https://img.shields.io/badge/许可证-MIT-green)
 
-VCF 生成器，输入姓名与手机号则自动生成用于批量导入的 VCF 文件。
-
 ## 软件截图
 
-![Screenshot](./screenshots/Snipaste_2023-11-25_23-57-38.png)
+![Screenshot](./screenshots/Snipaste_2024-03-25_05-27-52.png)
 
 ## 使用方法
 
-使用 Python 解析器运行 `vcf生成器.pyw` 或者运行发行版根目录中 `启动vcf生成器.bat` 即可启动程序
+进入[发行版][ReleaseInGitee]下载并运行安装程序（文件名通常是 `VCFGenerator_<版本>_<Python版本>_<处理器架构>_64_setup.exe`）。
 
-1. 把名字和电话以下面的格式复制到编辑框内。
+1. 把名字和电话以每行“姓名 电话号码”的格式复制到下面的编辑框内；
    ```text
-   名字1	13345367789
-   名字2	13245467890
-   名字3	13154678907
-   名字4	13145436748
+   李四	13445467890
+   王五	13554678907
+   赵六	13645436748
    ```
-2. 点击“生成”，软件会创建名为 `phones.vcf` 的文件。
-3. 将 `phones.vcf` 复制到手机内，打开文件时选择使用“通讯录”，然后选择“确定”。
-4. 等待导入完成。
+2. 点击“生成”，选择一个路径保存文件；
+3. 将生成后的 VCF 文件复制到手机内，打开文件时选择使用“通讯录”，然后根据提示操作。
+4. 等待导入完成
 
 > [!TIP]
 >
 > - 制表符将会自动转换为空格处理。
 > - 程序会自动去除输入框内多余的空格。
-> - 如果每行有多个空格，则会将最后一个空格以前所有的字符当作姓名处理。
+> - 如果每行有多个空格，则会将最后一个空格以前所有的字符当作姓名处理。\
 >   比如 `Wang lei 13333333333` 将会识别为
 >   ```text
 >   姓名：Wang lei
@@ -36,11 +50,41 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入的 VCF
 
 ## 软件架构
 
-- `vcf生成器.pyw`：入口文件。
+- `vcf_generator`：源代码目录
+    - `console`：开发 CLI
+    - `ui`： GUI 用户界面
+    - `util`：工具类
+    - `widget`：Tkinter 组件
+    - `constants.py`：常量
+- `assets`：资源文件目录
+- `main.py`：程序入口
 
-## 构建项目
+## 开发项目
 
-直接运行 `build.bat`。
+> [!NOTE]
+>
+> 开发环境目前仅支持 64 位 Windows 7+，暂不支持 macOS 与 Linux。
 
-> [!WARNING]\
-> 由于未知原因，打包为单个文件会导致运行时非常慢。因此建议不要打包为单个文件。
+### 构建项目
+
+1. 安装 [Python 3.8+](https://www.python.org/)、[Poetry](https://python-poetry.org/)、[UPX](https://upx.github.io/)
+2. 安装项目：`poetry install`
+3. 生成 `file_version_info.txt`：`poetry run generate-version-file`
+4. 生成应用的二进制文件：`poetry run build-app`
+5. 生成安装程序：`poetry run build-setup`
+
+### 切换版本
+
+运行 `poetry run change-version <版本名>`
+
+## 许可
+
+本项目以 [MIT 许可](./LICENSE)开源
+
+- LOGO：[Fluent Emoji](https://github.com/microsoft/fluentui-emoji) `MIT license`
+- [Python](https://www.python.org/) [`Python license`](https://docs.python.org/3/license.html)
+- [UPX](https://upx.github.io/) `GPL-2.0 licenses`
+- [PyInstaller](https://pyinstaller.org/en/stable/) [`PyInstaller license`](https://pyinstaller.org/en/stable/license.html)
+- [Nuitka](https://nuitka.net/) `Apache-2.0 license`
+
+[ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
