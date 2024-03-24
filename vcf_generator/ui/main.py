@@ -114,7 +114,7 @@ class MainController:
                 invalid_lines.append(line_text)
                 continue
             name, phone = person_info[0].strip(), person_info[1].strip()
-            if not phone.isnumeric() or is_china_phone(phone):
+            if not phone.isnumeric() or not is_china_phone(phone):
                 logger.error("电话号码不合法", f'"{line_text}"')
                 invalid_lines.append(line_text)
                 continue
