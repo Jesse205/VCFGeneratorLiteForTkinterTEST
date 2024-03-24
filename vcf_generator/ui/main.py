@@ -2,7 +2,7 @@ import webbrowser
 from tkinter import *
 from tkinter import filedialog
 from tkinter.ttk import *
-from typing import IO
+from typing import IO, List
 
 from vcf_generator import constants
 from vcf_generator.ui import about
@@ -99,7 +99,7 @@ class MainController:
     @staticmethod
     def generate_content(str_io: IO, text_content: str):
         logger.info("Start generate content.")
-        invalid_lines: list[str] = []
+        invalid_lines: List[str] = []
         # 将制表符转换为空格，统一处理
         text_content = text_content.replace("\t", " ")
         for line_text in text_content.split("\n"):
@@ -123,7 +123,7 @@ class MainController:
         return invalid_lines
 
     @staticmethod
-    def show_invalid_lines_dialog(invalid_lines: list[str]):
+    def show_invalid_lines_dialog(invalid_lines: List[str]):
         count = len(invalid_lines)
         message = f"以下电话号码无法识别：\n{', '.join(invalid_lines[0:MAX_INVALID_COUNT])}"
         if count > MAX_INVALID_COUNT:

@@ -1,12 +1,12 @@
 from tkinter import Label, Event
 
 from tkinter.ttk import Label as TtkLabel
-from typing import Callable
+from typing import Callable, Union
 
 from vcf_generator.ui.base import BaseWindow
 
 
-def get_auto_wrap_event(label: Label | TtkLabel, min_width: int = 0) -> Callable[[Event], None]:
+def get_auto_wrap_event(label: Union[Label, TtkLabel], min_width: int = 0) -> Callable[[Event], None]:
     """
     返回一个用于自动调整标签（Label或TtkLabel）换行长度的事件处理函数。
 
