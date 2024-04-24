@@ -46,7 +46,7 @@ def set_process_dpi_aware(value: WinDpiAwareness):
     try:
         ctypes.windll.shcore.SetProcessDpiAwareness(value.value)
     finally:
-        pass
+        return
 
 
 def get_window_dpi_scaling(misc: Misc) -> float:
@@ -62,5 +62,5 @@ def get_window_dpi_scaling(misc: Misc) -> float:
             windll.shcore.GetDpiForMonitor(monitor_handle, dpi_type, pointer(x_dpi), pointer(y_dpi))
             return (x_dpi.value + y_dpi.value) / (2 * dpi100pc)
         finally:
-            pass
+            return 1
     return 1
