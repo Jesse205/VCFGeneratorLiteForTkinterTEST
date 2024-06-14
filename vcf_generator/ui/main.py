@@ -87,7 +87,7 @@ class MainController:
         text_content = self.window.text_input.get(0.0, "end")
         logger.info("Start generate vcf file.")
         file_io = filedialog.asksaveasfile(parent=self.window, initialfile="phones.vcf",
-                                           filetypes=[("vCard 文件", ".svf")], defaultextension=".svf")
+                                           filetypes=[("vCard 文件", ".vcf")], defaultextension=".vcf")
         if file_io is None:
             return
         invalid_lines = MainController.generate_content(file_io, text_content)
