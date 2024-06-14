@@ -43,15 +43,17 @@ def set_process_dpi_aware(value: WinDpiAwareness):
     """
     if not sys.platform == 'win32':
         return
+    # noinspection PyBroadException
     try:
         ctypes.windll.shcore.SetProcessDpiAwareness(value.value)
-    finally:
-        return
+    except Exception:
+        pass
 
 
 def get_window_dpi_scaling(misc: Misc) -> float:
     if sys.platform == "win32":
         from ctypes import windll, pointer, wintypes
+        # noinspection PyBroadException
         try:
             dpi100pc = 96  # DPI 96 is 100% scaling
             dpi_type = 0  # MDT_EFFECTIVE_DPI = 0, MDT_ANGULAR_DPI = 1, MDT_RAW_DPI = 2
@@ -61,6 +63,6 @@ def get_window_dpi_scaling(misc: Misc) -> float:
             x_dpi, y_dpi = wintypes.UINT(), wintypes.UINT()
             windll.shcore.GetDpiForMonitor(monitor_handle, dpi_type, pointer(x_dpi), pointer(y_dpi))
             return (x_dpi.value + y_dpi.value) / (2 * dpi100pc)
-        finally:
+        except Exception:
             return 1
     return 1

@@ -34,14 +34,14 @@ class MainWindow(BaseWindow):
         sizegrip.place(relx=1, rely=1, anchor=SE)
         description_label = Label(self, text=constants.USAGE, justify=LEFT)
         description_label.bind("<Configure>", get_auto_wrap_event(description_label, 300))
-        description_label.pack(fill=X, padx=10, pady=10)
+        self.pack_widget(description_label, fill=X, padx=10, pady=10)
         self.text_input = ScrolledText(self, undo=True, tabs=True, height=0, borderwidth=1, relief=FLAT)
         self.text_input.insert(0.0, constants.DEFAULT_INPUT_CONTENT)
         self.text_input.pack(fill=BOTH, expand=True)
         self.text_context_menu = TextContextMenu(self.text_input)
         self.text_context_menu.bind_to_widget()
         self.generate_button = Button(self, text="生成", default=ACTIVE, command=self.controller.generate_file)
-        self.generate_button.pack(padx=10, pady=10, side=RIGHT)
+        self.pack_widget(self.generate_button, padx=10, pady=10, side=RIGHT)
 
     def on_init_menus(self, menu_bar: Menu):
         edit_menu = Menu(menu_bar, tearoff=False)
@@ -76,7 +76,12 @@ class MainWindow(BaseWindow):
             label="发行版",
             command=lambda: webbrowser.open('https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases')
         )
-        menu_bar.add_cascade(label="关于", menu=help_menu)
+        help_menu.add_separator()
+        help_menu.add_command(
+            label="关于",
+            command=self.controller.show_about_dialog
+        )
+        menu_bar.add_cascade(label="帮助", menu=help_menu)
 
 
 class MainController:
@@ -137,3 +142,7 @@ class MainController:
 def main():
     window = MainWindow()
     window.mainloop()
+
+
+if __name__ == '__main__':
+    main()

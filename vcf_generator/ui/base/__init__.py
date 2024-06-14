@@ -1,5 +1,4 @@
 import os
-import time
 from tkinter import *
 import tkinter.font as tk_font
 from vcf_generator.util import display
@@ -51,8 +50,21 @@ class BaseWindow(Tk):
     def get_scaled(self, size: int):
         return int(size * self._dpi_scaling)
 
+    def get_scaled_float(self, size: float):
+        return size * self._dpi_scaling
+
     def set_size(self, width: int, height: int):
         super().geometry(f"{self.get_scaled(width)}x{self.get_scaled(height)}")
 
     def set_minsize(self, width: int, height: int):
         super().minsize(self.get_scaled(width), self.get_scaled(height))
+
+    def pack_widget(self, widget: Widget, **kw):
+        """
+        适配了缩放的 pack 方法，pady 与 padx 现在为虚拟像素。
+        """
+        if "pady" in kw:
+            kw["pady"] = self.get_scaled_float(kw["pady"])
+        if "padx" in kw:
+            kw["padx"] = self.get_scaled_float(kw["padx"])
+        widget.pack(**kw)
