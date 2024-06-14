@@ -67,4 +67,8 @@ class BaseWindow(Tk):
             kw["pady"] = self.get_scaled_float(kw["pady"])
         if "padx" in kw:
             kw["padx"] = self.get_scaled_float(kw["padx"])
+        if "ipady" in kw:
+            kw["ipady"] = self.get_scaled_float(kw["ipady"])
+        if "ipadx" in kw:
+            kw["ipadx"] = self.get_scaled_float(kw["ipadx"])
         widget.pack(**kw)
