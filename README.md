@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/icon.png" width="192"/>
+<img src="./vcf_generator/assets/icon.png" width="192"/>
 
 # VCF Generator Lite
 
@@ -21,7 +21,7 @@ VCF generator, input name and phone number to automatically generate VCF files f
 
 ## Screenshot
 
-![Screenshot](./screenshots/Snipaste_2024-03-25_05-27-52.png)
+<img src="./screenshots/Snipaste_2024-06-17_04-06-51.png" width="600" alt="Snipaste_2024-06-17_04-06-51.png" />
 
 ## Usage
 
@@ -82,10 +82,11 @@ Run `poetry run change-version <Version>`
 
 This project is open source under the [MIT license](./LICENSE)
 
-- LOGO：[Fluent Emoji](https://github.com/microsoft/fluentui-emoji) `MIT license`
-- [Python](https://www.python.org/) [`Python license`](https://docs.python.org/3/license.html)
-- [UPX](https://upx.github.io/) `GPL-2.0 licenses`
-- [PyInstaller](https://pyinstaller.org/en/stable/) [`PyInstaller license`](https://pyinstaller.org/en/stable/license.html)
-- [Nuitka](https://nuitka.net/) `Apache-2.0 license`
+- [Fluent Emoji](https://github.com/microsoft/fluentui-emoji)(used as application icon): MIT license
+- [Python](https://www.python.org/): [Python license](https://docs.python.org/3/license.html)
+- [UPX](https://upx.github.io/): GPL-2.0 licenses
+- [PyInstaller](https://pyinstaller.org/en/stable/)：[PyInstaller license](https://pyinstaller.org/en/stable/license.html)
+- [Nuitka](https://nuitka.net/): Apache-2.0 license
+- [tkhtmlview](https://github.com/bauripalash/tkhtmlview): MIT License
 
 [ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest

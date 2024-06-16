@@ -13,19 +13,40 @@ Place methods are redirected to the Frame widget however.
 
 from tkinter import Text, Pack, Grid, Place
 from tkinter.ttk import Frame, Scrollbar
-from tkinter.constants import RIGHT, LEFT, Y, BOTH
+from tkinter.constants import RIGHT, LEFT, Y, BOTH, FLAT
 
 __all__ = ['ScrolledText']
 
 
 class ScrolledText(Text):
-    def __init__(self, master=None, **kw):
+    """
+    带有边框、Ttk滚动条的Text组件
+    """
+    def __init__(
+            self,
+            master=None,
+            borderwidth=1,
+            relief=FLAT,
+            highlightthickness=1,
+            highlightbackground="gray",
+            highlightcolor="SystemHighlight",
+            **kw
+    ):
         self.frame = Frame(master)
         self.vbar = Scrollbar(self.frame)
         self.vbar.pack(side=RIGHT, fill=Y)
 
         kw.update({'yscrollcommand': self.vbar.set})
-        Text.__init__(self, self.frame, **kw)
+        Text.__init__(
+            self,
+            self.frame,
+            borderwidth=borderwidth,
+            relief=relief,
+            highlightthickness=highlightthickness,
+            highlightbackground=highlightbackground,
+            highlightcolor=highlightcolor,
+            **kw
+        )
         self.pack(side=LEFT, fill=BOTH, expand=True)
         self.vbar['command'] = self.yview
 

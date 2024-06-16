@@ -34,14 +34,17 @@ class MainWindow(BaseWindow):
         sizegrip.place(relx=1, rely=1, anchor=SE)
         description_label = Label(self, text=constants.USAGE, justify=LEFT)
         description_label.bind("<Configure>", get_auto_wrap_event(description_label, 300))
-        self.pack_widget(description_label, fill=X, padx=10, pady=10)
-        self.text_input = ScrolledText(self, undo=True, tabs=True, height=0, borderwidth=1, relief=FLAT)
+        description_label.pack(fill=X, **self.scale_values(padx=10, pady=10))
+
+        self.text_input = ScrolledText(self, undo=True, tabs=True, height=0)
         self.text_input.insert(0.0, constants.DEFAULT_INPUT_CONTENT)
         self.text_input.pack(fill=BOTH, expand=True)
+
         self.text_context_menu = TextContextMenu(self.text_input)
         self.text_context_menu.bind_to_widget()
+
         self.generate_button = Button(self, text="生成", default=ACTIVE, command=self.controller.generate_file)
-        self.pack_widget(self.generate_button, padx=10, pady=10, side=RIGHT)
+        self.generate_button.pack(side=RIGHT, **self.scale_values(padx=10, pady=10))
 
     def on_init_menus(self, menu_bar: Menu):
         edit_menu = Menu(menu_bar, tearoff=False)
@@ -68,15 +71,15 @@ class MainWindow(BaseWindow):
         menu_bar.add_cascade(label="编辑", menu=edit_menu)
 
         help_menu = Menu(menu_bar, tearoff=False)
-        help_menu.add_command(
-            label="源代码",
-            command=lambda: webbrowser.open('https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter')
-        )
-        help_menu.add_command(
-            label="发行版",
-            command=lambda: webbrowser.open('https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases')
-        )
-        help_menu.add_separator()
+        # help_menu.add_command(
+        #     label="源代码",
+        #     command=lambda: webbrowser.open('https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter')
+        # )
+        # help_menu.add_command(
+        #     label="发行版",
+        #     command=lambda: webbrowser.open('https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases')
+        # )
+        # help_menu.add_separator()
         help_menu.add_command(
             label="关于",
             command=self.controller.show_about_dialog

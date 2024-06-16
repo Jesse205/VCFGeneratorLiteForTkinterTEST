@@ -4,8 +4,8 @@
 a = Analysis(
     ['./main.py'],
     pathex=[],
-    binaries=[],
-    datas=[('./assets', 'assets')],
+    binaries=[('./vcf_generator/assets', 'vcf_generator/assets')],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -34,7 +34,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['assets/icon.ico'],
+    icon=['./vcf_generator/assets/icon.ico'],
     version="file_version_info.txt" if os.path.exists("file_version_info.txt") else None,
 )
 
@@ -47,5 +47,5 @@ coll = COLLECT(
     upx=True,
     upx_exclude=[],
     name='vcf_generator',
-    icon=['assets/icon.ico']
+    icon=['./vcf_generator/assets/icon.ico']
 )

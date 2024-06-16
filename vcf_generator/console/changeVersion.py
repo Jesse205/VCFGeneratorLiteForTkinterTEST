@@ -1,13 +1,15 @@
 import argparse
 import re
 
+from typing import List, Pattern
+
 from vcf_generator.console import generateVersionFile
 from vcf_generator.util import logger
 
 
 def get_exe_style_version(version: str):
     assert re.match(r"^(\d+\.)*\d+$", version), f"Invalid version: {version}"
-    version_list: list[str] = version.split(".")
+    version_list: List[str] = version.split(".")
     while len(version_list) < 4:
         version_list.append("0")
     return ".".join(version_list[0:4])
@@ -15,7 +17,7 @@ def get_exe_style_version(version: str):
 
 def change_version(
         file_name: str,
-        content_pattern: re.Pattern[str],
+        content_pattern: Pattern[str],
         content_formatter: str,
         version: str,
         encoding="utf-8"

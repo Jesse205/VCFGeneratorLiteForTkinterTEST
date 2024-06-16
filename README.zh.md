@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/icon.png" width="192"/>
+<img src="./vcf_generator/assets/icon.png" width="192"/>
 
 # VCF 生成器 Lite
 
@@ -21,13 +21,13 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 ## 软件截图
 
-![Screenshot](./screenshots/Snipaste_2024-03-25_05-27-52.png)
+<img src="./screenshots/Snipaste_2024-06-17_04-06-51.png" width="600" alt="Snipaste_2024-06-17_04-06-51.png" />
 
 ## 使用方法
 
 进入[发行版][ReleaseInGitee]下载并运行安装程序（文件名通常是 `VCFGenerator_<版本>_<Python版本>_<处理器架构>_64_setup.exe`）。
 
-1. 把名字和电话以每行“姓名 电话号码”的格式复制到下面的编辑框内；
+1. 把名字和电话以每行` 姓名 电话号码` 的格式复制到下面的编辑框内；
    ```text
    李四	13445467890
    王五	13554678907
@@ -81,10 +81,11 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 本项目以 [MIT 许可](./LICENSE)开源
 
-- LOGO：[Fluent Emoji](https://github.com/microsoft/fluentui-emoji) `MIT license`
-- [Python](https://www.python.org/) [`Python license`](https://docs.python.org/3/license.html)
-- [UPX](https://upx.github.io/) `GPL-2.0 licenses`
-- [PyInstaller](https://pyinstaller.org/en/stable/) [`PyInstaller license`](https://pyinstaller.org/en/stable/license.html)
-- [Nuitka](https://nuitka.net/) `Apache-2.0 license`
+- [Fluent Emoji](https://github.com/microsoft/fluentui-emoji)（作为应用图标使用）：MIT license
+- [Python](https://www.python.org/)：[Python license](https://docs.python.org/3/license.html)
+- [UPX](https://upx.github.io/)：GPL-2.0 licenses
+- [PyInstaller](https://pyinstaller.org/en/stable/)：[PyInstaller license](https://pyinstaller.org/en/stable/license.html)
+- [Nuitka](https://nuitka.net/)：Apache-2.0 license
+- [tkhtmlview](https://github.com/bauripalash/tkhtmlview)：MIT License
 
 [ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
