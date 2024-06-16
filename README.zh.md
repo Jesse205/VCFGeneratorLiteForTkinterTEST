@@ -68,10 +68,11 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 ### 构建项目
 
 1. 安装 [Python 3.8+](https://www.python.org/)、[Poetry](https://python-poetry.org/)、[UPX](https://upx.github.io/)、[InnoSetup](https://jrsoftware.org/isinfo.php)
-2. 安装项目：`poetry install`
-3. 生成 `file_version_info.txt`：`poetry run generate-version-file`
-4. 生成应用的二进制文件：`poetry run build-app`
-5. 生成安装程序：`poetry run build-setup`
+2. 在 [Inno Setup Translations](https://jrsoftware.org/files/istrans/) 网站下载并安装安装 `ChineseSimplified.isl`
+3. 安装项目：`poetry install`
+4. 生成 `file_version_info.txt`：`poetry run generate-version-file`
+5. 生成应用的二进制文件：`poetry run build-app`
+6. 生成安装程序：`poetry run build-setup`
 
 ### 切换版本
 
