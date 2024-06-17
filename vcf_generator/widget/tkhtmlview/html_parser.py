@@ -10,6 +10,8 @@ from collections import OrderedDict
 from tkinter.font import Font
 from typing import Optional
 
+from vcf_generator.util.resource import get_default_color
+
 
 # __________________________________________________________________________________________________
 class Defs:
@@ -726,7 +728,7 @@ class HTMLTextParser(HTMLParser):
             tag_font = self.default_font.copy() if self.default_font is not None else font.Font()
             tag_font.config(**tag[Fnt.KEY])
             self._w.tag_config(key, font=tag_font, selectforeground="SystemHighlightText",
-                               selectbackground="SystemHighlight", **tag[WCfg.KEY])
+                               selectbackground=get_default_color(), **tag[WCfg.KEY])
             if tag[Bind.KEY][Bind.LINK]:
                 self.hlink_slots.append(
                     HLinkSlot(self._w, key, tag[Bind.KEY][Bind.LINK])

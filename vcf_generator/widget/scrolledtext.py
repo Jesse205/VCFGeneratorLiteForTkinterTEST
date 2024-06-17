@@ -14,6 +14,7 @@ Place methods are redirected to the Frame widget however.
 from tkinter import Text, Pack, Grid, Place
 from tkinter.ttk import Frame, Scrollbar
 from tkinter.constants import RIGHT, LEFT, Y, BOTH, FLAT
+from vcf_generator.util.resource import get_default_color
 
 __all__ = ['ScrolledText']
 
@@ -22,6 +23,7 @@ class ScrolledText(Text):
     """
     带有边框、Ttk滚动条的Text组件
     """
+
     def __init__(
             self,
             master=None,
@@ -29,7 +31,7 @@ class ScrolledText(Text):
             relief=FLAT,
             highlightthickness=1,
             highlightbackground="gray",
-            highlightcolor="SystemHighlight",
+            highlightcolor=get_default_color(),
             **kw
     ):
         self.frame = Frame(master)

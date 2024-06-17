@@ -6,10 +6,9 @@ from typing import Union
 from vcf_generator.model.FontConfig import FontConfig
 from vcf_generator.util import display
 from vcf_generator.util.display import get_window_dpi_scaling
+from vcf_generator.util.resource import get_window_icon
 
 __all__ = ["BaseWindow"]
-
-from vcf_generator.util.resource import get_path_in_assets
 
 _default_font_list = [
     FontConfig("Microsoft YaHei UI", 9, "normal"),
@@ -37,7 +36,7 @@ class BaseWindow(Tk):
         self.deiconify()
 
     def _apply_default_icon(self):
-        self.iconbitmap(default=get_path_in_assets("icon.ico"))
+        self.iconbitmap(default=get_window_icon())
 
     def _apply_default_font(self):
         families = tk_font.families(self)
