@@ -17,7 +17,8 @@ _应用程序暂时只支持中文_
 
 VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通讯录内的 VCF 文件。
 
-![许可证：MIT](https://img.shields.io/badge/许可证-MIT-green)
+[![许可证：MIT](https://img.shields.io/badge/许可证-MIT-green)](./LICENSE)
+[![贡献者公约](https://img.shields.io/badge/贡献者公约-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.zh.md)
 
 ## 软件截图
 

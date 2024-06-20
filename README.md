@@ -17,7 +17,8 @@ _The application currently only supports Chinese language_
 
 VCF generator, input name and phone number to automatically generate VCF files for batch import into the address book.
 
-![License：MIT](https://img.shields.io/badge/license-MIT-green)
+[![License：MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.md)
 
 ## Screenshot
 
