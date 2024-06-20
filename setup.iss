@@ -3,7 +3,7 @@
 
 #define MyAppName "VCF Éú³ÉÆ÷ Lite"
 ; VERSION
-#define MyAppVersion "2.0.1"
+#define MyAppVersion "2.0.2"
 ; END-VERSION
 #define MyAppPublisher "Jesse205"
 #define MyAppURL "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
