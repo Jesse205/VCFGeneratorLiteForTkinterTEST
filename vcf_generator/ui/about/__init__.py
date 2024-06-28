@@ -5,9 +5,10 @@ from tkinter.ttk import *
 from vcf_generator import __version__
 from vcf_generator import constants
 from vcf_generator.ui.base import BaseWindow
-from vcf_generator.util.resource import get_path_in_assets
+from vcf_generator.util.resource import get_path_in_assets, get_about_html
 from vcf_generator.widget.menu import TextContextMenu
 from vcf_generator.widget.tkhtmlview import HTMLScrolledText
+
 
 
 class AboutWindow(BaseWindow):
@@ -23,9 +24,8 @@ class AboutWindow(BaseWindow):
         details_input = HTMLScrolledText(
             self,
             default_font=self.font,
-            html=constants.APP_DETAILS,
+            html=get_about_html(),
             state=DISABLED,
-
         )
         details_input.pack(fill=BOTH, expand=True, **self.scale_values(padx=10, pady=10))
         details_context_menu = TextContextMenu(details_input)

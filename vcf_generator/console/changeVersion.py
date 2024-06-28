@@ -4,7 +4,6 @@ import re
 from typing import List, Pattern
 
 from vcf_generator.console import generateVersionFile
-from vcf_generator.util import logger
 
 
 def get_exe_style_version(version: str):
@@ -27,7 +26,7 @@ def change_version(
     new_content = re.sub(content_pattern, content_formatter % version, origin_content)
     with open(file_name, "w", encoding=encoding) as f:
         f.write(new_content)
-    logger.info("Change version to %s in %s." % (version, file_name))
+    print("Change version to %s in %s." % (version, file_name))
 
 
 def change_init_version(version: str):
@@ -75,7 +74,7 @@ def main():
 
     version = args.version
     if not re.match(r"^\d+\.\d+\.\d+$", version):
-        logger.error("Invalid version format. Version must be like '1.2.3'.")
+        print("Invalid version format. Version must be like '1.2.3'.")
         return
     change_init_version(version)
     change_pyproject_version(version)

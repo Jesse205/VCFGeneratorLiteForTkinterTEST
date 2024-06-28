@@ -4,7 +4,6 @@ from vcf_generator import __version__ as app_version
 import subprocess
 
 from vcf_generator.console.utils import get_bits, get_machine
-from vcf_generator.util import logger
 
 
 def find_iscc_in_path():
@@ -19,7 +18,7 @@ def find_iscc_in_path():
 def main():
     bits = get_bits()
     if bits != 64:
-        logger.error(f"Only 64 bit python is supported. Current version is {bits}")
+        print(f"Only 64 bit python is supported. Current version is {bits}")
         return
     py_version = f"{sys.version_info.major}.{sys.version_info.minor}"
     output_name = f"VCFGenerator_v{app_version}_py{py_version}_{get_machine()}_{bits}_setup"

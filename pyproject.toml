@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "vcf_generator"
 # VERSION
-version = "2.0.2"
+version = "3.0.0"
 # END-VERSION
 description = "A simple VCF generator"
 authors = ["Jesse205 <2055675594@qq.com>"]
