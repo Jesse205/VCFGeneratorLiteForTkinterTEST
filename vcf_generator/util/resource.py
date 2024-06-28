@@ -16,7 +16,7 @@ def get_path_in_assets(file_name: str) -> str:
 
 def get_window_icon() -> Optional[str]:
     if sys.platform == "win32":
-        return get_path_in_assets("icon.ico")
+        return get_path_in_assets("images/icon.ico")
     return None
 
 

@@ -34,7 +34,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['./vcf_generator/assets/icon.ico'],
+    icon=['./vcf_generator/assets/images/icon.ico'],
     version="file_version_info.txt" if os.path.exists("file_version_info.txt") else None,
 )
 

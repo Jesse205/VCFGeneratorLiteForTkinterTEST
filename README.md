@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./vcf_generator/assets/icon.png" width="192"/>
+<img src="./vcf_generator/assets/images/icon.png" width="192"/>
 
 # VCF Generator Lite
 
@@ -38,7 +38,7 @@ Go to the [Release][ReleaseInGitee] to download and run the installation program
 3. Copy the generated VCF file to your phone, select "Address Book" when opening the file, and then follow the prompts.
 4. Wait for import to complete
 
->[! TIP]
+> [!TIP]
 >
 > - Tabs will be automatically converted to spaces for processing.
 > - The program will automatically remove excess spaces from the input box.

@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./vcf_generator/assets/icon.png" width="192"/>
+<img src="./vcf_generator/assets/images/icon.png" width="192"/>
 
 # VCF 生成器 Lite
 

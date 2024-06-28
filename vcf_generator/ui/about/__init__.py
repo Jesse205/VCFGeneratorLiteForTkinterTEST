@@ -32,7 +32,7 @@ class AboutWindow(BaseWindow):
         details_context_menu.bind_to_widget()
 
     def on_init_header(self, header_frame: Frame):
-        self.app_icon_image = PhotoImage(master=self, file=get_path_in_assets("icon-48.png"))  # 保存到 Window 中防止回收内存
+        self.app_icon_image = PhotoImage(master=self, file=get_path_in_assets("images/icon-48.png"))  # 保存到 Window 中防止回收内存
         app_icon_label = tk.Label(header_frame, image=self.app_icon_image, background="white",
                                   **self.scale_values(width=48, height=48))
         app_icon_label.grid(**self.scale_values(row=0, column=0, rowspan=2, **self.scale_values(padx=5, pady=5)))
