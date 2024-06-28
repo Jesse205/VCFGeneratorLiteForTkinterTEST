@@ -12,8 +12,15 @@
 #     nuitka-project: --enable-console
 # nuitka-project-else:
 #     nuitka-project: --disable-console
-
+import constants
 import vcf_generator.ui.main
+import logging
+import os
+
+logging.basicConfig(level=logging.INFO)
+
+logging.info("Starting VCF Generator...")
 
 if __name__ == '__main__':
+    print(f"Tip: The source code is hosted at {constants.URL_SOURCE}")
     vcf_generator.ui.main.main()
