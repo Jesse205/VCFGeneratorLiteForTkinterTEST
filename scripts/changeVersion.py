@@ -3,7 +3,7 @@ import re
 
 from typing import List, Pattern
 
-from vcf_generator.console import generateVersionFile
+from scripts import generateVersionFile
 
 
 def get_exe_style_version(version: str):

@@ -1,11 +1,14 @@
-/.idea
 /.venv
 
+# IDE
+/.idea
+!/.idea/codeStyles
+
 # Build
-phones.vcf
 /build
 /dist
-
-__pycache__
-*.egg-info
 ./file_version_info.txt
+*.egg-info
+
+# Caches
+__pycache__

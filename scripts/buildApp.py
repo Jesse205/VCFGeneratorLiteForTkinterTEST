@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from vcf_generator.console.utils import get_bits
+from scripts.utils import get_bits
 
 
 def nuitka():

@@ -9,12 +9,16 @@ license = "MIT"
 readme = ["README.md", "README.zh.md"]
 package-mode = false
 repository = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
+packages = [
+    { include = "vcf_generator" },
+    { include = "scripts" },
+]
 
 [tool.poetry.scripts]
-build-app = "vcf_generator.console.buildApp:main"
-build-setup = "vcf_generator.console.buildSetup:main"
-change-version = "vcf_generator.console.changeVersion:main"
-generate-version-file = "vcf_generator.console.generateVersionFile:main"
+build-app = "scripts.buildApp:main"
+build-setup = "scripts.buildSetup:main"
+change-version = "scripts.changeVersion:main"
+generate-version-file = "scripts.generateVersionFile:main"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.13"

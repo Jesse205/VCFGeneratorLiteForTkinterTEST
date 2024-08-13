@@ -3,7 +3,7 @@ import sys
 from vcf_generator import __version__ as app_version
 import subprocess
 
-from vcf_generator.console.utils import get_bits, get_machine
+from scripts.utils import get_bits, get_machine
 
 
 def find_iscc_in_path():
