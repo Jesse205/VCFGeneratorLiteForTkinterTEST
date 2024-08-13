@@ -1,3 +1,4 @@
+import logging
 from tkinter import *
 import tkinter.font as tk_font
 from tkinter.font import Font
@@ -33,6 +34,7 @@ class BaseWindow(Tk):
         self.on_init_menus(menu_bar)
         if menu_bar.children:
             self.config(menu=menu_bar)
+        self.center_window()
         self.deiconify()
 
     def _apply_default_icon(self):
@@ -79,3 +81,18 @@ class BaseWindow(Tk):
             else:
                 raise TypeError(f"{key} 的值 {value} 必须为 int 或 float")
         return new_kw
+
+    def center_window(self):
+
+        self.update()
+        window_width = self.winfo_width()
+        window_height = self.winfo_height()
+        # maxsize不会包含任务栏高度，但是maxsize的值也会算上副屏，所以为了防止窗口超出当前屏幕，这里取最小值
+        max_width, max_height = self.maxsize()
+        container_width = min(max_width, self.winfo_screenwidth())
+        container_height = min(max_height, self.winfo_screenheight())
+        logging.info(
+            f"Container size: {container_width}x{container_height}, window size: {window_width}x{window_height}")
+        location_x = max(int((container_width - window_width) / 2), 0)
+        location_y = max(int((container_height - window_height) / 2), 0)
+        self.geometry(f"{window_width}x{window_height}+{location_x}+{location_y}")
