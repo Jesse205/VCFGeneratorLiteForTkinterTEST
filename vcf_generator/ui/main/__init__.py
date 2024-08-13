@@ -140,7 +140,7 @@ class MainController:
         dialog.show_error("无法识别电话号码", message)
 
     def show_about_dialog(self):
-        about.main()
+        about.AboutWindow(self.window)
 
 
 def main():

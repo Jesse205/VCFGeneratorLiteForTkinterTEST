@@ -17,14 +17,11 @@ _default_font_list = [
     FontConfig("Segoe ui", 9, "normal"),
 ]
 
-display.set_process_dpi_aware(display.WinDpiAwareness.PROCESS_SYSTEM_DPI_AWARE)
 
+class WindowInjector(Misc, Wm):
+    _dpi_scaling = 1
 
-class BaseWindow(Tk):
-
-    def __init__(self, screen_name=None, base_name=None, class_name='Tk',
-                 use_tk=True, sync=False, use=None):
-        super().__init__(screen_name, base_name, class_name, use_tk, sync, use)
+    def window_injector_init(self):
         self.withdraw()
         self._dpi_scaling = get_window_dpi_scaling(self)
         self._apply_default_icon()
@@ -33,7 +30,7 @@ class BaseWindow(Tk):
         menu_bar = Menu(self, tearoff=False)
         self.on_init_menus(menu_bar)
         if menu_bar.children:
-            self.config(menu=menu_bar)
+            self.configure({"menu": menu_bar})
         self.center_window()
         self.deiconify()
 
@@ -96,3 +93,15 @@ class BaseWindow(Tk):
         location_x = max(int((container_width - window_width) / 2), 0)
         location_y = max(int((container_height - window_height) / 2), 0)
         self.geometry(f"{window_width}x{window_height}+{location_x}+{location_y}")
+
+
+class BaseWindow(Tk, WindowInjector):
+    def __init__(self, screenName=None, baseName=None, className="Tk", useTk=True, sync=False, use=None):
+        super().__init__(screenName, baseName, className, useTk, sync, use)
+        self.window_injector_init()
+
+
+class BaseToplevel(Toplevel, WindowInjector):
+    def __init__(self, master=None, cnf={}, **kw):
+        super().__init__(master, cnf, **kw)
+        self.window_injector_init()
