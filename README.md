@@ -50,7 +50,7 @@ Go to the [Release][ReleaseInGitee] to download and run the installation program
 >   ```
 
 
-## Architecture
+## Project Structure
 
 - `vcf_generator`: Source code directory
     - `console`: Developing CLI
