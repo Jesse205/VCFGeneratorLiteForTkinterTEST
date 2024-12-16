@@ -9,4 +9,11 @@
 
 ## 代码规范
 
-参考 [.editorconfig](./.editorconfig)
+- Python（`.py`）：[PEP8](https://www.python.org/dev/peps/pep-0008/)
+- Markdown（`.md`）：[Markdownlint](https://github.com/DavidAnson/markdownlint)
+
+详情请参考 [.editorconfig](./.editorconfig)
+
+## GIT 提交规范
+
+参考 Angular 的 [Commit Message Format](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-commit-message-format)
