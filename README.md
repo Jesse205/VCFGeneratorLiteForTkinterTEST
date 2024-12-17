@@ -49,6 +49,10 @@ Go to the [Release][ReleaseInGitee] to download and run the installation program
 >   Phone: 13333333333
 >   ```
 
+> [!NOTE]
+> 
+> If you need to use this software on Windows 7, please add or overwrite the `python313.dll` and `api-ms-win-core-path-l1-1-0.dll` files compatible with Windows 7 in the `_internal` folder of the software installation directory. You can download these two files from the [PythonWin7](https://github.com/adang1345/PythonWin7) repository.
+
 
 ## Project Structure
 

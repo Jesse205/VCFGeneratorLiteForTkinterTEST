@@ -49,6 +49,10 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 >   电话：13333333333
 >   ```
 
+> [!NOTE]
+> 
+> 如果您需要在 Windows 7 中使用本软件，请在软件安装目录的 `_internal` 文件夹内添加或覆盖兼容 Windows 7 的 `python313.dll` 与 `api-ms-win-core-path-l1-1-0.dll`。您可以从 [PythonWin7](https://github.com/adang1345/PythonWin7) 仓库中下载这两个文件。
+
 ## 项目结构
 
 - `vcf_generator`：源代码目录
