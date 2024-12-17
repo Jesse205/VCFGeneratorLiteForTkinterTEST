@@ -7,7 +7,7 @@ from scripts.utils import get_bits
 
 
 def pyinstaller():
-    PyInstaller.run(["vcf_generator.spec --noconfirm"])
+    PyInstaller.run(["vcf_generator.spec", "--noconfirm"])
 
 
 def main():
