@@ -1,68 +1,85 @@
 """
 大部分代码来自 https://github.com/TomSchimansky/CustomTkinter/blob/master/customtkinter/windows/widgets/scaling/scaling_tracker.py
 """
-import ctypes
-import os
 import sys
 from enum import Enum
 from tkinter import Misc
 
-
-class WinDpiAwareness(Enum):
-    """
-    标识每英寸点数 (dpi) 感知值。 DPI 感知指示应用程序为 DPI 执行的缩放工作量与系统完成的缩放量。
-
-    用户可以在其显示器上设置 DPI 比例系数，彼此独立。某些旧版应用程序无法针对多个 DPI 设置调整其缩放比例。
-    为了使用户能够使用这些应用程序，而不会在显示器上显示太大或太小的内容，Windows 可以将 DPI 虚拟化应用于应用程序，使系统自动缩放该应用程序以匹配当前显示器的 DPI。
-    PROCESS_DPI_AWARENESS值指示应用程序自行处理的缩放级别以及 Windows 提供的缩放级别。
-    请记住，系统缩放的应用程序可能看起来模糊，并且会读取有关监视器的虚拟化数据以保持兼容性。
-
-    https://learn.microsoft.com/zh-cn/windows/win32/api/shellscalingapi/ne-shellscalingapi-process_dpi_awareness
-    """
-
-    PROCESS_DPI_UNAWARE = 0
-    """
-    DPI 不知道。 此应用不会缩放 DPI 更改，并且始终假定其比例系数为 100% (96 DPI) 。 系统将在任何其他 DPI 设置上自动缩放它。
-    """
-    PROCESS_SYSTEM_DPI_AWARE = 1
-    """
-    系统 DPI 感知。 此应用不会缩放 DPI 更改。 它将查询 DPI 一次，并在应用的生存期内使用该值。
-    如果 DPI 发生更改，应用将不会调整为新的 DPI 值。 当 DPI 与系统值发生更改时，系统会自动纵向扩展或缩减它。
-    """
-    PROCESS_PER_MONITOR_DPI_AWARE = 2
-    """
-    按监视器 DPI 感知。
-    此应用在创建 DPI 时检查 DPI，并在 DPI 发生更改时调整比例系数。
-    系统不会自动缩放这些应用程序。
-    """
+_default_dpi = 96
+_process_dpi_aware = False
 
 
-def set_process_dpi_aware(value: WinDpiAwareness):
+def _set_process_dpi_aware_win8_1():
+    from ctypes import windll
+    windll.shcore.SetProcessDpiAwareness(1)  # PROCESS_SYSTEM_DPI_AWARE
+
+
+def _set_process_dpi_aware_win7():
+    from ctypes import windll
+    windll.user32.SetProcessDPIAware()
+
+
+# noinspection PyBroadException
+def set_process_dpi_aware():
     """
     https://learn.microsoft.com/zh-cn/windows/win32/api/shellscalingapi/nf-shellscalingapi-setprocessdpiawareness
     """
-    if not sys.platform == 'win32':
-        return
-    # noinspection PyBroadException
-    try:
-        ctypes.windll.shcore.SetProcessDpiAwareness(value.value)
-    except Exception:
+    global _process_dpi_aware
+    if sys.platform == 'win32':
+        try:
+            _set_process_dpi_aware_win8_1()
+            _process_dpi_aware = True
+        except Exception:
+            try:
+                _set_process_dpi_aware_win7()
+                _process_dpi_aware = True
+            except Exception:
+                pass
+    else:
+        # 不支持缩放，忽略操作
         pass
 
 
-def get_window_dpi_scaling(misc: Misc) -> float:
+def _get_scale_factor_win8_1(misc: Misc):
+    from ctypes import windll, pointer, wintypes
+    dpi_type = 0  # MDT_EFFECTIVE_DPI = 0, MDT_ANGULAR_DPI = 1, MDT_RAW_DPI = 2
+    window_hwnd = wintypes.HWND(misc.winfo_id())
+    monitor_handle = windll.user32.MonitorFromWindow(window_hwnd,
+                                                     wintypes.DWORD(2))  # MONITOR_DEFAULTTONEAREST = 2
+    dpi_x, dpi_y = wintypes.UINT(), wintypes.UINT()
+    windll.shcore.GetDpiForMonitor(monitor_handle, dpi_type, pointer(dpi_x), pointer(dpi_y))
+    return (dpi_x.value + dpi_y.value) / 2 / _default_dpi
+
+
+def _get_scale_factor_win2000():
+    from ctypes import windll, WinError, get_last_error
+    hdc = windll.user32.GetDC(None)
+    if not hdc:
+        raise WinError(get_last_error())
+
+    try:
+        gdi32 = windll.gdi32
+        dpi_x = gdi32.GetDeviceCaps(hdc, 88)  # LOGPIXELSX
+        dpi_y = gdi32.GetDeviceCaps(hdc, 90)  # LOGPIXELSY
+    finally:
+        windll.user32.ReleaseDC(None, hdc)
+
+    return (dpi_x + dpi_y) / 2 / _default_dpi
+
+
+# noinspection PyBroadException
+def get_scale_factor(misc: Misc) -> float:
+    if not _process_dpi_aware:
+        return 1.0
     if sys.platform == "win32":
-        from ctypes import windll, pointer, wintypes
-        # noinspection PyBroadException
         try:
-            dpi100pc = 96  # DPI 96 is 100% scaling
-            dpi_type = 0  # MDT_EFFECTIVE_DPI = 0, MDT_ANGULAR_DPI = 1, MDT_RAW_DPI = 2
-            window_hwnd = wintypes.HWND(misc.winfo_id())
-            monitor_handle = windll.user32.MonitorFromWindow(window_hwnd,
-                                                             wintypes.DWORD(2))  # MONITOR_DEFAULTTONEAREST = 2
-            x_dpi, y_dpi = wintypes.UINT(), wintypes.UINT()
-            windll.shcore.GetDpiForMonitor(monitor_handle, dpi_type, pointer(x_dpi), pointer(y_dpi))
-            return (x_dpi.value + y_dpi.value) / (2 * dpi100pc)
+            return _get_scale_factor_win8_1(misc)
         except Exception:
-            return 1
-    return 1
+            try:
+                return _get_scale_factor_win2000()
+            except Exception:
+                return 1.0
+
+    else:
+        # 不支持缩放，默认返回1
+        return 1.0

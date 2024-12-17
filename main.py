@@ -5,7 +5,7 @@ import logging
 from vcf_generator.util import display
 
 logging.basicConfig(level=logging.INFO)
-display.set_process_dpi_aware(display.WinDpiAwareness.PROCESS_SYSTEM_DPI_AWARE)
+display.set_process_dpi_aware()
 
 logging.info("Starting VCF Generator...")
 

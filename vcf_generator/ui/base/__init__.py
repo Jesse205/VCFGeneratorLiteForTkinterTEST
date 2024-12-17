@@ -1,29 +1,19 @@
 import logging
-from tkinter import *
 import tkinter.font as tk_font
-from tkinter.font import Font
+from tkinter import *
 from typing import Union
 
-from vcf_generator.model.FontConfig import FontConfig
-from vcf_generator.util import display
-from vcf_generator.util.display import get_window_dpi_scaling
+from vcf_generator.util.display import get_scale_factor
 from vcf_generator.util.resource import get_window_icon
 
 __all__ = ["BaseWindow"]
 
-_default_font_list = [
-    FontConfig("Microsoft YaHei UI", 9, "normal"),
-    FontConfig("Microsoft YaHei", 9, "normal"),
-    FontConfig("Segoe ui", 9, "normal"),
-]
-
-
 class WindowInjector(Misc, Wm):
-    _dpi_scaling = 1
+    _scale_factor = 1
 
     def window_injector_init(self):
         self.withdraw()
-        self._dpi_scaling = get_window_dpi_scaling(self)
+        self._scale_factor = get_scale_factor(self)
         self._apply_default_icon()
         self._apply_default_font()
         self.on_init_widgets()
@@ -38,12 +28,7 @@ class WindowInjector(Misc, Wm):
         self.iconbitmap(default=get_window_icon())
 
     def _apply_default_font(self):
-        families = tk_font.families(self)
-        self.font = Font(self, size=10, weight=NORMAL)
-        for font in _default_font_list:
-            if font.family in families:
-                self.font = Font(self, family=font.family, size=font.size, weight=font.weight)
-                break
+        self.font = tk_font.nametofont("TkDefaultFont")
         self.option_add("*font", self.font)
 
     def on_init_widgets(self):
@@ -53,10 +38,10 @@ class WindowInjector(Misc, Wm):
         pass
 
     def get_scaled(self, size: int):
-        return int(size * self._dpi_scaling)
+        return int(size * self._scale_factor)
 
     def get_scaled_float(self, size: float):
-        return size * self._dpi_scaling
+        return size * self._scale_factor
 
     def set_size(self, width: int, height: int):
         """
