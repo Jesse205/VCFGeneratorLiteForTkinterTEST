@@ -26,7 +26,7 @@ VCF generator, input name and phone number to automatically generate VCF files f
 
 ## Usage
 
-Go to the [Release][ReleaseInGitee] to download and run the installation program (file name is usually `VCFGenerator_<Version>_<PythonVersion>_<Architecture>_64_setup.exe`).
+Go to the [Release][ReleaseInGitee] to download and run the installation program (file name is usually `VCFGenerator_<Version>_<PythonVersion>_<Architecture>_64bit_setup.exe`).
 
 1. Copy the name and phone number in the format of "name and phone number" on each line into the editing box below;
    ```text
@@ -65,7 +65,7 @@ Go to the [Release][ReleaseInGitee] to download and run the installation program
 
 > [!NOTE]
 >
-> The development environment currently only supports 64 bits Windows 7+and does not currently support macOS and Linux.
+> The development environment currently only supports 64 bits Windows 8+ and does not currently support macOS and Linux.
 
 ### Building
 
@@ -92,3 +92,7 @@ This project is open source under the [MIT license](./LICENSE)
 - [tkhtmlview](https://github.com/bauripalash/tkhtmlview): MIT License
 
 [ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
+
+## Contribute
+
+See [Contribution Guidelines](./CONTRIBUTING.zh.md).

@@ -2,9 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VCF Éú³ÉÆ÷ Lite"
-; VERSION
 #define MyAppVersion "3.0.0"
-; END-VERSION
 #define MyAppPublisher "Jesse205"
 #define MyAppURL "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
 #define MyAppPublisherURL "https://gitee.com/Jesse205"

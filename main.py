@@ -1,8 +1,8 @@
-import constants
+from vcf_generator import constants
 import vcf_generator.ui.main
 import logging
 
-from util import display
+from vcf_generator.util import display
 
 logging.basicConfig(level=logging.INFO)
 display.set_process_dpi_aware(display.WinDpiAwareness.PROCESS_SYSTEM_DPI_AWARE)

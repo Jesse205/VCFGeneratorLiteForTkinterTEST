@@ -26,7 +26,7 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 ## 使用方法
 
-进入[发行版][ReleaseInGitee]下载并运行安装程序（文件名通常是 `VCFGenerator_<版本>_<Python版本>_<处理器架构>_64_setup.exe`）。
+进入[发行版][ReleaseInGitee]下载并运行安装程序（文件名通常是 `VCFGenerator_<版本>_<Python版本>_<处理器架构>_64bit_setup.exe`）。
 
 1. 把名字和电话以每行` 姓名 电话号码` 的格式复制到下面的编辑框内；
    ```text
@@ -64,7 +64,7 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 > [!NOTE]
 >
-> 开发环境目前仅支持 64 位 Windows 7+，暂不支持 macOS 与 Linux。
+> 开发环境目前仅支持 64 位 Windows 8+，暂不支持 macOS 与 Linux。
 
 ### 构建项目
 
@@ -91,3 +91,7 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 - [tkhtmlview](https://github.com/bauripalash/tkhtmlview)：MIT License
 
 [ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
+
+## 贡献项目
+
+请参阅 [《贡献指南》](./CONTRIBUTING.zh.md)。

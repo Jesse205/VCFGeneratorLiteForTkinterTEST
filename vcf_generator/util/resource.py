@@ -2,7 +2,7 @@ import os
 import sys
 from typing import Optional, List, Dict
 import pkgutil
-import constants
+from vcf_generator import constants
 import json
 
 

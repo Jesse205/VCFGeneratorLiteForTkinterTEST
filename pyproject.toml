@@ -1,8 +1,6 @@
 [tool.poetry]
 name = "vcf_generator"
-# VERSION
 version = "3.0.0"
-# END-VERSION
 description = "A simple VCF generator"
 authors = ["Jesse205 <2055675594@qq.com>"]
 license = "MIT"
@@ -18,16 +16,12 @@ packages = [
 build-app = "scripts.buildApp:main"
 build-setup = "scripts.buildSetup:main"
 change-version = "scripts.changeVersion:main"
-generate-version-file = "scripts.generateVersionFile:main"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.13"
-pyinstaller = "^6.8.0"
-pyinstaller-versionfile = "^2.1.1"
+python = ">=3.13,<3.14"
+pyinstaller = "^6.11.0"
+pyinstaller-versionfile = "^3.0.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-#requires = ["setuptools>=42", "wheel", "poetry-core", "nuitka", "toml"]
-#build-backend = "nuitka.distutils.Build"
