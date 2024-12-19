@@ -30,8 +30,8 @@ def get_default_color() -> str:
     return "blue"
 
 
-def _get_licenses_html() -> str:
-    projects = json.loads(pkgutil.get_data(_APP_MODULE_NAME, 'assets/data/licenses.json'))
+def _get_os_notice_html() -> str:
+    projects = json.loads(pkgutil.get_data(_APP_MODULE_NAME, 'assets/data/os_notice.json'))
     item_template = '{name} - <a href="{url}">{url}</a><br />'
     return "".join([
         item_template.format(url=item["url"], name=item["name"]) for item in projects
@@ -44,5 +44,5 @@ def get_about_html() -> str:
         source_url=constants.URL_SOURCE,
         release_url=constants.URL_RELEASES,
         jesse205_email=constants.EMAIL_JESSE205,
-        licenses_html=_get_licenses_html()
+        os_notice_html=_get_os_notice_html()
     )

@@ -89,9 +89,8 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 - [Fluent Emoji](https://github.com/microsoft/fluentui-emoji)（作为应用图标使用）：MIT license
 - [Python](https://www.python.org/)：[Python license](https://docs.python.org/3/license.html)
-- [UPX](https://upx.github.io/)：GPL-2.0 licenses
+- [UPX](https://upx.github.io/)（用于压缩代码）：GPL-2.0 licenses
 - [PyInstaller](https://pyinstaller.org/en/stable/)：[PyInstaller license](https://pyinstaller.org/en/stable/license.html)
-- [Nuitka](https://nuitka.net/)：Apache-2.0 license
 - [tkhtmlview](https://github.com/bauripalash/tkhtmlview)：MIT License
 
 [ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
