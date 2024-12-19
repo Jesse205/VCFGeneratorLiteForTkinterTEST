@@ -31,12 +31,20 @@ def get_licenses() -> List[Dict[str, str]]:
     return json.loads(pkgutil.get_data('vcf_generator', 'assets/data/licenses.json'))
 
 
-def get_about_html() -> str:
-    licenses_html = "".join([
-        f"<a href=\"{_license['url']}\">{_license['name']}</a> - {_license['license']}<br />" for _license in
-        get_licenses()
+def _get_licenses_html() -> str:
+    projects = json.loads(pkgutil.get_data('vcf_generator', 'assets/data/licenses.json'))
+    item_template = '<a href="{url}">{name}</a> - {url}<br />'
+    return "".join([
+        item_template.format(url=item["url"], name=item["name"]) for item in projects
     ])
+
+
+def get_about_html() -> str:
     about_html = pkgutil.get_data('vcf_generator', 'assets/texts/about.html').decode('UTF-8', 'ignore')
-    about_html = about_html.format(source_url=constants.URL_SOURCE, release_url=constants.URL_RELEASES,
-                                   jesse205_email=constants.EMAIL_JESSE205, licenses_html=licenses_html)
+    about_html = about_html.format(
+        source_url=constants.URL_SOURCE,
+        release_url=constants.URL_RELEASES,
+        jesse205_email=constants.EMAIL_JESSE205,
+        licenses_html=_get_licenses_html()
+    )
     return about_html
