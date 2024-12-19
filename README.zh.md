@@ -70,7 +70,7 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 >
 > 开发环境目前仅支持 64 位 Windows 8+，暂不支持 macOS 与 Linux。
 
-### 构建项目
+### 构建应用
 
 1. 安装 [Python 3.8+](https://www.python.org/)、[Poetry](https://python-poetry.org/)、[UPX](https://upx.github.io/)、[InnoSetup](https://jrsoftware.org/isinfo.php)
 2. 在 [Inno Setup Translations](https://jrsoftware.org/files/istrans/) 网站下载并安装安装 `ChineseSimplified.isl`
