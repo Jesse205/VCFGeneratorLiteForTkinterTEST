@@ -32,7 +32,7 @@ def get_default_color() -> str:
 
 def _get_licenses_html() -> str:
     projects = json.loads(pkgutil.get_data(_APP_MODULE_NAME, 'assets/data/licenses.json'))
-    item_template = '<a href="{url}">{name}</a> - {url}<br />'
+    item_template = '{name} - <a href="{url}">{url}</a><br />'
     return "".join([
         item_template.format(url=item["url"], name=item["name"]) for item in projects
     ])
