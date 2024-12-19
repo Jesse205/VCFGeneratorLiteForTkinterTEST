@@ -29,10 +29,6 @@ def get_default_color() -> str:
     return "blue"
 
 
-def get_licenses() -> List[Dict[str, str]]:
-    return json.loads(pkgutil.get_data(_APP_MODULE_NAME, 'assets/data/licenses.json'))
-
-
 def _get_licenses_html() -> str:
     projects = json.loads(pkgutil.get_data(_APP_MODULE_NAME, 'assets/data/licenses.json'))
     item_template = '<a href="{url}">{name}</a> - {url}<br />'
@@ -43,10 +39,9 @@ def _get_licenses_html() -> str:
 
 def get_about_html() -> str:
     about_html = pkgutil.get_data(_APP_MODULE_NAME, 'assets/texts/about.html').decode('UTF-8', 'ignore')
-    about_html = about_html.format(
+    return about_html.format(
         source_url=constants.URL_SOURCE,
         release_url=constants.URL_RELEASES,
         jesse205_email=constants.EMAIL_JESSE205,
         licenses_html=_get_licenses_html()
     )
-    return about_html
