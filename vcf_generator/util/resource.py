@@ -1,9 +1,10 @@
-import os
-import sys
-from typing import Optional, List, Dict
-import pkgutil
-from vcf_generator import constants
 import json
+import os
+import pkgutil
+import sys
+from typing import Optional
+
+from vcf_generator import constants
 
 _APP_MODULE_NAME = "vcf_generator"
 
