@@ -9,7 +9,11 @@ from vcf_generator import constants
 _APP_MODULE_NAME = "vcf_generator"
 
 
-def get_path_in_assets(file_name: str) -> str:
+def get_asset_data(resource: str) -> bytes | None:
+    return pkgutil.get_data(_APP_MODULE_NAME, os.path.join('assets', resource))
+
+
+def get_asset_path(file_name: str) -> str:
     """
     Get the path to the file in the assets' folder.
     :param file_name: The name of the file.
@@ -20,7 +24,7 @@ def get_path_in_assets(file_name: str) -> str:
 
 def get_window_icon() -> Optional[str]:
     if sys.platform == "win32":
-        return get_path_in_assets("images/icon.ico")
+        return get_asset_path("images/icon.ico")
     return None
 
 
@@ -31,7 +35,7 @@ def get_default_color() -> str:
 
 
 def _get_os_notice_html() -> str:
-    projects = json.loads(pkgutil.get_data(_APP_MODULE_NAME, 'assets/data/os_notice.json'))
+    projects = json.loads(get_asset_data('data/os_notice.json'))
     item_template = '{name} - <a href="{url}">{url}</a><br />'
     return "".join([
         item_template.format(url=item["url"], name=item["name"]) for item in projects
@@ -39,7 +43,7 @@ def _get_os_notice_html() -> str:
 
 
 def get_about_html() -> str:
-    about_html = pkgutil.get_data(_APP_MODULE_NAME, 'assets/texts/about.html').decode('UTF-8', 'ignore')
+    about_html = get_asset_data('texts/about.html').decode('UTF-8', 'ignore')
     return about_html.format(
         source_url=constants.URL_SOURCE,
         release_url=constants.URL_RELEASES,
