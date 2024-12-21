@@ -1,4 +1,5 @@
 import logging
+import re
 import webbrowser
 from tkinter import *
 from tkinter import filedialog
@@ -79,6 +80,13 @@ class MainWindow(BaseWindow):
         )
         menu_bar.add_cascade(label="编辑", menu=edit_menu)
 
+        tool_menu = Menu(menu_bar, tearoff=False)
+        tool_menu.add_command(
+            label="移除引号",
+            command=self.controller.on_clean_quotes_click
+        )
+        menu_bar.add_cascade(label="工具", menu=tool_menu)
+
         help_menu = Menu(menu_bar, tearoff=False)
         help_menu.add_command(
             label="源代码",
@@ -100,8 +108,15 @@ class MainController:
     def __init__(self, window: MainWindow):
         self.window = window
 
+    def _get_text_content(self):
+        return self.window.text_input.get(1.0, END)[:-1]  # 获取到的字符串末尾会有一个换行符，所以要消掉
+
+    def _set_text_content(self, new_content):
+        self.window.text_input.delete(1.0, END)
+        self.window.text_input.replace(1.0, END, new_content)
+
     def generate_file(self):
-        text_content = self.window.text_input.get(0.0, "end")
+        text_content = self._get_text_content()
         logging.info("Start generate vcf file.")
         file_io = filedialog.asksaveasfile(parent=self.window, initialfile="phones.vcf",
                                            filetypes=[("vCard 文件", ".vcf")], defaultextension=".vcf")
@@ -149,6 +164,14 @@ class MainController:
 
     def show_about_dialog(self):
         about.AboutWindow(self.window)
+
+    def _clean_quotes(self):
+        origin_content = self._get_text_content()
+        result_content = re.sub(r'"\s*(([^"\s][^"]*[^"\s])|[^"\s]?)\s*"', r'\1', origin_content, flags=re.S)
+        self._set_text_content(result_content)
+
+    def on_clean_quotes_click(self):
+        self._clean_quotes()
 
 
 def main():
