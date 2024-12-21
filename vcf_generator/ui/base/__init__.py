@@ -65,8 +65,7 @@ class WindowInjector(Misc, Wm):
         return new_kw
 
     def center_window(self):
-
-        self.update()
+        self.update_idletasks()
         window_width = self.winfo_width()
         window_height = self.winfo_height()
         # maxsize不会包含任务栏高度，但是maxsize的值也会算上副屏，所以为了防止窗口超出当前屏幕，这里取最小值
