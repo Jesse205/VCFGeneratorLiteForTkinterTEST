@@ -38,7 +38,7 @@ class WindowInjector(Misc, Wm):
 
     def _apply_default_theme(self):
         style = Style(self)
-        style.configure("TButton", padding="4p")
+        style.configure("TButton", padding="2p")
 
     def on_init_widgets(self):
         pass
