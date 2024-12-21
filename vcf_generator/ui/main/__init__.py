@@ -5,6 +5,7 @@ from tkinter import filedialog
 from tkinter.ttk import *
 from typing import IO, List
 
+from constants import URL_RELEASES, URL_SOURCE
 from vcf_generator import constants
 from vcf_generator.ui import about
 from vcf_generator.ui.base import BaseWindow
@@ -47,6 +48,14 @@ class MainWindow(BaseWindow):
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def on_init_menus(self, menu_bar: Menu):
+        file_menu = Menu(menu_bar, tearoff=False)
+        file_menu.add_command(
+            label="退出",
+            command=self.quit,
+            accelerator="Alt + F4"
+        )
+        menu_bar.add_cascade(label="文件", menu=file_menu)
+
         edit_menu = Menu(menu_bar, tearoff=False)
         edit_menu.add_command(
             label='剪切',
@@ -71,15 +80,15 @@ class MainWindow(BaseWindow):
         menu_bar.add_cascade(label="编辑", menu=edit_menu)
 
         help_menu = Menu(menu_bar, tearoff=False)
-        # help_menu.add_command(
-        #     label="源代码",
-        #     command=lambda: webbrowser.open('https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter')
-        # )
-        # help_menu.add_command(
-        #     label="发行版",
-        #     command=lambda: webbrowser.open('https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases')
-        # )
-        # help_menu.add_separator()
+        help_menu.add_command(
+            label="源代码",
+            command=lambda: webbrowser.open(URL_SOURCE)
+        )
+        help_menu.add_command(
+            label="版本发布",
+            command=lambda: webbrowser.open(URL_RELEASES)
+        )
+        help_menu.add_separator()
         help_menu.add_command(
             label="关于",
             command=self.controller.show_about_dialog
