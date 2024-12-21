@@ -31,12 +31,12 @@ class MainWindow(BaseWindow):
     def on_init_widgets(self):
         self.anchor(CENTER)
         self.title(constants.APP_NAME)
-        self.set_minsize(200, 400)
+        self.set_minsize(400, 400)
         self.set_size(600, 600)
         sizegrip = Sizegrip(self)
         sizegrip.place(relx=1, rely=1, anchor=SE)
         description_label = Label(self, text=constants.USAGE, justify=LEFT)
-        description_label.bind("<Configure>", get_auto_wrap_event(description_label, 300))
+        description_label.bind("<Configure>", get_auto_wrap_event(description_label))
         description_label.pack(fill=X, padx="10p", pady="10p")
         self.text_input = ScrolledText(self, undo=True, tabs=True, height=0)
         self.text_input.insert(0.0, constants.DEFAULT_INPUT_CONTENT)
@@ -45,7 +45,7 @@ class MainWindow(BaseWindow):
         self.text_context_menu = TextContextMenu(self.text_input)
         self.text_context_menu.bind_to_widget()
 
-        self.generate_button = Button(self, text="生成", default=ACTIVE, command=self.controller.generate_file)
+        self.generate_button = Button(self, text="生成", default=ACTIVE, command=self.controller.on_generate_click)
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def on_init_menus(self, menu_bar: Menu):
@@ -99,7 +99,7 @@ class MainWindow(BaseWindow):
         help_menu.add_separator()
         help_menu.add_command(
             label="关于",
-            command=self.controller.show_about_dialog
+            command=self.controller.on_about_click
         )
         menu_bar.add_cascade(label="帮助", menu=help_menu)
 
@@ -115,7 +115,7 @@ class MainController:
         self.window.text_input.delete(1.0, END)
         self.window.text_input.replace(1.0, END, new_content)
 
-    def generate_file(self):
+    def on_generate_click(self):
         text_content = self._get_text_content()
         logging.info("Start generate vcf file.")
         file_io = filedialog.asksaveasfile(parent=self.window, initialfile="phones.vcf",
@@ -162,7 +162,7 @@ class MainController:
             message += f"... 等{count - MAX_INVALID_COUNT}个。"
         dialog.show_error("无法识别电话号码", message)
 
-    def show_about_dialog(self):
+    def on_about_click(self):
         about.AboutWindow(self.window)
 
     def _clean_quotes(self):
