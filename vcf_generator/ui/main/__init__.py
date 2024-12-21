@@ -35,8 +35,7 @@ class MainWindow(BaseWindow):
         sizegrip.place(relx=1, rely=1, anchor=SE)
         description_label = Label(self, text=constants.USAGE, justify=LEFT)
         description_label.bind("<Configure>", get_auto_wrap_event(description_label, 300))
-        description_label.pack(fill=X, **self.scale_values(padx=10, pady=10))
-
+        description_label.pack(fill=X, padx="10p", pady="10p")
         self.text_input = ScrolledText(self, undo=True, tabs=True, height=0)
         self.text_input.insert(0.0, constants.DEFAULT_INPUT_CONTENT)
         self.text_input.pack(fill=BOTH, expand=True)
@@ -45,7 +44,7 @@ class MainWindow(BaseWindow):
         self.text_context_menu.bind_to_widget()
 
         self.generate_button = Button(self, text="生成", default=ACTIVE, command=self.controller.generate_file)
-        self.generate_button.pack(side=RIGHT, **self.scale_values(padx=10, pady=10))
+        self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def on_init_menus(self, menu_bar: Menu):
         edit_menu = Menu(menu_bar, tearoff=False)

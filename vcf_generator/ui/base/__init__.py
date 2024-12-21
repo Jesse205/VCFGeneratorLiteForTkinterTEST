@@ -1,6 +1,7 @@
 import logging
 import tkinter.font as tk_font
 from tkinter import *
+from tkinter.ttk import Style
 from typing import Union
 
 from vcf_generator.util.display import get_scale_factor
@@ -8,14 +9,17 @@ from vcf_generator.util.resource import get_window_icon
 
 __all__ = ["BaseWindow"]
 
+
 class WindowInjector(Misc, Wm):
     _scale_factor = 1
 
     def window_injector_init(self):
         self.withdraw()
         self._scale_factor = get_scale_factor(self)
+        self.tk.call("tk", "scaling", self._scale_factor)
         self._apply_default_icon()
         self._apply_default_font()
+        self._apply_default_theme()
         self.on_init_widgets()
         menu_bar = Menu(self, tearoff=False)
         self.on_init_menus(menu_bar)
@@ -29,7 +33,12 @@ class WindowInjector(Misc, Wm):
 
     def _apply_default_font(self):
         self.font = tk_font.nametofont("TkDefaultFont")
+        self.font.config(size=12)
         self.option_add("*font", self.font)
+
+    def _apply_default_theme(self):
+        style = Style(self)
+        style.configure("TButton", padding="4p")
 
     def on_init_widgets(self):
         pass

@@ -15,8 +15,7 @@ from vcf_generator.util.resource import get_default_color
 
 # __________________________________________________________________________________________________
 class Defs:
-    # DEFAULT_TEXT_FONT_FAMILY = ("Microsoft YaHei", "Segoe ui", "Calibri", "Helvetica", "TkTextFont")
-    FONT_SIZE = 9
+    FONT_SIZE = 0
     PREFORMATTED_FONT_FAMILY = ("Courier", "DejaVu Sans Mono", "TkFixedFont")
     HEADINGS_FONT_SIZE = {
         "h1": 38,
@@ -24,7 +23,7 @@ class Defs:
         "h3": 24,
         "h4": 20,
         "h5": 16,
-        "h6": 14,
+        "h6": 16,
     }
 
 
