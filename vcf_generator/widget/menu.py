@@ -62,4 +62,4 @@ class TextContextMenu(Menu):
         self.post(x, y)
 
     def bind_to_widget(self):
-        self.master.bind("<Button-3>", lambda event: self.show(event.x_root, event.y_root))
+        self.master.bind("<Button-3>", lambda event: self.show(event.x_root, event.y_root), add="+")
