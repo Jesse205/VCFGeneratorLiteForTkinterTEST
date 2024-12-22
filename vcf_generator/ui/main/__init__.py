@@ -1,8 +1,8 @@
 import logging
 import re
 import webbrowser
-from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, Menu
+from tkinter.constants import *
 from tkinter.ttk import *
 from typing import IO, List
 
@@ -23,6 +23,7 @@ class MainWindow(BaseWindow):
     generate_button = None
     text_input = None
     text_context_menu = None
+    progress_bar = None
 
     def __init__(self):
         self.controller = MainController(self)
@@ -41,12 +42,23 @@ class MainWindow(BaseWindow):
         self.text_input = ScrolledText(self, undo=True, tabs=True, height=0)
         self.text_input.insert(0.0, constants.DEFAULT_INPUT_CONTENT)
         self.text_input.pack(fill=BOTH, expand=True)
-
         self.text_context_menu = TextContextMenu(self.text_input)
         self.text_context_menu.bind_to_widget()
 
-        self.generate_button = Button(self, text="生成", default=ACTIVE, command=self.controller.on_generate_click)
+        bottom_frame = Frame(self)
+        bottom_frame.pack(fill=X)
+
+        self.progress_bar = Progressbar(bottom_frame, orient=HORIZONTAL, length=200, mode='determinate', maximum=10)
+
+        self.generate_button = Button(bottom_frame, text="生成", default=ACTIVE,
+                                      command=self.controller.on_generate_click)
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
+
+    def show_progress_bar(self):
+        self.progress_bar.pack(side=LEFT, padx="10p", pady="10p")
+
+    def hide_progress_bar(self):
+        self.progress_bar.pack_forget()
 
     def on_init_menus(self, menu_bar: Menu):
         file_menu = Menu(menu_bar, tearoff=False)
@@ -122,19 +134,33 @@ class MainController:
                                            filetypes=[("vCard 文件", ".vcf")], defaultextension=".vcf")
         if file_io is None:
             return
-        invalid_lines = MainController.generate_content(file_io, text_content)
+        self.window.show_progress_bar()
+        self.window.progress_bar.configure(value=0)
+        self.window.update()
+        invalid_lines = self.generate_content(file_io, text_content)
         if len(invalid_lines) > 0:
             MainController.show_invalid_lines_dialog(invalid_lines)
+        self.window.hide_progress_bar()
         dialog.show_info("生成 VCF 文件完成", f"已导出文件到 \"{file_io.name}\"。")
         logging.info("Generate file successfully.")
 
-    @staticmethod
-    def generate_content(str_io: IO, text_content: str):
+    def generate_content(self, str_io: IO, text_content: str):
         logging.info("Start generate content.")
         invalid_lines: List[str] = []
+
         # 将制表符转换为空格，统一处理
         text_content = text_content.replace("\t", " ")
-        for line_text in text_content.split("\n"):
+        items = text_content.split("\n")
+        length = len(items)
+        progress = 0
+        pre_progress_value = 0
+        for line_text in items:
+            progress += 1
+            progress_value = int(progress / length * 10)
+            if progress_value > pre_progress_value:
+                pre_progress_value = progress_value
+                self.window.progress_bar.configure(value=progress_value)
+                self.window.update()
             line_text = line_text.strip()
             # 空行跳过
             if line_text == "":
