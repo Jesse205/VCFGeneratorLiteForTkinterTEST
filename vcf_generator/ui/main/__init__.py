@@ -41,6 +41,7 @@ class MainWindow(BaseWindow):
         description_label.pack(fill=X, padx="10p", pady="10p")
         self.text_input = ScrolledText(self, undo=True, tabs=True, height=0)
         self.text_input.insert(0.0, constants.DEFAULT_INPUT_CONTENT)
+        self.text_input.edit_reset()
         self.text_input.pack(fill=BOTH, expand=True)
         self.text_context_menu = TextContextMenu(self.text_input)
         self.text_context_menu.bind_to_widget()
@@ -124,7 +125,6 @@ class MainController:
         return self.window.text_input.get(1.0, END)[:-1]  # 获取到的字符串末尾会有一个换行符，所以要消掉
 
     def _set_text_content(self, new_content):
-        self.window.text_input.delete(1.0, END)
         self.window.text_input.replace(1.0, END, new_content)
 
     def on_generate_click(self):
