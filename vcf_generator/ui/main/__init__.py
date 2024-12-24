@@ -34,8 +34,7 @@ class MainWindow(BaseWindow):
         self.title(constants.APP_NAME)
         self.set_minsize(400, 400)
         self.set_size(600, 600)
-        sizegrip = Sizegrip(self)
-        sizegrip.place(relx=1, rely=1, anchor=SE)
+
         description_label = Label(self, text=constants.USAGE, justify=LEFT)
         description_label.bind("<Configure>", get_auto_wrap_event(description_label))
         description_label.pack(fill=X, padx="10p", pady="10p")
@@ -48,6 +47,9 @@ class MainWindow(BaseWindow):
 
         bottom_frame = Frame(self)
         bottom_frame.pack(fill=X)
+
+        sizegrip = Sizegrip(bottom_frame)
+        sizegrip.place(relx=1, rely=1, anchor=SE)
 
         self.progress_bar = Progressbar(bottom_frame, orient=HORIZONTAL, length=200, mode='determinate', maximum=10)
 
