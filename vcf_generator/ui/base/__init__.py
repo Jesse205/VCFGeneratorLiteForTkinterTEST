@@ -7,11 +7,12 @@ from typing import Union
 from vcf_generator.util.display import get_scale_factor
 from vcf_generator.util.resource import get_window_icon
 
-__all__ = ["BaseWindow"]
+__all__ = ["BaseWindow", "BaseToplevel"]
 
 
 class WindowInjector(Misc, Wm):
     _scale_factor = 1
+    menu_bar: Menu = None
 
     def window_injector_init(self):
         self.withdraw()
@@ -20,11 +21,11 @@ class WindowInjector(Misc, Wm):
         self._apply_default_icon()
         self._apply_default_font()
         self._apply_default_theme()
+        self.on_init_window()
         self.on_init_widgets()
-        menu_bar = Menu(self, tearoff=False)
-        self.on_init_menus(menu_bar)
-        if menu_bar.children:
-            self.configure({"menu": menu_bar})
+        self.menu_bar = Menu(self, tearoff=False)
+        self.on_init_menus(self.menu_bar)
+        self.configure({"menu": self.menu_bar})
         self.center_window()
         self.deiconify()
 
@@ -39,6 +40,9 @@ class WindowInjector(Misc, Wm):
     def _apply_default_theme(self):
         style = Style(self)
         style.configure("TButton", padding="2p")
+
+    def on_init_window(self):
+        pass
 
     def on_init_widgets(self):
         pass

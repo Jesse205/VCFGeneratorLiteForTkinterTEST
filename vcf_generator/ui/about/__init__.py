@@ -13,10 +13,12 @@ from vcf_generator.widget.tkhtmlview import HTMLScrolledText
 class AboutWindow(BaseToplevel):
     app_icon_image = None
 
-    def on_init_widgets(self):
+    def on_init_window(self):
         self.title(f"关于 {constants.APP_NAME}")
         self.set_size(500, 400)
         self.resizable(False, False)
+
+    def on_init_widgets(self):
         header_frame = tk.Frame(self, background="white")
         header_frame.pack(fill=X)
         self.on_init_header(header_frame)

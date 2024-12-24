@@ -29,12 +29,13 @@ class MainWindow(BaseWindow):
     text_context_menu = None
     progress_bar = None
 
-    def on_init_widgets(self):
+    def on_init_window(self):
         self.anchor(CENTER)
         self.title(constants.APP_NAME)
         self.set_minsize(400, 400)
         self.set_size(600, 600)
 
+    def on_init_widgets(self):
         description_label = Label(self, text=constants.USAGE, justify=LEFT)
         description_label.bind("<Configure>", get_auto_wrap_event(description_label))
         description_label.pack(fill=X, padx="10p", pady="10p")
