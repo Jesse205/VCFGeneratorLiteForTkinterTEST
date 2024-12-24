@@ -8,7 +8,7 @@ from typing import IO, List
 
 from constants import URL_RELEASES, URL_SOURCE
 from vcf_generator import constants
-from vcf_generator.ui import about
+from vcf_generator.ui.about import create_about_window
 from vcf_generator.ui.base import BaseWindow
 from vcf_generator.util import dialog, vcard
 from vcf_generator.util.phone import is_china_phone
@@ -189,7 +189,7 @@ class MainController:
         dialog.show_error("无法识别电话号码", message)
 
     def on_about_click(self):
-        about.AboutWindow(self.window)
+        create_about_window(self.window)
 
     def _clean_quotes(self):
         origin_content = self._get_text_content()
@@ -200,10 +200,10 @@ class MainController:
         self._clean_quotes()
 
 
-def main():
-    window = MainWindow()
-    window.mainloop()
+def create_main_window() -> MainWindow:
+    return MainWindow()
 
 
 if __name__ == '__main__':
-    main()
+    window = create_main_window()
+    window.mainloop()

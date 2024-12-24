@@ -1,7 +1,7 @@
-from vcf_generator import constants
-import vcf_generator.ui.main
 import logging
 
+from vcf_generator import constants
+from vcf_generator.ui.main import create_main_window
 from vcf_generator.util import display
 
 logging.basicConfig(level=logging.INFO)
@@ -11,4 +11,5 @@ logging.info("Starting VCF Generator...")
 
 if __name__ == '__main__':
     print(f"Tip: The source code is hosted at {constants.URL_SOURCE}")
-    vcf_generator.ui.main.main()
+    main_window = create_main_window()
+    main_window.mainloop()
