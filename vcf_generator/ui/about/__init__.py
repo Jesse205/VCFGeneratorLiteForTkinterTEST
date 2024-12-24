@@ -45,10 +45,5 @@ class AboutWindow(BaseToplevel):
         app_version_label.grid(row=1, column=1, sticky=NW)
 
 
-def create_about_window(master: Misc | None = None) -> AboutWindow:
-    return AboutWindow(master)
-
-
-if __name__ == '__main__':
-    window = create_about_window()
-    window.mainloop()
+def create_about_window(master: Misc | None = None) -> tuple[AboutWindow]:
+    return AboutWindow(master),

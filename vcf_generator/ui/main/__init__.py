@@ -18,16 +18,16 @@ from vcf_generator.widget.scrolledtext import ScrolledText
 
 MAX_INVALID_COUNT = 1000
 
+EVENT_ON_ABOUT_CLICK = "<<OnAboutClick>>"
+EVENT_ON_CLEAN_QUOTES_CLICK = "<<OnCleanQuotesClick>>"
+EVENT_ON_GENERATE_CLICK = "<<OnGenerateClick>>"
+
 
 class MainWindow(BaseWindow):
     generate_button = None
     text_input = None
     text_context_menu = None
     progress_bar = None
-
-    def __init__(self):
-        self.controller = MainController(self)
-        super().__init__()
 
     def on_init_widgets(self):
         self.anchor(CENTER)
@@ -52,7 +52,7 @@ class MainWindow(BaseWindow):
         self.progress_bar = Progressbar(bottom_frame, orient=HORIZONTAL, length=200, mode='determinate', maximum=10)
 
         self.generate_button = Button(bottom_frame, text="生成", default=ACTIVE,
-                                      command=self.controller.on_generate_click)
+                                      command=lambda: self.event_generate(EVENT_ON_GENERATE_CLICK))
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def show_progress_bar(self):
@@ -96,7 +96,7 @@ class MainWindow(BaseWindow):
         tool_menu = Menu(menu_bar, tearoff=False)
         tool_menu.add_command(
             label="移除引号",
-            command=self.controller.on_clean_quotes_click
+            command=lambda: self.event_generate(EVENT_ON_CLEAN_QUOTES_CLICK)
         )
         menu_bar.add_cascade(label="工具", menu=tool_menu)
 
@@ -112,7 +112,7 @@ class MainWindow(BaseWindow):
         help_menu.add_separator()
         help_menu.add_command(
             label="关于",
-            command=self.controller.on_about_click
+            command=lambda: self.event_generate(EVENT_ON_ABOUT_CLICK)
         )
         menu_bar.add_cascade(label="帮助", menu=help_menu)
 
@@ -120,6 +120,9 @@ class MainWindow(BaseWindow):
 class MainController:
     def __init__(self, window: MainWindow):
         self.window = window
+        window.bind(EVENT_ON_ABOUT_CLICK, self.on_about_click)
+        window.bind(EVENT_ON_CLEAN_QUOTES_CLICK, self.on_clean_quotes_click)
+        window.bind(EVENT_ON_GENERATE_CLICK, self.on_generate_click)
 
     def _get_text_content(self):
         return self.window.text_input.get(1.0, END)[:-1]  # 获取到的字符串末尾会有一个换行符，所以要消掉
@@ -127,7 +130,13 @@ class MainController:
     def _set_text_content(self, new_content):
         self.window.text_input.replace(1.0, END, new_content)
 
-    def on_generate_click(self):
+    def on_about_click(self, _):
+        create_about_window(self.window)
+
+    def on_clean_quotes_click(self, _):
+        self._clean_quotes()
+
+    def on_generate_click(self, _):
         text_content = self._get_text_content()
         logging.info("Start generate vcf file.")
         file_io = filedialog.asksaveasfile(parent=self.window, initialfile="phones.vcf",
@@ -188,22 +197,13 @@ class MainController:
             message += f"... 等{count - MAX_INVALID_COUNT}个。"
         dialog.show_error("无法识别电话号码", message)
 
-    def on_about_click(self):
-        create_about_window(self.window)
-
     def _clean_quotes(self):
         origin_content = self._get_text_content()
         result_content = re.sub(r'"\s*(([^"\s][^"]*[^"\s])|[^"\s]?)\s*"', r'\1', origin_content, flags=re.S)
         self._set_text_content(result_content)
 
-    def on_clean_quotes_click(self):
-        self._clean_quotes()
 
-
-def create_main_window() -> MainWindow:
-    return MainWindow()
-
-
-if __name__ == '__main__':
-    window = create_main_window()
-    window.mainloop()
+def create_main_window() -> tuple[MainWindow, MainController]:
+    window = MainWindow()
+    controller = MainController(window)
+    return window, controller

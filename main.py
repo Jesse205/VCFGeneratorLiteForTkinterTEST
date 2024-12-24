@@ -11,5 +11,5 @@ logging.info("Starting VCF Generator...")
 
 if __name__ == '__main__':
     print(f"Tip: The source code is hosted at {constants.URL_SOURCE}")
-    main_window = create_main_window()
+    main_window, _ = create_main_window()
     main_window.mainloop()
