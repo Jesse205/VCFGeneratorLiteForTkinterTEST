@@ -1,10 +1,9 @@
-import logging
 import re
 import webbrowser
+from concurrent.futures import Future
 from tkinter import filedialog, Menu
 from tkinter.constants import *
 from tkinter.ttk import *
-from typing import IO
 
 from vcf_generator.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE
 from vcf_generator.ui.about import create_about_window
@@ -156,10 +155,7 @@ class MainController:
                                            filetypes=[("vCard 文件", ".vcf")], defaultextension=".vcf")
         if file_io is None:
             return
-        cpu_executor.submit(self.generate_vcard_file, file_io, text_content)
 
-    def generate_vcard_file(self, output_io: IO, text_content):
-        logging.info("Start generate vcf file.")
         self.window.show_progress_bar()
         self.window.set_progress(0)
         self.window.disable_generate_button()
@@ -168,15 +164,17 @@ class MainController:
             if self._previous_update_progress_id is not None:
                 self.window.after_cancel(self._previous_update_progress_id)
             self._previous_update_progress_id = self.window.after_idle(self.window.set_progress, progress)
-            self._previous_progress = progress
 
-        result = generate_vcard_file(output_io, text_content, on_update_progress=update_progress)
-        if len(result.invalid_items) > 0:
-            MainController.show_invalid_items_dialog(result.invalid_items)
-        logging.info("Generate file successfully.")
-        dialog.show_info("生成 VCF 文件完成", f"已导出文件到 \"{output_io.name}\"。")
-        self.window.hide_progress_bar()
-        self.window.enable_generate_button()
+        def done(_):
+            if len(future.result().invalid_items) > 0:
+                MainController.show_invalid_items_dialog(future.result().invalid_items)
+            dialog.show_info("生成 VCF 文件完成", f"已导出文件到 \"{file_io.name}\"。")
+            self.window.hide_progress_bar()
+            self.window.enable_generate_button()
+
+        future: Future = cpu_executor.submit(generate_vcard_file, file_io, text_content,
+                                             on_update_progress=update_progress)
+        future.add_done_callback(done)
 
     @staticmethod
     def show_invalid_items_dialog(invalid_items: list[LineContent]):

@@ -36,6 +36,7 @@ class GenerateResult:
 
 
 def generate_vcard_file(output_io: IO, text_content: str, on_update_progress: Callable[[float], None] = None):
+    logging.info("Start generate vcf file.")
     invalid_items: list[LineContent] = []
 
     # 将制表符转换为空格，统一处理
@@ -67,4 +68,5 @@ def generate_vcard_file(output_io: IO, text_content: str, on_update_progress: Ca
 
     io_queue.join()
     io_queue.shutdown()
+    logging.info("Generate file successfully.")
     return GenerateResult(invalid_items)
