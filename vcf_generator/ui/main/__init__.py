@@ -168,7 +168,7 @@ class MainController:
         def done(future: Future[GenerateResult]):
             if len(future.result().invalid_items) > 0:
                 MainController.show_invalid_items_dialog(future.result().invalid_items)
-            dialog.show_info("生成 VCF 文件完成", f"已导出文件到 \"{file_io.name}\"。")
+            dialog.show_info("生成 VCF 文件完成", f'已导出文件到 "{file_io.name}"。')
             self.window.hide_progress_bar()
             self.window.enable_generate_button()
 
