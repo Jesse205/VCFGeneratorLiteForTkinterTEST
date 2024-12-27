@@ -1,4 +1,3 @@
-import sys
 from queue import Queue
 from typing import IO, AnyStr, Callable
 
@@ -14,4 +13,5 @@ def write_io_from_queue(output_io: IO, queue: Queue[AnyStr], on_write: Callable[
             try:
                 on_write(write_count)
             except Exception as e:
-                print(e, file=sys.stderr)
+                queue.shutdown(True)
+                raise e

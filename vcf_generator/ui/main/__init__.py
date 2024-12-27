@@ -10,7 +10,7 @@ from vcf_generator.ui.about import create_about_window
 from vcf_generator.ui.base import BaseWindow
 from vcf_generator.util import dialog
 from vcf_generator.util.thread import cpu_executor
-from vcf_generator.util.vcard import generate_vcard_file, LineContent
+from vcf_generator.util.vcard import generate_vcard_file, LineContent, GenerateResult
 from vcf_generator.util.widget import get_auto_wrap_event
 from vcf_generator.widget.menu import TextContextMenu
 from vcf_generator.widget.scrolledtext import ScrolledText
@@ -165,16 +165,16 @@ class MainController:
                 self.window.after_cancel(self._previous_update_progress_id)
             self._previous_update_progress_id = self.window.after_idle(self.window.set_progress, progress)
 
-        def done(_):
+        def done(future: Future[GenerateResult]):
             if len(future.result().invalid_items) > 0:
                 MainController.show_invalid_items_dialog(future.result().invalid_items)
             dialog.show_info("生成 VCF 文件完成", f"已导出文件到 \"{file_io.name}\"。")
             self.window.hide_progress_bar()
             self.window.enable_generate_button()
 
-        future: Future = cpu_executor.submit(generate_vcard_file, file_io, text_content,
-                                             on_update_progress=update_progress)
-        future.add_done_callback(done)
+        process_future: Future[GenerateResult] = cpu_executor.submit(generate_vcard_file, file_io, text_content,
+                                                                     on_update_progress=update_progress)
+        process_future.add_done_callback(lambda future: self.window.after_idle(done, future))
 
     @staticmethod
     def show_invalid_items_dialog(invalid_items: list[LineContent]):

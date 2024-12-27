@@ -1,10 +1,11 @@
 import logging
+from concurrent.futures import Future
 from queue import Queue
 from typing import IO, Callable
 
 from vcf_generator.util.io import write_io_from_queue
 from vcf_generator.util.person import parse_person
-from vcf_generator.util.thread import io_executor
+from vcf_generator.util.thread import io_executor, print_future_result
 
 
 def _str_to_hex(content: str):
@@ -54,8 +55,9 @@ def generate_vcard_file(output_io: IO, text_content: str, on_update_progress: Ca
             previous_progress = progress
             on_update_progress(progress)
 
-    io_queue: Queue[str] = Queue()
-    io_executor.submit(write_io_from_queue, output_io, io_queue, on_write=on_write)
+    write_queue: Queue[str] = Queue()
+    write_future: Future[None] = io_executor.submit(write_io_from_queue, output_io, write_queue, on_write=on_write)
+    write_future.add_done_callback(print_future_result)
 
     for position, line_text in enumerate(items, start=1):
         try:
@@ -64,9 +66,9 @@ def generate_vcard_file(output_io: IO, text_content: str, on_update_progress: Ca
             logging.error(e)
             invalid_items.append(LineContent(position, line_text))
         else:
-            io_queue.put(f"{get_vcard_item_content(person.name, person.phone)}\n\n")
+            write_queue.put(f"{get_vcard_item_content(person.name, person.phone)}\n\n")
 
-    io_queue.join()
-    io_queue.shutdown()
+    write_queue.shutdown()
+    write_queue.join()
     logging.info("Generate file successfully.")
     return GenerateResult(invalid_items)
