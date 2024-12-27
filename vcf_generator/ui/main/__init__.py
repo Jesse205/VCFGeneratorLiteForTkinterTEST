@@ -4,19 +4,19 @@ import webbrowser
 from tkinter import filedialog, Menu
 from tkinter.constants import *
 from tkinter.ttk import *
-from typing import IO, List
+from typing import IO
 
-from constants import URL_RELEASES, URL_SOURCE
-from vcf_generator import constants
+from vcf_generator.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE
 from vcf_generator.ui.about import create_about_window
 from vcf_generator.ui.base import BaseWindow
-from vcf_generator.util import dialog, vcard
-from vcf_generator.util.phone import is_china_phone
+from vcf_generator.util import dialog
+from vcf_generator.util.thread import cpu_executor
+from vcf_generator.util.vcard import generate_vcard_file, LineContent
 from vcf_generator.util.widget import get_auto_wrap_event
 from vcf_generator.widget.menu import TextContextMenu
 from vcf_generator.widget.scrolledtext import ScrolledText
 
-MAX_INVALID_COUNT = 1000
+MAX_INVALID_COUNT = 200
 
 EVENT_ON_ABOUT_CLICK = "<<OnAboutClick>>"
 EVENT_ON_CLEAN_QUOTES_CLICK = "<<OnCleanQuotesClick>>"
@@ -31,16 +31,16 @@ class MainWindow(BaseWindow):
 
     def on_init_window(self):
         self.anchor(CENTER)
-        self.title(constants.APP_NAME)
+        self.title(APP_NAME)
         self.set_minsize(400, 400)
         self.set_size(600, 600)
 
     def on_init_widgets(self):
-        description_label = Label(self, text=constants.USAGE, justify=LEFT)
+        description_label = Label(self, text=USAGE, justify=LEFT)
         description_label.bind("<Configure>", get_auto_wrap_event(description_label))
         description_label.pack(fill=X, padx="10p", pady="10p")
         self.text_input = ScrolledText(self, undo=True, tabs=True, height=0)
-        self.text_input.insert(0.0, constants.DEFAULT_INPUT_CONTENT)
+        self.text_input.insert(0.0, DEFAULT_INPUT_CONTENT)
         self.text_input.edit_reset()
         self.text_input.pack(fill=BOTH, expand=True)
         self.text_context_menu = TextContextMenu(self.text_input)
@@ -52,7 +52,7 @@ class MainWindow(BaseWindow):
         sizegrip = Sizegrip(bottom_frame)
         sizegrip.place(relx=1, rely=1, anchor=SE)
 
-        self.progress_bar = Progressbar(bottom_frame, orient=HORIZONTAL, length=200, mode='determinate', maximum=10)
+        self.progress_bar = Progressbar(bottom_frame, orient=HORIZONTAL, length=200, mode='determinate', maximum=1)
 
         self.generate_button = Button(bottom_frame, text="生成", default=ACTIVE,
                                       command=lambda: self.event_generate(EVENT_ON_GENERATE_CLICK))
@@ -63,6 +63,15 @@ class MainWindow(BaseWindow):
 
     def hide_progress_bar(self):
         self.progress_bar.pack_forget()
+
+    def set_progress(self, progress: float):
+        self.progress_bar.configure(value=progress)
+
+    def enable_generate_button(self):
+        self.generate_button.configure(state=NORMAL)
+
+    def disable_generate_button(self):
+        self.generate_button.configure(state=DISABLED)
 
     def on_init_menus(self, menu_bar: Menu):
         file_menu = Menu(menu_bar, tearoff=False)
@@ -121,6 +130,8 @@ class MainWindow(BaseWindow):
 
 
 class MainController:
+    _previous_update_progress_id: str = None
+
     def __init__(self, window: MainWindow):
         self.window = window
         window.bind(EVENT_ON_ABOUT_CLICK, self.on_about_click)
@@ -141,64 +152,40 @@ class MainController:
 
     def on_generate_click(self, _):
         text_content = self._get_text_content()
-        logging.info("Start generate vcf file.")
         file_io = filedialog.asksaveasfile(parent=self.window, initialfile="phones.vcf",
                                            filetypes=[("vCard 文件", ".vcf")], defaultextension=".vcf")
         if file_io is None:
             return
+        cpu_executor.submit(self.generate_vcard_file, file_io, text_content)
+
+    def generate_vcard_file(self, output_io: IO, text_content):
+        logging.info("Start generate vcf file.")
         self.window.show_progress_bar()
-        self.window.progress_bar.configure(value=0)
-        self.window.update()
-        invalid_lines = self.generate_content(file_io, text_content)
-        if len(invalid_lines) > 0:
-            MainController.show_invalid_lines_dialog(invalid_lines)
-        self.window.hide_progress_bar()
-        dialog.show_info("生成 VCF 文件完成", f"已导出文件到 \"{file_io.name}\"。")
+        self.window.set_progress(0)
+        self.window.disable_generate_button()
+
+        def update_progress(progress):
+            if self._previous_update_progress_id is not None:
+                self.window.after_cancel(self._previous_update_progress_id)
+            self._previous_update_progress_id = self.window.after_idle(self.window.set_progress, progress)
+            self._previous_progress = progress
+
+        result = generate_vcard_file(output_io, text_content, on_update_progress=update_progress)
+        if len(result.invalid_items) > 0:
+            MainController.show_invalid_items_dialog(result.invalid_items)
         logging.info("Generate file successfully.")
-
-    def generate_content(self, str_io: IO, text_content: str):
-        logging.info("Start generate content.")
-        invalid_lines: List[str] = []
-
-        # 将制表符转换为空格，统一处理
-        text_content = text_content.replace("\t", " ")
-        items = text_content.split("\n")
-        length = len(items)
-        progress = 0
-        pre_progress_value = 0
-        for line_text in items:
-            progress += 1
-            progress_value = int(progress / length * 10)
-            if progress_value > pre_progress_value:
-                pre_progress_value = progress_value
-                self.window.progress_bar.configure(value=progress_value)
-                self.window.update()
-            line_text = line_text.strip()
-            # 空行跳过
-            if line_text == "":
-                continue
-            person_info = line_text.rsplit(" ", 1)
-            # 虽然是分割一次，但是用户可能不会输入空格。这时候会出现错误。
-            if len(person_info) != 2:
-                logging.error(f"Contact not recognized: '{line_text}'", )
-                invalid_lines.append(line_text)
-                continue
-            name, phone = person_info[0].strip(), person_info[1].strip()
-            if not phone.isnumeric() or not is_china_phone(phone):
-                logging.error(f"The phone number is illegal: '{line_text}'.")
-                invalid_lines.append(line_text)
-                continue
-            str_io.write(f"{vcard.get_vcard_item_content(name, int(phone))}\n\n")
-        logging.info("Generation complete.")
-        return invalid_lines
+        dialog.show_info("生成 VCF 文件完成", f"已导出文件到 \"{output_io.name}\"。")
+        self.window.hide_progress_bar()
+        self.window.enable_generate_button()
 
     @staticmethod
-    def show_invalid_lines_dialog(invalid_lines: List[str]):
-        count = len(invalid_lines)
-        message = f"以下电话号码无法识别：\n{', '.join(invalid_lines[0:MAX_INVALID_COUNT])}"
+    def show_invalid_items_dialog(invalid_items: list[LineContent]):
+        count = len(invalid_items)
+        invalid_text_list = [f"第 {item.line} 行：{item.content}" for item in invalid_items[0:MAX_INVALID_COUNT]]
+        message = "以下电话号码无法识别：\n{content}".format(content='，'.join(invalid_text_list))
         if count > MAX_INVALID_COUNT:
-            message += f"... 等{count - MAX_INVALID_COUNT}个。"
-        dialog.show_error("无法识别电话号码", message)
+            message += f"... 等 {count - MAX_INVALID_COUNT} 个。"
+        dialog.show_error("出现无法识别电话号码", message)
 
     def _clean_quotes(self):
         origin_content = self._get_text_content()
