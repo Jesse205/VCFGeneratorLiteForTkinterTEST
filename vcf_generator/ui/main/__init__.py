@@ -102,14 +102,12 @@ class MainWindow(BaseWindow):
             command=self.text_context_menu.clear,
             accelerator="Ctrl + D",
         )
-        menu_bar.add_cascade(label="编辑", menu=edit_menu)
-
-        tool_menu = Menu(menu_bar, tearoff=False)
-        tool_menu.add_command(
+        edit_menu.add_separator()
+        edit_menu.add_command(
             label="移除引号",
             command=lambda: self.event_generate(EVENT_ON_CLEAN_QUOTES_CLICK)
         )
-        menu_bar.add_cascade(label="工具", menu=tool_menu)
+        menu_bar.add_cascade(label="编辑", menu=edit_menu)
 
         help_menu = Menu(menu_bar, tearoff=False)
         help_menu.add_command(
