@@ -166,9 +166,7 @@ class MainController:
             self._previous_update_progress_id = self.window.after_idle(self.window.set_progress, progress)
 
         def done(future: Future[GenerateResult]):
-            if len(future.result().invalid_items) > 0:
-                MainController.show_invalid_items_dialog(future.result().invalid_items)
-            dialog.show_info("生成 VCF 文件完成", f'已导出文件到 "{file_io.name}"。')
+            self._show_generate_done_dialog(file_io.name, future.result().invalid_items)
             self.window.hide_progress_bar()
             self.window.enable_generate_button()
 
@@ -176,14 +174,21 @@ class MainController:
                                                                      on_update_progress=update_progress)
         process_future.add_done_callback(lambda future: self.window.after_idle(done, future))
 
-    @staticmethod
-    def show_invalid_items_dialog(invalid_items: list[LineContent]):
-        count = len(invalid_items)
-        invalid_text_list = [f"第 {item.line} 行：{item.content}" for item in invalid_items[0:MAX_INVALID_COUNT]]
-        message = "以下电话号码无法识别：\n{content}".format(content='，'.join(invalid_text_list))
-        if count > MAX_INVALID_COUNT:
-            message += f"... 等 {count - MAX_INVALID_COUNT} 个。"
-        dialog.show_error("出现无法识别电话号码", message)
+    def _show_generate_done_dialog(self, display_path: str, invalid_items: list[LineContent]):
+        title = "生成 VCF 文件完成"
+        if len(invalid_items) > 0:
+            invalid_text = '，'.join(
+                [f"第 {item.line} 行：{item.content}" for item in invalid_items[0:MAX_INVALID_COUNT]])
+            ignored_count = max(len(invalid_items) - MAX_INVALID_COUNT, 0)
+            if ignored_count > 0:
+                invalid_text += f"... 等 {ignored_count} 个。"
+            message = "以下电话号码无法识别：\n{invalid_text}\n\n已导出文件到 {display_path}，但异常的号码未包含在此的文件中。".format(
+                invalid_text=invalid_text,
+                display_path=display_path
+            )
+            dialog.show_warning(self.window, title, message)
+        else:
+            dialog.show_info(self.window, title, f'已导出文件到“{display_path}”。')
 
     def _clean_quotes(self):
         origin_content = self._get_text_content()
