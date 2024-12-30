@@ -73,8 +73,9 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 ### 开发准备
 
 1. 安装 [Python 3.13+](https://www.python.org/)、[PDM](https://pdm-project.org/zh-cn/latest/)、[UPX](https://upx.github.io/)、[InnoSetup 6.3](https://jrsoftware.org/isinfo.php)；
-2. 安装项目依赖：`pdm install`。
-3. 安装 PDM 插件：`pdm install --plugins`
+2. 安装项目依赖：`pdm install`；
+3. 安装 PDM 插件：`pdm install --plugins`；
+4. 下载 InnoSetup 文件：`pdm run prepare_innosetup_extensions`。
 
 ### 构建应用
 

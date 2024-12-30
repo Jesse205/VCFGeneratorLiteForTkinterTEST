@@ -77,8 +77,9 @@ This project defines a number of commands that you can view with `pdm run --list
 ### Pre-development
 
 1. Install [Python 3.11+](https://www.python.org/), [PDM](https://pdm-project.org/zh-cn/latest/), [UPX](https://upx.github.io/), [InnoSetup 6.3](https://jrsoftware.org/isinfo.php);
-2. Install dependencies: `pdm install`.
-3. Install the PDM plugins: `pdm install --plugins`
+2. Install dependencies: `pdm install`;
+3. Install the PDM plugins: `pdm install --plugins`;
+4. Download the InnoSetup file: `pdm run prepare_innosetup_extensions`。
 
 ### Building
 
