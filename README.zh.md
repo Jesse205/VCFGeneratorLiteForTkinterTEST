@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./vcf_generator/assets/images/icon.png" width="192"/>
+<img src="./docs/images/icon.png" width="192"/>
 
 # VCF 生成器 Lite
 
@@ -22,13 +22,13 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 ## 软件截图
 
-<img src="./screenshots/Snipaste_2024-06-17_04-06-51.png" width="600" alt="Snipaste_2024-06-17_04-06-51.png" />
+<img src="./docs/images/screenshots/Snipaste_2024-06-17_04-06-51.png" width="600" alt="Snipaste_2024-06-17_04-06-51.png" />
 
 ## 使用方法
 
 进入[发行版][ReleaseInGitee]下载并运行安装程序（文件名通常是 `VCFGenerator_<版本>_<Python版本>_<处理器架构>_64bit_setup.exe`）。
 
-1. 把名字和电话以每行` 姓名 电话号码` 的格式复制到下面的编辑框内；
+1. 把名字和电话以每行 `姓名 电话号码` 的格式复制到下面的编辑框内；
    ```text
    李四	13445467890
    王五	13554678907
@@ -56,36 +56,39 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 ## 项目结构
 
 - `vcf_generator`：源代码目录
-    - `console`：开发 CLI
     - `ui`： GUI 用户界面
     - `util`：工具类
     - `widget`：Tkinter 组件
     - `constants.py`：常量
-- `assets`：资源文件目录
+  - `assets`：资源文件目录
+- `scripts`：脚本目录
 - `main.py`：程序入口
 
 ## 开发项目
 
-> [!NOTE]
->
-> 开发环境目前仅支持 64 位 Windows 8+，暂不支持 macOS 与 Linux。
+开发环境目前仅支持 64 位 Windows 8+，暂不支持 macOS 与 Linux。
+
+本项目定义了一些命令，您可以通过 `pdm run --list` 查看。
+
+### 开发准备
+
+1. 安装 [Python 3.13+](https://www.python.org/)、[PDM](https://pdm-project.org/zh-cn/latest/)、[UPX](https://upx.github.io/)、[InnoSetup 6.3](https://jrsoftware.org/isinfo.php)；
+2. 安装项目依赖：`pdm install`。
+3. 安装 PDM 插件：`pdm install --plugins`
 
 ### 构建应用
 
-1. 安装 [Python 3.8+](https://www.python.org/)、[Poetry](https://python-poetry.org/)、[UPX](https://upx.github.io/)、[InnoSetup](https://jrsoftware.org/isinfo.php)
-2. 在 [Inno Setup Translations](https://jrsoftware.org/files/istrans/) 网站下载并安装安装 `ChineseSimplified.isl`
-3. 安装项目：`poetry install`
-4. 生成 `file_version_info.txt`：`poetry run generate-version-file`
-5. 生成应用的二进制文件：`poetry run build-app`
-6. 生成安装程序：`poetry run build-setup`
+1. 生成 `file_version_info.txt`：`pdm run generate-version-file`；
+2. 生成应用的二进制文件：`pdm run build-app`；
+3. 生成安装程序：`pdm run build-setup`。
 
 ### 切换版本
 
-运行 `poetry run change-version <版本名>`
+运行 `pdm run change-version <版本名>`。
 
 ## 许可
 
-本项目以 [MIT 许可](./LICENSE)开源
+本项目以 [MIT 许可](./LICENSE)开源。
 
 - [Fluent Emoji](https://github.com/microsoft/fluentui-emoji)（作为应用图标使用）：MIT license
 - [Python](https://www.python.org/)：[Python license](https://docs.python.org/3/license.html)
@@ -93,8 +96,8 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 - [PyInstaller](https://pyinstaller.org/en/stable/)：[PyInstaller license](https://pyinstaller.org/en/stable/license.html)
 - [tkhtmlview](https://github.com/bauripalash/tkhtmlview)：MIT License
 
-[ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
-
 ## 贡献项目
 
 请参阅 [《贡献指南》](./CONTRIBUTING.zh.md)。
+
+[ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest

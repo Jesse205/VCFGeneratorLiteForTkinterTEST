@@ -1,27 +1,48 @@
-[tool.poetry]
+[project]
 name = "vcf_generator"
-version = "3.0.0"
+dynamic = ["version"]
 description = "A simple VCF generator"
-authors = ["Jesse205 <2055675594@qq.com>"]
-license = "MIT"
-readme = ["README.md", "README.zh.md"]
-package-mode = false
-repository = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
-packages = [
-    { include = "vcf_generator" },
-    { include = "scripts" },
+authors = [
+    { name = "Jesse205", email = "2055675594@qq.com" },
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = "==3.13.*"
+dependencies = [
 ]
 
-[tool.poetry.scripts]
-build-app = "scripts.buildApp:main"
-build-setup = "scripts.buildSetup:main"
-change-version = "scripts.changeVersion:main"
+[dependency-groups]
+dev = [
+    "pyinstaller<7.0.0,>=6.11.0",
+    "pyinstaller-versionfile<4.0.0,>=3.0.0",
+    "requests>=2.32.3",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.13,<3.14"
-pyinstaller = "^6.11.0"
-pyinstaller-versionfile = "^3.0.0"
+[project.urls]
+Repository = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
+
+[project.gui-scripts]
+vcf-generator = "vcf_generator.__main__:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+plugins = [
+    "pdm-packer"
+]
+
+[tool.pdm.scripts]
+prepare_innosetup_extensions = { call = "scripts.prepare_innosetup_extensions:main" }
+build_app = { call = "scripts.build_app:main" }
+build_installer = { call = "scripts.build_installer:main" }
+change_version = { call = "scripts.change_version:main" }
+
+[tool.pdm.build]
+is-purelib = true
+
+[tool.pdm.version]
+source = "file"
+path = "src/vcf_generator/__init__.py"
+

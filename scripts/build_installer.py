@@ -1,9 +1,9 @@
 import os
-import sys
-from vcf_generator import __version__ as app_version
 import subprocess
+import sys
 
 from scripts.utils import get_bits, get_machine
+from vcf_generator import __version__ as app_version
 
 
 def find_iscc_in_path():
@@ -26,4 +26,7 @@ def main():
     if iscc_path is None:
         iscc_path = r'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
 
-    subprocess.run([iscc_path, f"/F{output_name}", os.path.abspath('setup.iss')], shell=True)
+    result = subprocess.run([iscc_path, f"/F{output_name}", os.path.abspath('setup.iss')], shell=True)
+    if result.returncode != 0:
+        print("Build failed.", file=sys.stderr)
+        exit(result.returncode)

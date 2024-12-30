@@ -5,7 +5,7 @@ from tkinter.ttk import Style
 from typing import Union
 
 from vcf_generator.util.display import get_scale_factor
-from vcf_generator.util.resource import get_window_icon
+from vcf_generator.util.resource import get_asset_data
 
 __all__ = ["BaseWindow", "BaseToplevel"]
 
@@ -30,7 +30,7 @@ class WindowInjector(Misc, Wm):
         self.deiconify()
 
     def _apply_default_icon(self):
-        self.iconbitmap(default=get_window_icon())
+        self.iconphoto(True, PhotoImage(data=get_asset_data("images/icon-48.png")))
 
     def _apply_default_font(self):
         self.font = tk_font.nametofont("TkDefaultFont")

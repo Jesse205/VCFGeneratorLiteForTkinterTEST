@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./vcf_generator/assets/images/icon.png" width="192"/>
+<img src="./docs/images/icon.png" width="192"/>
 
 # VCF Generator Lite
 
@@ -22,13 +22,14 @@ VCF generator, input name and phone number to automatically generate VCF files f
 
 ## Screenshot
 
-<img src="./screenshots/Snipaste_2024-06-17_04-06-51.png" width="600" alt="Snipaste_2024-06-17_04-06-51.png" />
+<img src="./docs/images/screenshots/Snipaste_2024-06-17_04-06-51.png" width="600" alt="Snipaste_2024-06-17_04-06-51.png" />
 
 ## Usage
 
-Go to the [Release][ReleaseInGitee] to download and run the installation program (file name is usually `VCFGenerator_<Version>_<PythonVersion>_<Architecture>_64bit_setup.exe`).
+Go to the [Release][ReleaseInGitee] to download and run the installation program (file name is usually
+`VCFGenerator_<Version>_<PythonVersion>_<Architecture>_64bit_setup.exe`).
 
-1. Copy the name and phone number in the format of "name and phone number" on each line into the editing box below;
+1. Copy the name and phone number in the format of `name  phone_number` on each line into the editing box below;
    ```text
    Hardy Buck 13445467890
    Alva Mackintosh 13554678907
@@ -43,16 +44,17 @@ Go to the [Release][ReleaseInGitee] to download and run the installation program
 > - Tabs will be automatically converted to spaces for processing.
 > - The program will automatically remove excess spaces from the input box.
 > - If there are multiple spaces in each line, all characters before the last space will be treated as names.\
->   For example, `Hardy Buck 13333333333` will be recognized as
->   ```text
+    > For example, `Hardy Buck 13333333333` will be recognized as
+    >   ```text
 >   Name: Hardy Buck
 >   Phone: 13333333333
 >   ```
 
 > [!NOTE]
-> 
-> If you need to use this software on Windows 7, please add or overwrite the `python313.dll` and `api-ms-win-core-path-l1-1-0.dll` files compatible with Windows 7 in the `_internal` folder of the software installation directory. You can download these two files from the [PythonWin7](https://github.com/adang1345/PythonWin7) repository.
-
+>
+> If you need to use this software on Windows 7, please add or overwrite the `python313.dll` and
+`api-ms-win-core-path-l1-1-0.dll` files compatible with Windows 7 in the
+`_internal` folder of the software installation directory. You can download these two files from the [PythonWin7](https://github.com/adang1345/PythonWin7) repository.
 
 ## Project Structure
 
@@ -62,27 +64,31 @@ Go to the [Release][ReleaseInGitee] to download and run the installation program
     - `util`: Tool classes
     - `widget`: Tkinter widget
     - `constants.py`: Constants
-- `assets`: Resource file directory
+  - `assets`: Resource file directory
+- `scripts`：Script directory
 - `main.py`: Program entry
 
 ## Developing
 
-> [!NOTE]
->
-> The development environment currently only supports 64 bits Windows 8+ and does not currently support macOS and Linux.
+The development environment currently only supports 64 bits Windows 8+ and does not currently support macOS and Linux.
+
+This project defines a number of commands that you can view with `pdm run --list`.
+
+### Pre-development
+
+1. Install [Python 3.11+](https://www.python.org/), [PDM](https://pdm-project.org/zh-cn/latest/), [UPX](https://upx.github.io/), [InnoSetup 6.3](https://jrsoftware.org/isinfo.php);
+2. Install dependencies: `pdm install`.
+3. Install the PDM plugins: `pdm install --plugins`
 
 ### Building
 
-1. Install [Python 3.8+](https://www.python.org/), [Poetry](https://python-poetry.org/), [UPX](https://upx.github.io/), [InnoSetup](https://jrsoftware.org/isinfo.php)
-2. Download and install `ChineseSimplified.isl` from [Inno Setup Translations](https://jrsoftware.org/files/istrans/).
-3. Install project: `poetry install`
-4. Generate `file_version_info.txt`：`poetry run generate-version-file`
-5. Generate app binary: `poetry run build-app`
-6. Generate installer：`poetry run build-setup`
+1. Generate `file_version_info.txt`：`poetry run generate-version-file`;
+2. Generate app binary: `poetry run build-app`;
+3. Generate installer：`poetry run build-setup`.
 
 ### Change version
 
-Run `poetry run change-version <Version>`
+Run `poetry run change-version <Version>`.
 
 ## License
 
@@ -94,8 +100,8 @@ This project is open source under the [MIT license](./LICENSE)
 - [PyInstaller](https://pyinstaller.org/en/stable/)：[PyInstaller license](https://pyinstaller.org/en/stable/license.html)
 - [tkhtmlview](https://github.com/bauripalash/tkhtmlview): MIT License
 
-[ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
-
 ## Contribute
 
 See [Contribution Guidelines](./CONTRIBUTING.zh.md).
+
+[ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest

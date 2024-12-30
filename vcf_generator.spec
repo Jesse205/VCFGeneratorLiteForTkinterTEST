@@ -2,9 +2,9 @@
 
 # noinspection PyUnresolvedReferences
 a = Analysis(
-    ['./main.py'],
+    ['./src/__main__.py'],
     pathex=[],
-    binaries=[('./vcf_generator/assets', 'vcf_generator/assets')],
+    binaries=[('./src/vcf_generator/assets', 'vcf_generator/assets')],
     datas=[],
     hiddenimports=[],
     hookspath=[],
@@ -34,7 +34,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['./vcf_generator/assets/images/icon.ico'],
+    icon=['./src/vcf_generator/assets/images/icon.ico'],
     version="versionfile.txt" if os.path.exists("file_version_info.txt") else None,
 )
 
@@ -47,5 +47,5 @@ coll = COLLECT(
     upx=True,
     upx_exclude=[],
     name='vcf_generator',
-    icon=['./vcf_generator/assets/icon.ico']
+    icon=['./src/vcf_generator/assets/icon.ico']
 )

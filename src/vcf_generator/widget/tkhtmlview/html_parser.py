@@ -1,12 +1,12 @@
 """
 HTML parser
 """
-import webbrowser
 import tkinter as tk
-from tkinter import font
+import webbrowser
+from collections import OrderedDict
 from copy import deepcopy
 from html.parser import HTMLParser
-from collections import OrderedDict
+from tkinter import font
 from tkinter.font import Font
 from typing import Optional
 

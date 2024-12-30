@@ -31,7 +31,7 @@ def change_version(
 
 def change_init_version(version: str):
     change_version(
-        file_name="vcf_generator/__init__.py",
+        file_name="./src/vcf_generator/__init__.py",
         content_pattern=re.compile(r'^ *__version__ *= *".*" *$', flags=re.M),
         content_formatter='__version__ = "%s"',
         version=version
@@ -74,7 +74,7 @@ def main():
     version = args.version
     if not re.match(r"^\d+\.\d+\.\d+$", version):
         print("Invalid version format. Version must be like '1.2.3'.", file=sys.stderr)
-        exit(1)
+        return 1
     change_init_version(version)
     change_pyproject_version(version)
     change_setup_version(version)

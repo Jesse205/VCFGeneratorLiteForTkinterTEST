@@ -3,8 +3,6 @@ from tkinter import Label, Event
 from tkinter.ttk import Label as TtkLabel
 from typing import Callable, Union
 
-from vcf_generator.ui.base import BaseWindow
-
 
 def get_auto_wrap_event(label: Union[Label, TtkLabel]) -> Callable[[Event], None]:
     """

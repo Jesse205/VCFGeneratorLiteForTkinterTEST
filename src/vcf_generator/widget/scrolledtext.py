@@ -12,8 +12,9 @@ Place methods are redirected to the Frame widget however.
 """
 
 from tkinter import Text, Pack, Grid, Place
-from tkinter.ttk import Frame, Scrollbar
 from tkinter.constants import RIGHT, LEFT, Y, BOTH, FLAT
+from tkinter.ttk import Frame, Scrollbar
+
 from vcf_generator.util.resource import get_default_color
 
 __all__ = ['ScrolledText']

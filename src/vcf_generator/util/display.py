@@ -2,7 +2,6 @@
 大部分代码来自 https://github.com/TomSchimansky/CustomTkinter/blob/master/customtkinter/windows/widgets/scaling/scaling_tracker.py
 """
 import sys
-from enum import Enum
 from tkinter import Misc
 
 _default_dpi = 96

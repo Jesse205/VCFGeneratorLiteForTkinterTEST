@@ -1,4 +1,6 @@
 /.venv
+.pdm-python
+.innosetup
 
 # IDE
 /.idea
@@ -7,7 +9,6 @@
 # Build
 /build
 /dist
-./file_version_info.txt
 *.egg-info
 
 # Caches
