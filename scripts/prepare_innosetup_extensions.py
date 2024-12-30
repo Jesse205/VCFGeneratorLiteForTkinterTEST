@@ -23,12 +23,13 @@ def main():
         print(f"Failed to download Chinese Simplified ISL: {response.status_code}", file=sys.stderr)
         return 1
     file_text = response.text
+    # 获取到的内容是CRLF换行的，但是python只能识别LF换行，所以需要替换一下
+    file_text = file_text.replace("\r", "")
     for key, value in TEXT_REPLACE_DICT_CHINESE_SIMPLIFIED.items():
         file_text = re.sub(f"^{key}=.*$", f"{key}={value}", file_text, flags=re.MULTILINE)
     os.makedirs(os.path.dirname(PATH_CHINESE_SIMPLIFIED), exist_ok=True)
     # TODO: 解决文件换行不一致问题
-    with open(PATH_CHINESE_SIMPLIFIED, "wt", encoding=response.encoding) as f:
+    with open(PATH_CHINESE_SIMPLIFIED, "wt", encoding=response.encoding, newline="\r\n") as f:
         f.write(file_text)
-
     print("Downloaded Chinese Simplified ISL.")
     return 0
