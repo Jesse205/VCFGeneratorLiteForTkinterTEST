@@ -2,21 +2,19 @@
   {
     "name": "Fluent Emoji",
     "url": "https://github.com/microsoft/fluentui-emoji",
-    "license": "MIT License"
+    "license": "MIT License",
+    "license_url": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
   },
   {
     "name": "tkhtmlview",
     "url": "https://github.com/bauripalash/tkhtmlview",
-    "license": "MIT License"
+    "license": "MIT License",
+    "license_url": "https://github.com/bauripalash/tkhtmlview/blob/main/LICENSE"
   },
   {
     "name": "CPython",
     "url": "https://github.com/python/cpython",
-    "license": "Python Software Foundation License Version 2"
-  },
-  {
-    "name": "pyinstaller",
-    "url": "https://github.com/pyinstaller/pyinstaller",
-    "license": "The PyInstaller licensing terms"
+    "license": "Python Software Foundation License Version 2",
+    "license_url": "https://docs.python.org/3/license.html"
   }
 ]

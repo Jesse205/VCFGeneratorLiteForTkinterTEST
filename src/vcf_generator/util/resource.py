@@ -36,9 +36,13 @@ def get_default_color() -> str:
 
 def _get_os_notice_html() -> str:
     projects = json.loads(get_asset_data('data/os_notice.json'))
-    item_template = '{name} - <a href="{url}">{url}</a><br />'
-    return "".join([
-        item_template.format(url=item["url"], name=item["name"]) for item in projects
+    return "<br />".join([
+        '<a href="{url}">{name}</a> - <a href="{license_url}">{license}</a>'.format(
+            url=item["url"],
+            name=item["name"],
+            license=item["license"],
+            license_url=item["license_url"]
+        ) for item in projects
     ])
 
 
