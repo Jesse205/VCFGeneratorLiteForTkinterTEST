@@ -84,26 +84,26 @@ class MainWindow(BaseWindow):
 
         edit_menu = Menu(menu_bar, tearoff=False)
         edit_menu.add_command(
-            label='剪切(X)',
-            command=self.text_context_menu.cut,
+            label='剪切(T)',
+            command=lambda: self.focus_get().event_generate("<<Cut>>"),
             accelerator="Ctrl + X",
             underline=3,
         )
         edit_menu.add_command(
             label='复制(C)',
-            command=self.text_context_menu.copy,
+            command=lambda: self.focus_get().event_generate("<<Copy>>"),
             accelerator="Ctrl + C",
             underline=3,
         )
         edit_menu.add_command(
             label='粘贴(P)',
-            command=self.text_context_menu.paste,
+            command=lambda: self.focus_get().event_generate("<<Paste>>"),
             accelerator="Ctrl + V",
             underline=3,
         )
         edit_menu.add_command(
             label='删除(D)',
-            command=self.text_context_menu.clear,
+            command=lambda: self.focus_get().event_generate("<<Clear>>"),
             accelerator="Ctrl + D",
             underline=3,
         )

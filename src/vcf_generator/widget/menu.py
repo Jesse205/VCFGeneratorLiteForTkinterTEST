@@ -2,6 +2,14 @@ from tkinter import *
 from typing import Union, Literal
 
 
+def boolean_to_state(state: bool) -> Literal["normal", "disabled"]:
+    return "normal" if state else "disabled"
+
+
+def state_to_boolean(state: Literal["normal", "disabled"]) -> bool:
+    return state == "normal"
+
+
 class TextContextMenu(Menu):
     master: Union[Text, Entry]
 
@@ -15,50 +23,47 @@ class TextContextMenu(Menu):
         except TclError:
             return False
 
-    def cut(self):
-        self.master.event_generate("<<Cut>>")
-
-    def copy(self):
-        self.master.event_generate("<<Copy>>")
-
-    def paste(self):
-        self.master.event_generate('<<Paste>>')
-
-    def clear(self):
-        self.master.event_generate("<<Clear>>")
-
     def show(self, x: int, y: int):
-        is_selected = self.is_selected()
-        menu_state_with_selected: Literal["normal", "disabled"] = "normal" if is_selected else "disabled"
-        is_master_editable = self.master.cget("state") == NORMAL
+        state_by_selected = boolean_to_state(self.is_selected())
+        is_master_editable = state_to_boolean(self.master.cget("state"))
         self.delete(0, END)
         if is_master_editable:
             self.add_command(
-                label='剪切',
-                command=self.cut,
-                accelerator="Ctrl + X",
-                state=menu_state_with_selected
+                label='撤消(U)',
+                command=lambda: self.master.event_generate("<<Undo>>"),
+                underline=3,
+            )
+            self.add_separator()
+            self.add_command(
+                label='剪切(T)',
+                command=lambda: self.master.event_generate("<<Cut>>"),
+                state=state_by_selected,
+                underline=3,
             )
         self.add_command(
-            label='复制',
-            command=self.copy,
-            accelerator="Ctrl + C",
-            state=menu_state_with_selected
+            label='复制(C)',
+            command=lambda: self.master.event_generate("<<Copy>>"),
+            state=state_by_selected,
+            underline=3,
         )
         if is_master_editable:
             self.add_command(
-                label='粘贴',
-                command=self.paste,
-                accelerator="Ctrl + V"
+                label='粘贴(P)',
+                command=lambda: self.master.event_generate("<<Paste>>"),
+                underline=3,
             )
             self.add_command(
-                label='删除',
-                command=self.clear,
-                accelerator="Ctrl + D",
-                state=menu_state_with_selected
-
+                label='删除(D)',
+                command=lambda: self.master.event_generate("<<Clear>>"),
+                state=state_by_selected,
+                underline=3,
             )
-        # self.add_command(label='全选', command=lambda: self.select_all())
+        self.add_separator()
+        self.add_command(
+            label='全选(A)',
+            command=lambda: self.master.event_generate("<<SelectAll>>"),
+            underline=3,
+        )
         self.post(x, y)
 
     def bind_to_widget(self):
