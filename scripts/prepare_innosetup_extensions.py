@@ -16,7 +16,7 @@ TEXT_REPLACE_DICT_CHINESE_SIMPLIFIED = {
 }
 
 
-def main():
+def main() -> int:
     print("Preparing InnoSetup extensions.")
     response = requests.get(URL_CHINESE_SIMPLIFIED_ISL_GITCODE)
     if response.status_code != 200:

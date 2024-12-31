@@ -6,7 +6,7 @@ from scripts.utils import get_bits, get_machine
 from vcf_generator import __version__ as app_version
 
 
-def find_iscc_in_path():
+def find_iscc_in_path() -> str | None:
     """尝试从系统PATH环境变量中找到iscc.exe的路径"""
     for path in os.environ["PATH"].split(os.pathsep):
         iscc_path = os.path.join(path, "iscc.exe")
@@ -15,7 +15,7 @@ def find_iscc_in_path():
     return None
 
 
-def main():
+def main() -> int:
     bits = get_bits()
     if bits != 64:
         print(f"Only 64 bit python is supported. Current version is {bits}.", file=sys.stderr)
@@ -29,4 +29,5 @@ def main():
     result = subprocess.run([iscc_path, f"/F{output_name}", os.path.abspath('setup.iss')], shell=True)
     if result.returncode != 0:
         print("Build failed.", file=sys.stderr)
-        exit(result.returncode)
+        return result.returncode
+    return 0

@@ -66,7 +66,7 @@ def change_version_info(version: str):
     print("Change version to %s in %s." % (version, "versionfile.txt"))
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("version", type=str)
     args = parser.parse_args()
@@ -79,3 +79,4 @@ def main():
     change_pyproject_version(version)
     change_setup_version(version)
     change_version_info(version)
+    return 0
