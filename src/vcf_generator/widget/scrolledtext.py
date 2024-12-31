@@ -61,7 +61,6 @@ class ScrolledText(Text):
         text_meths = vars(Text).keys()
         methods = vars(Pack).keys() | vars(Grid).keys() | vars(Place).keys()
         methods = methods.difference(text_meths)
-        print(methods)
         for m in methods:
             if m[0] != '_' and m != 'config' and m != 'configure':
                 setattr(self, m, getattr(self.frame, m))
