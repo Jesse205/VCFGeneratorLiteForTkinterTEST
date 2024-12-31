@@ -28,7 +28,6 @@ def main() -> int:
     for key, value in TEXT_REPLACE_DICT_CHINESE_SIMPLIFIED.items():
         file_text = re.sub(f"^{key}=.*$", f"{key}={value}", file_text, flags=re.MULTILINE)
     os.makedirs(os.path.dirname(PATH_CHINESE_SIMPLIFIED), exist_ok=True)
-    # TODO: 解决文件换行不一致问题
     with open(PATH_CHINESE_SIMPLIFIED, "wt", encoding=response.encoding, newline="\r\n") as f:
         f.write(file_text)
     print("Downloaded Chinese Simplified ISL.")
