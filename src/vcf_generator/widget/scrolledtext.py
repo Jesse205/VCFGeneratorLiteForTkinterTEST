@@ -8,12 +8,12 @@ Configuration options are passed to the Text widget.
 A Frame widget is inserted between the master and the text, to hold
 the Scrollbar widget.
 Most methods calls are inherited from the Text widget; Pack, Grid and
-Place methods are redirected to the Frame widget however.
+Place methods are redirected to the Frame widget, however.
 """
 
-from tkinter import Text, Pack, Grid, Place
+from tkinter import Text, Pack, Grid, Place, Frame
 from tkinter.constants import RIGHT, LEFT, Y, BOTH, FLAT
-from tkinter.ttk import Frame, Scrollbar
+from tkinter.ttk import Scrollbar
 
 from vcf_generator.util.resource import get_default_color
 
@@ -26,16 +26,22 @@ class ScrolledText(Text):
     """
 
     def __init__(
-            self,
-            master=None,
-            borderwidth=1,
-            relief=FLAT,
-            highlightthickness=1,
-            highlightbackground="gray",
-            highlightcolor=get_default_color(),
-            **kw
+        self,
+        master=None,
+        borderwidth=1,
+        relief=FLAT,
+        highlightthickness=1,
+        highlightbackground="gray",
+        highlightcolor=get_default_color(),
+        **kw
     ):
-        self.frame = Frame(master)
+        self.frame = Frame(
+            master,
+            relief=relief,
+            highlightthickness=highlightthickness,
+            highlightbackground=highlightbackground,
+            highlightcolor=highlightcolor,
+        )
         self.vbar = Scrollbar(self.frame)
         self.vbar.pack(side=RIGHT, fill=Y)
 
@@ -44,10 +50,7 @@ class ScrolledText(Text):
             self,
             self.frame,
             borderwidth=borderwidth,
-            relief=relief,
-            highlightthickness=highlightthickness,
-            highlightbackground=highlightbackground,
-            highlightcolor=highlightcolor,
+            relief="flat",
             **kw
         )
         self.pack(side=LEFT, fill=BOTH, expand=True)
@@ -58,7 +61,7 @@ class ScrolledText(Text):
         text_meths = vars(Text).keys()
         methods = vars(Pack).keys() | vars(Grid).keys() | vars(Place).keys()
         methods = methods.difference(text_meths)
-
+        print(methods)
         for m in methods:
             if m[0] != '_' and m != 'config' and m != 'configure':
                 setattr(self, m, getattr(self.frame, m))
