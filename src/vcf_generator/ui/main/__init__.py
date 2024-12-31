@@ -1,7 +1,7 @@
 import re
 import webbrowser
 from concurrent.futures import Future
-from tkinter import filedialog, Menu
+from tkinter import filedialog, Menu, Event
 from tkinter.constants import *
 from tkinter.ttk import *
 
@@ -53,8 +53,8 @@ class MainWindow(BaseWindow):
 
         self.progress_bar = Progressbar(bottom_frame, orient=HORIZONTAL, length=200, mode='determinate', maximum=1)
 
-        self.generate_button = Button(bottom_frame, text="生成", default=ACTIVE,
-                                      command=lambda: self.event_generate(EVENT_ON_GENERATE_CLICK))
+        self.generate_button = Button(bottom_frame, text="生成(G)", default=ACTIVE,
+                                      command=lambda: self.event_generate(EVENT_ON_GENERATE_CLICK), underline=3)
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def show_progress_bar(self):
@@ -75,39 +75,44 @@ class MainWindow(BaseWindow):
     def on_init_menus(self, menu_bar: Menu):
         file_menu = Menu(menu_bar, tearoff=False)
         file_menu.add_command(
-            label="退出",
+            label="退出(X)",
             command=self.quit,
-            accelerator="Alt + F4"
+            accelerator="Alt + F4",
+            underline=3,
         )
-        menu_bar.add_cascade(label="文件", menu=file_menu)
+        menu_bar.add_cascade(label="文件(F)", menu=file_menu, underline=3)
 
         edit_menu = Menu(menu_bar, tearoff=False)
         edit_menu.add_command(
-            label='剪切',
+            label='剪切(X)',
             command=self.text_context_menu.cut,
             accelerator="Ctrl + X",
+            underline=3,
         )
         edit_menu.add_command(
-            label='复制',
+            label='复制(C)',
             command=self.text_context_menu.copy,
             accelerator="Ctrl + C",
+            underline=3,
         )
         edit_menu.add_command(
-            label='粘贴',
+            label='粘贴(P)',
             command=self.text_context_menu.paste,
-            accelerator="Ctrl + V"
+            accelerator="Ctrl + V",
+            underline=3,
         )
         edit_menu.add_command(
-            label='删除',
+            label='删除(D)',
             command=self.text_context_menu.clear,
             accelerator="Ctrl + D",
+            underline=3,
         )
         edit_menu.add_separator()
         edit_menu.add_command(
             label="移除引号",
             command=lambda: self.event_generate(EVENT_ON_CLEAN_QUOTES_CLICK)
         )
-        menu_bar.add_cascade(label="编辑", menu=edit_menu)
+        menu_bar.add_cascade(label="编辑(E)", menu=edit_menu, underline=3)
 
         help_menu = Menu(menu_bar, tearoff=False)
         help_menu.add_command(
@@ -120,10 +125,11 @@ class MainWindow(BaseWindow):
         )
         help_menu.add_separator()
         help_menu.add_command(
-            label="关于",
-            command=lambda: self.event_generate(EVENT_ON_ABOUT_CLICK)
+            label="关于(A)",
+            command=lambda: self.event_generate(EVENT_ON_ABOUT_CLICK),
+            underline=3,
         )
-        menu_bar.add_cascade(label="帮助", menu=help_menu)
+        menu_bar.add_cascade(label="帮助(H)", menu=help_menu, underline=3)
 
 
 class MainController:
@@ -134,6 +140,7 @@ class MainController:
         window.bind(EVENT_ON_ABOUT_CLICK, self.on_about_click)
         window.bind(EVENT_ON_CLEAN_QUOTES_CLICK, self.on_clean_quotes_click)
         window.bind(EVENT_ON_GENERATE_CLICK, self.on_generate_click)
+        window.bind("<Return>", self.on_return_click)
 
     def _get_text_content(self):
         return self.window.text_input.get(1.0, END)[:-1]  # 获取到的字符串末尾会有一个换行符，所以要消掉
@@ -146,6 +153,11 @@ class MainController:
 
     def on_clean_quotes_click(self, _):
         self._clean_quotes()
+
+    def on_return_click(self, event: Event):
+        if event.widget is self.window.text_input:
+            return
+        self.window.generate_button.invoke()
 
     def on_generate_click(self, _):
         text_content = self._get_text_content()
