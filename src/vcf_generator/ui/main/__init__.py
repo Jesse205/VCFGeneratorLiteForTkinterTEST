@@ -6,7 +6,7 @@ from tkinter.constants import *
 from tkinter.ttk import *
 
 from vcf_generator.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE
-from vcf_generator.ui.about import create_about_window
+from vcf_generator.ui.about import open_about_window
 from vcf_generator.ui.base import BaseWindow
 from vcf_generator.util import dialog
 from vcf_generator.util.thread import cpu_executor
@@ -142,7 +142,7 @@ class MainController:
         self.window.text_input.replace(1.0, END, new_content)
 
     def on_about_click(self, _):
-        create_about_window(self.window)
+        open_about_window(self.window)
 
     def on_clean_quotes_click(self, _):
         self._clean_quotes()

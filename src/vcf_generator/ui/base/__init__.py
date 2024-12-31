@@ -7,7 +7,7 @@ from typing import Union
 from vcf_generator.util.display import get_scale_factor
 from vcf_generator.util.resource import get_asset_data
 
-__all__ = ["BaseWindow", "BaseToplevel"]
+__all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
 
 
 class WindowInjector(Misc, Wm):
@@ -18,6 +18,7 @@ class WindowInjector(Misc, Wm):
         self.withdraw()
         self._scale_factor = get_scale_factor(self)
         self.tk.call("tk", "scaling", self._scale_factor)
+
         self._apply_default_icon()
         self._apply_default_font()
         self._apply_default_theme()
@@ -27,6 +28,7 @@ class WindowInjector(Misc, Wm):
         self.on_init_menus(self.menu_bar)
         self.configure({"menu": self.menu_bar})
         self.center_window()
+
         self.deiconify()
 
     def _apply_default_icon(self):
@@ -102,3 +104,14 @@ class BaseToplevel(Toplevel, WindowInjector):
     def __init__(self, master=None, cnf={}, **kw):
         super().__init__(master, cnf, **kw)
         self.window_injector_init()
+
+
+class BaseDialog(BaseToplevel):
+    def on_init_window(self):
+        if issubclass(type(self.master), Wm):
+            # noinspection PyTypeChecker
+            self.transient(self.master)
+        self.protocol("WM_DELETE_WINDOW", self.dismiss)
+
+    def dismiss(self):
+        self.destroy()
