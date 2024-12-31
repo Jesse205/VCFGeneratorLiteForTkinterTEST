@@ -72,7 +72,9 @@ Go to the [Release][ReleaseInGitee] to download and run the installation program
 
 The development environment currently only supports 64 bits Windows 8+ and does not currently support macOS and Linux.
 
-This project defines a number of commands that you can view with `pdm run --list`.
+> [!TIP]
+>
+> You can view all the commands defined in this project by running pdm run --list.
 
 ### Pre-development
 
@@ -83,9 +85,8 @@ This project defines a number of commands that you can view with `pdm run --list
 
 ### Building
 
-1. Generate `file_version_info.txt`：`poetry run generate-version-file`;
-2. Generate app binary: `poetry run build-app`;
-3. Generate installer：`poetry run build-setup`.
+1. Generate app binary: `poetry run build_app`;
+2. Generate installer：`poetry run build_setup`.
 
 ### Change version
 

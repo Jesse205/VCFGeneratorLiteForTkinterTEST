@@ -66,17 +66,25 @@ def change_version_info(version: str):
     print("Change version to %s in %s." % (version, "versionfile.txt"))
 
 
+def print_version():
+    import vcf_generator
+    print(vcf_generator.__version__)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("version", type=str)
+    parser.add_argument("version", nargs='?', type=str)
     args = parser.parse_args()
 
     version = args.version
-    if not re.match(r"^\d+\.\d+\.\d+$", version):
-        print("Invalid version format. Version must be like '1.2.3'.", file=sys.stderr)
-        return 1
-    change_init_version(version)
-    change_pyproject_version(version)
-    change_setup_version(version)
-    change_version_info(version)
+    if version:
+        if not re.match(r"^\d+\.\d+\.\d+$", version):
+            print("Invalid version format. Version must be like '1.2.3'.", file=sys.stderr)
+            return 1
+        change_init_version(version)
+        change_pyproject_version(version)
+        change_setup_version(version)
+        change_version_info(version)
+    else:
+        print_version()
     return 0

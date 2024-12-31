@@ -34,10 +34,10 @@ plugins = [
 ]
 
 [tool.pdm.scripts]
-prepare_innosetup_extensions = { call = "scripts.prepare_innosetup_extensions:main" }
-build_app = { call = "scripts.build_app:main" }
-build_installer = { call = "scripts.build_installer:main" }
-change_version = { call = "scripts.change_version:main" }
+build_app = { call = "scripts.build_app:main", help = "Build app." }
+build_installer = { call = "scripts.build_installer:main", help = "Build installer." }
+prepare_innosetup_extensions = { call = "scripts.prepare_innosetup_extensions:main", help = "Download InnoSetup language files." }
+version = { call = "scripts.version:main", help = "Display or modify the project version number." }
 
 [tool.pdm.build]
 is-purelib = true
