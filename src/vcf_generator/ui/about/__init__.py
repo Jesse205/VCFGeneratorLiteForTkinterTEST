@@ -39,15 +39,22 @@ class AboutWindow(BaseDialog):
                                          data=get_asset_data("images/icon-48.png"))  # 保存到 Window 中防止回收内存
         app_icon_label = tk.Label(header_frame, image=self.app_icon_image, background=header_background,
                                   width="48p", height="48p")
-        app_icon_label.grid(row=0, column=0, rowspan=2, padx="5p", pady="5p")
+        app_icon_label.pack(side=LEFT, padx="10p", pady="10p")
+
+        app_info_frame = tk.Frame(header_frame, background=header_background)
+        app_info_frame.pack(side=LEFT, anchor=CENTER, fill=X, expand=True, padx=(0, "10p"), pady="10p")
 
         app_name_font = self.font.copy()
         app_name_font.config(size=16)
-        app_name_label = tk.Label(header_frame, text=constants.APP_NAME, font=app_name_font,
-                                  background=header_background)
-        app_name_label.grid(row=0, column=1, sticky=SW)
-        app_version_label = tk.Label(header_frame, text=f"v{__version__}", background=header_background)
-        app_version_label.grid(row=1, column=1, sticky=NW)
+        app_name_label = tk.Label(
+            app_info_frame,
+            text=f"{constants.APP_NAME} v{__version__}",
+            font=app_name_font,
+            background=header_background
+        )
+        app_name_label.pack(anchor=W)
+        app_copyright_label = tk.Label(app_info_frame, text=constants.APP_COPYRIGHT, background=header_background)
+        app_copyright_label.pack(anchor=W)
 
 
 _about_window_instance: AboutWindow | None = None
