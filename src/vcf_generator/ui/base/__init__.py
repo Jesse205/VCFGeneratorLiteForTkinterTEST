@@ -20,8 +20,8 @@ class WindowInjector(Misc, Wm):
         self.tk.call("tk", "scaling", self._scale_factor)
 
         self._apply_default_icon()
-        self._apply_default_font()
         self._apply_default_theme()
+        self._apply_default_font()
         self.on_init_window()
         self.on_init_widgets()
         self.menu_bar = Menu(self, tearoff=False)
