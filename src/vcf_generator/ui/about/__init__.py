@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from tkinter.ttk import *
+from typing import Optional
 
 from vcf_generator import __version__
 from vcf_generator import constants
@@ -57,7 +58,7 @@ class AboutWindow(BaseDialog):
         app_copyright_label.pack(anchor=W)
 
 
-_about_window_instance: AboutWindow | None = None
+_about_window_instance: Optional[AboutWindow] = None
 
 
 def _on_destroy(event: Event):
@@ -66,7 +67,7 @@ def _on_destroy(event: Event):
         _about_window_instance = None
 
 
-def open_about_window(master: Misc | None = None) -> tuple[AboutWindow]:
+def open_about_window(master: Optional[Misc]) -> tuple[AboutWindow]:
     global _about_window_instance
     if _about_window_instance is None or not _about_window_instance.winfo_exists():
         _about_window_instance = AboutWindow(master)

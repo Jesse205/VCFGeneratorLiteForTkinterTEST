@@ -1,12 +1,13 @@
 import os
 import subprocess
 import sys
+from typing import Optional
 
 from scripts.utils import get_bits, get_machine
 from vcf_generator import __version__ as app_version
 
 
-def find_iscc_in_path() -> str | None:
+def find_iscc_in_path() -> Optional[str]:
     """尝试从系统PATH环境变量中找到iscc.exe的路径"""
     for path in os.environ["PATH"].split(os.pathsep):
         iscc_path = os.path.join(path, "iscc.exe")

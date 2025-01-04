@@ -9,7 +9,7 @@ from vcf_generator import constants
 _APP_MODULE_NAME = "vcf_generator"
 
 
-def get_asset_data(resource: str) -> bytes | None:
+def get_asset_data(resource: str) -> Optional[bytes]:
     return pkgutil.get_data(_APP_MODULE_NAME, os.path.join('assets', resource))
 
 
