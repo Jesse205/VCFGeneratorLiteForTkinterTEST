@@ -1,5 +1,4 @@
 import argparse
-import subprocess
 import sys
 
 # noinspection PyPep8Naming
@@ -13,7 +12,8 @@ def build_with_pyinstaller():
 
 
 def build_with_zipapp():
-    subprocess.run(["pdm", "pack   -m vcf_generator.__main__:main --pyc --no-py -c", "-o", "app.pyzw"])
+    # TODO: 支持zipapp打包
+    pass
 
 
 def main() -> int:
@@ -22,7 +22,7 @@ def main() -> int:
         return 1
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-b", "--builder", type=str, default="pyinstaller", choices=["pyinstaller", "zipapp"])
+    parser.add_argument("-b", "--builder", type=str, default="pyinstaller", choices=["pyinstaller"])
     args = parser.parse_args()
 
     builder = args.builder
@@ -31,7 +31,4 @@ def main() -> int:
         build_with_pyinstaller()
     elif builder == "zipapp":
         build_with_zipapp()
-    else:
-        print(f"Unknown builder: {builder}", file=sys.stderr)
-        return 1
     return 0
