@@ -24,49 +24,67 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 <img src="./docs/images/screenshots/Snipaste_2024-06-17_04-06-51.png" width="600" alt="Snipaste_2024-06-17_04-06-51.png" />
 
+## 环境要求
+
+- 操作系统
+    - Windows：Windows 8+ 或 Windows 7+（伴随补丁）
+    - Linux：不支持（欢迎贡献）
+    - macOS：不支持（欢迎贡献）
+- CPU：x86 64位
+- Python 版本：不要求
+
+对于部分系统，您可以通过修补软件的方法支持运行此APP。如需在这些系统中运行此APP，请参考[修补 APP](#修补-APP)章节。
+
+### 修补 APP
+
+<details>
+<summary>支持 Windows 7 运行</summary>
+
+1. 下载兼容 Windows 7 的 `python313.dll` 与 `api-ms-win-core-path-l1-1-0.dll`；
+    - 您可以选择到 [PythonWin7](https://github.com/adang1345/PythonWin7) 仓库中下载这两个文件。
+2. 安装软件，进入安装目录中 `_internal`，覆盖以上两个 DLL。
+
+</details>
+
 ## 使用方法
 
-进入[发行版][ReleaseInGitee]下载并运行安装程序（文件名通常是 `VCFGenerator_<版本>_<Python版本>_<处理器架构>_64bit_setup.exe`）。
-
-1. 把名字和电话以每行 `姓名 电话号码` 的格式复制到下面的编辑框内；
-   ```text
-   李四	13445467890
-   王五	13554678907
-   赵六	13645436748
-   ```
-2. 点击“生成”，选择一个路径保存文件；
-3. 将生成后的 VCF 文件复制到手机内，打开文件时选择使用“通讯录”，然后根据提示操作。
-4. 等待导入完成
+1. 进入[发行版][ReleaseInGitee]下载并运行安装程序（文件名通常是
+   `VCFGenerator_<版本>_<Python版本>_<CPU架构>_64bit_setup.exe`）；
+2. 打开 APP；
+3. 把名字和电话以每行 `姓名 电话号码` 的格式复制到下面的编辑框内；
+    ```text
+    李四	13445467890
+    王五	13554678907
+    赵六	13645436748
+    ```
+4. 点击“生成”，选择一个路径保存文件；
+5. 将生成后的 VCF 文件复制到手机内，打开文件时选择使用“通讯录”，然后根据提示操作；
+6. 等待导入完成。
 
 > [!TIP]
 >
 > - 制表符将会自动转换为空格处理。
 > - 程序会自动去除输入框内多余的空格。
-> - 如果每行有多个空格，则会将最后一个空格以前所有的字符当作姓名处理。\
->   比如 `Wang lei 13333333333` 将会识别为
->   ```text
->   姓名：Wang lei
->   电话：13333333333
->   ```
-
-> [!NOTE]
-> 
-> 如果您需要在 Windows 7 中使用本软件，请在软件安装目录的 `_internal` 文件夹内添加或覆盖兼容 Windows 7 的 `python313.dll` 与 `api-ms-win-core-path-l1-1-0.dll`。您可以从 [PythonWin7](https://github.com/adang1345/PythonWin7) 仓库中下载这两个文件。
+> - 如果每行有多个空格，则会将最后一个空格以前所有的字符当作姓名处理。
+>
+> 比如 ` Wang lei   13333333333   ` 将会识别为
+> ```text
+> 姓名：Wang lei
+> 电话：13333333333
+> ```
 
 ## 项目结构
 
-- `vcf_generator`：源代码目录
-    - `ui`： GUI 用户界面
-    - `util`：工具类
-    - `widget`：Tkinter 组件
-    - `constants.py`：常量
-  - `assets`：资源文件目录
+- `src`：源代码目录
+    - `vcf_generator/ui`： GUI 用户界面
+    - `vcf_generator/util`：工具类
+    - `vcf_generator/widget`：Tkinter 组件
+    - `vcf_generator/constants.py`：常量
+    - `vcf_generator/assets`：资源文件目录
+    - `__main__.py`：程序入口
 - `scripts`：脚本目录
-- `main.py`：程序入口
 
 ## 开发项目
-
-开发环境目前仅支持 64 位 Windows 8+，暂不支持 macOS 与 Linux。
 
 > [!TIP]
 >
@@ -94,8 +112,8 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 - [Fluent Emoji](https://github.com/microsoft/fluentui-emoji)（作为应用图标使用）：MIT license
 - [Python](https://www.python.org/)：[Python license](https://docs.python.org/3/license.html)
-- [UPX](https://upx.github.io/)（用于压缩代码）：GPL-2.0 licenses
-- [PyInstaller](https://pyinstaller.org/en/stable/)：[PyInstaller license](https://pyinstaller.org/en/stable/license.html)
+- [UPX](https://upx.github.io/)（用于压缩代码）：GPL-2.0 license
+- [PyInstaller](https://pyinstaller.org/en/stable/)（用于打包为 APP）：[GPL-2.0 license](https://pyinstaller.org/en/stable/license.html)
 - [tkhtmlview](https://github.com/bauripalash/tkhtmlview)：MIT License
 
 ## 贡献项目
