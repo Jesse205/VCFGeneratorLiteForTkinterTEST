@@ -32,6 +32,7 @@ build-backend = "pdm.backend"
 plugins = [
     "pdm-packer"
 ]
+distribution = true
 
 [tool.pdm.scripts]
 build_app = { call = "scripts.build_app:main", help = "Build app." }
