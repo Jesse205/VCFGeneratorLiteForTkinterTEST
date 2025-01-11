@@ -111,7 +111,3 @@ class BaseDialog(BaseToplevel):
         if issubclass(type(self.master), Wm):
             # noinspection PyTypeChecker
             self.transient(self.master)
-        self.protocol("WM_DELETE_WINDOW", self.dismiss)
-
-    def dismiss(self):
-        self.destroy()
