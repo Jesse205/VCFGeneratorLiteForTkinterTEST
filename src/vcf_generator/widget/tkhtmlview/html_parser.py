@@ -15,7 +15,7 @@ from vcf_generator.util.resource import get_default_color
 
 # __________________________________________________________________________________________________
 class Defs:
-    FONT_SIZE = 0
+    FONT_SIZE = 12
     PREFORMATTED_FONT_FAMILY = ("Courier", "DejaVu Sans Mono", "TkFixedFont")
     HEADINGS_FONT_SIZE = {
         "h1": 38,
