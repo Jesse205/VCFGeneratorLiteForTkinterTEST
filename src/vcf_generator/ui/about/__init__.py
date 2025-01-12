@@ -29,6 +29,7 @@ class AboutWindow(BaseDialog):
             default_font=self.font,
             html=get_about_html(),
             state=DISABLED,
+            highlightcolor=None,
         )
         details_input.pack(fill=BOTH, expand=True, padx="10p", pady="10p")
         details_context_menu = TextContextMenu(details_input)

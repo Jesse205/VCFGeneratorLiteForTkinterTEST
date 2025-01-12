@@ -41,7 +41,7 @@ class MainWindow(BaseWindow):
         self.text_input = ScrolledText(self, undo=True, tabs=True, height=0)
         self.text_input.insert(0.0, DEFAULT_INPUT_CONTENT)
         self.text_input.edit_reset()
-        self.text_input.pack(fill=BOTH, expand=True)
+        self.text_input.pack(fill=BOTH, expand=True, padx="10p", pady=0)
         self.text_context_menu = TextContextMenu(self.text_input)
         self.text_context_menu.bind_to_widget()
 
