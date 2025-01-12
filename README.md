@@ -61,7 +61,7 @@ For some systems, you can enable running this APP by patching software. If you n
 5. Copy the generated VCF file to your phone, select "Contacts" when opening the file, and then follow the prompts;
 6. Wait for import to complete.
 
-> [!TIP]
+> [!NOTE]
 >
 > - Tabs will be automatically converted to spaces for processing.
 > - The program will automatically remove excess spaces from the input box.
