@@ -9,6 +9,7 @@ from vcf_generator.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_
 from vcf_generator.ui.about import open_about_window
 from vcf_generator.ui.base import BaseWindow
 from vcf_generator.util import dialog
+from vcf_generator.util.menu import add_menus, MenuCascade, MenuCommand, MenuSeparator
 from vcf_generator.util.thread import cpu_executor
 from vcf_generator.util.vcard import generate_vcard_file, LineContent, GenerateResult
 from vcf_generator.util.widget import get_auto_wrap_event
@@ -74,63 +75,61 @@ class MainWindow(BaseWindow):
         self.generate_button.configure(state=DISABLED)
 
     def on_init_menus(self, menu_bar: Menu):
-        file_menu = Menu(menu_bar, tearoff=False)
-        file_menu.add_command(
-            label="退出(X)",
-            command=self.quit,
-            accelerator="Alt + F4",
-            underline=3,
-        )
-        menu_bar.add_cascade(label="文件(F)", menu=file_menu, underline=3)
-
-        edit_menu = Menu(menu_bar, tearoff=False)
-        edit_menu.add_command(
-            label='剪切(T)',
-            command=lambda: self.focus_get().event_generate("<<Cut>>"),
-            accelerator="Ctrl + X",
-            underline=3,
-        )
-        edit_menu.add_command(
-            label='复制(C)',
-            command=lambda: self.focus_get().event_generate("<<Copy>>"),
-            accelerator="Ctrl + C",
-            underline=3,
-        )
-        edit_menu.add_command(
-            label='粘贴(P)',
-            command=lambda: self.focus_get().event_generate("<<Paste>>"),
-            accelerator="Ctrl + V",
-            underline=3,
-        )
-        edit_menu.add_command(
-            label='删除(D)',
-            command=lambda: self.focus_get().event_generate("<<Clear>>"),
-            accelerator="Ctrl + D",
-            underline=3,
-        )
-        edit_menu.add_separator()
-        edit_menu.add_command(
-            label="移除引号",
-            command=lambda: self.event_generate(EVENT_ON_CLEAN_QUOTES_CLICK)
-        )
-        menu_bar.add_cascade(label="编辑(E)", menu=edit_menu, underline=3)
-
-        help_menu = Menu(menu_bar, tearoff=False)
-        help_menu.add_command(
-            label="VCF 生成器 Lite 源代码网址",
-            command=lambda: webbrowser.open(URL_SOURCE)
-        )
-        help_menu.add_command(
-            label="VCF 生成器 Lite 发布网址",
-            command=lambda: webbrowser.open(URL_RELEASES)
-        )
-        help_menu.add_separator()
-        help_menu.add_command(
-            label="关于 VCF 生成器 Lite(A)",
-            command=lambda: self.event_generate(EVENT_ON_ABOUT_CLICK),
-            underline=16,
-        )
-        menu_bar.add_cascade(label="帮助(H)", menu=help_menu, underline=3)
+        add_menus(menu_bar, [
+            MenuCascade(
+                label="文件(&F)",
+                items=[
+                    MenuCommand(
+                        label="退出(&X)",
+                        command=self.quit,
+                        accelerator="Alt + F4",
+                    )
+                ]
+            ),
+            MenuCascade(
+                label="编辑(&E)",
+                items=[
+                    MenuCommand(
+                        label="剪切(&T)",
+                        command=lambda: self.focus_get().event_generate("<<Cut>>"),
+                        accelerator="Ctrl + X",
+                    ),
+                    MenuCommand(
+                        label="复制(&C)",
+                        command=lambda: self.focus_get().event_generate("<<Copy>>"),
+                        accelerator="Ctrl + C",
+                    ),
+                    MenuCommand(
+                        label="粘贴(&P)",
+                        command=lambda: self.focus_get().event_generate("<<Paste>>"),
+                        accelerator="Ctrl + V",
+                    ),
+                    MenuSeparator(),
+                    MenuCommand(
+                        label="移除引号",
+                        command=lambda: self.event_generate(EVENT_ON_CLEAN_QUOTES_CLICK),
+                    ),
+                ]
+            ),
+            MenuCascade(
+                label="帮助(&H)",
+                items=[
+                    MenuCommand(
+                        label="代码托管网址",
+                        command=lambda: webbrowser.open(URL_SOURCE),
+                    ),
+                    MenuCommand(
+                        label="版本发布网址",
+                        command=lambda: webbrowser.open(URL_RELEASES),
+                    ),
+                    MenuSeparator(),
+                    MenuCommand(
+                        label="关于 VCF 生成器 Lite(&A)",
+                        command=lambda: self.event_generate(EVENT_ON_ABOUT_CLICK),
+                    )
+                ]
+            )
+        ])
 
 
 class MainController:
