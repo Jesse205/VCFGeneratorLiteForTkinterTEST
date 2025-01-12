@@ -18,9 +18,14 @@ def _set_process_dpi_aware_win7():
     windll.user32.SetProcessDPIAware()
 
 
-# noinspection PyBroadException
 def set_process_dpi_aware():
     """
+    设置进程默认 DPI 感知级别。
+
+    该函数尝试将当前进程设置为 DPI 感知模式，以便在高 DPI 显示器上正确缩放。
+    它针对不同的 Windows 版本尝试不同的设置方法。如果在所有尝试均失败或在非 Windows 平台上运行，
+    则该函数不会产生任何影响。
+
     https://learn.microsoft.com/zh-cn/windows/win32/api/shellscalingapi/nf-shellscalingapi-setprocessdpiawareness
     """
     global _process_dpi_aware
@@ -70,6 +75,15 @@ def _get_scale_factor_win2000() -> float:
 
 
 def get_scale_factor(misc: Misc) -> float:
+    """
+    获取缩放因子。
+
+    在不同操作系统上获取缩放因子，以便在高 DPI 屏幕上正确显示界面。
+    缩放因子影响如何将逻辑坐标转换为屏幕坐标。
+
+    :param misc: Misc对象
+    :return: 缩放因子，如果无法确定则默认返回 1.0。
+    """
     if not _process_dpi_aware:
         return 1.0
     if sys.platform == "win32":
