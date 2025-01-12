@@ -2,10 +2,8 @@
 
 ## 图标生成
 
-1. 制作大小为 `512x512` 的图标，重命名为 `icon.png`；
-2. 使用 [FreeConvert](https://www.freeconvert.com/zh/ico-converter) 生成`.ico`文件，命名为 `icon.ico`；
-3. 生成 `48x48` 的图标，重命名为 `icon-48.png`；
-4. 将这些图标放入 [/vcf_generator/assets](/vcf_generator/assets) 目录中。
+1. 制作大小为 `512x512` 的图标，重命名为 `icon.png`，放入 [`项目/docs/images`](/docs/images) 中；
+2. 生成 `.ico` 图标与 48x48 的 `.png` 图标，分别命名为 `icon.ico` 与 `icon-48.png`，放入 [`项目/src/vcf_generator/assets/images`](/src/vcf_generator/assets/images) 中（推荐使用使用 [FreeConvert](https://www.freeconvert.com/zh/ico-converter)）。
 
 ## 代码规范
 
@@ -24,6 +22,6 @@
 
 注意事项：
 
-- 代码中布局尺寸单位是点（`p`），而不是像素 (`px`) 、[有效像素 (`epx`) ](https://learn.microsoft.com/zh-cn/windows/apps/design/layout/screen-sizes-and-breakpoints-for-responsive-design#effective-pixels-and-scale-factor)；
-- 本软件的点（`p`）单位与 Tkinter 默认的点（`p`）单位不同，本软件的点（`p`）与有效像素 (`epx`)相同；
-- 由于字体单位也使用点（`p`），因此在本软件中，字体的单位与有效像素 (`epx`)相同，与 Tkinter 默认的点（`p`）单位不同。
+- 代码中布局尺寸单位是点（`p`），而不是像素（`px`） 、[有效像素（`epx`）](https://learn.microsoft.com/zh-cn/windows/apps/design/layout/screen-sizes-and-breakpoints-for-responsive-design#effective-pixels-and-scale-factor)；
+- 本软件的点（`p`）单位与 Tkinter 默认的点（`p`）单位不同，本软件的点（`p`）的作用与有效像素（`epx`）的作用相同；
+- 由于字体单位也使用点（`p`），因此在本软件中，字体的单位与有效像素（`epx`）相同，默认的字体大小为 `12p` 而非 `9p`。
