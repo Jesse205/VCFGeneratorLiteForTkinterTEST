@@ -25,21 +25,23 @@ def set_process_dpi_aware():
     """
     global _process_dpi_aware
     if sys.platform == 'win32':
-        try:
-            _set_process_dpi_aware_win8_1()
-            _process_dpi_aware = True
-        except Exception:
+        for setter in (
+            _set_process_dpi_aware_win8_1,
+            _set_process_dpi_aware_win7,
+        ):
             try:
-                _set_process_dpi_aware_win7()
-                _process_dpi_aware = True
-            except Exception:
+                setter()
+            except (ImportError, AttributeError, OSError):
                 pass
+            else:
+                _process_dpi_aware = True
+                break
     else:
         # 不支持缩放，忽略操作
         pass
 
 
-def _get_scale_factor_win8_1(misc: Misc):
+def _get_scale_factor_win8_1(misc: Misc) -> float:
     from ctypes import windll, pointer, wintypes
     dpi_type = 0  # MDT_EFFECTIVE_DPI = 0, MDT_ANGULAR_DPI = 1, MDT_RAW_DPI = 2
     window_hwnd = wintypes.HWND(misc.winfo_id())
@@ -47,10 +49,11 @@ def _get_scale_factor_win8_1(misc: Misc):
                                                      wintypes.DWORD(2))  # MONITOR_DEFAULTTONEAREST = 2
     dpi_x, dpi_y = wintypes.UINT(), wintypes.UINT()
     windll.shcore.GetDpiForMonitor(monitor_handle, dpi_type, pointer(dpi_x), pointer(dpi_y))
+
     return (dpi_x.value + dpi_y.value) / 2 / _default_dpi
 
 
-def _get_scale_factor_win2000():
+def _get_scale_factor_win2000() -> float:
     from ctypes import windll, WinError, get_last_error
     hdc = windll.user32.GetDC(None)
     if not hdc:
@@ -66,19 +69,18 @@ def _get_scale_factor_win2000():
     return (dpi_x + dpi_y) / 2 / _default_dpi
 
 
-# noinspection PyBroadException
 def get_scale_factor(misc: Misc) -> float:
     if not _process_dpi_aware:
         return 1.0
     if sys.platform == "win32":
-        try:
-            return _get_scale_factor_win8_1(misc)
-        except Exception:
+        for getter in (
+            lambda: _get_scale_factor_win8_1(misc),
+            _get_scale_factor_win2000,
+        ):
             try:
-                return _get_scale_factor_win2000()
-            except Exception:
-                return 1.0
+                return getter()
+            except (ImportError, AttributeError, OSError):
+                pass
 
-    else:
-        # 不支持缩放，默认返回1
-        return 1.0
+    # 不支持缩放，默认返回1
+    return 1.0
