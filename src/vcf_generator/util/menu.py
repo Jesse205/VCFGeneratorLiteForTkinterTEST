@@ -29,7 +29,7 @@ def _parse_label(label: str) -> tuple[str, int]:
     """
     解析标签字符串，将标签字符串中的快捷键标识符替换为对应的快捷键键值
     """
-    return label.replace("&", ""), label.find("&")
+    return label.replace("&", "", 1), label.find("&")
 
 
 def add_menus(menu: Menu, items: list[MenuItem]):
