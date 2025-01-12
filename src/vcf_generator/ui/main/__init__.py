@@ -55,8 +55,8 @@ class MainWindow(BaseWindow):
 
         self.progress_bar = Progressbar(bottom_frame, orient=HORIZONTAL, length=200, mode='determinate', maximum=1)
 
-        self.generate_button = Button(bottom_frame, text="生成(G)", default=ACTIVE,
-                                      command=lambda: self.event_generate(EVENT_ON_GENERATE_CLICK), underline=3)
+        self.generate_button = Button(bottom_frame, text="生成", default=ACTIVE,
+                                      command=lambda: self.event_generate(EVENT_ON_GENERATE_CLICK))
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def show_progress_bar(self):
@@ -140,6 +140,8 @@ class MainController:
         window.bind(EVENT_ON_ABOUT_CLICK, self.on_about_click)
         window.bind(EVENT_ON_CLEAN_QUOTES_CLICK, self.on_clean_quotes_click)
         window.bind(EVENT_ON_GENERATE_CLICK, self.on_generate_click)
+        window.bind("<Control-S>", self.on_generate_click)
+        window.bind("<Control-s>", self.on_generate_click)
         window.bind("<Return>", self.on_return_click)
 
     def _get_text_content(self):
