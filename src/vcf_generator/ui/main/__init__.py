@@ -116,18 +116,18 @@ class MainWindow(BaseWindow):
 
         help_menu = Menu(menu_bar, tearoff=False)
         help_menu.add_command(
-            label="源代码",
+            label="VCF 生成器 Lite 源代码网址",
             command=lambda: webbrowser.open(URL_SOURCE)
         )
         help_menu.add_command(
-            label="版本发布",
+            label="VCF 生成器 Lite 发布网址",
             command=lambda: webbrowser.open(URL_RELEASES)
         )
         help_menu.add_separator()
         help_menu.add_command(
-            label="关于(A)",
+            label="关于 VCF 生成器 Lite(A)",
             command=lambda: self.event_generate(EVENT_ON_ABOUT_CLICK),
-            underline=3,
+            underline=16,
         )
         menu_bar.add_cascade(label="帮助(H)", menu=help_menu, underline=3)
 
