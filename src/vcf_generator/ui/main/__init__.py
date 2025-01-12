@@ -40,7 +40,8 @@ class MainWindow(BaseWindow):
         description_label.bind("<Configure>", get_auto_wrap_event(description_label))
         description_label.pack(fill=X, padx="10p", pady="10p")
 
-        self.text_input = ScrolledText(self, undo=True, tabs="2c", tabstyle="wordprocessor")
+        #height=0允许文本框以更低的高度显示
+        self.text_input = ScrolledText(self, undo=True, tabs="2c", tabstyle="wordprocessor", height=0)
         self.text_input.insert(0.0, DEFAULT_INPUT_CONTENT)
         self.text_input.edit_reset()
         self.text_input.pack(fill=BOTH, expand=True, padx="10p", pady=0)
