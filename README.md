@@ -4,6 +4,7 @@
 # VCF Generator Lite
 
 [![Gitee repository](https://img.shields.io/badge/Gitee-repository-C71D23?logo=gitee)](https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter)
+[![Github repository](https://img.shields.io/badge/Github-repository-0969da?logo=github)](https://github.com/HelloTool/VCFGeneratorLiteForTkinter)
 
 [![Windows](https://img.shields.io/badge/Windows-exe-%232863C5?logo=windows)][ReleaseInGitee]
 
