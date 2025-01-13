@@ -100,12 +100,12 @@ For some systems, you can enable running this APP by patching software. If you n
 
 ### Building
 
-1. Generate app binary: `poetry run build_app`;
-2. Generate installer：`poetry run build_setup`.
+1. Generate app binary: `pdm run build_app`;
+2. Generate installer：`pdm run build_setup`.
 
 ### Change version
 
-Run `poetry run change-version <Version>`.
+Run `pdm run version <Version>`.
 
 ## License
 

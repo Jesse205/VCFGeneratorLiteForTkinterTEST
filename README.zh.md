@@ -105,7 +105,7 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 ### 切换版本
 
-运行 `pdm run change_version <版本名>`。
+运行 `pdm run version <版本名>`。
 
 ## 许可
 
