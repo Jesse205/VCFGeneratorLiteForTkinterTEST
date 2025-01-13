@@ -20,7 +20,9 @@ jobs:
       - name: Install dependencies
         run: pdm install
       - name: Install Inno Setup
-        run: pdm run install_innosetup
+        uses: ConorMacBride/install-package@v1
+        with:
+          choco: innosetup
       - name: Prepare Inno Setup extensions
         run: pdm run prepare_innosetup_extensions
       - name: Build app
