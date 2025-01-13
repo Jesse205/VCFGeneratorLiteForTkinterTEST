@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: pdm install
       - name: Install Inno Setup
-        uses: pdm run install_innosetup
+        run: pdm run install_innosetup
       - name: Prepare Inno Setup extensions
         run: pdm run prepare_innosetup_extensions
       - name: Build app
