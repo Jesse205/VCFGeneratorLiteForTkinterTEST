@@ -179,6 +179,7 @@ class MainController:
             self._previous_update_progress_id = self.window.after_idle(self.window.set_progress, progress)
 
         def done(future: Future[GenerateResult]):
+            file_io.close()
             self._show_generate_done_dialog(file_io.name, future.result().invalid_items)
             self.window.hide_progress_bar()
             self.window.enable_generate_button()
