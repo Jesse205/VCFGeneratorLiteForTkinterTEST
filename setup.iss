@@ -39,7 +39,7 @@ Name: zh_cn; MessagesFile: ".innosetup\Languages\ChineseSimplified.isl"
 
 [CustomMessages]
 en_us.MyAppName=VCF Generator Lite
-zh_cn.MyAppName=VCF Éú³ÉÆ÷ Lite
+zh_cn.MyAppName=VCF ç”Ÿæˆå™¨ Lite
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
