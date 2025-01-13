@@ -40,6 +40,8 @@ build_installer = { call = "scripts.build_installer:main", help = "Build install
 prepare_innosetup_extensions = { call = "scripts.prepare_innosetup_extensions:main", help = "Download InnoSetup language files." }
 version = { call = "scripts.version:main", help = "Display or modify the project version number." }
 
+install_innosetup = { call = "scripts.install_innosetup:main"}
+
 [tool.pdm.build]
 is-purelib = true
 
