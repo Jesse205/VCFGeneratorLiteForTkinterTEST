@@ -37,6 +37,24 @@ ArchitecturesInstallIn64BitMode=x64compatible
 Name: en_us; MessagesFile: "compiler:Default.isl"
 Name: zh_cn; MessagesFile: ".innosetup\Languages\ChineseSimplified.isl"
 
+[LangOptions]
+; Microsoft's recommended normal font size is 9pt.
+DialogFontSize=9
+WelcomeFontSize=12
+TitleFontSize=29
+CopyrightFontSize=9
+
+; The language file does not contain the correct font, so we should set the correct font.
+; https://learn.microsoft.com/zh-cn/windows/win32/uxguide/text-ui#guidelines
+en_us.DialogFontName=Segoe UI
+en_us.WelcomeFontName=Segoe UI
+en_us.TitleFontName=Segoe UI
+en_us.CopyrightFontName=Segoe UI
+zh_cn.DialogFontName=Microsoft Yahei UI
+zh_cn.WelcomeFontName=Microsoft Yahei UI
+zh_cn.TitleFontName=Microsoft Yahei UI
+zh_cn.CopyrightFontName=Microsoft Yahei UI
+
 [CustomMessages]
 en_us.MyAppName=VCF Generator Lite
 zh_cn.MyAppName=VCF 生成器 Lite
