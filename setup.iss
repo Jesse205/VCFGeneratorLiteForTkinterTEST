@@ -4,9 +4,8 @@
 #define MyAppName "VCFGeneratorLite"
 #define MyAppVersion "3.0.0"
 #define MyAppPublisher "Jesse205"
-#define MyAppURL "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
-#define MyAppPublisherURL "https://gitee.com/Jesse205"
 #define MyAppExeName "vcf_generator.exe"
+#define MyAppIcon ".\src\vcf_generator\assets\images\icon.ico"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -15,23 +14,24 @@ AppId={{2CA151A5-049F-4AD9-92B1-5F0A244F52A4}
 AppName={cm:MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
-AppPublisher={#MyAppPublisher}
-AppPublisherURL={#MyAppPublisherURL}
-AppSupportURL={#MyAppURL}
-AppUpdatesURL={#MyAppURL}
+AppCopyright={#MyAppCopyright}
+AppPublisher={cm:MyAppPublisher}
+AppPublisherURL={cm:MyAppPublisherURL}
+AppReadmeFile={cm:MyAppReadmeFile}
+AppUpdatesURL={cm:MyAppUpdatesURL}
 DefaultDirName={autopf}\{#MyAppPublisher}\{#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile=.\LICENSE
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=.\dist
-OutputBaseFilename={#MyAppName}_v{#MyAppVersion}_x64_setup
-SetupIconFile=.\src\vcf_generator\assets\images\icon.ico
-Compression=lzma
+Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
+AllowNoIcons=yes
+UninstallDisplayIcon={app}\{#MyAppExeName}
 
 [Languages]
 Name: en_us; MessagesFile: "compiler:Default.isl"
@@ -50,14 +50,48 @@ en_us.DialogFontName=Segoe UI
 en_us.WelcomeFontName=Segoe UI
 en_us.TitleFontName=Segoe UI
 en_us.CopyrightFontName=Segoe UI
-zh_cn.DialogFontName=Microsoft Yahei UI
-zh_cn.WelcomeFontName=Microsoft Yahei UI
-zh_cn.TitleFontName=Microsoft Yahei UI
-zh_cn.CopyrightFontName=Microsoft Yahei UI
+; Windows 7 does not have Microsoft Yahei UI fonts, so it should always be Microsoft Yahei fonts
+zh_cn.DialogFontName=Microsoft Yahei
+zh_cn.WelcomeFontName=Microsoft Yahei
+zh_cn.TitleFontName=Microsoft Yahei
+zh_cn.CopyrightFontName=Microsoft Yahei
 
 [CustomMessages]
 en_us.MyAppName=VCF Generator Lite
+en_us.MyAppPublisher=Jesse205
+en_us.MyAppPublisherURL=https://github.com/Jesse205
+en_us.MyAppReadmeFile=https://github.com/HelloTool/VCFGeneratorLiteForTkinter/blob/master/README.md
+en_us.MyAppUpdatesURL=https://github.com/HelloTool/VCFGeneratorLiteForTkinter/releases
+en_us.SetupAppRunningOnWin7=Note: You are using Windows 7, you will need to add the following additional files after the installation is complete in order to run: python313.dll and api-ms-win-core-path-l1-1-0.dll.
+
 zh_cn.MyAppName=VCF 生成器 Lite
+zh_cn.MyAppPublisher=Jesse205
+zh_cn.MyAppPublisherURL=https://gitee.com/Jesse205
+zh_cn.MyAppReadmeFile=https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/blob/master/README.md
+zh_cn.MyAppUpdatesURL=https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases
+zh_cn.SetupAppRunningOnWin7=注意: 您正在使用 Windows 7, 您需要在安装完成后额外添加以下文件才能运行：python313.dll 和 api-ms-win-core-path-l1-1-0.dll。
+
+[Code]
+var
+  Win7MessageShown: Boolean;
+
+procedure InitializeWizard();
+begin
+  Win7MessageShown := False;
+end;
+
+procedure CurInstallProgressChanged(CurProgress, MaxProgress: Integer);
+var
+  WinVersion: TWindowsVersion;
+  VersionStr: string;
+begin
+  GetWindowsVersionEx(WinVersion);
+  if (CurProgress=MaxProgress) and (WinVersion.Major = 6) and (WinVersion.Minor = 1) and (not Win7MessageShown) then
+  begin
+    MsgBox(CustomMessage('SetupAppRunningOnWin7'), mbInformation, MB_OK);
+    Win7MessageShown := True;
+  end;
+end;
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
