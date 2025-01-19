@@ -12,7 +12,7 @@
 **English** |
 <small>More translations are welcome!</small>
 
-_The application currently only supports Chinese language_
+_The application currently only supports the Chinese language._
 
 </div>
 
@@ -51,16 +51,16 @@ For some systems, you can enable running this APP by patching software. If you n
 
 1. Go to the [Release][ReleaseInGitee] to download and run the installation program (file name is usually
    `VCFGenerator_<Version>_<PythonVersion>_<Architecture>_64bit_setup.exe`).
-2. Open APP;
-3. Copy the name and phone number in the format of `Name  PhoneNumber` on each line into the editing box below;
+2. Open the app.
+3. Copy the name and phone number in the format of `Name PhoneNumber` on each line into the editing box below;
     ```text
     Hardy Buck 13445467890
     Alva Mackintosh 13554678907
     Hobart Baker 13645436748
     ```
-4. Click "生成" (Generate), select a path to save the file;
-5. Copy the generated VCF file to your phone, select "Contacts" when opening the file, and then follow the prompts;
-6. Wait for import to complete.
+4. Click "生成" (Generate), select a path to save the file.
+5. Copy the generated VCF file to your phone, select "Contacts" when opening the file, and then follow the prompts.
+6. Wait for the import to complete.
 
 > [!NOTE]
 >
@@ -113,7 +113,7 @@ This project is open source under the [MIT license](./LICENSE)
 - [Fluent Emoji](https://github.com/microsoft/fluentui-emoji)(used as application icon): MIT license
 - [Python](https://www.python.org/): [Python license](https://docs.python.org/3/license.html)
 - [UPX](https://upx.github.io/)(for compressing code): GPL-2.0 license
-- [PyInstaller](https://pyinstaller.org/en/stable/)(for packaging as an APP)：[GPL-2.0 license](https://pyinstaller.org/en/stable/license.html)
+- [PyInstaller](https://pyinstaller.org/en/stable/)(for packaging as an APP): [GPL-2.0 license](https://pyinstaller.org/en/stable/license.html)
 - [tkhtmlview](https://github.com/bauripalash/tkhtmlview): MIT License
 
 ## Contribute
