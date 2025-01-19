@@ -26,7 +26,6 @@ class AboutWindow(BaseDialog):
         self.on_init_header(header_frame)
         details_input = HTMLScrolledText(
             self,
-            default_font=self.font,
             html=get_about_html(),
             state=DISABLED,
             highlightcolor=None,

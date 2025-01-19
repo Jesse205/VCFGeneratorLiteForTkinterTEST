@@ -20,10 +20,9 @@ class HTMLText(Text):
     HTML text widget
     """
 
-    def __init__(self, master=None, html=None, wrap="word", default_font: Font = None, **kw):
+    def __init__(self, master=None, html=None, wrap="word", **kw):
         super().__init__(master=master, wrap=wrap, **kw)
         self.html_parser = html_parser.HTMLTextParser()
-        self.html_parser.default_font = default_font
         if isinstance(html, str):
             self.set_html(html)
         elif isinstance(html, RenderHTML):
