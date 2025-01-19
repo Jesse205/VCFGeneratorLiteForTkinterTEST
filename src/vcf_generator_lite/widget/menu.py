@@ -27,6 +27,7 @@ class TextContextMenu(Menu):
         state_by_selected = boolean_to_state(self.is_selected())
         is_master_editable = state_to_boolean(self.master.cget("state"))
         self.delete(0, END)
+        self.master.focus()
         if is_master_editable:
             self.add_command(
                 label='撤消(U)',
@@ -64,7 +65,7 @@ class TextContextMenu(Menu):
             command=lambda: self.master.event_generate("<<SelectAll>>"),
             underline=3,
         )
-        self.post(x, y)
+        self.tk_popup(x, y)
 
     def bind_to_widget(self):
         self.master.bind("<Button-3>", lambda event: self.show(event.x_root, event.y_root), add="+")
