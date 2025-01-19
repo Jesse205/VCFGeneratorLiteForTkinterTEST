@@ -84,6 +84,11 @@ For some systems, you can enable running this APP by patching software. If you n
     - `vcf_generator/assets`：Resource file directory
     - `__main__.py`：Program entry
 - `scripts`：Script directory
+- `pyproject.toml`: Project configuration file
+- `setup.iss`: InnoSetup configuration file, used to generate Windows installer
+- `vcf_generator.spec`: PyInstaller configuration file, used to build the app
+- `versionfile.txt`: Automatically generated information file, providing EXE information for PyInstaller
+- `metadata.yml`: Information file (excluding version), used to generate versionfile.txt
 
 ## Developing
 

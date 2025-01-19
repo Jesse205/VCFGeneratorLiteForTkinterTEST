@@ -84,6 +84,11 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
     - `vcf_generator/assets`：资源文件目录
     - `__main__.py`：程序入口
 - `scripts`：脚本目录
+- `pyproject.toml`：项目配置文件
+- `setup.iss`：InnoSetup 配置文件，用于生成 Windows 安装器
+- `vcf_generator.spec`：PyInstaller 配置文件，用于构建 APP
+- `metadata.yml`：信息文件（不包括版本），用于生成 versionfile.txt
+- `versionfile.txt`：自动生成的信息文件，为 PyInstaller 提供 EXE 信息
 
 ## 开发项目
 
