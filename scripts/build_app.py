@@ -1,19 +1,56 @@
 import argparse
+import os
+import shutil
+import subprocess
 import sys
+from zipfile import ZipFile
 
 # noinspection PyPep8Naming
 import PyInstaller.__main__ as PyInstaller
 
+from scripts.prepare_innosetup_extensions import PATH_INNOSETUP_EXTENSION, main as prepare_innosetup_extensions
 from scripts.utils import get_bits
+from vcf_generator import __version__ as app_version
+from vcf_generator.constants import APP_COPYRIGHT
+
+PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
+OUTPUT_BASE_NAME = f"VCFGenerator_v{app_version}_{get_bits()}bit"
 
 
 def build_with_pyinstaller():
+    print("Building with PyInstaller...")
     PyInstaller.run(["vcf_generator.spec", "--noconfirm"])
+    print("Building finished.")
 
 
 def build_with_zipapp():
     # TODO: 支持zipapp打包
     pass
+
+
+def pack_with_innosetup() -> int:
+    print("Packaging with InnoSetup...")
+    if not os.path.isdir(PATH_INNOSETUP_EXTENSION):
+        if result := prepare_innosetup_extensions():
+            return result
+    os.environ["PATH"] += os.pathsep + "C:\\Program Files (x86)\\Inno Setup 6\\"
+    result = subprocess.run([
+        shutil.which("iscc"),
+        "/F" + f"{OUTPUT_BASE_NAME}_setup",
+        "/D" + f"MyAppCopyright={APP_COPYRIGHT}",
+        os.path.abspath('setup.iss'),
+    ])
+    print("Packaging finished.")
+    return result.returncode
+
+
+def pack_with_zipfile():
+    print("Packaging with ZipFile...")
+    with ZipFile(os.path.join("dist", f"{OUTPUT_BASE_NAME}_bin.zip"), "w") as zip_file:
+        for path, dirs, files in os.walk(os.path.join("dist", "vcf_generator")):
+            for file_path in [os.path.join(path, file) for file in files]:
+                zip_file.write(file_path, os.path.relpath(file_path, "dist"))
+    print("Packaging finished.")
 
 
 def main() -> int:
@@ -22,13 +59,17 @@ def main() -> int:
         return 1
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-b", "--builder", type=str, default="pyinstaller", choices=["pyinstaller"])
+    parser.add_argument("-t", "--type", type=str, default="bundle", choices=["bundle", "binary", "zipapp"])
     args = parser.parse_args()
 
-    builder = args.builder
-
-    if builder == "pyinstaller":
-        build_with_pyinstaller()
-    elif builder == "zipapp":
-        build_with_zipapp()
+    type_ = args.type
+    match type_:
+        case "bundle":
+            build_with_pyinstaller()
+            return pack_with_innosetup()
+        case "binary":
+            build_with_pyinstaller()
+            pack_with_zipfile()
+        case "zipapp":
+            build_with_zipapp()
     return 0

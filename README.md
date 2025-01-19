@@ -93,15 +93,14 @@ For some systems, you can enable running this APP by patching software. If you n
 
 ### Pre-development
 
-1. Install [Python 3.11+](https://www.python.org/), [PDM](https://pdm-project.org/zh-cn/latest/), [UPX](https://upx.github.io/), [InnoSetup 6.3](https://jrsoftware.org/isinfo.php);
+1. Install [Python 3.11+](https://www.python.org/), [PDM](https://pdm-project.org/zh-cn/latest/), [UPX](https://upx.github.io/), [InnoSetup 6.4](https://jrsoftware.org/isinfo.php);
 2. Install dependencies: `pdm install`;
 3. Install the PDM plugins: `pdm install --plugins`;
 4. Download the InnoSetup file: `pdm run prepare_innosetup_extensions`.
 
 ### Building
 
-1. Generate app binary: `pdm run build_app`;
-2. Generate installer：`pdm run build_setup`.
+Run `pdm run build_app`.
 
 ### Change version
 

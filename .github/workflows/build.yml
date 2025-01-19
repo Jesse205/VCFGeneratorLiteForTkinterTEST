@@ -2,6 +2,7 @@ name: Build App
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -11,31 +12,34 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python 3.10
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v4
-      - name: Install dependencies
-        run: pdm install
       - name: Install Inno Setup
         uses: ConorMacBride/install-package@v1
         with:
           choco: innosetup
+
+      - name: Install Dependencies
+        run: pdm install -G:all
       - name: Prepare Inno Setup extensions
         run: pdm run prepare_innosetup_extensions
-      - name: Build app
-        run: pdm run build_app
-      - name: Build installer
-        run: pdm run build_installer
-      - name: Upload package
+
+      - name: Build Apps
+        run: |
+          pdm run build_app -t bundle
+          pdm run build_app -t binary
+
+      - name: Upload Binary
         uses: actions/upload-artifact@v4
         with:
-          name: VCF Generator Lite for Windows
-          path: dist/vcf_generator/*
-      - name: Upload installer
+          name: windows-binary
+          path: dist/*_bin.zip
+      - name: Upload Installer
         uses: actions/upload-artifact@v4
         with:
-          name: VCF Generator Lite Installer for Windows
-          path: dist/*setup.exe
+          name: windows-installer
+          path: dist/*_setup.exe

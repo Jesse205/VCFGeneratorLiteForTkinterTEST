@@ -8,7 +8,7 @@ URL_CHINESE_SIMPLIFIED_ISL_URL = "https://raw.github.com/jrsoftware/issrc/main/F
 # 国内使用 GitCode 加速下载
 URL_CHINESE_SIMPLIFIED_ISL_GITCODE = "https://raw.gitcode.com/gh_mirrors/is/issrc/raw/main/Files/Languages/Unofficial/ChineseSimplified.isl"
 
-PATH_INNOSETUP_EXTENSION = ".innosetup"
+PATH_INNOSETUP_EXTENSION = "./.innosetup"
 PATH_CHINESE_SIMPLIFIED = os.path.join(PATH_INNOSETUP_EXTENSION, "Languages", "ChineseSimplified.isl")
 
 TEXT_REPLACE_DICT_CHINESE_SIMPLIFIED = {
