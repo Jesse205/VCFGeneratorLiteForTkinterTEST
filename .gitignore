@@ -3,7 +3,7 @@
 .innosetup
 
 # IDE
-/.idea
+/.idea/*
 !/.idea/codeStyles
 !/.idea/runConfigurations
 
