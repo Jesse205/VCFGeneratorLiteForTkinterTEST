@@ -30,10 +30,10 @@ def build_with_zipapp():
         "pack",
         "-m", "vcf_generator_lite.__main__:main",
         "-o", "dist/vcf_generator_lite.pyzw",
-        "--interpreter", "/usr/bin/env python3",
-        "--pyc",
-        "--no-py",
+        "--interpreter", "/usr/bin/env python3.13",
         "--compile",
+        "--compress",
+        "--no-py",
     ])
     print("Building finished.")
     return result.returncode
