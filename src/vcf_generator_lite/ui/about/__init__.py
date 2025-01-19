@@ -18,7 +18,6 @@ class AboutWindow(BaseDialog):
         super().on_init_window()
         self.title(f"关于 {constants.APP_NAME}")
         self.set_size(500, 400)
-        self.resizable(False, False)
 
     def on_init_widgets(self):
         header_frame = tk.Frame(self, background="systemWindow")

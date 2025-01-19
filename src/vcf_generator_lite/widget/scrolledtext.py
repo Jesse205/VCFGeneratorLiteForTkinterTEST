@@ -50,6 +50,7 @@ class ScrolledText(Text):
             self,
             self.frame,
             borderwidth=borderwidth,
+            highlightthickness=0,
             relief="flat",
             **kw
         )

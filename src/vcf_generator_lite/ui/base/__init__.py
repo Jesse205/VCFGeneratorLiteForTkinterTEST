@@ -91,7 +91,7 @@ class WindowInjector(Misc, Wm):
             f"Container size: {container_width}x{container_height}, window size: {window_width}x{window_height}")
         location_x = max(int((container_width - window_width) / 2), 0)
         location_y = max(int((container_height - window_height) / 2), 0)
-        self.geometry(f"{window_width}x{window_height}+{location_x}+{location_y}")
+        self.geometry(f"+{location_x}+{location_y}")
 
 
 class BaseWindow(Tk, WindowInjector):
@@ -111,3 +111,4 @@ class BaseDialog(BaseToplevel):
         if issubclass(type(self.master), Wm):
             # noinspection PyTypeChecker
             self.transient(self.master)
+            self.resizable(False, False)
