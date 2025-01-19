@@ -44,3 +44,8 @@ jobs:
         with:
           name: windows-installer
           path: dist/*_setup.exe
+      - name: Upload Single File
+        uses: actions/upload-artifact@v4
+        with:
+          name: single-file
+          path: dist/vcf_generator_lite.pyzw
