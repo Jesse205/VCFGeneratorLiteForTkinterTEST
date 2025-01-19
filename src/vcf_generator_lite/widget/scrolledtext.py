@@ -15,7 +15,7 @@ from tkinter import Text, Pack, Grid, Place, Frame
 from tkinter.constants import RIGHT, LEFT, Y, BOTH, FLAT
 from tkinter.ttk import Scrollbar
 
-from vcf_generator.util.resource import get_default_color
+from vcf_generator_lite.util.resource import get_default_color
 
 __all__ = ['ScrolledText']
 

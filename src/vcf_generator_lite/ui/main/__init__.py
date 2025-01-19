@@ -5,16 +5,16 @@ from tkinter import filedialog, Menu, Event
 from tkinter.constants import *
 from tkinter.ttk import *
 
-from vcf_generator.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE
-from vcf_generator.ui.about import open_about_window
-from vcf_generator.ui.base import BaseWindow
-from vcf_generator.util import dialog
-from vcf_generator.util.menu import add_menus, MenuCascade, MenuCommand, MenuSeparator
-from vcf_generator.util.thread import cpu_executor
-from vcf_generator.util.vcard import generate_vcard_file, LineContent, GenerateResult
-from vcf_generator.util.widget import get_auto_wrap_event
-from vcf_generator.widget.menu import TextContextMenu
-from vcf_generator.widget.scrolledtext import ScrolledText
+from vcf_generator_lite.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE
+from vcf_generator_lite.ui.about import open_about_window
+from vcf_generator_lite.ui.base import BaseWindow
+from vcf_generator_lite.util import dialog
+from vcf_generator_lite.util.menu import add_menus, MenuCascade, MenuCommand, MenuSeparator
+from vcf_generator_lite.util.thread import cpu_executor
+from vcf_generator_lite.util.vcard import generate_vcard_file, LineContent, GenerateResult
+from vcf_generator_lite.util.widget import get_auto_wrap_event
+from vcf_generator_lite.widget.menu import TextContextMenu
+from vcf_generator_lite.widget.scrolledtext import ScrolledText
 
 MAX_INVALID_COUNT = 200
 

@@ -31,7 +31,7 @@ def change_version(
 
 def change_init_version(version: str):
     change_version(
-        file_name="./src/vcf_generator/__init__.py",
+        file_name="./src/vcf_generator_lite/__init__.py",
         content_pattern=re.compile(r'^ *__version__ *= *".*" *$', flags=re.M),
         content_formatter='__version__ = "%s"',
         version=version
@@ -47,8 +47,8 @@ def change_version_info(version: str):
 
 
 def print_version():
-    import vcf_generator
-    print(vcf_generator.__version__)
+    import vcf_generator_lite
+    print(vcf_generator_lite.__version__)
 
 
 def main() -> int:

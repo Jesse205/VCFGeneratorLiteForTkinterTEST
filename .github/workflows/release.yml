@@ -25,4 +25,4 @@ jobs:
         uses: jaywcjlove/github-action-upload-assets@v1.1.1
         with:
           tag: ${{ github.event.release.tag_name }}
-          asset-path: '["*_bin.zip", "*_setup.exe"]'
+          asset-path: '["*_bin_windows.zip", "*_setup.exe", "vcf_generator_lite.pyzw"]'

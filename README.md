@@ -3,10 +3,11 @@
 
 # VCF Generator Lite
 
-[![Gitee repository](https://img.shields.io/badge/Gitee-repository-C71D23?logo=gitee)](https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter)
-[![Github repository](https://img.shields.io/badge/Github-repository-0969da?logo=github)](https://github.com/HelloTool/VCFGeneratorLiteForTkinter)
+[![Gitee repository](https://img.shields.io/badge/Gitee-repository-C71D23?logo=gitee)][RepositoryOnGitee]
+[![GitHub repository](https://img.shields.io/badge/GitHub-repository-0969da?logo=github)][RepositoryOnGithub]
 
-[![Windows](https://img.shields.io/badge/Windows-exe-%232863C5?logo=windows)][ReleaseInGitee]
+[![Windows exe](https://img.shields.io/badge/Windows-exe-0078D4?logo=windows)][ReleaseOnGitee]
+[![Python pyzw](https://img.shields.io/badge/Python-pyzw-3776AB?logo=python&logoColor=f5f5f5)][ReleaseOnGitee]
 
 [中文](./README.zh.md) |
 **English** |
@@ -18,7 +19,7 @@ _The application currently only supports the Chinese language._
 
 VCF generator, input name and phone number to automatically generate VCF files for batch import into the address book.
 
-[![License：MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+[![License](https://img.shields.io/github/license/HelloTool/VCFGeneratorLiteForTkinter)](./LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.md)
 
 ## Screenshot
@@ -27,12 +28,12 @@ VCF generator, input name and phone number to automatically generate VCF files f
 
 ## Environment Requirements
 
-- Operating System
-    - Windows: Windows 8+ or Windows 7+ (with patches)
-    - Linux: Not supported (contributions welcome)
-    - macOS: Not supported (contributions welcome)
-- CPU: x86 64-bit
-- Python Version: No requirement
+- `VCFGenerator_<version>_<bit>_setup.exe`, `VCFGenerator_<version>_<bit>_bin_windows.zip`
+    - Operating System: Windows 8+ or Windows 7+ (with required patches)
+    - CPU: x86 64-bit
+- `vcf_generator.pyzw`
+    - Operating System: Windows 8+ or Windows 7+ (with required patches) (other operating systems are not supported at this time)
+    - Python Version: Python 3.13 (with Tkinter)
 
 For some systems, you can enable running this APP by patching software. If you need to run this APP on these systems, please refer to the [Patch APP](#patch-app) section.
 
@@ -42,15 +43,14 @@ For some systems, you can enable running this APP by patching software. If you n
 <summary>Support Running on Windows 7</summary>
 
 1. Download `python313.dll` and `api-ms-win-core-path-l1-1-0.dll` compatible with Windows 7;
-    - You can choose to download these two files from the [PythonWin7](https://github.com/adang1345/PythonWin7) repository.
+    - You can choose to download these two files from the [PythonWin7][PythonWin7RepositoryOnGithub] repository.
 2. Install the software, go to the `_internal` directory in the installation folder, and overwrite the above two DLLs.
 
 </details>
 
 ## Usage
 
-1. Go to the [Release][ReleaseInGitee] to download and run the installation program (file name is usually
-   `VCFGenerator_<Version>_<PythonVersion>_<Architecture>_64bit_setup.exe`).
+1. Navigate to the [Release][ReleaseOnGithub] to download and install the app.
 2. Open the app.
 3. Copy the name and phone number in the format of `Name PhoneNumber` on each line into the editing box below;
     ```text
@@ -77,16 +77,16 @@ For some systems, you can enable running this APP by patching software. If you n
 ## Project Structure
 
 - `src`：Source code directory
-    - `vcf_generator/ui`： GUI
-    - `vcf_generator/util`：Utilities
-    - `vcf_generator/widget`：Tkinter widget
-    - `vcf_generator/constants.py`：Constants
-    - `vcf_generator/assets`：Resource file directory
+    - `vcf_generator_lite/ui`： GUI
+    - `vcf_generator_lite/util`：Utilities
+    - `vcf_generator_lite/widget`：Tkinter widget
+    - `vcf_generator_lite/constants.py`：Constants
+    - `vcf_generator_lite/assets`：Resource file directory
     - `__main__.py`：Program entry
 - `scripts`：Script directory
 - `pyproject.toml`: Project configuration file
 - `setup.iss`: InnoSetup configuration file, used to generate Windows installer
-- `vcf_generator.spec`: PyInstaller configuration file, used to build the app
+- `vcf_generator_lite.spec`: PyInstaller configuration file, used to build the app
 - `versionfile.txt`: Automatically generated information file, providing EXE information for PyInstaller
 - `metadata.yml`: Information file (excluding version), used to generate versionfile.txt
 
@@ -125,4 +125,8 @@ This project is open source under the [MIT license](./LICENSE)
 
 See [Contribution Guidelines (Chinese)](./CONTRIBUTING.zh.md).
 
-[ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
+[RepositoryOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/
+[RepositoryOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/
+[ReleaseOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
+[ReleaseOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
+[PythonWin7RepositoryOnGithub]: https://github.com/adang1345/PythonWin7

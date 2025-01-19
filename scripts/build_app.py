@@ -10,22 +10,33 @@ import PyInstaller.__main__ as PyInstaller
 
 from scripts.prepare_innosetup_extensions import PATH_INNOSETUP_EXTENSION, main as prepare_innosetup_extensions
 from scripts.utils import get_bits
-from vcf_generator import __version__ as app_version
-from vcf_generator.constants import APP_COPYRIGHT
+from vcf_generator_lite import __version__ as app_version
+from vcf_generator_lite.constants import APP_COPYRIGHT
 
 PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
-OUTPUT_BASE_NAME = f"VCFGenerator_v{app_version}_{get_bits()}bit"
+OUTPUT_BASE_NAME = f"VCFGeneratorLite_v{app_version}_{get_bits()}bit"
 
 
 def build_with_pyinstaller():
     print("Building with PyInstaller...")
-    PyInstaller.run(["vcf_generator.spec", "--noconfirm"])
+    PyInstaller.run(["vcf_generator_lite.spec", "--noconfirm"])
     print("Building finished.")
 
 
 def build_with_zipapp():
-    # TODO: 支持zipapp打包
-    pass
+    print("Building with pdm-packer...")
+    result = subprocess.run([
+        shutil.which("pdm"),
+        "pack",
+        "-m", "vcf_generator_lite.__main__:main",
+        "-o", "dist/vcf_generator_lite.pyzw",
+        "--interpreter", "/usr/bin/env python3",
+        "--pyc",
+        "--no-py",
+        "--compile",
+    ])
+    print("Building finished.")
+    return result.returncode
 
 
 def pack_with_innosetup() -> int:
@@ -47,8 +58,8 @@ def pack_with_innosetup() -> int:
 
 def pack_with_zipfile():
     print("Packaging with ZipFile...")
-    with ZipFile(os.path.join("dist", f"{OUTPUT_BASE_NAME}_bin.zip"), "w") as zip_file:
-        for path, dirs, files in os.walk(os.path.join("dist", "vcf_generator")):
+    with ZipFile(os.path.join("dist", f"{OUTPUT_BASE_NAME}_bin_windows.zip"), "w") as zip_file:
+        for path, dirs, files in os.walk(os.path.join("dist", "vcf_generator_lite")):
             for file_path in [os.path.join(path, file) for file in files]:
                 zip_file.write(file_path, os.path.relpath(file_path, "dist"))
     print("Packaging finished.")
@@ -60,7 +71,7 @@ def main() -> int:
         return 1
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-t", "--type", type=str, default="bundle", choices=["bundle", "binary", "zipapp"])
+    parser.add_argument("-t", "--type", type=str, default="bundle", choices=["bundle", "zipfile", "zipapp"])
     args = parser.parse_args()
 
     type_ = args.type
@@ -68,7 +79,7 @@ def main() -> int:
         case "bundle":
             build_with_pyinstaller()
             return pack_with_innosetup()
-        case "binary":
+        case "zipfile":
             build_with_pyinstaller()
             pack_with_zipfile()
         case "zipapp":

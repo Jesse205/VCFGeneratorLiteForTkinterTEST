@@ -1,8 +1,8 @@
 import logging
 
-from vcf_generator import constants
-from vcf_generator.ui.main import create_main_window
-from vcf_generator.util import display
+from vcf_generator_lite import constants
+from vcf_generator_lite.ui.main import create_main_window
+from vcf_generator_lite.util import display
 
 
 def main():

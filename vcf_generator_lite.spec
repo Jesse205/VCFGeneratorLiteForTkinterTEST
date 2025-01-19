@@ -4,7 +4,7 @@
 a = Analysis(
     ['./src/__main__.py'],
     pathex=[],
-    binaries=[('./src/vcf_generator/assets', 'vcf_generator/assets')],
+    binaries=[('./src/vcf_generator_lite/assets', 'vcf_generator_lite/assets')],
     datas=[],
     hiddenimports=[],
     hookspath=[],
@@ -23,7 +23,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='vcf_generator',
+    name='vcf_generator_lite',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -34,7 +34,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['./src/vcf_generator/assets/images/icon.ico'],
+    icon=['./src/vcf_generator_lite/assets/images/icon.ico'],
     version="versionfile.txt" if os.path.exists("file_version_info.txt") else None,
 )
 
@@ -46,6 +46,6 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='vcf_generator',
-    icon=['./src/vcf_generator/assets/icon.ico']
+    name='vcf_generator_lite',
+    icon=['./src/vcf_generator_lite/assets/icon.ico']
 )

@@ -1,5 +1,5 @@
-from vcf_generator.model.Person import Person
-from vcf_generator.util.phone import is_china_phone
+from vcf_generator_lite.model.Person import Person
+from vcf_generator_lite.util.phone import is_china_phone
 
 
 def parse_person(person_text: str):

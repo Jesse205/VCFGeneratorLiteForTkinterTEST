@@ -3,10 +3,11 @@
 
 # VCF 生成器 Lite
 
-[![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee)](https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter)
-[![Github 仓库](https://img.shields.io/badge/Github-仓库-0969da?logo=github)](https://github.com/HelloTool/VCFGeneratorLiteForTkinter)
+[![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee)][RepositoryOnGitee]
+[![GitHub 仓库](https://img.shields.io/badge/GitHub-仓库-0969da?logo=github)][RepositoryOnGithub]
 
-[![Windows](https://img.shields.io/badge/Windows-exe-%232863C5?logo=windows)][ReleaseInGitee]
+[![Windows exe](https://img.shields.io/badge/Windows-exe-0078D4?logo=windows)][ReleaseOnGitee]
+[![Python pyzw](https://img.shields.io/badge/Python-pyzw-3776AB?logo=python&logoColor=f5f5f5)][ReleaseOnGitee]
 
 **中文** |
 [English](./README.md) |
@@ -18,7 +19,7 @@ _该应用程序目前仅支持中文。_
 
 VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通讯录内的 VCF 文件。
 
-[![许可证：MIT](https://img.shields.io/badge/许可证-MIT-green)](./LICENSE)
+[![许可证](https://img.shields.io/github/license/HelloTool/VCFGeneratorLiteForTkinter?label=%E8%AE%B8%E5%8F%AF%E8%AF%81)](./LICENSE)
 [![贡献者公约](https://img.shields.io/badge/贡献者公约-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.zh.md)
 
 ## 软件截图
@@ -27,14 +28,14 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 ## 环境要求
 
-- 操作系统
-    - Windows：Windows 8+ 或 Windows 7+（伴随补丁）
-    - Linux：不支持（欢迎贡献）
-    - macOS：不支持（欢迎贡献）
-- CPU：x86 64位
-- Python 版本：不要求
+- `VCFGenerator_<版本>_<位数>_setup.exe`、`VCFGenerator_<版本>_<位数>_bin_windows.zip`
+    - 操作系统：Windows 8+ 或 Windows 7+（伴随补丁）
+    - CPU：x86 64位
+- `vcf_generator.pyzw`
+    - 操作系统：Windows 8+ 或 Windows 7+（伴随补丁）（其他操作系统暂不支持）
+    - Python 版本：Python 3.13（伴随 Tkinter）
 
-对于部分系统，您可以通过修补软件的方法支持运行此APP。如需在这些系统中运行此APP，请参考[修补 APP](#修补-APP)章节。
+对于部分系统，您可以通过修补软件的方法支持运行此 APP。如需在这些系统中运行此 APP，请参考[修补 APP](#修补-APP)章节。
 
 ### 修补 APP
 
@@ -42,15 +43,14 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 <summary>支持 Windows 7 运行</summary>
 
 1. 下载兼容 Windows 7 的 `python313.dll` 与 `api-ms-win-core-path-l1-1-0.dll`；
-    - 您可以选择到 [PythonWin7](https://github.com/adang1345/PythonWin7) 仓库中下载这两个文件。
+    - 您可以选择到 [PythonWin7][PythonWin7RepositoryOnGithub] 仓库中下载这两个文件。
 2. 安装软件，进入安装目录中 `_internal`，覆盖以上两个 DLL。
 
 </details>
 
 ## 使用方法
 
-1. 进入[发行版][ReleaseInGitee]下载并运行安装程序（文件名通常是
-   `VCFGenerator_<版本>_<Python版本>_<CPU架构>_64bit_setup.exe`）；
+1. 进入[发行版][ReleaseOnGitee]下载并安装 APP；
 2. 打开 APP；
 3. 把名字和电话以每行 `姓名 电话号码` 的格式复制到下面的编辑框内；
     ```text
@@ -77,16 +77,16 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 ## 项目结构
 
 - `src`：源代码目录
-    - `vcf_generator/ui`： GUI 用户界面
-    - `vcf_generator/util`：工具类
-    - `vcf_generator/widget`：Tkinter 组件
-    - `vcf_generator/constants.py`：常量
-    - `vcf_generator/assets`：资源文件目录
+    - `vcf_generator_lite/ui`： GUI 用户界面
+    - `vcf_generator_lite/util`：工具类
+    - `vcf_generator_lite/widget`：Tkinter 组件
+    - `vcf_generator_lite/constants.py`：常量
+    - `vcf_generator_lite/assets`：资源文件目录
     - `__main__.py`：程序入口
 - `scripts`：脚本目录
 - `pyproject.toml`：项目配置文件
 - `setup.iss`：InnoSetup 配置文件，用于生成 Windows 安装器
-- `vcf_generator.spec`：PyInstaller 配置文件，用于构建 APP
+- `vcf_generator_lite.spec`：PyInstaller 配置文件，用于构建 APP
 - `metadata.yml`：信息文件（不包括版本），用于生成 versionfile.txt
 - `versionfile.txt`：自动生成的信息文件，为 PyInstaller 提供 EXE 信息
 
@@ -125,4 +125,8 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 请参阅 [《贡献指南》](./CONTRIBUTING.zh.md)。
 
-[ReleaseInGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
+[RepositoryOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/
+[RepositoryOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/
+[ReleaseOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
+[ReleaseOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
+[PythonWin7RepositoryOnGithub]: https://github.com/adang1345/PythonWin7

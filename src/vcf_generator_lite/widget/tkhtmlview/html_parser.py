@@ -10,7 +10,7 @@ from tkinter import font
 from tkinter.font import Font
 from typing import Optional
 
-from vcf_generator.util.resource import get_default_color
+from vcf_generator_lite.util.resource import get_default_color
 
 
 # __________________________________________________________________________________________________

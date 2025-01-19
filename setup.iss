@@ -3,8 +3,8 @@
 
 #define MyAppName "VCFGeneratorLite"
 #define MyAppPublisher "Jesse205"
-#define MyAppExeName "vcf_generator.exe"
-#define MyAppIcon ".\src\vcf_generator\assets\images\icon.ico"
+#define MyAppExeName "vcf_generator_lite.exe"
+#define MyAppIcon ".\src\vcf_generator_lite\assets\images\icon.ico"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -96,7 +96,7 @@ end;
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 
 [Files]
-Source: ".\dist\vcf_generator\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\dist\vcf_generator_lite\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

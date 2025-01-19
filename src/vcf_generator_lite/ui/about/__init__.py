@@ -3,12 +3,12 @@ from tkinter import *
 from tkinter.ttk import *
 from typing import Optional
 
-from vcf_generator import __version__
-from vcf_generator import constants
-from vcf_generator.ui.base import BaseDialog
-from vcf_generator.util.resource import get_about_html, get_asset_data
-from vcf_generator.widget.menu import TextContextMenu
-from vcf_generator.widget.tkhtmlview import HTMLScrolledText
+from vcf_generator_lite import __version__
+from vcf_generator_lite import constants
+from vcf_generator_lite.ui.base import BaseDialog
+from vcf_generator_lite.util.resource import get_about_html, get_asset_data
+from vcf_generator_lite.widget.menu import TextContextMenu
+from vcf_generator_lite.widget.tkhtmlview import HTMLScrolledText
 
 
 class AboutWindow(BaseDialog):

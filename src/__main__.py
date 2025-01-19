@@ -1,3 +1,3 @@
-from vcf_generator.__main__ import main
+from vcf_generator_lite.__main__ import main
 
 main()

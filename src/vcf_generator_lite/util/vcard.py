@@ -3,9 +3,9 @@ from concurrent.futures import Future
 from queue import Queue
 from typing import IO, Callable
 
-from vcf_generator.util.io import write_io_from_queue
-from vcf_generator.util.person import parse_person
-from vcf_generator.util.thread import io_executor, print_future_result
+from vcf_generator_lite.util.io import write_io_from_queue
+from vcf_generator_lite.util.person import parse_person
+from vcf_generator_lite.util.thread import io_executor, print_future_result
 
 
 def _str_to_hex(content: str):

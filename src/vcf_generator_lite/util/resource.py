@@ -4,9 +4,9 @@ import pkgutil
 import sys
 from typing import Optional
 
-from vcf_generator import constants
+from vcf_generator_lite import constants
 
-_APP_MODULE_NAME = "vcf_generator"
+_APP_MODULE_NAME = "vcf_generator_lite"
 
 
 def get_asset_data(resource: str) -> Optional[bytes]:

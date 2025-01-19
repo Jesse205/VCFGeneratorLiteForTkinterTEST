@@ -4,8 +4,8 @@ from tkinter import *
 from tkinter.ttk import Style
 from typing import Union
 
-from vcf_generator.util.display import get_scale_factor
-from vcf_generator.util.resource import get_asset_data
+from vcf_generator_lite.util.display import get_scale_factor
+from vcf_generator_lite.util.resource import get_asset_data
 
 __all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
 
