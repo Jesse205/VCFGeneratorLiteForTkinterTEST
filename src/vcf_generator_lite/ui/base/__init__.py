@@ -1,4 +1,4 @@
-import logging
+import sys
 import tkinter.font as tk_font
 from tkinter import *
 from tkinter.ttk import Style
@@ -27,7 +27,12 @@ class WindowInjector(Misc, Wm):
         self.menu_bar = Menu(self, tearoff=False)
         self.on_init_menus(self.menu_bar)
         self.configure({"menu": self.menu_bar})
+
         self.center_window()
+        # 延迟0秒调用center_window，修复WSL中窗口大小获取不正确
+        # after_idle不起作用
+        if sys.platform == "linux":
+            self.after(0, self.center_window)
 
         self.deiconify()
 
@@ -87,8 +92,6 @@ class WindowInjector(Misc, Wm):
         max_width, max_height = self.maxsize()
         container_width = min(max_width, self.winfo_screenwidth())
         container_height = min(max_height, self.winfo_screenheight())
-        logging.info(
-            f"Container size: {container_width}x{container_height}, window size: {window_width}x{window_height}")
         location_x = max(int((container_width - window_width) / 2), 0)
         location_y = max(int((container_height - window_height) / 2), 0)
         self.geometry(f"+{location_x}+{location_y}")
