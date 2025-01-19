@@ -2,7 +2,6 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VCFGeneratorLite"
-#define MyAppVersion "3.0.0"
 #define MyAppPublisher "Jesse205"
 #define MyAppExeName "vcf_generator.exe"
 #define MyAppIcon ".\src\vcf_generator\assets\images\icon.ico"

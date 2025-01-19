@@ -38,6 +38,7 @@ def pack_with_innosetup() -> int:
         shutil.which("iscc"),
         "/F" + f"{OUTPUT_BASE_NAME}_setup",
         "/D" + f"MyAppCopyright={APP_COPYRIGHT}",
+        "/D" + f"MyAppVersion={app_version}",
         os.path.abspath('setup.iss'),
     ])
     print("Packaging finished.")

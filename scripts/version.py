@@ -37,26 +37,6 @@ def change_init_version(version: str):
         version=version
     )
 
-
-def change_pyproject_version(version: str):
-    change_version(
-        file_name="pyproject.toml",
-        content_pattern=re.compile(r'^ *version *= *".*" *$', flags=re.M),
-        content_formatter='version = "%s"',
-        version=version
-    )
-
-
-def change_setup_version(version: str):
-    change_version(
-        file_name="setup.iss",
-        content_pattern=re.compile(r'^ *#define *MyAppVersion *".*" *$', flags=re.M),
-        content_formatter='#define MyAppVersion "%s"',
-        version=version,
-        encoding="gbk"
-    )
-
-
 def change_version_info(version: str):
     pyinstaller_versionfile.create_versionfile_from_input_file(
         output_file="versionfile.txt",
@@ -82,8 +62,6 @@ def main() -> int:
             print("Invalid version format. Version must be like '1.2.3'.", file=sys.stderr)
             return 1
         change_init_version(version)
-        change_pyproject_version(version)
-        change_setup_version(version)
         change_version_info(version)
     else:
         print_version()
