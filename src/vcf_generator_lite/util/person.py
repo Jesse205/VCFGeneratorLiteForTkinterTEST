@@ -1,5 +1,12 @@
-from vcf_generator_lite.model.Person import Person
+from dataclasses import dataclass
+
 from vcf_generator_lite.util.phone import is_china_phone
+
+
+@dataclass
+class Person:
+    name: str
+    phone: int
 
 
 def parse_person(person_text: str):
