@@ -111,7 +111,6 @@ class BaseToplevel(Toplevel, WindowInjector):
 
 class BaseDialog(BaseToplevel):
     def on_init_window(self):
-        if issubclass(type(self.master), Wm):
-            # noinspection PyTypeChecker
+        if isinstance(self.master, Wm):
             self.transient(self.master)
             self.resizable(False, False)
