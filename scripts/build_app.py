@@ -42,7 +42,7 @@ def build_with_zipapp():
 def pack_with_innosetup() -> int:
     print("Packaging with InnoSetup...")
     if not os.path.isdir(PATH_INNOSETUP_EXTENSION):
-        if result := prepare_innosetup_extensions():
+        if (result := prepare_innosetup_extensions()) != 0:
             return result
     os.environ["PATH"] += os.pathsep + "C:\\Program Files (x86)\\Inno Setup 6\\"
     result = subprocess.run([
