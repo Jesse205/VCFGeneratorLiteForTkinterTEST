@@ -1,6 +1,8 @@
 import re
+import traceback
 import webbrowser
 from concurrent.futures import Future
+from concurrent.futures.thread import ThreadPoolExecutor
 from tkinter import filedialog, Menu, Event
 from tkinter.constants import *
 from tkinter.ttk import *
@@ -10,8 +12,7 @@ from vcf_generator_lite.ui.about import open_about_window
 from vcf_generator_lite.ui.base import BaseWindow
 from vcf_generator_lite.util import dialog
 from vcf_generator_lite.util.menu import add_menus, MenuCascade, MenuCommand, MenuSeparator
-from vcf_generator_lite.util.thread import cpu_executor
-from vcf_generator_lite.util.vcard import generate_vcard_file, LineContent, GenerateResult
+from vcf_generator_lite.util.vcard import GenerateResult, generate_vcard_file
 from vcf_generator_lite.util.widget import get_auto_wrap_event
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.widget.scrolledtext import ScrolledText
@@ -40,7 +41,7 @@ class MainWindow(BaseWindow):
         description_label.bind("<Configure>", get_auto_wrap_event(description_label))
         description_label.pack(fill=X, padx="10p", pady="10p")
 
-        #height=0允许文本框以更低的高度显示
+        # height=0允许文本框以更低的高度显示
         self.text_input = ScrolledText(self, undo=True, tabs="2c", tabstyle="wordprocessor", height=0)
         self.text_input.insert(0.0, DEFAULT_INPUT_CONTENT)
         self.text_input.edit_reset()
@@ -54,7 +55,7 @@ class MainWindow(BaseWindow):
         sizegrip = Sizegrip(bottom_frame)
         sizegrip.place(relx=1, rely=1, anchor=SE)
 
-        self.progress_bar = Progressbar(bottom_frame, orient=HORIZONTAL, length=200, mode='determinate', maximum=1)
+        self.progress_bar = Progressbar(bottom_frame, orient=HORIZONTAL, length=200)
 
         self.generate_button = Button(bottom_frame, text="生成", default=ACTIVE,
                                       command=lambda: self.event_generate(EVENT_ON_GENERATE_CLICK))
@@ -68,6 +69,17 @@ class MainWindow(BaseWindow):
 
     def set_progress(self, progress: float):
         self.progress_bar.configure(value=progress)
+
+    def set_progress_determinate(self, value: bool):
+        previous_value: bool = self.progress_bar.cget("mode") == "determinate"
+        if previous_value != previous_value:
+            return
+        if value:
+            self.progress_bar.configure(mode="determinate", maximum=1)
+            self.progress_bar.stop()
+        else:
+            self.progress_bar.configure(mode="indeterminate", maximum=10)
+            self.progress_bar.start()
 
     def enable_generate_button(self):
         self.generate_button.configure(state=NORMAL)
@@ -134,8 +146,6 @@ class MainWindow(BaseWindow):
 
 
 class MainController:
-    _previous_update_progress_id: str = None
-
     def __init__(self, window: MainWindow):
         self.window = window
         window.bind(EVENT_ON_ABOUT_CLICK, self.on_about_click)
@@ -150,6 +160,9 @@ class MainController:
 
     def _set_text_content(self, new_content):
         self.window.text_input.replace(1.0, END, new_content)
+
+    def _set_progress(self, progress: float):
+        self.window.set_progress(progress)
 
     def on_about_click(self, _):
         open_about_window(self.window)
@@ -173,36 +186,59 @@ class MainController:
         self.window.set_progress(0)
         self.window.disable_generate_button()
 
-        def update_progress(progress):
-            if self._previous_update_progress_id is not None:
-                self.window.after_cancel(self._previous_update_progress_id)
-            self._previous_update_progress_id = self.window.after_idle(self.window.set_progress, progress)
-
         def done(future: Future[GenerateResult]):
             file_io.close()
-            self._show_generate_done_dialog(file_io.name, future.result().invalid_items)
+            self._show_generate_done_dialog(file_io.name, future.result())
             self.window.hide_progress_bar()
             self.window.enable_generate_button()
 
-        process_future: Future[GenerateResult] = cpu_executor.submit(generate_vcard_file, file_io, text_content,
-                                                                     on_update_progress=update_progress)
-        process_future.add_done_callback(lambda future: self.window.after_idle(done, future))
+        # @tk_throttle(self.window.progress_bar, 1)
+        # TODO:解决偶尔报错pending args and kwargs must not be None的问题
+        def on_update_progress(progress: float, determinate: bool):
+            self.window.set_progress_determinate(determinate)
+            if determinate:
+                self.window.set_progress(progress)
 
-    def _show_generate_done_dialog(self, display_path: str, invalid_items: list[LineContent]):
+        executor = ThreadPoolExecutor(max_workers=1)
+        executor.submit(
+            generate_vcard_file,
+            text_content,
+            file_io,
+            on_update_progress=on_update_progress
+        ).add_done_callback(done)
+        executor.shutdown(wait=False)
+
+    def _show_generate_done_dialog(self, display_path: str, generate_result: GenerateResult):
+        invalid_items = generate_result.invalid_items
         title = "生成 VCF 文件完成"
-        if len(invalid_items) > 0:
-            invalid_text = '，'.join(
-                [f"第 {item.line} 行：{item.content}" for item in invalid_items[0:MAX_INVALID_COUNT]])
-            ignored_count = max(len(invalid_items) - MAX_INVALID_COUNT, 0)
-            if ignored_count > 0:
-                invalid_text += f"... 等 {ignored_count} 个。"
-            message = "以下电话号码无法识别：\n{invalid_text}\n\n已导出文件到 {display_path}，但异常的号码未包含在此的文件中。".format(
-                invalid_text=invalid_text,
-                display_path=display_path
-            )
-            dialog.show_warning(self.window, title, message)
+        title_success = "生成 VCF 文件成功"
+        title_failure = "生成 VCF 文件失败"
+        title_partial_failure = "生成 VCF 文件部分成功"
+        message_success_template = "已导出文件到“{path}”。"
+        message_failure_template = "生成 VCF 文件时出现未知异常：\n\n{content}"
+        message_partial_failure_template = "以下电话号码无法识别：\n{content}\n\n已导出文件到 {path}，但异常的号码未包含在导出文件中。"
+        invalid_item_template = "第 {line} 行：{content}"
+        ignored_template = "{content}... 等 {ignored_count} 个。"
+
+        if generate_result.exceptions:
+            formatted_exceptions = [
+                "\n".join(traceback.format_exception(exception)) for exception in generate_result.exceptions
+            ]
+            dialog.show_error(self.window, title_failure,
+                              message_failure_template.format(content="\n\n".join(formatted_exceptions)))
+        elif len(invalid_items) > 0:
+            content = '，'.join([
+                invalid_item_template.format(line=item.line, content=item.content)
+                for item in invalid_items[0:MAX_INVALID_COUNT]
+            ])
+            if (ignored_count := max(len(invalid_items) - MAX_INVALID_COUNT, 0)) > 0:
+                content = ignored_template.format(content=content, ignored_count=ignored_count)
+            dialog.show_warning(self.window, title_partial_failure, message_partial_failure_template.format(
+                content=content,
+                path=display_path
+            ))
         else:
-            dialog.show_info(self.window, title, f'已导出文件到“{display_path}”。')
+            dialog.show_info(self.window, title_success, message_success_template.format(path=display_path))
 
     def _clean_quotes(self):
         origin_content = self._get_text_content()
