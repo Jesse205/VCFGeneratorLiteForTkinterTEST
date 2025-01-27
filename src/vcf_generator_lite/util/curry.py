@@ -1,4 +1,4 @@
-import logging
+import threading
 from collections.abc import Callable
 from tkinter import Misc
 from typing import Any, Optional
@@ -16,57 +16,56 @@ class TkDebounceWrapper[**P, T]:
         self._leading = leading
         self._trailing = trailing
         self._after_id = None
+        self.lock = threading.RLock()
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs):
-        logging.debug("TkDebounceWrapper.__call__()")
-        self._cancel_timer()
-        self._update_pending_args(args, kwargs)
-        is_leading_invoke = self.is_pending
-        if self._ms > 0:
-            # 确保trailing在leading后
-            # noinspection PyTypeChecker
+        with self.lock:
+            self._cancel_timer()
+            self._update_pending_args(args, kwargs)
+            if self._leading and not self.is_pending:
+                self._invoke_idle()
             self._after_id = self._widget.after(self._ms, self._on_time_end)
-        if self._leading and is_leading_invoke:
-            self._invoke()
-        if self._ms <= 0:
-            self._on_time_end()
 
     def _invoke(self):
-        logging.debug("_invoke")
-        assert self._pending_args is not None and self._pending_kwargs is not None, "pending args and kwargs must not be None"
-        self._func(*self._pending_args, **self._pending_kwargs)
+        with self.lock:
+            assert self._pending_args is not None and self._pending_kwargs is not None, "pending args and kwargs must not be None"
+            self._func(*self._pending_args, **self._pending_kwargs)
+
+    def _invoke_idle(self):
+        self._widget.after_idle(self._invoke)
 
     def _on_time_end(self):
-        logging.debug("_on_time_end")
-        self._after_id = None
-        if self._trailing:
-            self._invoke()
-        self._update_pending_args(None, None)
+        with self.lock:
+            self._after_id = None
+            if self._trailing:
+                self._invoke()
+            self._update_pending_args(None, None)
 
     def _cancel_timer(self):
-        logging.debug("_cancel_timer")
-        if self._after_id is not None:
-            self._widget.after_cancel(self._after_id)
-            self._after_id = None
+        with self.lock:
+            if self._after_id is not None:
+                self._widget.after_cancel(self._after_id)
+                self._after_id = None
 
     def _update_pending_args(self, args: Optional[tuple[Any]], kwargs: Optional[dict[str, Any]]):
-        logging.debug(f"_update_pending_args{args,kwargs}")
-        self._pending_args = args
-        self._pending_kwargs = kwargs
+        with self.lock:
+            self._pending_args = args
+            self._pending_kwargs = kwargs
 
     @property
     def is_pending(self) -> bool:
         return self._after_id is not None
 
     def cancel(self):
-        logging.debug("cancel")
-        self._cancel_timer()
-        self._update_pending_args(None, None)
+        with self.lock:
+            self._cancel_timer()
+            self._update_pending_args(None, None)
 
     def flush(self):
-        assert self.is_pending, "can not flush when not pending"
-        self._cancel_timer()
-        self._invoke()
+        with self.lock:
+            assert self.is_pending, "can not flush when not pending"
+            self._cancel_timer()
+            self._invoke()
 
 
 class TkThrottleWrapper[**P, T](TkDebounceWrapper[P, T]):
@@ -74,10 +73,11 @@ class TkThrottleWrapper[**P, T](TkDebounceWrapper[P, T]):
         super().__init__(widget, func, ms, leading=leading, trailing=trailing)
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs):
-        if self.is_pending:
-            self._update_pending_args(args, kwargs)
-            return
-        super().__call__(*args, **kwargs)
+        with self.lock:
+            if self.is_pending:
+                self._update_pending_args(args, kwargs)
+                return
+            super().__call__(*args, **kwargs)
 
 
 def tk_debounce(widget: Misc, ms: int, *, leading=False, trailing=True):
