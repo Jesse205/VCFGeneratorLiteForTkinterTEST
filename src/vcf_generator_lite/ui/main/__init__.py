@@ -49,15 +49,15 @@ class MainWindow(BaseWindow):
         self.text_context_menu = TextContextMenu(self.text_input)
         self.text_context_menu.bind_to_widget()
 
-        bottom_frame = Frame(self)
-        bottom_frame.pack(fill=X)
+        action_frame = Frame(self)
+        action_frame.pack(fill=X)
 
-        sizegrip = Sizegrip(bottom_frame)
+        sizegrip = Sizegrip(action_frame)
         sizegrip.place(relx=1, rely=1, anchor=SE)
 
-        self.progress_bar = Progressbar(bottom_frame, orient=HORIZONTAL, length=200)
+        self.progress_bar = Progressbar(action_frame, orient=HORIZONTAL, length=200)
 
-        self.generate_button = Button(bottom_frame, text="生成", default=ACTIVE,
+        self.generate_button = Button(action_frame, text="生成", default=ACTIVE,
                                       command=lambda: self.event_generate(EVENT_ON_GENERATE_CLICK))
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
