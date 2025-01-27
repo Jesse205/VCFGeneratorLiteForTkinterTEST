@@ -2,7 +2,7 @@
 
 # noinspection PyUnresolvedReferences
 a = Analysis(
-    ['./src/__main__.py'],
+    ['./src/vcf_generator_lite/__main__.py'],
     pathex=[],
     binaries=[('./src/vcf_generator_lite/assets', 'vcf_generator_lite/assets')],
     datas=[],
