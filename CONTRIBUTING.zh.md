@@ -1,5 +1,13 @@
 # 贡献指南
 
+1. 在 [Gitee][RepositoryOnGitee] 或 [GitHub][RepositoryOnGithub] 平台中 Fork 本项目；
+2. 使用 [Git](https://git-scm.com/) 克隆项目到本地：`git clone https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter.git`；
+3. 创建分支，如 `feature/xxx` 或 `bugfix/xxx`；
+4. 编写并提交代码；
+5. 向本项目提交 Pull Request。
+
+此外，有一些规范规则，请遵守：
+
 ## 图标生成
 
 1. 制作大小为 `512x512` 的图标，重命名为 `icon.png`，放入 [`项目/docs/images`](/docs/images) 中；
@@ -26,3 +34,6 @@
 - 代码中布局尺寸单位是点（`p`），而不是像素（`px`） 、[有效像素（`epx`）](https://learn.microsoft.com/zh-cn/windows/apps/design/layout/screen-sizes-and-breakpoints-for-responsive-design#effective-pixels-and-scale-factor)；
 - 本软件的点（`p`）单位与 Tkinter 默认的点（`p`）单位不同，本软件的点（`p`）的作用与有效像素（`epx`）的作用相同；
 - 由于字体单位也使用点（`p`），因此在本软件中，字体的单位与有效像素（`epx`）相同，默认的字体大小为 `12p` 而非 `9p`。
+
+[RepositoryOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/
+[RepositoryOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/
