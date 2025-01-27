@@ -82,15 +82,15 @@ def _get_scale_factor_win10(misc: Misc) -> float:
     """
     https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-getdpiforwindow
     """
-    window_hwnd = HWND(misc.winfo_id())
-    return windll.user32.GetDpiForWindow(window_hwnd) / DEFAULT_DPI
+    hwnd = HWND(misc.winfo_id())
+    return windll.user32.GetDpiForWindow(hwnd) / DEFAULT_DPI
 
 
 def _get_scale_factor_win8_1(misc: Misc) -> float:
     shcore = windll.shcore
     user32 = windll.user32
-    window_hwnd = HWND(misc.winfo_id())
-    monitor_handle = user32.MonitorFromWindow(window_hwnd, DWORD(MONITOR_DEFAULTTONEAREST))
+    hwnd = HWND(misc.winfo_id())
+    monitor_handle = user32.MonitorFromWindow(hwnd, DWORD(MONITOR_DEFAULTTONEAREST))
     dpi_x, dpi_y = UINT(), UINT()
     shcore.GetDpiForMonitor(monitor_handle, MonitorDpiType.MDT_EFFECTIVE_DPI.value, pointer(dpi_x), pointer(dpi_y))
 
