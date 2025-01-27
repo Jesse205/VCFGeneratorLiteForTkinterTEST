@@ -28,15 +28,23 @@ class AboutWindow(BaseDialog):
             html=get_about_html(),
             state=DISABLED,
             highlightcolor=None,
+            height=0
         )
-        details_input.pack(fill=BOTH, expand=True, padx="10p", pady="10p")
+        details_input.pack(fill=BOTH, expand=True, padx="10p", pady=("10p",0))
         details_context_menu = TextContextMenu(details_input)
         details_context_menu.bind_to_widget()
+        action_frame = Frame(self)
+        action_frame.pack(fill=X)
+        ok_button = Button(action_frame, text="确定", default=ACTIVE,
+                           command=lambda: self.destroy())
+        ok_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def on_init_header(self, header_frame: Frame):
         header_background = header_frame.cget("background")
-        self.app_icon_image = PhotoImage(master=self,
-                                         data=get_asset_data("images/icon-48.png"))  # 保存到 Window 中防止回收内存
+        self.app_icon_image = PhotoImage(
+            master=self,
+            data=get_asset_data("images/icon-48.png")
+        )  # 保存到 Window 中防止回收内存
         app_icon_label = tk.Label(header_frame, image=self.app_icon_image, background=header_background,
                                   width="48p", height="48p")
         app_icon_label.pack(side=LEFT, padx="10p", pady="10p")
