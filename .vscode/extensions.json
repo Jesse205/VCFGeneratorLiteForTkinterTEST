@@ -1,6 +1,8 @@
 {
     "recommendations": [
         "chouzz.vscode-innosetup",
-        "davidanson.vscode-markdownlint"
+        "davidanson.vscode-markdownlint",
+        "ms-python.debugpy",
+        "ms-python.python"
     ]
 }
