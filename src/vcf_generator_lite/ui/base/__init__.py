@@ -10,7 +10,7 @@ from vcf_generator_lite.util.resource import get_asset_data
 __all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
 
 
-class WindowInjector(Misc, Wm):
+class WindowExtension(Misc, Wm):
     _scale_factor = 1
     menu_bar: Menu = None
 
@@ -97,13 +97,13 @@ class WindowInjector(Misc, Wm):
         self.geometry(f"+{location_x}+{location_y}")
 
 
-class BaseWindow(Tk, WindowInjector):
+class BaseWindow(Tk, WindowExtension):
     def __init__(self, screenName=None, baseName=None, className="Tk", useTk=True, sync=False, use=None):
         super().__init__(screenName, baseName, className, useTk, sync, use)
         self.window_injector_init()
 
 
-class BaseToplevel(Toplevel, WindowInjector):
+class BaseToplevel(Toplevel, WindowExtension):
     def __init__(self, master=None, cnf={}, **kw):
         super().__init__(master, cnf, **kw)
         self.window_injector_init()
