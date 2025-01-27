@@ -23,7 +23,7 @@ def build_with_pyinstaller():
     print("Building finished.")
 
 
-def build_with_zipapp():
+def build_with_pdm_packer():
     print("Building with pdm-packer...")
     result = subprocess.run([
         shutil.which("pdm"),
@@ -58,7 +58,7 @@ def pack_with_innosetup() -> int:
 
 def pack_with_zipfile():
     print("Packaging with ZipFile...")
-    with ZipFile(os.path.join("dist", f"{OUTPUT_BASE_NAME}_bin_windows.zip"), "w") as zip_file:
+    with ZipFile(os.path.join("dist", f"{OUTPUT_BASE_NAME}_portable_windows.zip"), "w") as zip_file:
         for path, dirs, files in os.walk(os.path.join("dist", "vcf_generator_lite")):
             for file_path in [os.path.join(path, file) for file in files]:
                 zip_file.write(file_path, os.path.relpath(file_path, "dist"))
@@ -71,7 +71,7 @@ def main() -> int:
         return 1
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-t", "--type", type=str, default="bundle", choices=["bundle", "zipfile", "zipapp"])
+    parser.add_argument("-t", "--type", type=str, default="bundle", choices=["bundle", "portable", "zipapp"])
     args = parser.parse_args()
 
     type_ = args.type
@@ -79,9 +79,9 @@ def main() -> int:
         case "bundle":
             build_with_pyinstaller()
             return pack_with_innosetup()
-        case "zipfile":
+        case "portable":
             build_with_pyinstaller()
             pack_with_zipfile()
         case "zipapp":
-            build_with_zipapp()
+            build_with_pdm_packer()
     return 0

@@ -33,21 +33,21 @@ jobs:
       - name: Build Apps
         run: |
           pdm run build_app -t bundle
-          pdm run build_app -t zipfile
+          pdm run build_app -t portable
           pdm run build_app -t zipapp
 
-      - name: Upload Binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-binary
-          path: dist/*_bin_windows.zip
       - name: Upload Installer
         uses: actions/upload-artifact@v4
         with:
           name: windows-installer
           path: dist/*_setup.exe
-      - name: Upload Single File
+      - name: Upload Portable
         uses: actions/upload-artifact@v4
         with:
-          name: single-file
+          name: windows-portable
+          path: dist/*_bin_windows.zip
+      - name: Upload Zip Application
+        uses: actions/upload-artifact@v4
+        with:
+          name: zip-app
           path: dist/vcf_generator_lite.pyzw
