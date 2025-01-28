@@ -14,7 +14,6 @@
 2. 生成大小为 `512x512` 的图标，重命名为 `icon.png`，放入 [`项目/docs/images`](./docs/images) 中；
 3. 生成 `.ico` 图标与 48x48 的 `.png` 图标，分别命名为 `icon.ico` 与 `icon-48.png`，放入 [`项目/src/vcf_generator_lite/assets/images`](./src/vcf_generator_lite/assets/images) 中。
 
-
 ## 代码规范
 
 - Python（`.py`）：[PEP8](https://www.python.org/dev/peps/pep-0008/)；
