@@ -10,8 +10,10 @@
 
 ## 图标生成
 
-1. 制作大小为 `512x512` 的图标，重命名为 `icon.png`，放入 [`项目/docs/images`](/docs/images) 中；
-2. 生成 `.ico` 图标与 48x48 的 `.png` 图标，分别命名为 `icon.ico` 与 `icon-48.png`，放入 [`项目/src/vcf_generator/assets/images`](/vcf_generator_lite/assets/images) 中（推荐使用使用 [FreeConvert](https://www.freeconvert.com/zh/ico-converter)）。
+1. 图标使用 Fluent 设计
+2. 生成大小为 `512x512` 的图标，重命名为 `icon.png`，放入 [`项目/docs/images`](./docs/images) 中；
+3. 生成 `.ico` 图标与 48x48 的 `.png` 图标，分别命名为 `icon.ico` 与 `icon-48.png`，放入 [`项目/src/vcf_generator_lite/assets/images`](./src/vcf_generator_lite/assets/images) 中。
+
 
 ## 代码规范
 
