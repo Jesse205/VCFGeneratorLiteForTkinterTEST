@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from vcf_generator_lite import constants
 from vcf_generator_lite.ui.main import create_main_window
@@ -6,7 +7,7 @@ from vcf_generator_lite.util import display
 
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     display.set_process_dpi_aware()
 
     logging.info("Starting VCF Generator...")
