@@ -15,8 +15,6 @@ from tkinter import Text, Pack, Grid, Place, Frame
 from tkinter.constants import RIGHT, LEFT, Y, BOTH, FLAT
 from tkinter.ttk import Scrollbar
 
-from vcf_generator_lite.util.resource import get_default_color
-
 __all__ = ['ScrolledText']
 
 
@@ -28,24 +26,26 @@ class ScrolledText(Text):
     def __init__(
         self,
         master=None,
-        borderwidth=1,
+        borderwidth=None,
+        highlightthickness=None,
+        highlightbackground=None,
+        highlightcolor=None,
         relief=FLAT,
-        highlightthickness=1,
-        highlightbackground="gray",
-        highlightcolor=get_default_color(),
         **kw
     ):
         self.frame = Frame(
             master,
-            relief=relief,
+            class_="ScrolledTextFrame",
             highlightthickness=highlightthickness,
             highlightbackground=highlightbackground,
             highlightcolor=highlightcolor,
+            relief=relief,
         )
         self.vbar = Scrollbar(self.frame)
         self.vbar.pack(side=RIGHT, fill=Y)
 
         kw.update({'yscrollcommand': self.vbar.set})
+
         Text.__init__(
             self,
             self.frame,

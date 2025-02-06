@@ -1,11 +1,11 @@
 import sys
-import tkinter.font as tk_font
 from tkinter import *
-from tkinter.ttk import Style
 from typing import Union
 
 from vcf_generator_lite.util.display import get_scale_factor
 from vcf_generator_lite.util.resource import get_asset_data
+from vcf_generator_lite.util.style.theme import get_theme_manager
+from vcf_generator_lite.util.style.theme.manager import ThemeManager
 
 __all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
 
@@ -13,15 +13,14 @@ __all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
 class WindowExtension(Misc, Wm):
     _scale_factor = 1
     menu_bar: Menu = None
+    theme_manager: ThemeManager = None
 
     def window_injector_init(self):
         self.withdraw()
         self._scale_factor = get_scale_factor(self)
         self.tk.call("tk", "scaling", self._scale_factor)
-
+        self.theme_manager = get_theme_manager(self)
         self._apply_default_icon()
-        self._apply_default_theme()
-        self._apply_default_font()
         self.on_init_window()
         self.on_init_widgets()
         self.menu_bar = Menu(self, tearoff=False)
@@ -38,15 +37,6 @@ class WindowExtension(Misc, Wm):
 
     def _apply_default_icon(self):
         self.iconphoto(True, PhotoImage(data=get_asset_data("images/icon-48.png")))
-
-    def _apply_default_font(self):
-        self.font = tk_font.nametofont("TkDefaultFont")
-        self.font.config(size=12)
-        self.option_add("*font", self.font)
-
-    def _apply_default_theme(self):
-        style = Style(self)
-        style.configure("TButton", padding="2p")
 
     def on_init_window(self):
         pass

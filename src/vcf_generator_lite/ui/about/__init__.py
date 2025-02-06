@@ -7,6 +7,7 @@ from vcf_generator_lite import __version__
 from vcf_generator_lite import constants
 from vcf_generator_lite.ui.base import BaseDialog
 from vcf_generator_lite.util.resource import get_about_html, get_asset_data
+from vcf_generator_lite.util.style.font import extend_font
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.widget.tkhtmlview import HTMLScrolledText
 
@@ -20,17 +21,16 @@ class AboutWindow(BaseDialog):
         self.set_size(500, 400)
 
     def on_init_widgets(self):
-        header_frame = tk.Frame(self, background="systemWindow")
+        header_frame = tk.Frame(self, background=self.theme_manager.get_color("client_background"))
         header_frame.pack(fill=X)
         self.on_init_header(header_frame)
         details_input = HTMLScrolledText(
             self,
             html=get_about_html(),
             state=DISABLED,
-            highlightcolor=None,
             height=0
         )
-        details_input.pack(fill=BOTH, expand=True, padx="10p", pady=("10p",0))
+        details_input.pack(fill=BOTH, expand=True, padx="10p", pady=("10p", 0))
         details_context_menu = TextContextMenu(details_input)
         details_context_menu.bind_to_widget()
         action_frame = Frame(self)
@@ -52,14 +52,12 @@ class AboutWindow(BaseDialog):
         app_info_frame = tk.Frame(header_frame, background=header_background)
         app_info_frame.pack(side=LEFT, anchor=CENTER, fill=X, expand=True, padx=(0, "10p"), pady="10p")
 
-        app_name_font = self.font.copy()
-        app_name_font.config(size=16)
         app_name_label = tk.Label(
             app_info_frame,
             text=f"{constants.APP_NAME} v{__version__}",
-            font=app_name_font,
             background=header_background
         )
+        app_name_label.configure(font=extend_font(app_name_label.cget("font"), size=16))
         app_name_label.pack(anchor=W)
         app_copyright_label = tk.Label(app_info_frame, text=constants.APP_COPYRIGHT, background=header_background)
         app_copyright_label.pack(anchor=W)
