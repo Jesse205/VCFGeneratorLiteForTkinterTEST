@@ -1,58 +1,20 @@
-from vcf_generator_lite.util.style.theme.config import ThemeConfig, ThemeTtkConfig, ThemeColors
+from tkinter import Toplevel, Tk
+from tkinter.ttk import Style
 
-clam_theme = ThemeConfig(
-    name="Clam theme",
-    ttk=ThemeTtkConfig(
-        name="clam",
-        overrides={
-            "TButton": dict(
-                padding="3p"
-            ),
-            "Frame": dict(
-                background="$color:window_background"
-            ),
-            "Toplevel": dict(
-                background="$color:window_background"
-            ),
-            "TScrollbar": dict(
-                width="12p",
-            ),
-            "ScrolledText.TFrame": dict(
-                highlightthickness=1,
-                highlightbackground="gray"
-            )
-        }
-    ),
-    colors=ThemeColors(
-        window_background="$lookup:.:background",
-    ),
-    widgets={
-        "Frame": dict(
-            background="$color:window_background"
-        ),
-        "Toplevel": dict(
-            background="$color:window_background"
-        ),
-        "Text": dict(
-            borderWidth=1,
-            background="white",
-            insertWidth="$lookup:TEntry:insertwidth",
-            highlightBackground="$lookup:TEntry:bordercolor",
-            highlightColor="$lookup:TEntry:bordercolor:focus",
-            highlightThickness="1p",
-            selectBackground="$lookup:TEntry:selectbackground:focus",
-            selectForeground="$lookup:TEntry:selectforeground:focus",
-            inactiveSelectBackground="$lookup:TEntry:selectbackground",
-        ),
-        "ScrolledTextFrame": dict(
-            background="white",
-            insertWidth="$lookup:TEntry:insertwidth",
-            highlightBackground="$lookup:TEntry:bordercolor",
-            highlightColor="$lookup:TEntry:bordercolor:focus",
-            highlightThickness="1p",
-            selectBackground="$lookup:TEntry:selectbackground:focus",
-            selectForeground="$lookup:TEntry:selectforeground:focus",
-            inactiveSelectBackground="$lookup:TEntry:selectbackground",
-        ),
-    }
-)
+from vcf_generator_lite.theme.base import BaseTheme
+
+
+class ClamTheme(BaseTheme):
+    def apply_theme_with_style(self, master: Tk | Toplevel, style: Style):
+        super().apply_theme_with_style(master, style)
+        style.theme_use("clam")
+        style.configure("TButton", padding="3p")
+        style.configure("Vertical.TScrollbar", arrowsize="12p")
+        window_background = style.lookup("TFrame", "background")
+        master.configure(background=window_background)
+        master.option_add("*Toplevel.background", window_background)
+        master.option_add("*Text.insertWidth", style.lookup("TEntry", "insertwidth"))
+        master.option_add("*Text.selectBackground", style.lookup("TEntry", "selectbackground", ["focus"]))
+        master.option_add("*Text.selectForeground", style.lookup("TEntry", "selectforeground", ["focus"]))
+        master.option_add("*Text.inactiveSelectBackground", style.lookup("TEntry", "selectbackground"))
+        master.option_add("*TextFrame.borderWidth", 2)

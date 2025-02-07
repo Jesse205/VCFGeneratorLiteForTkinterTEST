@@ -21,14 +21,14 @@ class AboutWindow(BaseDialog):
         self.set_size(500, 400)
 
     def on_init_widgets(self):
-        header_frame = tk.Frame(self, background=self.theme_manager.get_color("client_background"))
+        header_frame = Frame(self, style="InfoHeader.TFrame")
         header_frame.pack(fill=X)
         self.on_init_header(header_frame)
         details_input = HTMLScrolledText(
             self,
             html=get_about_html(),
             state=DISABLED,
-            height=0
+            height=0,
         )
         details_input.pack(fill=BOTH, expand=True, padx="10p", pady=("10p", 0))
         details_context_menu = TextContextMenu(details_input)
@@ -40,7 +40,8 @@ class AboutWindow(BaseDialog):
         ok_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def on_init_header(self, header_frame: Frame):
-        header_background = header_frame.cget("background")
+        style = Style(self)
+        header_background = style.lookup(header_frame.cget("style"), "background")
         self.app_icon_image = PhotoImage(
             master=self,
             data=get_asset_data("images/icon-48.png")

@@ -2,10 +2,9 @@ import sys
 from tkinter import *
 from typing import Union
 
+from vcf_generator_lite.theme import get_platform_theme
 from vcf_generator_lite.util.display import get_scale_factor
 from vcf_generator_lite.util.resource import get_asset_data
-from vcf_generator_lite.util.style.theme import get_theme_manager
-from vcf_generator_lite.util.style.theme.manager import ThemeManager
 
 __all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
 
@@ -13,13 +12,11 @@ __all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
 class WindowExtension(Misc, Wm):
     _scale_factor = 1
     menu_bar: Menu = None
-    theme_manager: ThemeManager = None
 
     def window_injector_init(self):
         self.withdraw()
         self._scale_factor = get_scale_factor(self)
         self.tk.call("tk", "scaling", self._scale_factor)
-        self.theme_manager = get_theme_manager(self)
         self._apply_default_icon()
         self.on_init_window()
         self.on_init_widgets()
@@ -90,6 +87,7 @@ class WindowExtension(Misc, Wm):
 class BaseWindow(Tk, WindowExtension):
     def __init__(self, screenName=None, baseName=None, className="Tk", useTk=True, sync=False, use=None):
         super().__init__(screenName, baseName, className, useTk, sync, use)
+        get_platform_theme().apply_theme(self)
         self.window_injector_init()
 
 

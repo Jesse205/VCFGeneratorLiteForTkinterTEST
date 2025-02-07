@@ -6,7 +6,7 @@ tkinter HTML text widgets
 from tkinter import *
 from tkinter.font import Font
 
-from vcf_generator_lite.widget.scrolledtext import ScrolledText
+from vcf_generator_lite.widget.scrolled_text import ScrolledText
 from vcf_generator_lite.widget.tkhtmlview import html_parser
 from vcf_generator_lite.widget.tkhtmlview.utils import RenderHTML
 
