@@ -33,6 +33,7 @@ class ThemedText(Text):
             height=height,
             relief="flat",
             borderwidth=0,
+            highlightthickness=0,
             **kw
         )
         self.pack(side="left", fill="both", expand=True)
