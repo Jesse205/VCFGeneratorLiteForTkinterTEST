@@ -35,7 +35,10 @@ VCF generator, input name and phone number to automatically generate VCF files f
   - Operating System: Windows 8+ or Windows 7+ (with required patches)
   - CPU: x86 64-bit
 - `vcf_generator.pyzw`
-  - Operating System: Windows 8+ or Windows 7+ (with required patches) (other operating systems are not supported at this time)
+  - Operating System: 
+    - Windows 8+ or Windows 7+ (with required patches)
+    - Linux
+    - _(Other operating systems are untested.)_
   - Python Version: Python 3.13 (with Tkinter)
 
 For some systems, you can enable running this APP by patching software. If you need to run this APP on these systems, please refer to the [Patch APP](#patch-app) section.
