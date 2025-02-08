@@ -11,6 +11,8 @@ from vcf_generator_lite.util.style.font import extend_font
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.widget.tkhtmlview import HTMLScrolledText
 
+EVENT_ON_OK_CLICK = "<<OnOkClick>>"
+
 
 class AboutWindow(BaseDialog):
     app_icon_image = None
@@ -36,7 +38,7 @@ class AboutWindow(BaseDialog):
         action_frame = Frame(self)
         action_frame.pack(fill=X)
         ok_button = Button(action_frame, text="确定", default=ACTIVE,
-                           command=lambda: self.destroy())
+                           command=lambda: self.event_generate(EVENT_ON_OK_CLICK))
         ok_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def _create_header(self, master):
@@ -65,19 +67,32 @@ class AboutWindow(BaseDialog):
         return header_frame
 
 
-_about_window_instance: Optional[AboutWindow] = None
+class AboutController:
+    def __init__(self, window: AboutWindow):
+        self.window = window
+        window.bind(EVENT_ON_OK_CLICK, self.on_ok_click)
+        window.bind("<Return>", self.on_ok_click)
+
+    def on_ok_click(self, _: Event):
+        self.window.destroy()
+
+
+about_window: Optional[AboutWindow] = None
+about_controller: Optional[AboutController] = None
 
 
 def _on_destroy(event: Event):
-    global _about_window_instance
-    if event.widget is _about_window_instance:
-        _about_window_instance = None
+    global about_window, about_controller
+    if event.widget is about_window:
+        about_window = None
+        about_controller = None
 
 
-def open_about_window(master: Optional[Misc]) -> tuple[AboutWindow]:
-    global _about_window_instance
-    if _about_window_instance is None or not _about_window_instance.winfo_exists():
-        _about_window_instance = AboutWindow(master)
-        _about_window_instance.bind("<Destroy>", _on_destroy, "+")
-    _about_window_instance.focus()
-    return _about_window_instance,
+def open_about_window(master: Optional[Misc]) -> tuple[AboutWindow, AboutController]:
+    global about_window, about_controller
+    if about_window is None or not about_window.winfo_exists():
+        about_window = AboutWindow(master)
+        about_controller = AboutController(about_window)
+        about_window.bind("<Destroy>", _on_destroy, "+")
+    about_window.focus()
+    return about_window, about_controller
