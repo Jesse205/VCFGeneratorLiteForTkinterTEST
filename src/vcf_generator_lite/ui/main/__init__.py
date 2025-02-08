@@ -154,6 +154,8 @@ def clean_quotes(text: str) -> str:
 
 
 class MainController:
+    is_generating = False
+
     def __init__(self, window: MainWindow):
         self.window = window
         window.bind(EVENT_ON_ABOUT_CLICK, self.on_about_click)
@@ -162,6 +164,7 @@ class MainController:
         window.bind("<Control-S>", self.on_generate_click)
         window.bind("<Control-s>", self.on_generate_click)
         window.bind("<Return>", self.on_return_click)
+        window.protocol("WM_DELETE_WINDOW", self.on_close_window)
 
     def on_about_click(self, _):
         open_about_window(self.window)
@@ -181,6 +184,7 @@ class MainController:
         if file_io is None:
             return
 
+        self.is_generating = True
         self.window.show_progress_bar()
         self.window.set_progress(0)
         self.window.set_generate_enabled(False)
@@ -188,6 +192,7 @@ class MainController:
         def done(future: Future[GenerateResult]):
             file_io.close()
             self._show_generate_done_dialog(file_io.name, future.result())
+            self.is_generating = False
             self.window.hide_progress_bar()
             self.window.set_generate_enabled(True)
 
@@ -202,6 +207,12 @@ class MainController:
         progress_future = processor.generate(text_content, file_io)
         progress_future.add_done_callback(done)
         executor.shutdown(wait=False)
+
+    def on_close_window(self):
+        if self.is_generating:
+            dialog.show_warning(self.window, "正在生成文件", "文件正在生成中，无法关闭窗口。请稍后重试。")
+        else:
+            self.window.destroy()
 
     def _show_generate_done_dialog(self, display_path: str, generate_result: GenerateResult):
         invalid_items = generate_result.invalid_items
