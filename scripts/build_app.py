@@ -71,12 +71,18 @@ def main() -> int:
         return 1
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-t", "--type", type=str, default="bundle", choices=["bundle", "portable", "zipapp"])
+    parser.add_argument(
+        "-t", "--type",
+        type=str,
+        default="package",
+        choices=["package", "portable", "zipapp"],
+        help="应用打包类型（默认：%(default)s）"
+    )
     args = parser.parse_args()
 
     type_ = args.type
     match type_:
-        case "bundle":
+        case "package":
             build_with_pyinstaller()
             return pack_with_innosetup()
         case "portable":

@@ -32,7 +32,7 @@ jobs:
 
       - name: Build Apps
         run: |
-          pdm run build_app -t bundle
+          pdm run build_app -t package
           pdm run build_app -t portable
           pdm run build_app -t zipapp
 
