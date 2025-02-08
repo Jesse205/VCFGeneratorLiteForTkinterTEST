@@ -19,11 +19,11 @@ class AboutWindow(BaseDialog):
         super().on_init_window()
         self.title(f"关于 {constants.APP_NAME}")
         self.set_size(500, 400)
+        self._create_widgets()
 
-    def on_init_widgets(self):
-        header_frame = Frame(self, style="InfoHeader.TFrame")
+    def _create_widgets(self):
+        header_frame = self._create_header(self)
         header_frame.pack(fill=X)
-        self.on_init_header(header_frame)
         details_input = HTMLScrolledText(
             self,
             html=get_about_html(),
@@ -39,9 +39,9 @@ class AboutWindow(BaseDialog):
                            command=lambda: self.destroy())
         ok_button.pack(side=RIGHT, padx="10p", pady="10p")
 
-    def on_init_header(self, header_frame: Frame):
-        style = Style(self)
-        header_background = style.lookup(header_frame.cget("style"), "background")
+    def _create_header(self, master):
+        header_frame = Frame(master, style="InfoHeader.TFrame")
+        header_background = Style(self).lookup(header_frame.cget("style"), "background")
         self.app_icon_image = PhotoImage(
             master=self,
             data=get_asset_data("images/icon-48.png")
@@ -62,6 +62,7 @@ class AboutWindow(BaseDialog):
         app_name_label.pack(anchor=W)
         app_copyright_label = tk.Label(app_info_frame, text=constants.APP_COPYRIGHT, background=header_background)
         app_copyright_label.pack(anchor=W)
+        return header_frame
 
 
 _about_window_instance: Optional[AboutWindow] = None

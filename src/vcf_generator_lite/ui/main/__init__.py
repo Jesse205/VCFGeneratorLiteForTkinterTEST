@@ -3,7 +3,7 @@ import traceback
 import webbrowser
 from concurrent.futures import Future
 from concurrent.futures.thread import ThreadPoolExecutor
-from tkinter import filedialog, Menu, Event
+from tkinter import filedialog, Event
 from tkinter.constants import *
 from tkinter.ttk import *
 
@@ -11,8 +11,8 @@ from vcf_generator_lite.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEF
 from vcf_generator_lite.ui.about import open_about_window
 from vcf_generator_lite.ui.base import BaseWindow
 from vcf_generator_lite.util import dialog
-from vcf_generator_lite.util.menu import add_menus, MenuCascade, MenuCommand, MenuSeparator
-from vcf_generator_lite.util.vcard import GenerateResult, generate_vcard_file
+from vcf_generator_lite.util.menu import MenuCascade, MenuCommand, MenuSeparator
+from vcf_generator_lite.util.vcard import GenerateResult, VCardProcessor
 from vcf_generator_lite.util.widget import get_auto_wrap_event
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.widget.scrolled_text import ScrolledText
@@ -35,8 +35,10 @@ class MainWindow(BaseWindow):
         self.title(APP_NAME)
         self.set_minsize(400, 400)
         self.set_size(600, 600)
+        self._create_widgets()
+        self._create_menus()
 
-    def on_init_widgets(self):
+    def _create_widgets(self):
         description_label = Label(self, text=USAGE, justify=LEFT)
         description_label.bind("<Configure>", get_auto_wrap_event(description_label))
         description_label.pack(fill=X, padx="10p", pady="10p")
@@ -60,34 +62,8 @@ class MainWindow(BaseWindow):
                                       command=lambda: self.event_generate(EVENT_ON_GENERATE_CLICK))
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
-    def show_progress_bar(self):
-        self.progress_bar.pack(side=LEFT, padx="10p", pady="10p")
-
-    def hide_progress_bar(self):
-        self.progress_bar.pack_forget()
-
-    def set_progress(self, progress: float):
-        self.progress_bar.configure(value=progress)
-
-    def set_progress_determinate(self, value: bool):
-        previous_value: bool = self.progress_bar.cget("mode") == "determinate"
-        if previous_value != previous_value:
-            return
-        if value:
-            self.progress_bar.configure(mode="determinate", maximum=1)
-            self.progress_bar.stop()
-        else:
-            self.progress_bar.configure(mode="indeterminate", maximum=10)
-            self.progress_bar.start()
-
-    def enable_generate_button(self):
-        self.generate_button.configure(state=NORMAL)
-
-    def disable_generate_button(self):
-        self.generate_button.configure(state=DISABLED)
-
-    def on_init_menus(self, menu_bar: Menu):
-        add_menus(menu_bar, [
+    def _create_menus(self):
+        self.add_menus(
             MenuCascade(
                 label="文件(&F)",
                 items=[
@@ -141,7 +117,40 @@ class MainWindow(BaseWindow):
                     )
                 ]
             )
-        ])
+        )
+
+    def set_text_content(self, content: str):
+        self.text_input.replace(1.0, END, content)
+
+    def get_text_content(self) -> str:
+        return self.text_input.get(1.0, END)[:-1]
+
+    def show_progress_bar(self):
+        self.progress_bar.pack(side=LEFT, padx="10p", pady="10p")
+
+    def hide_progress_bar(self):
+        self.progress_bar.pack_forget()
+
+    def set_progress(self, progress: float):
+        self.progress_bar.configure(value=progress)
+
+    def set_progress_determinate(self, value: bool):
+        previous_value: bool = self.progress_bar.cget("mode") == "determinate"
+        if previous_value != previous_value:
+            return
+        if value:
+            self.progress_bar.configure(mode="determinate", maximum=1)
+            self.progress_bar.stop()
+        else:
+            self.progress_bar.configure(mode="indeterminate", maximum=10)
+            self.progress_bar.start()
+
+    def set_generate_enabled(self, enabled: bool):
+        self.generate_button.configure(state="normal" if enabled else "disabled")
+
+
+def clean_quotes(text: str) -> str:
+    return re.sub(r'"\s*(([^"\s][^"]*[^"\s])|[^"\s]?)\s*"', r'\1', text, flags=re.S)
 
 
 class MainController:
@@ -153,15 +162,6 @@ class MainController:
         window.bind("<Control-S>", self.on_generate_click)
         window.bind("<Control-s>", self.on_generate_click)
         window.bind("<Return>", self.on_return_click)
-
-    def _get_text_content(self):
-        return self.window.text_input.get(1.0, END)[:-1]  # 获取到的字符串末尾会有一个换行符，所以要消掉
-
-    def _set_text_content(self, new_content):
-        self.window.text_input.replace(1.0, END, new_content)
-
-    def _set_progress(self, progress: float):
-        self.window.set_progress(progress)
 
     def on_about_click(self, _):
         open_about_window(self.window)
@@ -175,7 +175,7 @@ class MainController:
         self.window.generate_button.invoke()
 
     def on_generate_click(self, _):
-        text_content = self._get_text_content()
+        text_content = self.window.get_text_content()
         file_io = filedialog.asksaveasfile(parent=self.window, initialfile="phones.vcf",
                                            filetypes=[("vCard 文件", ".vcf")], defaultextension=".vcf")
         if file_io is None:
@@ -183,33 +183,28 @@ class MainController:
 
         self.window.show_progress_bar()
         self.window.set_progress(0)
-        self.window.disable_generate_button()
+        self.window.set_generate_enabled(False)
 
         def done(future: Future[GenerateResult]):
             file_io.close()
             self._show_generate_done_dialog(file_io.name, future.result())
             self.window.hide_progress_bar()
-            self.window.enable_generate_button()
+            self.window.set_generate_enabled(True)
 
-        # @tk_throttle(self.window.progress_bar, 1)
-        # TODO:解决偶尔报错pending args and kwargs must not be None的问题
         def on_update_progress(progress: float, determinate: bool):
             self.window.set_progress_determinate(determinate)
             if determinate:
                 self.window.set_progress(progress)
 
         executor = ThreadPoolExecutor(max_workers=1)
-        executor.submit(
-            generate_vcard_file,
-            text_content,
-            file_io,
-            on_update_progress=on_update_progress
-        ).add_done_callback(done)
+        processor = VCardProcessor(executor)
+        processor.add_progress_callback(on_update_progress)
+        progress_future = processor.generate(text_content, file_io)
+        progress_future.add_done_callback(done)
         executor.shutdown(wait=False)
 
     def _show_generate_done_dialog(self, display_path: str, generate_result: GenerateResult):
         invalid_items = generate_result.invalid_items
-        title = "生成 VCF 文件完成"
         title_success = "生成 VCF 文件成功"
         title_failure = "生成 VCF 文件失败"
         title_partial_failure = "生成 VCF 文件部分成功"
@@ -240,9 +235,8 @@ class MainController:
             dialog.show_info(self.window, title_success, message_success_template.format(path=display_path))
 
     def _clean_quotes(self):
-        origin_content = self._get_text_content()
-        result_content = re.sub(r'"\s*(([^"\s][^"]*[^"\s])|[^"\s]?)\s*"', r'\1', origin_content, flags=re.S)
-        self._set_text_content(result_content)
+        origin_text = self.window.get_text_content()
+        self.window.set_text_content(clean_quotes(origin_text))
 
 
 def create_main_window() -> tuple[MainWindow, MainController]:

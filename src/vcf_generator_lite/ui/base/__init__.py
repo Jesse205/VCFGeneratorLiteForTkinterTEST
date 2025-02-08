@@ -1,9 +1,10 @@
 import sys
 from tkinter import *
-from typing import Union
+from typing import Union, Optional
 
 from vcf_generator_lite.theme import get_platform_theme
 from vcf_generator_lite.util.display import get_scale_factor
+from vcf_generator_lite.util.menu import add_menus, MenuItem
 from vcf_generator_lite.util.resource import get_asset_data
 
 __all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
@@ -11,7 +12,10 @@ __all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
 
 class WindowExtension(Misc, Wm):
     _scale_factor = 1
-    menu_bar: Menu = None
+    menu_bar: Optional[Menu] = None
+
+    def on_init_window(self):
+        pass
 
     def window_injector_init(self):
         self.withdraw()
@@ -19,30 +23,15 @@ class WindowExtension(Misc, Wm):
         self.tk.call("tk", "scaling", self._scale_factor)
         self._apply_default_icon()
         self.on_init_window()
-        self.on_init_widgets()
-        self.menu_bar = Menu(self, tearoff=False)
-        self.on_init_menus(self.menu_bar)
-        self.configure({"menu": self.menu_bar})
-
         self.center_window()
         # 延迟0秒调用center_window，修复WSL中窗口大小获取不正确
         # after_idle不起作用
         if sys.platform == "linux":
             self.after(0, self.center_window)
-
         self.deiconify()
 
     def _apply_default_icon(self):
         self.iconphoto(True, PhotoImage(data=get_asset_data("images/icon-48.png")))
-
-    def on_init_window(self):
-        pass
-
-    def on_init_widgets(self):
-        pass
-
-    def on_init_menus(self, menu_bar: Menu):
-        pass
 
     def get_scaled(self, size: int):
         return int(size * self._scale_factor)
@@ -82,6 +71,12 @@ class WindowExtension(Misc, Wm):
         location_x = max(int((container_width - window_width) / 2), 0)
         location_y = max(int((container_height - window_height) / 2), 0)
         self.geometry(f"+{location_x}+{location_y}")
+
+    def add_menus(self, *items: MenuItem):
+        if self.menu_bar is None:
+            self.menu_bar = Menu(self, tearoff=False)
+            self.configure({"menu": self.menu_bar})
+        add_menus(self.menu_bar, list(items))
 
 
 class BaseWindow(Tk, WindowExtension):
