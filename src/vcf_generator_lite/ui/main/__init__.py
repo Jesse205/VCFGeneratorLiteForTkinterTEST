@@ -187,6 +187,7 @@ class MainController:
         self.is_generating = True
         self.window.show_progress_bar()
         self.window.set_progress(0)
+        self.window.set_progress_determinate(False)
         self.window.set_generate_enabled(False)
 
         def done(future: Future[GenerateResult]):
