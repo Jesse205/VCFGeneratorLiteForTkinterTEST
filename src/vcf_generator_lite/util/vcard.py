@@ -145,10 +145,10 @@ class VCardProcessor:
                 output_io.write(item)
                 self._update_progress(state, 1)
         except IOError as e:
-            logging.error(f"File write error %s", e)
+            logger.error(f"File write error %s", e)
             state.exceptions.append(e)
         except Exception as e:
-            logging.exception("Unexpected write error %s", e)
+            logger.exception("Unexpected write error %s", e)
             state.exceptions.append(e)
 
     def _update_progress(self, state: VCardProcessorState, increment: int):
