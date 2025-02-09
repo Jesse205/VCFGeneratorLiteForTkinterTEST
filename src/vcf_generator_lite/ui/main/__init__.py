@@ -103,16 +103,16 @@ class MainWindow(BaseWindow):
                 label="帮助(&H)",
                 items=[
                     MenuCommand(
-                        label="代码托管网址",
+                        label="开源仓库(&O)",
                         command=lambda: webbrowser.open(URL_SOURCE),
                     ),
                     MenuCommand(
-                        label="版本发布网址",
+                        label="版本发布网址(&R)",
                         command=lambda: webbrowser.open(URL_RELEASES),
                     ),
                     MenuSeparator(),
                     MenuCommand(
-                        label="提交反馈",
+                        label="提交反馈(&F)",
                         command=lambda: webbrowser.open(URL_REPORT),
                     ),
                     MenuCommand(
