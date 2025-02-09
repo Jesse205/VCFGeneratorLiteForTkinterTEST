@@ -59,7 +59,7 @@ body:
     id: app-type
     attributes:
       label: 应用类型
-      description: 您当前阻止使用我们应用的什么类型？
+      description: 您当前正在使用我们应用的什么类型？
       options:
         - label: 安装版
         - label: 便携版
