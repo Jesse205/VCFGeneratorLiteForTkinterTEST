@@ -7,7 +7,7 @@ from tkinter import filedialog, Event
 from tkinter.constants import *
 from tkinter.ttk import *
 
-from vcf_generator_lite.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE
+from vcf_generator_lite.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE, URL_REPORT
 from vcf_generator_lite.ui.about import open_about_window
 from vcf_generator_lite.ui.base import BaseWindow
 from vcf_generator_lite.util import dialog
@@ -111,6 +111,10 @@ class MainWindow(BaseWindow):
                         command=lambda: webbrowser.open(URL_RELEASES),
                     ),
                     MenuSeparator(),
+                    MenuCommand(
+                        label="提交反馈",
+                        command=lambda: webbrowser.open(URL_REPORT),
+                    ),
                     MenuCommand(
                         label="关于 VCF 生成器 Lite(&A)",
                         command=lambda: self.event_generate(EVENT_ON_ABOUT_CLICK),
