@@ -12,7 +12,7 @@ def main():
 
     logging.info("Starting VCF Generator...")
 
-    print(f"Tip: The source code is hosted at {constants.URL_SOURCE}")
+    print(f"💡Tip: The source code is hosted at {constants.URL_SOURCE}")
     main_window, _ = create_main_window()
     main_window.mainloop()
 
