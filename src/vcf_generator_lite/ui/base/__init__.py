@@ -4,7 +4,6 @@ from tkinter import *
 from typing import Union, Optional
 
 from vcf_generator_lite.theme import get_platform_theme
-from vcf_generator_lite.util import environment
 from vcf_generator_lite.util.display import get_scale_factor
 from vcf_generator_lite.util.menu import add_menus, MenuItem
 from vcf_generator_lite.util.resource import get_asset_data
@@ -35,12 +34,8 @@ class WindowExtension(Misc, Wm):
         self.deiconify()
 
     def _apply_default_icon(self):
-        if sys.platform == "win32" and environment.frozen:
-            logger.debug(f"窗口 {self.winfo_name()} 设置图标为 {sys.executable}")
-            self.iconbitmap(sys.executable)
-        else:
-            logger.debug(f"窗口 {self.winfo_name()} 设置图标为 icon-48.png")
-            self.iconphoto(True, PhotoImage(data=get_asset_data("images/icon-48.png")))
+        logger.debug(f"窗口 {self.winfo_name()} 设置图标为 icon-48.png")
+        self.iconphoto(True, PhotoImage(data=get_asset_data("images/icon-48.png")))
 
     def get_scaled(self, size: int):
         return int(size * self._scale_factor)
