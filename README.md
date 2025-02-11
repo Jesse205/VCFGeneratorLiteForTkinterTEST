@@ -29,44 +29,70 @@ VCF generator, input name and phone number to automatically generate VCF files f
 
 <img src="./docs/images/screenshots/Snipaste_2025-02-08_10-30-21.png" width="600" alt="Snipaste_2025-02-08_10-30-21.png" />
 
-## Environment Requirements
+## Download
 
-- `VCFGenerator_<version>_<bit>_setup.exe`, `VCFGenerator_<version>_<bit>_portable_windows.zip`
-  - Operating System: Windows 8+ or Windows 7+ (with required patches)
-  - CPU: x86 64-bit
-- `vcf_generator.pyzw`
-  - Operating System: 
-    - Windows 8+ or Windows 7+ (with required patches)
-    - Linux
-    - _(Other operating systems are untested.)_
-  - Python Version: Python 3.13 (with Tkinter)
+### Application Package Type Description
 
-For some systems, you can enable running this APP by patching software. If you need to run this APP on these systems, please refer to the [Patch APP](#patch-app) section.
+Choose the most suitable package format based on your usage scenario:
 
-### Patch APP
+| Package Format | Execution Method               | Use Case                                |
+| -------------- | ------------------------------ | --------------------------------------- |
+| Installer      | Install and run                | Long-term use/Desktop shortcut required |
+| Portable       | Extract and run (USB portable) | No installation/Temporary use           |
+| ZipApp         | Directly run by double-click   | Quick launch/Cross-platform usage       |
+
+### Compatibility Requirements
+
+Different packages require specific environments. Select the appropriate package for your system:
+
+| Package Format     | Core Dependencies      | Architecture          | Special Notes                      |
+| ------------------ | ---------------------- | --------------------- | ---------------------------------- |
+| Installer/Portable | Windows 7+ environment | x86_64                | Requires patch files for Windows 7 |
+| ZipApp             | Python 3.13 + Tkinter  | Architecture-agnostic | -                                  |
+
+### Download Sources
+
+Get packages through these channels:
+
+- [Gitee Releases][ReleaseOnGitee]
+- [GitHub Releases][ReleaseOnGithub]
+
+System-specific packages:
+
+| OS          | Installer     | Portable Package         | ZipApp File               |
+| ----------- | ------------- | ------------------------ | ------------------------- |
+| Windows 7+  | `*_setup.exe` | `*_portable_windows.zip` | `vcf_generator_lite.pyzw` |
+| Linux/macOS | Not supported | Not supported            | `vcf_generator_lite.pyzw` |
+
+### Windows 7 Compatibility Patch
 
 <details>
-<summary>Support Running on Windows 7</summary>
+<summary>Patch instructions (Windows 7 ONLY)</summary>
 
-1. Download `python313.dll` and `api-ms-win-core-path-l1-1-0.dll` compatible with Windows 7;
-    - You can choose to download these two files from the [PythonWin7][PythonWin7RepositoryOnGithub] repository.
-2. Install the software, go to the `_internal` directory in the installation folder, and overwrite the above two DLLs.
+1. **Download Python embed package** from [PythonWin7][PythonWin7RepositoryOnGithub]:
+   - `python-3.13.2-embed-amd64.zip`
+2. **Extract required DLLs**:
+   - `python313.dll`
+   - `api-ms-win-core-path-l1-1-0.dll`
+3. **Apply patch**:
+   1. Complete software installation
+   2. Navigate to `_internal` folder in installation directory
+   3. Replace existing files with the extracted DLLs
 
 </details>
 
 ## Usage
 
-1. Navigate to the [Release][ReleaseOnGithub] to download and install the app.
-2. Open the app.
-3. Copy the name and phone number in the format of `Name PhoneNumber` on each line into the editing box below;
-    ```text
-    Hardy Buck	13445467890
-    Alva Mackintosh	13554678907
-    Hobart Baker	13645436748
-    ```
-4. Click "生成" (Generate), select a path to save the file.
-5. Copy the generated VCF file to your phone, select "Contacts" when opening the file, and then follow the prompts.
-6. Wait for the import to complete.
+1. Open the app.
+2. Copy the name and phone number in the format of `Name PhoneNumber` on each line into the editing box below;
+   ```text
+   Hardy Buck	13445467890
+   Alva Mackintosh	13554678907
+   Hobart Baker	13645436748
+   ```
+3. Click "生成" (Generate), select a path to save the file.
+4. Copy the generated VCF file to your phone, select "Contacts" when opening the file, and then follow the prompts.
+5. Wait for the import to complete.
 
 > [!NOTE]
 >

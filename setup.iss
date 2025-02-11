@@ -4,7 +4,6 @@
 #define MyAppName "VCF Generator Lite"
 #define MyAppPublisher "Jesse205"
 #define MyAppExeName "vcf_generator_lite.exe"
-#define MyAppIcon ".\src\vcf_generator_lite\assets\images\icon.ico"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -34,6 +33,7 @@ AllowNoIcons=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
 VersionInfoOriginalFileName={#OutputBaseFilename}.exe
 VersionInfoVersion={#MyAppVersion}.0
+VersionInfoCompany={#MyAppPublisher}
 
 [Languages]
 Name: en_us; MessagesFile: "compiler:Default.isl"

@@ -4,14 +4,15 @@
 a = Analysis(
     ['./src/vcf_generator_lite/__main__.py'],
     pathex=[],
-    binaries=[('./src/vcf_generator_lite/assets', 'vcf_generator_lite/assets')],
-    datas=[],
+    binaries=[],
+    datas=[('./src/vcf_generator_lite/assets', 'vcf_generator_lite/assets')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
+    optimize=0
 )
 
 # noinspection PyUnresolvedReferences
@@ -34,8 +35,8 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['./src/vcf_generator_lite/assets/images/icon.ico'],
-    version="versionfile.txt" if os.path.exists("file_version_info.txt") else None,
+    icon=['./icon.ico'],
+    version="versionfile.txt" if os.path.exists("versionfile.txt") else None,
 )
 
 # noinspection PyUnresolvedReferences
@@ -47,5 +48,5 @@ coll = COLLECT(
     upx=True,
     upx_exclude=[],
     name='vcf_generator_lite',
-    icon=['./src/vcf_generator_lite/assets/icon.ico']
+    icon=['./icon.ico']
 )

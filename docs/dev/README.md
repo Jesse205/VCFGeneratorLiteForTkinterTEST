@@ -1,46 +1,79 @@
 # 开发指南
 
-本项目使用 Python 作为开发语言，使用 PDM 作为项目管理工具，使用 PyInstaller、ZipApp 作为打包工具，使用 InnoSetup 作为安装包生成工具。
+## 技术栈
 
-## 开发准备
+- **开发语言**: Python 3.13+
+- **GUI 框架**: Tkinter
+- **包管理**: PDM
+- **打包工具**: PyInstaller、ZipApp、InnoSetup 6.4+
 
-1. 安装 [Python 3.13+](https://www.python.org/)、[PDM](https://pdm-project.org/zh-cn/latest/)、[UPX](https://upx.github.io/)、[InnoSetup 6.4](https://jrsoftware.org/isinfo.php)；
-2. 安装项目依赖：`pdm install`；
-3. 安装 PDM 插件：`pdm install --plugins`；
-4. 下载 InnoSetup 文件：`pdm run prepare_innosetup_extensions`。
+## 🛠️ 开发准备
 
-## 构建应用
+### 环境配置
 
-| 名称            | 命令                            |
-| --------------- | ------------------------------- |
-| 安装包（器）    | `pdm run build_app -t bundle`   |
-| 便携式压缩文件  | `pdm run build_app -t portable` |
-| Python Zip 应用 | `pdm run build_app -t zipapp`   |
+1. **安装基础工具**：
+   - [Python 3.13+](https://www.python.org/)（勾选 `Add to PATH`）
+   - [PDM](https://pdm-project.org/zh-cn/latest/)（包管理工具）
+      ```bash
+      pip install --user pdm
+      ```
+   - [UPX](https://upx.github.io/)（可选）
+   - [InnoSetup](https://jrsoftware.org/isinfo.php)（仅 Windows）
+2. **初始化项目**：
+   ```bash
+   pdm install # 安装项目依赖
+   pdm install --plugins  # 安装 PDM 插件
+   pdm run prepare_innosetup_extensions  # 下载 InnoSetup 文件
+   ```
+
+## 📦 构建应用
+
+| 应用包类型 | 命令                            |
+| ---------- | ------------------------------- |
+| 安装版     | `pdm run build_app -t package`  |
+| 便携版     | `pdm run build_app -t portable` |
+| ZipApp     | `pdm run build_app -t zipapp`   |
 
 ## 项目结构
 
-### 源代码
-
-- `src`：源代码目录
-  - `vcf_generator_lite/ui`： GUI 用户界面
-  - `vcf_generator_lite/util`：工具类
-  - `vcf_generator_lite/widget`：Tkinter 组件
-  - `vcf_generator_lite/constants.py`：常量
-  - `vcf_generator_lite/assets`：资源文件目录
-  - `vcf_generator_lite/__main__.py`：程序入口
-- `scripts`：脚本目录
-- `pyproject.toml`：项目配置文件
-- `setup.iss`：InnoSetup 配置文件，用于生成 Windows 安装器
-- `vcf_generator_lite.spec`：PyInstaller 配置文件，用于构建 APP
-- `metadata.yml`：信息文件（不包括版本），用于生成 versionfile.txt
-- `versionfile.txt`：自动生成的信息文件，为 PyInstaller 提供 EXE 信息
+```txt
+VCFGeneratorLiteForTkinter/
+├── src/                          # 源代码
+│   └── vcf_generator_lite/
+│       ├── ui/                   # 界面模块（窗口、对话框）
+│       ├── util/                 # 工具类（文件操作、VCF生成等）
+│       ├── widget/               # 自定义组件（增强型输入框等）
+│       ├── assets/               # 静态资源（图标、数据等）
+│       ├── __main__.py           # 程序入口
+│       └── constants.py          # 全局常量（名称、链接等）
+├── scripts/                      # 构建脚本
+├── pyproject.toml                # 依赖配置
+├── vcf_generator_lite.spec       # PyInstaller 配置
+├── setup.iss                     # InnoSetup 安装脚本
+├── metadata.yml                  # 元数据（作者、描述等）
+└── versionfile.txt               # 版本信息（自动生成）
+```
 
 ## 常用命令
 
-| 命令                       | 描述                 |
-| -------------------------- | -------------------- |
-| pdm run vcf-generator-lite | 运行应用             |
-| pdm run build_app          | 构建应用             |
-| pdm run version            | 显示或修改应用版本号 |
+| 命令                         | 描述                         |
+| ---------------------------- | ---------------------------- |
+| `pdm run vcf-generator-lite` | 运行应用                     |
+| `pdm run build_app`          | 构建应用                     |
+| `pdm run version`            | 查看当前版本                 |
+| `pdm run version 1.2.3`      | 更新版本号并同步所有配置文件 |
 
 您可以通过 `pdm run --list` 查看所有自定义命令。
+
+## 🎨 UI 开发规范
+
+### 单位系统
+
+- **设计单位**：点（`p`）对应 **有效像素（epx）**；
+   ```python
+   # 转换示例：12p 在 125% 缩放中表示为 15px
+   Label(root, text="示例", font=("微软雅黑", 12))  # 默认12p字体
+   ```
+- **布局原则**：
+   - 尽量使用 `pack` 布局管理器，创建响应式 UI；
+   - 组件间距统一使用 `padx=10p, pady=10p`。

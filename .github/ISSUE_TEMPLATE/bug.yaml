@@ -56,13 +56,13 @@ body:
     validations:
       required: true
   - type: checkboxes
-    id: app-type
+    id: package-types
     attributes:
-      label: 应用类型
-      description: 您当前正在使用我们应用的什么类型？
+      label: 应用包类型
+      description: 您当前正在使用我们应用的什么应用包格式？
       options:
-        - label: 安装版
-        - label: 便携版
+        - label: 安装包
+        - label: 便携包
         - label: ZipApp
     validations:
       required: true

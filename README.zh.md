@@ -29,44 +29,69 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 <img src="./docs/images/screenshots/Snipaste_2025-02-08_10-30-21.png" width="600" alt="Snipaste_2025-02-08_10-30-21.png" />
 
-## 环境要求
+## 下载
 
-- `VCFGenerator_<版本>_<位数>_setup.exe`、`VCFGenerator_<版本>_<位数>_portable_windows.zip`
-  - 操作系统：Windows 8+ 或 Windows 7+（伴随补丁）
-  - CPU：x86 64位
-- `vcf_generator.pyzw`
-  - 操作系统：
-    - Windows 8+ 或 Windows 7+（伴随补丁）
-    - Linux
-    - _（其他操作系统未经测试）_
-  - Python 版本：Python 3.13（伴随 Tkinter）
+### 应用包类型说明
 
-对于部分系统，您可以通过修补软件的方法支持运行此应用。如需在这些系统中运行此应用，请参考[修补应用](#修补应用)章节。
+根据使用场景选择最适合的应用包格式：
 
-### 修补应用
+| 包格式 | 运行方式                    | 适用场景                  |
+| ------ | --------------------------- | ------------------------- |
+| 安装包 | 安装后使用                  | 长期使用/需要桌面快捷方式 |
+| 便携包 | 解压即用（支持U盘随身携带） | 免安装/临时使用           |
+| ZipApp | 双击直接运行                | 快速启动/跨平台使用       |
+
+### 兼容性要求
+
+不同的应用包有一不同环境要求，您需要根据您的系统环境选择对应的应用包。
+
+| 包格式        | 核心依赖              | 架构要求 | 特殊需求                           |
+| ------------- | --------------------- | -------- | ---------------------------------- |
+| 安装包/便携包 | Windows 7+ 系统环境   | x86 64位 | Windows 7 需补丁文件（见下方说明） |
+| ZipApp        | Python 3.13 + Tkinter | 无限制   | -                                  |
+
+### 文件下载列表
+
+通过以下渠道获取安装包：
+
+- [Gitee 发行版][ReleaseOnGitee]
+- [GitHub Releases][ReleaseOnGithub]
+
+各系统对应文件清单：
+
+| 系统        | 安装包        | 便携包                   | ZipApp                    |
+| ----------- | ------------- | ------------------------ | ------------------------- |
+| Windows 7+  | `*_setup.exe` | `*_portable_windows.zip` | `vcf_generator_lite.pyzw` |
+| Linux/macOS | 暂未提供      | 暂未提供                 | `vcf_generator_lite.pyzw` |
+
+### Windows 7 特别说明
 
 <details>
-<summary>支持 Windows 7 运行</summary>
+<summary>兼容性补丁安装指南（仅 Windows 7 用户）</summary>
 
-1. 下载兼容 Windows 7 的 `python313.dll` 与 `api-ms-win-core-path-l1-1-0.dll`；
-    - 您可以选择到 [PythonWin7][PythonWin7RepositoryOnGithub] 仓库中下载这两个文件。
-2. 安装软件，进入安装目录中 `_internal`，覆盖以上两个 DLL。
+1. **获取 Python 嵌入包**：从 [PythonWin7][PythonWin7RepositoryOnGithub] 仓库下载：
+    - `python-3.13.2-embed-amd64.zip`
+2. **提取 DLL 文件**：解压下载的 ZIP 包，从中获取以下文件：
+    - `python313.dll`  
+    - `api-ms-win-core-path-l1-1-0.dll`
+3. **应用补丁**：
+    1. 完成软件安装
+    2. 打开安装目录下的 `_internal` 文件夹
+    3. 将下载的两个 DLL 文件覆盖到该目录
 
 </details>
 
 ## 使用方法
 
-1. 进入[发行版][ReleaseOnGitee]下载并安装 APP；
-2. 打开 APP；
-3. 把名字和电话以每行 `姓名 电话号码` 的格式复制到下面的编辑框内；
-    ```text
-    李四	13445467890
-    王五	13554678907
-    赵六	13645436748
-    ```
-4. 点击“生成”，选择一个路径保存文件；
-5. 将生成后的 VCF 文件复制到手机内，打开文件时选择使用“通讯录”，然后根据提示操作；
-6. 等待导入完成。
+1. 把名字和电话以每行 `姓名 电话号码` 的格式复制到下面的编辑框内；
+   ```text
+   李四	13445467890
+   王五	13554678907
+   赵六	13645436748
+   ```
+2. 点击“生成”，选择一个路径保存文件；
+3. 将生成后的 VCF 文件复制到手机内，打开文件时选择使用“通讯录”，然后根据提示操作；
+4. 等待导入完成。
 
 > [!NOTE]
 >

@@ -2,15 +2,41 @@
   "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint/refs/heads/main/schema/markdownlint-config-schema.json",
   "line-length": false,
   "no-inline-html": {
-    "allowed_elements": ["img", "div", "small", "details", "summary"]
+    "allowed_elements": [
+      "img",
+      "div",
+      "small",
+      "details",
+      "summary"
+    ]
   },
   "first-line-heading": false,
   "no-hard-tabs": {
-    "ignore_code_languages": ["text"]
+    "ignore_code_languages": [
+      "text"
+    ]
   },
   "blanks-around-fences": {
     "list_items": false
   },
   "no-space-in-code": false,
-  "link-image-reference-definitions":false
+  "link-image-reference-definitions": false,
+  "code-block-style": {
+    "style": "fenced"
+  },
+  "code-fence-style": {
+    "style": "backtick"
+  },
+  "ul-style": {
+    "style": "dash"
+  },
+  "ul-indent": {
+    "indent": 3
+  },
+  "ol-prefix": {
+    "style": "ordered"
+  },
+  "table-pipe-style": {
+    "style": "leading_and_trailing"
+  }
 }
