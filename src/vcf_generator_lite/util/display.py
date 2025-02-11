@@ -12,8 +12,6 @@ if sys.platform == "win32":
 
 __all__ = ["enable_dpi_aware", "get_scale_factor"]
 
-_process_dpi_aware = False
-
 
 def enable_dpi_aware():
     """
@@ -26,15 +24,12 @@ def enable_dpi_aware():
     非 Windows 平台：
     - 当前保持空实现，后续可按需扩展其他系统支持
     """
-    global _process_dpi_aware
 
     try:
         if sys.platform == "win32":
             enable_dpi_aware_windows()
     except RuntimeError as e:
         print("Failed to get scale factor", e, file=sys.stderr)
-    else:
-        _process_dpi_aware = True
 
 
 def get_scale_factor(misc: Misc) -> float:
@@ -47,8 +42,7 @@ def get_scale_factor(misc: Misc) -> float:
     :param misc: Tkinter 根对象(Tk 或 Toplevel)，用于跨平台兼容性参数传递，实际实现可能根据平台不同忽略此参数
     :return: 系统缩放系数(例如 1.5 表示 150% 缩放)，无法检测时默认返回 1.0
     """
-    if not _process_dpi_aware:
-        return 1.0
+
     try:
         if sys.platform == "win32":
             return get_scale_factor_windows(misc)

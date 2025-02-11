@@ -17,6 +17,8 @@ MONITOR_DEFAULTTONEAREST = 2
 LOGPIXELSX = 88
 LOGPIXELSY = 90
 
+_process_dpi_aware = False
+
 
 class MonitorDpiType(Enum):
     """
@@ -91,6 +93,8 @@ def enable_dpi_aware_windows():
     ):
         try:
             setter()
+            global _process_dpi_aware
+            _process_dpi_aware = True
             break
         except (AttributeError, OSError) as e:
             last_error = e
@@ -132,6 +136,8 @@ def _get_scale_factor_win2000(misc: Misc) -> float:
 
 
 def get_scale_factor_windows(misc: Misc) -> float:
+    if not _process_dpi_aware:
+        return 1.0
     last_error = None
     for getter in (
         _get_scale_factor_win10,
