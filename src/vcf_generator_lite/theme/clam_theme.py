@@ -10,6 +10,8 @@ class ClamTheme(BaseTheme):
         style.theme_use("clam")
         style.configure("TButton", padding="3p")
         style.configure("Vertical.TScrollbar", arrowsize="12p")
+        style.configure("TextFrame.TEntry", padding=0, borderwidth="2p")
+
         window_background = style.lookup("TFrame", "background")
         master.configure(background=window_background)
         master.option_add("*Toplevel.background", window_background)
@@ -17,4 +19,3 @@ class ClamTheme(BaseTheme):
         master.option_add("*Text.selectBackground", style.lookup("TEntry", "selectbackground", ["focus"]))
         master.option_add("*Text.selectForeground", style.lookup("TEntry", "selectforeground", ["focus"]))
         master.option_add("*Text.inactiveSelectBackground", style.lookup("TEntry", "selectbackground"))
-        master.option_add("*TextFrame.borderWidth", 2)
