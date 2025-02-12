@@ -9,7 +9,7 @@ from tkinter.ttk import *
 
 from vcf_generator_lite.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE, URL_REPORT
 from vcf_generator_lite.ui.about import open_about_window
-from vcf_generator_lite.ui.base import BaseWindow
+from vcf_generator_lite.ui.base import BaseWindow, EVENT_EXIT
 from vcf_generator_lite.util import dialog
 from vcf_generator_lite.util.menu import MenuCascade, MenuCommand, MenuSeparator
 from vcf_generator_lite.util.vcard import GenerateResult, VCardProcessor
@@ -168,7 +168,7 @@ class MainController:
         window.bind("<Control-S>", self.on_generate_click)
         window.bind("<Control-s>", self.on_generate_click)
         window.bind("<Return>", self.on_return_click)
-        window.protocol("WM_DELETE_WINDOW", self.on_close_window)
+        window.bind(EVENT_EXIT, self.on_exit)
 
     def on_about_click(self, _):
         open_about_window(self.window)
@@ -213,7 +213,7 @@ class MainController:
         progress_future.add_done_callback(done)
         executor.shutdown(wait=False)
 
-    def on_close_window(self):
+    def on_exit(self, _):
         if self.is_generating:
             dialog.show_warning(self.window, "正在生成文件", "文件正在生成中，无法关闭窗口。请稍后重试。")
         else:

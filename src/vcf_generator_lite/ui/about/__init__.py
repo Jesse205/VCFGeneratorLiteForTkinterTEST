@@ -72,7 +72,6 @@ class AboutController:
         self.window = window
         window.bind(EVENT_ON_OK_CLICK, self.on_ok_click)
         window.bind("<Return>", self.on_ok_click)
-        window.bind("<Escape>", self.on_escape_click)
 
     def on_ok_click(self, _: Event):
         self.window.destroy()

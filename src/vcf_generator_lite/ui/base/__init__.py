@@ -12,6 +12,8 @@ __all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
 
 logger = logging.getLogger(__name__)
 
+EVENT_EXIT = "<<Exit>>"
+
 
 class WindowExtension(Misc, Wm):
     _scale_factor = 1
@@ -22,9 +24,10 @@ class WindowExtension(Misc, Wm):
 
     def window_injector_init(self):
         self.withdraw()
-        self._scale_factor = get_scale_factor(self)
-        self.tk.call("tk", "scaling", self._scale_factor)
-        self._apply_default_icon()
+        self.__apply_default_scaling()
+        self.__apply_default_icon()
+        self.__apply_default_events()
+
         self.on_init_window()
         self.center_window()
         # 延迟0秒调用center_window，修复WSL中窗口大小获取不正确
@@ -33,9 +36,17 @@ class WindowExtension(Misc, Wm):
             self.after(0, self.center_window)
         self.deiconify()
 
-    def _apply_default_icon(self):
+    def __apply_default_scaling(self):
+        self._scale_factor = get_scale_factor(self)
+        self.tk.call("tk", "scaling", self._scale_factor)
+
+    def __apply_default_icon(self):
         logger.debug(f"窗口 {self.winfo_name()} 设置图标为 icon-48.png")
         self.iconphoto(True, PhotoImage(data=get_asset_data("images/icon-48.png")))
+
+    def __apply_default_events(self):
+        self.protocol("WM_DELETE_WINDOW", lambda: self.event_generate(EVENT_EXIT))
+        self.bind(EVENT_EXIT, lambda _: self.destroy())
 
     def get_scaled(self, size: int):
         return int(size * self._scale_factor)
@@ -98,6 +109,8 @@ class BaseToplevel(Toplevel, WindowExtension):
 
 class BaseDialog(BaseToplevel):
     def on_init_window(self):
+        self.bind("<Escape>", lambda _: self.event_generate(EVENT_EXIT))
+
         if isinstance(self.master, Wm):
             self.transient(self.master)
             self.resizable(False, False)
