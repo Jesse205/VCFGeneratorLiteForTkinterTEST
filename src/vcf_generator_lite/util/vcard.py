@@ -5,21 +5,15 @@ from dataclasses import dataclass
 from queue import Queue
 from typing import IO, Callable
 
-from vcf_generator_lite.util.person import parse_person
+from vcf_generator_lite.util.contact import parse_contact, Contact
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
-class LineItem:
+class OriginItem:
     line: int
     content: str
-
-
-@dataclass(frozen=True)
-class GenerateResult:
-    invalid_items: list[LineItem]
-    exceptions: list[BaseException]
 
 
 @dataclass
@@ -27,16 +21,22 @@ class VCardProcessorState:
     total: int
     processed: int
     progress: float
-    invalid_items: list[LineItem]
+    invalid_items: list[OriginItem]
     exceptions: list[BaseException]
 
 
-def generate_vcard_entry(name: str, phone: int):
-    name_encoded = binascii.b2a_qp(name.encode("utf-8")).decode("utf-8")
+@dataclass(frozen=True)
+class GenerateResult:
+    invalid_items: list[OriginItem]
+    exceptions: list[BaseException]
+
+
+def generate_vcard(contact: Contact):
+    name_encoded = binascii.b2a_qp(contact.name.encode("utf-8")).decode("utf-8")
     return f"""BEGIN:VCARD
 VERSION:2.1
 FN;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{name_encoded}
-TEL;CELL:{phone}
+TEL;CELL:{contact.phone}
 END:VCARD"""
 
 
@@ -120,12 +120,12 @@ class VCardProcessor:
 
             for idx, line in enumerate(items, 1):
                 try:
-                    person = parse_person(line)
-                    vcard = generate_vcard_entry(person.name, person.phone)
+                    contact = parse_contact(line)
+                    vcard = generate_vcard(contact)
                     write_queue.put(vcard)
                 except ValueError as e:
                     logger.error(f"Invalid line {idx}: {e}")
-                    state.invalid_items.append(LineItem(idx, line))
+                    state.invalid_items.append(OriginItem(idx, line))
                     self._update_progress(state, 1)
                 except Exception as e:
                     logger.exception(f"Unexpected parsing error")
