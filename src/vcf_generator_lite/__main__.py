@@ -7,7 +7,10 @@ from vcf_generator_lite.util.display import enable_dpi_aware
 
 
 def main():
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    if __debug__:
+        logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+    else:
+        logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     enable_dpi_aware()
 
     logging.info("Starting VCF Generator...")
