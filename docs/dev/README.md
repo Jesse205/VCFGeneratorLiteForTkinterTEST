@@ -28,11 +28,11 @@
 
 ## 📦 构建应用
 
-| 应用包类型 | 命令                            |
-| ---------- | ------------------------------- |
-| 安装版     | `pdm run build_app -t package`  |
-| 便携版     | `pdm run build_app -t portable` |
-| ZipApp     | `pdm run build_app -t zipapp`   |
+| 应用包类型 | 命令                             |
+| ---------- | -------------------------------- |
+| 安装版     | `pdm run build_app -t installer` |
+| 便携版     | `pdm run build_app -t portable`  |
+| ZipApp     | `pdm run build_app -t zipapp`    |
 
 ## 项目结构
 
