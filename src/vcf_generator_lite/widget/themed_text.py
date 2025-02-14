@@ -34,6 +34,7 @@ class ThemedText(Text):
         style_obj = Style(master)
         border_width = style_obj.lookup(style, "borderwidth", None, 1)
         padding = style_obj.lookup(style, "padding", None, 1)
+        highlightcolor=style_obj.lookup(style, "bordercolor", ["focus"], "blue")
         del style_obj
         self.frame = Frame(
             master,
@@ -51,6 +52,7 @@ class ThemedText(Text):
             relief="flat",
             borderwidth=0,
             highlightthickness=0,
+            highlightcolor=highlightcolor,
             **kw
         )
         self.pack(side="left", fill="both", expand=True)

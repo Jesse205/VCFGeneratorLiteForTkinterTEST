@@ -22,18 +22,6 @@ def get_asset_path(file_name: str) -> str:
     return os.path.join(os.path.dirname(sys.modules[_APP_MODULE_NAME].__file__), "assets", file_name)
 
 
-def get_window_icon() -> Optional[str]:
-    if sys.platform == "win32":
-        return get_asset_path("images/icon.ico")
-    return None
-
-
-def get_default_color() -> str:
-    if sys.platform == "win32":
-        return "SystemHighlight"
-    return "blue"
-
-
 def _get_os_notice_html() -> str:
     projects = json.loads(get_asset_data('data/os_notice.json'))
     return "<br />".join([

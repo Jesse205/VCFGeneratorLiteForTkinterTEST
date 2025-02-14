@@ -10,7 +10,7 @@ class WindowsTheme(BaseTheme):
         style.theme_use("vista")
         style.configure("TButton", padding="2p")
         style.configure("InfoHeader.TFrame", background="systemWindow")
-        style.configure("TextFrame.TEntry", padding=0, borderwidth="2p")
+        style.configure("TextFrame.TEntry", padding=0, borderwidth="2p", bordercolor="SystemHighlight")
 
         master.option_add("*Text.selectBackground", style.lookup(".", "selectbackground"))
         master.option_add("*Text.selectForeground", style.lookup(".", "selectforeground"))

@@ -8,8 +8,6 @@ from copy import deepcopy
 from html.parser import HTMLParser
 from tkinter import font
 
-from vcf_generator_lite.util.resource import get_default_color
-
 
 # __________________________________________________________________________________________________
 class Defs:
@@ -361,7 +359,7 @@ class HTMLTextParser(HTMLParser):
                 tag, WCfg.FOREGROUND, attrs[HTML.Attrs.STYLE][HTML.Style.COLOR]
             )
         elif tag == HTML.Tag.A and attrs[HTML.Attrs.HREF]:
-            self._stack_add(tag, WCfg.FOREGROUND, get_default_color())
+            self._stack_add(tag, WCfg.FOREGROUND, self.default_highlightcolor)
         else:
             self._stack_add(tag, WCfg.FOREGROUND)
 
@@ -737,6 +735,7 @@ class HTMLTextParser(HTMLParser):
         self.default_font = font.nametofont(w.cget("font"))
         self.default_selectbackground = w.cget("selectbackground")
         self.default_selectforeground = w.cget("selectforeground")
+        self.default_highlightcolor = w.cget("highlightcolor")
         self.stack = deepcopy(DEFAULT_STACK)
         self.stack[WCfg.KEY][WCfg.BACKGROUND].append(
             ("__DEFAULT__", w.cget("background"))
