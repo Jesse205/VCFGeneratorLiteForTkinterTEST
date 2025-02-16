@@ -5,8 +5,7 @@ import subprocess
 import sys
 from zipfile import ZipFile
 
-# noinspection PyPep8Naming
-import PyInstaller.__main__ as PyInstaller
+import PyInstaller.__main__ as pyinstaller
 
 from scripts.prepare_innosetup_extensions import PATH_INNOSETUP_EXTENSION, main as prepare_innosetup_extensions
 from scripts.utils import get_bits
@@ -19,7 +18,7 @@ OUTPUT_BASE_NAME = f"VCFGeneratorLite_v{app_version}_{get_bits()}bit"
 
 def build_with_pyinstaller():
     print("Building with PyInstaller...")
-    PyInstaller.run(["vcf_generator_lite.spec", "--noconfirm"])
+    pyinstaller.run(["vcf_generator_lite.spec", "--noconfirm"])
     print("Building finished.")
 
 
