@@ -56,7 +56,7 @@ class ThemedText(Text):
             **kw
         )
         self.pack(side="left", fill="both", expand=True)
-        for sequence in ("<FocusIn>", "<FocusOut>", "<Enter>", "<Leave>", "<ButtonPress>", "<ButtonRelease>"):
+        for sequence in ("<FocusIn>", "<FocusOut>", "<Enter>", "<Leave>", "<ButtonPress-1>", "<ButtonRelease-1>"):
             self.bind(sequence, self.__on_state_event, "+")
 
         # Copy geometry methods of self.frame without overriding Text methods -- hack!
@@ -75,9 +75,11 @@ class ThemedText(Text):
             case EventType.Leave:
                 self.frame.state(["!hover"])
             case EventType.ButtonPress:
-                self.frame.state(["pressed"])
+                if event.num == 1:
+                    self.frame.state(["pressed"])
             case EventType.ButtonRelease:
-                self.frame.state(["!pressed"])
+                if event.num == 1:
+                    self.frame.state(["!pressed"])
 
     def __str__(self):
         return str(self.frame)
