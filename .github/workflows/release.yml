@@ -23,9 +23,10 @@ jobs:
           merge-multiple: true
       - name: Release Upload Assets
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload ${{ github.event.release.tag_name }} \
             *_portable_windows.zip \
             *_setup.exe \
-                vcf_generator_lite.pyzw
+            vcf_generator_lite.pyzw \
+            --clobber --repo $GITHUB_REPOSITORY
