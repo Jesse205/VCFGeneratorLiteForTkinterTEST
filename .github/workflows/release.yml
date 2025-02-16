@@ -22,7 +22,10 @@ jobs:
         with:
           merge-multiple: true
       - name: Release Upload Assets
-        uses: jaywcjlove/github-action-upload-assets@v1.1.1
-        with:
-          tag: ${{ github.event.release.tag_name }}
-          asset-path: '["*_portable_windows.zip", "*_setup.exe", "vcf_generator_lite.pyzw"]'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} \
+            *_portable_windows.zip \
+            *_setup.exe \
+                vcf_generator_lite.pyzw
