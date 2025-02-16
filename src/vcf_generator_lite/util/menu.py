@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from tkinter import Menu
-from typing import Callable, Self, Optional
+from typing import Callable, Self, Optional, Literal
 
 
 @dataclass
@@ -8,6 +8,7 @@ class MenuCommand:
     label: str
     command: Optional[Callable[[], object | str]] = None
     accelerator: Optional[str] = None
+    state: Literal["normal", "active", "disabled"] = "normal"
 
 
 @dataclass
@@ -19,7 +20,9 @@ class MenuSeparator:
 class MenuCascade:
     label: str
     items: list[MenuCommand | MenuSeparator | Self]
+    accelerator: Optional[str] = None
     tearoff: bool = False
+    state: Literal["normal", "active", "disabled"] = "normal"
 
 
 type MenuItem = MenuCommand | MenuSeparator | MenuCascade
@@ -44,6 +47,7 @@ def add_menus(menu: Menu, items: list[MenuItem]):
                 command=item.command,
                 underline=underline,
                 accelerator=item.accelerator,
+                state=item.state,
             )
         elif isinstance(item, MenuSeparator):
             menu.add_separator()
@@ -54,5 +58,7 @@ def add_menus(menu: Menu, items: list[MenuItem]):
             menu.add_cascade(
                 label=label,
                 menu=submenu,
-                underline=underline
+                underline=underline,
+                accelerator=item.accelerator,
+                state=item.state,
             )

@@ -69,7 +69,7 @@ class MainWindow(BaseWindow):
                 items=[
                     MenuCommand(
                         label="退出(&X)",
-                        command=self.quit,
+                        command=lambda: self.event_generate(EVENT_EXIT),
                         accelerator="Alt + F4",
                     )
                 ]
@@ -77,6 +77,17 @@ class MainWindow(BaseWindow):
             MenuCascade(
                 label="编辑(&E)",
                 items=[
+                    MenuCommand(
+                        label="撤销(&U)",
+                        command=lambda: self.focus_get().event_generate("<<Undo>>"),
+                        accelerator="Ctrl + Z",
+                    ),
+                    MenuCommand(
+                        label="重做(&R)",
+                        command=lambda: self.focus_get().event_generate("<<Redo>>"),
+                        accelerator="Ctrl + Y",
+                    ),
+                    MenuSeparator(),
                     MenuCommand(
                         label="剪切(&T)",
                         command=lambda: self.focus_get().event_generate("<<Cut>>"),

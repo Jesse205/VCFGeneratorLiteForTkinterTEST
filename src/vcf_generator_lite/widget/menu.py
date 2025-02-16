@@ -1,6 +1,8 @@
 from tkinter import *
 from typing import Union, Literal
 
+from vcf_generator_lite.util.menu import add_menus, MenuCommand, MenuSeparator
+
 
 def boolean_to_state(state: bool) -> Literal["normal", "disabled"]:
     return "normal" if state else "disabled"
@@ -24,47 +26,53 @@ class TextContextMenu(Menu):
             return False
 
     def show(self, x: int, y: int):
+        self.master.focus()
+        self.delete(0, END)
         state_by_selected = boolean_to_state(self.is_selected())
         is_master_editable = state_to_boolean(self.master.cget("state"))
-        self.delete(0, END)
-        self.master.focus()
         if is_master_editable:
-            self.add_command(
-                label='撤消(U)',
-                command=lambda: self.master.event_generate("<<Undo>>"),
-                underline=3,
-            )
-            self.add_separator()
-            self.add_command(
-                label='剪切(T)',
-                command=lambda: self.master.event_generate("<<Cut>>"),
+            add_menus(self, [
+                MenuCommand(
+                    label="撤销(&U)",
+                    command=lambda: self.master.event_generate("<<Undo>>"),
+                ),
+                MenuCommand(
+                    label="重做(&R)",
+                    command=lambda: self.master.event_generate("<<Redo>>"),
+                ),
+                MenuSeparator(),
+                MenuCommand(
+                    label="剪切(&T)",
+                    command=lambda: self.master.event_generate("<<Cut>>"),
+                    state=state_by_selected,
+                ),
+            ])
+        add_menus(self, [
+            MenuCommand(
+                label="复制(&C)",
+                command=lambda: self.master.event_generate("<<Copy>>"),
                 state=state_by_selected,
-                underline=3,
-            )
-        self.add_command(
-            label='复制(C)',
-            command=lambda: self.master.event_generate("<<Copy>>"),
-            state=state_by_selected,
-            underline=3,
-        )
+            ),
+        ])
         if is_master_editable:
-            self.add_command(
-                label='粘贴(P)',
-                command=lambda: self.master.event_generate("<<Paste>>"),
-                underline=3,
+            add_menus(self, [
+                MenuCommand(
+                    label="粘贴(&P)",
+                    command=lambda: self.master.event_generate("<<Paste>>"),
+                ),
+                MenuCommand(
+                    label="删除(&D)",
+                    command=lambda: self.master.event_generate("<<Clear>>"),
+                    state=state_by_selected,
+                ),
+            ])
+        add_menus(self, [
+            MenuSeparator(),
+            MenuCommand(
+                label="全选(&A)",
+                command=lambda: self.master.event_generate("<<SelectAll>>"),
             )
-            self.add_command(
-                label='删除(D)',
-                command=lambda: self.master.event_generate("<<Clear>>"),
-                state=state_by_selected,
-                underline=3,
-            )
-        self.add_separator()
-        self.add_command(
-            label='全选(A)',
-            command=lambda: self.master.event_generate("<<SelectAll>>"),
-            underline=3,
-        )
+        ])
         self.tk_popup(x, y)
 
     def bind_to_widget(self):
