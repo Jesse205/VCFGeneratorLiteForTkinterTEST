@@ -15,7 +15,3 @@ class ClamTheme(BaseTheme):
         window_background = style.lookup("TFrame", "background")
         master.configure(background=window_background)
         master.option_add("*Toplevel.background", window_background)
-        master.option_add("*Text.insertWidth", style.lookup("TEntry", "insertwidth"))
-        master.option_add("*Text.selectBackground", style.lookup("TEntry", "selectbackground", ["focus"]))
-        master.option_add("*Text.selectForeground", style.lookup("TEntry", "selectforeground", ["focus"]))
-        master.option_add("*Text.inactiveSelectBackground", style.lookup("TEntry", "selectbackground"))

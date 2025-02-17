@@ -34,7 +34,10 @@ class ThemedText(Text):
         style_obj = Style(master)
         border_width = style_obj.lookup(style, "borderwidth", None, 1)
         padding = style_obj.lookup(style, "padding", None, 1)
-        highlightcolor=style_obj.lookup(style, "bordercolor", ["focus"], "blue")
+        highlight_color = style_obj.lookup(style, "bordercolor", ["focus"], "blue")
+        select_background = style_obj.lookup(style, "selectbackground", ["focus"]) or None
+        select_foreground = style_obj.lookup(style, "selectforeground", ["focus"]) or None
+        insert_width = style_obj.lookup(style, "insertwidth", ["focus"]) or None
         del style_obj
         self.frame = Frame(
             master,
@@ -52,17 +55,17 @@ class ThemedText(Text):
             relief="flat",
             borderwidth=0,
             highlightthickness=0,
-            highlightcolor=highlightcolor,
+            highlightcolor=highlight_color,
+            selectbackground=select_background,
+            selectforeground=select_foreground,
+            insertwidth=insert_width,
             **kw
         )
         self.pack(side="left", fill="both", expand=True)
         for sequence in ("<FocusIn>", "<FocusOut>", "<Enter>", "<Leave>", "<ButtonPress-1>", "<ButtonRelease-1>"):
             self.bind(sequence, self.__on_state_event, "+")
 
-        # Copy geometry methods of self.frame without overriding Text methods -- hack!
-        for m in (vars(Pack).keys() | vars(Grid).keys() | vars(Place).keys()).difference(vars(Text).keys()):
-            if m[0] != '_' and m != 'config' and m != 'configure':
-                setattr(self, m, getattr(self.frame, m))
+        self.__copy_geometry_methods()
 
     def __on_state_event(self, event: Event):
         match event.type:
@@ -80,6 +83,15 @@ class ThemedText(Text):
             case EventType.ButtonRelease:
                 if event.num == 1:
                     self.frame.state(["!pressed"])
+
+    def __copy_geometry_methods(self):
+        """
+        Copy geometry methods of self.frame without overriding Text methods -- hack!
+        """
+
+        for m in (vars(Pack).keys() | vars(Grid).keys() | vars(Place).keys()).difference(vars(Text).keys()):
+            if m[0] != '_' and m != 'config' and m != 'configure':
+                setattr(self, m, getattr(self.frame, m))
 
     def __str__(self):
         return str(self.frame)
