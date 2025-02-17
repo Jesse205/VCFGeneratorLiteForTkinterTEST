@@ -35,7 +35,7 @@ def _parse_label(label: str) -> tuple[str, int]:
     return label.replace("&", "", 1), label.find("&")
 
 
-def add_menus(menu: Menu, items: list[MenuItem]):
+def add_menu_items(menu: Menu, items: list[MenuItem]):
     """
     向给定的菜单对象中批量添加菜单项。
     """
@@ -54,7 +54,7 @@ def add_menus(menu: Menu, items: list[MenuItem]):
         elif isinstance(item, MenuCascade):
             label, underline = _parse_label(item.label)
             submenu = Menu(menu, tearoff=item.tearoff)
-            add_menus(submenu, item.items)
+            add_menu_items(submenu, item.items)
             menu.add_cascade(
                 label=label,
                 menu=submenu,

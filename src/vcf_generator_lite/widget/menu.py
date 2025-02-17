@@ -1,7 +1,7 @@
 from tkinter import *
 from typing import Union, Literal
 
-from vcf_generator_lite.util.menu import add_menus, MenuCommand, MenuSeparator
+from vcf_generator_lite.util.menu import add_menu_items, MenuCommand, MenuSeparator
 
 
 def boolean_to_state(state: bool) -> Literal["normal", "disabled"]:
@@ -31,7 +31,7 @@ class TextContextMenu(Menu):
         state_by_selected = boolean_to_state(self.is_selected())
         is_master_editable = state_to_boolean(self.master.cget("state"))
         if is_master_editable:
-            add_menus(self, [
+            add_menu_items(self, [
                 MenuCommand(
                     label="撤销(&U)",
                     command=lambda: self.master.event_generate("<<Undo>>"),
@@ -47,7 +47,7 @@ class TextContextMenu(Menu):
                     state=state_by_selected,
                 ),
             ])
-        add_menus(self, [
+        add_menu_items(self, [
             MenuCommand(
                 label="复制(&C)",
                 command=lambda: self.master.event_generate("<<Copy>>"),
@@ -55,7 +55,7 @@ class TextContextMenu(Menu):
             ),
         ])
         if is_master_editable:
-            add_menus(self, [
+            add_menu_items(self, [
                 MenuCommand(
                     label="粘贴(&P)",
                     command=lambda: self.master.event_generate("<<Paste>>"),
@@ -66,7 +66,7 @@ class TextContextMenu(Menu):
                     state=state_by_selected,
                 ),
             ])
-        add_menus(self, [
+        add_menu_items(self, [
             MenuSeparator(),
             MenuCommand(
                 label="全选(&A)",

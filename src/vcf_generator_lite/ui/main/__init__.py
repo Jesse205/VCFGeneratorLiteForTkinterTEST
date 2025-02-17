@@ -63,7 +63,7 @@ class MainWindow(BaseWindow):
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def _create_menus(self):
-        self.add_menus(
+        self.add_menu_bar_items(
             MenuCascade(
                 label="文件(&F)",
                 items=[
