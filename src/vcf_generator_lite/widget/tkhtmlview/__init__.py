@@ -3,25 +3,32 @@ tkinter HTML text widgets
 
 修改自 https://github.com/bauripalash/tkhtmlview，去除了字体设置和图片加载，修复无法选择
 """
-from tkinter import *
-from tkinter.font import Font
 
-from vcf_generator_lite.widget.scrolled_text import ScrolledText
+from tkinter.constants import NORMAL, END
+from tkinter.ttk import Style
+
+from ttk_text import ThemedText
+from ttk_text.scrolled_text import ScrolledText
+
 from vcf_generator_lite.widget.tkhtmlview import html_parser
 from vcf_generator_lite.widget.tkhtmlview.utils import RenderHTML
 
 VERSION = "0.3.0"
 
-__all__ = ['HTMLText', 'HTMLScrolledText']
+__all__ = ["HTMLText", "HTMLScrolledText"]
 
 
-class HTMLText(Text):
+class HTMLText(ThemedText):
     """
     HTML text widget
     """
 
     def __init__(self, master=None, html=None, wrap="word", **kw):
         super().__init__(master=master, wrap=wrap, **kw)
+        style: str = self.frame.cget("style")
+        style_obj = Style(self)
+        highlight_color = style_obj.lookup(style, "bordercolor", ["focus"], "blue")
+        self.configure(highlightcolor=highlight_color)
         self.html_parser = html_parser.HTMLTextParser()
         if isinstance(html, str):
             self.set_html(html)
@@ -56,36 +63,3 @@ class HTMLText(Text):
 
 class HTMLScrolledText(HTMLText, ScrolledText):
     pass
-
-
-def example():
-    root = Tk()
-    root.title("HTMLText")
-    html = """
-    <html>
-    <head>
-        <title>HTMLText</title>
-    </head>
-    <body>
-        <h1>H1 标题1</h1>
-        <h2>H2 标题2</h1>
-        <h3>H3 标题3</h1>
-        <h4>H4 标题4</h1>
-        <h5>H5 标题5</h1>
-        <p>
-            HTMLText is a widget that displays HTML formatted text.
-        </p>
-    </body>
-    </html>
-    """
-    html_text = HTMLText(root, html=html, default_font=Font(family="微软雅黑"))
-    html_text.pack(fill=BOTH, expand=True)
-    # html_text.fit_height()
-    html_scrolled_text = HTMLScrolledText(root, html=html)
-    html_scrolled_text.pack(fill=BOTH, expand=True)
-    # html_scrolled_text.fit_height()
-    root.mainloop()
-
-
-if __name__ == "__main__":
-    example()

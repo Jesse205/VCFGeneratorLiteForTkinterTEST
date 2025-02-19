@@ -5,7 +5,7 @@ from typing import Union, Optional
 
 from vcf_generator_lite.theme import get_platform_theme
 from vcf_generator_lite.util.display import get_scale_factor
-from vcf_generator_lite.util.menu import add_menus, MenuItem
+from vcf_generator_lite.util.menu import add_menu_items, MenuItem
 from vcf_generator_lite.util.resource import get_asset_data
 
 __all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
@@ -87,11 +87,11 @@ class WindowExtension(Misc, Wm):
         location_y = max(int((container_height - window_height) / 2), 0)
         self.geometry(f"+{location_x}+{location_y}")
 
-    def add_menus(self, *items: MenuItem):
+    def add_menu_bar_items(self, *items: MenuItem):
         if self.menu_bar is None:
             self.menu_bar = Menu(self, tearoff=False)
             self.configure({"menu": self.menu_bar})
-        add_menus(self.menu_bar, list(items))
+        add_menu_items(self.menu_bar, list(items))
 
 
 class BaseWindow(Tk, WindowExtension):

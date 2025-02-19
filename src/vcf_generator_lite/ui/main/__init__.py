@@ -7,6 +7,8 @@ from tkinter import filedialog, Event
 from tkinter.constants import *
 from tkinter.ttk import *
 
+from ttk_text.scrolled_text import ScrolledText
+
 from vcf_generator_lite.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE, URL_REPORT
 from vcf_generator_lite.ui.about import open_about_window
 from vcf_generator_lite.ui.base import BaseWindow, EVENT_EXIT
@@ -15,7 +17,6 @@ from vcf_generator_lite.util.menu import MenuCascade, MenuCommand, MenuSeparator
 from vcf_generator_lite.util.vcard import GenerateResult, VCardProcessor
 from vcf_generator_lite.util.widget import get_auto_wrap_event
 from vcf_generator_lite.widget.menu import TextContextMenu
-from vcf_generator_lite.widget.scrolled_text import ScrolledText
 
 MAX_INVALID_COUNT = 200
 
@@ -63,13 +64,13 @@ class MainWindow(BaseWindow):
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def _create_menus(self):
-        self.add_menus(
+        self.add_menu_bar_items(
             MenuCascade(
                 label="文件(&F)",
                 items=[
                     MenuCommand(
                         label="退出(&X)",
-                        command=self.quit,
+                        command=lambda: self.event_generate(EVENT_EXIT),
                         accelerator="Alt + F4",
                     )
                 ]
@@ -77,6 +78,17 @@ class MainWindow(BaseWindow):
             MenuCascade(
                 label="编辑(&E)",
                 items=[
+                    MenuCommand(
+                        label="撤销(&U)",
+                        command=lambda: self.focus_get().event_generate("<<Undo>>"),
+                        accelerator="Ctrl + Z",
+                    ),
+                    MenuCommand(
+                        label="重做(&R)",
+                        command=lambda: self.focus_get().event_generate("<<Redo>>"),
+                        accelerator="Ctrl + Y",
+                    ),
+                    MenuSeparator(),
                     MenuCommand(
                         label="剪切(&T)",
                         command=lambda: self.focus_get().event_generate("<<Cut>>"),

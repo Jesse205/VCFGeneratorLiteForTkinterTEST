@@ -12,7 +12,7 @@
 
 ## 提交反馈
 
-您可以在 [Gitee issues][IssuesOnGitee] 或 [GitHub issues][IssuesOnGithub] 平台中提交反馈。
+您可以在 [Gitee Issues][IssuesOnGitee] 或 [GitHub Issues][IssuesOnGithub] 平台中提交反馈。
 
 ## 参与开发
 
@@ -39,7 +39,7 @@
 
 - Python（`.py`）：[PEP8](https://www.python.org/dev/peps/pep-0008/)；
 - Markdown（`.md`）：[Markdownlint](https://github.com/DavidAnson/markdownlint)。
-  - 本项目未完全遵守 Markdownlint 规范，详情请参考 [.markdownlint.json](./.markdownlint.json)。
+   - 本项目未完全遵守 Markdownlint 规范，详情请参考 [.markdownlint.json](./.markdownlint.json)。
 
 详情请参考 [.editorconfig](./.editorconfig)。
 

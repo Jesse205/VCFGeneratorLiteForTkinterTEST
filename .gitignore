@@ -3,9 +3,6 @@
 .innosetup
 
 # IDE
-/.idea/*
-!/.idea/codeStyles
-!/.idea/runConfigurations
 
 # Build
 /build

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from tkinter import Menu
-from typing import Callable, Self, Optional
+from typing import Callable, Self, Optional, Literal
 
 
 @dataclass
@@ -8,6 +8,7 @@ class MenuCommand:
     label: str
     command: Optional[Callable[[], object | str]] = None
     accelerator: Optional[str] = None
+    state: Literal["normal", "active", "disabled"] = "normal"
 
 
 @dataclass
@@ -19,7 +20,9 @@ class MenuSeparator:
 class MenuCascade:
     label: str
     items: list[MenuCommand | MenuSeparator | Self]
+    accelerator: Optional[str] = None
     tearoff: bool = False
+    state: Literal["normal", "active", "disabled"] = "normal"
 
 
 type MenuItem = MenuCommand | MenuSeparator | MenuCascade
@@ -32,7 +35,7 @@ def _parse_label(label: str) -> tuple[str, int]:
     return label.replace("&", "", 1), label.find("&")
 
 
-def add_menus(menu: Menu, items: list[MenuItem]):
+def add_menu_items(menu: Menu, items: list[MenuItem]):
     """
     向给定的菜单对象中批量添加菜单项。
     """
@@ -44,15 +47,18 @@ def add_menus(menu: Menu, items: list[MenuItem]):
                 command=item.command,
                 underline=underline,
                 accelerator=item.accelerator,
+                state=item.state,
             )
         elif isinstance(item, MenuSeparator):
             menu.add_separator()
         elif isinstance(item, MenuCascade):
             label, underline = _parse_label(item.label)
             submenu = Menu(menu, tearoff=item.tearoff)
-            add_menus(submenu, item.items)
+            add_menu_items(submenu, item.items)
             menu.add_cascade(
                 label=label,
                 menu=submenu,
-                underline=underline
+                underline=underline,
+                accelerator=item.accelerator,
+                state=item.state,
             )

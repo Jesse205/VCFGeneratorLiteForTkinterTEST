@@ -9,6 +9,7 @@ license = { text = "MIT" }
 readme = "README.md"
 requires-python = "==3.13.*"
 dependencies = [
+    "ttk-text>=0.1.1"
 ]
 
 [dependency-groups]
@@ -45,3 +46,7 @@ is-purelib = true
 [tool.pdm.version]
 source = "file"
 path = "src/vcf_generator_lite/__init__.py"
+
+[[tool.pdm.source]]
+name = "pypi"
+url = "https://pypi.org/simple"

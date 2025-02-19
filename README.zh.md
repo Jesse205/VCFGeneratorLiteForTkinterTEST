@@ -14,7 +14,7 @@
 **语言：**
 **中文** |
 [English](./README.md) |
-<small>期待你的翻译！</small>
+<small>期待您的翻译！</small>
 
 _该应用程序目前仅支持中文。_
 
