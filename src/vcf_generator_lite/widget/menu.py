@@ -40,7 +40,7 @@ class TextContextMenu(Menu):
                     label="重做(&R)",
                     command=lambda: self.master.event_generate("<<Redo>>"),
                 ),
-                MenuSeparator(),
+                MenuSeparator,
                 MenuCommand(
                     label="剪切(&T)",
                     command=lambda: self.master.event_generate("<<Cut>>"),
@@ -67,7 +67,7 @@ class TextContextMenu(Menu):
                 ),
             ])
         add_menu_items(self, [
-            MenuSeparator(),
+            MenuSeparator,
             MenuCommand(
                 label="全选(&A)",
                 command=lambda: self.master.event_generate("<<SelectAll>>"),

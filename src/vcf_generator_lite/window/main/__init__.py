@@ -88,7 +88,7 @@ class MainWindow(BaseWindow):
                         command=lambda: self.focus_get().event_generate("<<Redo>>"),
                         accelerator="Ctrl + Y",
                     ),
-                    MenuSeparator(),
+                    MenuSeparator,
                     MenuCommand(
                         label="剪切(&T)",
                         command=lambda: self.focus_get().event_generate("<<Cut>>"),
@@ -104,7 +104,7 @@ class MainWindow(BaseWindow):
                         command=lambda: self.focus_get().event_generate("<<Paste>>"),
                         accelerator="Ctrl + V",
                     ),
-                    MenuSeparator(),
+                    MenuSeparator,
                     MenuCommand(
                         label="移除引号",
                         command=lambda: self.event_generate(EVENT_ON_CLEAN_QUOTES_CLICK),
@@ -122,7 +122,7 @@ class MainWindow(BaseWindow):
                         label="版本发布网址(&R)",
                         command=lambda: webbrowser.open(URL_RELEASES),
                     ),
-                    MenuSeparator(),
+                    MenuSeparator,
                     MenuCommand(
                         label="提交反馈(&F)",
                         command=lambda: webbrowser.open(URL_REPORT),

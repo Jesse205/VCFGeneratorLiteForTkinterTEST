@@ -25,7 +25,7 @@ class MenuCascade:
     state: Literal["normal", "active", "disabled"] = "normal"
 
 
-type MenuItem = MenuCommand | MenuSeparator | MenuCascade
+type MenuItem = MenuCommand | MenuSeparator | MenuCascade | type[MenuSeparator]
 
 
 def _parse_label(label: str) -> tuple[str, int]:
