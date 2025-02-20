@@ -5,7 +5,7 @@ from typing import Optional
 
 from vcf_generator_lite import __version__
 from vcf_generator_lite import constants
-from vcf_generator_lite.ui.base import BaseDialog
+from vcf_generator_lite.window.base import BaseDialog
 from vcf_generator_lite.util.resource import get_about_html, get_asset_data
 from vcf_generator_lite.util.style.font import extend_font
 from vcf_generator_lite.widget.menu import TextContextMenu

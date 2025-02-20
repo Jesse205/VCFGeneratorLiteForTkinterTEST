@@ -10,8 +10,8 @@ from tkinter.ttk import Label, Frame, Sizegrip, Progressbar, Button
 from ttk_text.scrolled_text import ScrolledText
 
 from vcf_generator_lite.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE, URL_REPORT
-from vcf_generator_lite.ui.about import open_about_window
-from vcf_generator_lite.ui.base import BaseWindow, EVENT_EXIT
+from vcf_generator_lite.window.about import open_about_window
+from vcf_generator_lite.window.base import BaseWindow, EVENT_EXIT
 from vcf_generator_lite.util import dialog
 from vcf_generator_lite.util.menu import MenuCascade, MenuCommand, MenuSeparator
 from vcf_generator_lite.util.vcard import GenerateResult, VCardProcessor
