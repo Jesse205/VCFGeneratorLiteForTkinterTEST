@@ -1,4 +1,5 @@
 import logging
+import re
 import sys
 from tkinter import *
 from typing import Union, Optional
@@ -29,7 +30,8 @@ class WindowExtension(Misc, Wm):
         self.__apply_default_events()
 
         self.on_init_window()
-        self.center_window()
+        self.center_window(self.master)
+
         # 延迟0秒调用center_window，修复WSL中窗口大小获取不正确
         # after_idle不起作用
         if sys.platform == "linux":
@@ -75,16 +77,26 @@ class WindowExtension(Misc, Wm):
                 raise TypeError(f"{key} 的值 {value} 必须为 int 或 float")
         return new_kw
 
-    def center_window(self):
+    def center_window(self, relative_widget: Misc | Wm = None):
         self.update_idletasks()
         window_width = self.winfo_width()
         window_height = self.winfo_height()
-        # maxsize不会包含任务栏高度，但是maxsize的值也会算上副屏，所以为了防止窗口超出当前屏幕，这里取最小值
-        max_width, max_height = self.maxsize()
-        container_width = min(max_width, self.winfo_screenwidth())
-        container_height = min(max_height, self.winfo_screenheight())
-        location_x = max(int((container_width - window_width) / 2), 0)
-        location_y = max(int((container_height - window_height) / 2), 0)
+
+        if relative_widget is not None and relative_widget.geometry():
+            match = re.match(r"(\d+)x(\d+)\+(\d+)\+(\d+)", relative_widget.geometry())
+            container_x = int(match.group(3))
+            container_y = int(match.group(4))
+            container_width = int(match.group(1))
+            container_height = int(match.group(2))
+        else:
+            # maxsize不会包含任务栏高度，但是maxsize的值也会算上副屏，所以为了防止窗口超出当前屏幕，这里取最小值
+            max_width, max_height = self.maxsize()
+            container_x = 0
+            container_y = 0
+            container_width = min(max_width, self.winfo_screenwidth())
+            container_height = min(max_height, self.winfo_screenheight())
+        location_x = container_x + max(int((container_width - window_width) / 2), 0)
+        location_y = container_y + max(int((container_height - window_height) / 2), 0)
         self.geometry(f"+{location_x}+{location_y}")
 
     def add_menu_bar_items(self, *items: MenuItem):
