@@ -49,7 +49,7 @@ def add_menu_items(menu: Menu, items: list[MenuItem]):
                 accelerator=item.accelerator,
                 state=item.state,
             )
-        elif isinstance(item, MenuSeparator):
+        elif isinstance(item, MenuSeparator) or (type(item) == type and issubclass(item, MenuSeparator)):
             menu.add_separator()
         elif isinstance(item, MenuCascade):
             label, underline = _parse_label(item.label)
