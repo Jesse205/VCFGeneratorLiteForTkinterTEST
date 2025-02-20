@@ -1,6 +1,6 @@
-import tkinter as tk
-from tkinter import *
-from tkinter.ttk import *
+from tkinter import PhotoImage, Misc, Event, Frame as TkFrame, Label as TkLabel
+from tkinter.constants import *
+from tkinter.ttk import Style, Frame, Button, Label
 from typing import Optional
 
 from vcf_generator_lite import __version__
@@ -48,21 +48,21 @@ class AboutWindow(BaseDialog):
             master=self,
             data=get_asset_data("images/icon-48.png")
         )  # 保存到 Window 中防止回收内存
-        app_icon_label = tk.Label(header_frame, image=self.app_icon_image, background=header_background,
-                                  width="48p", height="48p")
+        app_icon_label = TkLabel(header_frame, image=self.app_icon_image, background=header_background,
+                                 width="48p", height="48p")
         app_icon_label.pack(side=LEFT, padx="10p", pady="10p")
 
-        app_info_frame = tk.Frame(header_frame, background=header_background)
+        app_info_frame = TkFrame(header_frame, background=header_background)
         app_info_frame.pack(side=LEFT, anchor=CENTER, fill=X, expand=True, padx=(0, "10p"), pady="10p")
 
-        app_name_label = tk.Label(
+        app_name_label = Label(
             app_info_frame,
             text=f"{constants.APP_NAME} v{__version__}",
-            background=header_background
+            background=header_background,
+            font=extend_font("TkDefaultFont", size=16)
         )
-        app_name_label.configure(font=extend_font(app_name_label.cget("font"), size=16))
         app_name_label.pack(anchor=W)
-        app_copyright_label = tk.Label(app_info_frame, text=constants.APP_COPYRIGHT, background=header_background)
+        app_copyright_label = Label(app_info_frame, text=constants.APP_COPYRIGHT, background=header_background)
         app_copyright_label.pack(anchor=W)
         return header_frame
 

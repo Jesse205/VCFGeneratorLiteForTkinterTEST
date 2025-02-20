@@ -5,7 +5,7 @@ from concurrent.futures import Future
 from concurrent.futures.thread import ThreadPoolExecutor
 from tkinter import filedialog, Event
 from tkinter.constants import *
-from tkinter.ttk import *
+from tkinter.ttk import Label, Frame, Sizegrip, Progressbar, Button
 
 from ttk_text.scrolled_text import ScrolledText
 
