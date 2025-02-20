@@ -14,6 +14,8 @@ class BaseTheme(Theme):
         font = nametofont("TkDefaultFont")
         font.configure(size=12)
         master.option_add("*font", font, "widgetDefault")
+        master.option_add("*TextFrame.Text.width", 0, "widgetDefault")
+        master.option_add("*TextFrame.Text.height", 0, "widgetDefault")
         style = Style(master)
         self.apply_theme_with_style(master, style)
 
