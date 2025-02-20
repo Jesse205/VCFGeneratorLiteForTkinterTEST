@@ -9,7 +9,7 @@ license = { text = "MIT" }
 readme = "README.md"
 requires-python = "==3.13.*"
 dependencies = [
-    "ttk-text>=0.1.1"
+    "ttk-text>=0.1.2"
 ]
 
 [dependency-groups]
