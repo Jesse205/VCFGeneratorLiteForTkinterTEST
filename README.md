@@ -113,13 +113,34 @@ System-specific packages:
 
 ## License
 
-This project is open source under the [MIT license](./LICENSE)
+This project is released under the Apache 2.0 license.For details,please refer to [LICENSE](./LICENSE).
 
-- [Fluent Emoji](https://github.com/microsoft/fluentui-emoji)(used as application icon): MIT license
-- [Python](https://www.python.org/): [Python license](https://docs.python.org/3/license.html)
-- [UPX](https://upx.github.io/)(for compressing code): GPL-2.0 license
-- [PyInstaller](https://pyinstaller.org/en/stable/)(for packaging as an APP): [GPL-2.0 license](https://pyinstaller.org/en/stable/license.html)
-- [tkhtmlview](https://github.com/bauripalash/tkhtmlview): MIT License
+```txt
+Copyright 2023-2025 Jesse205
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+
+## Open Source Notice
+
+| Project                               | License                               | Purpose                                        |
+| ------------------------------------- | ------------------------------------- | ---------------------------------------------- |
+| [Fluent Emoji][FluentEmojiRepository] | [MIT license][FluentEmojiLicense]     | Used as application icons                      |
+| [Python][CPythonRepository]           | [Python license][CPythonLicense]      | Provides runtime environment                   |
+| [UPX][UPXRepository]                  | [UPX license][UPXLicense]             | Code compression                               |
+| [PyInstaller][PyInstallerRepository]  | [GPL-2.0 license][PyInstallerLicense] | Packaging into an APP                          |
+| [tkhtmlview][TkhtmlviewRepository]    | [MIT License][TkhtmlviewLicense]      | Displaying HTML content (source code modified) |
+| [TtkText][TtkTextRepository]          | [MIT License][TtkTextLicense]         | Provides a rich-text editor for modern UI      |
 
 ## Development & Contribution
 
@@ -130,3 +151,17 @@ Please refer to the [Development Guide](./docs/dev/README.md) and the [Contribut
 [ReleaseOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
 [ReleaseOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
 [PythonWin7RepositoryOnGithub]: https://github.com/adang1345/PythonWin7
+
+[FluentEmojiRepository]: https://github.com/microsoft/fluentui-emoji
+[FluentEmojiLicense]: https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE
+[PythonHomepage]: https://www.python.org/
+[CPythonRepository]: https://github.com/python/cpython
+[CPythonLicense]: https://docs.python.org/3/license.html
+[UPXRepository]: https://github.com/upx/upx
+[UPXLicense]: https://github.com/upx/upx/blob/devel/LICENSE
+[PyInstallerRepository]: https://github.com/pyinstaller/pyinstaller
+[PyInstallerLicense]: https://pyinstaller.org/en/stable/license.html
+[TkhtmlviewRepository]: https://github.com/bauripalash/tkhtmlview
+[TkhtmlviewLicense]: https://github.com/bauripalash/tkhtmlview/blob/main/LICENSE
+[TtkTextRepository]: https://github.com/Jesse205/TtkText
+[TtkTextLicense]: https://github.com/Jesse205/TtkText/blob/main/LICENSE

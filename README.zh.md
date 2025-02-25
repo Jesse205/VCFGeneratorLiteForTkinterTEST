@@ -110,6 +110,37 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 > 电话：13333333333
 > ```
 
+## 许可证
+
+本项目以 Apache 2.0 许可证发布，详情请参阅 [LICENSE](./LICENSE)。
+
+```txt
+Copyright 2023-2025 Jesse205
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+
+## 开源声明
+
+| 项目                                  | 许可证                                | 目的                           |
+| ------------------------------------- | ------------------------------------- | ------------------------------ |
+| [Fluent Emoji][FluentEmojiRepository] | [MIT license][FluentEmojiLicense]     | 用作应用图标                   |
+| [Python][CPythonRepository]           | [Python license][CPythonLicense]      | 提供运行时环境                 |
+| [UPX][UPXRepository]                  | [UPX license][UPXLicense]             | 压缩代码                       |
+| [PyInstaller][PyInstallerRepository]  | [GPL-2.0 license][PyInstallerLicense] | 打包为 APP                     |
+| [tkhtmlview][TkhtmlviewRepository]    | [MIT License][TkhtmlviewLicense]      | 显示 HTML 内容（已修改源代码） |
+| [TtkText][TtkTextRepository]          | [MIT License][TtkTextLicense]         | 提供现代UI的富文本编辑器       |
+
 ## 开发与贡献
 
 请参阅[《开发指南》](./docs/dev/README.md)与[《贡献指南》](./CONTRIBUTING.zh.md)。
@@ -119,3 +150,17 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 [ReleaseOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
 [ReleaseOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
 [PythonWin7RepositoryOnGithub]: https://github.com/adang1345/PythonWin7
+
+[FluentEmojiRepository]: https://github.com/microsoft/fluentui-emoji
+[FluentEmojiLicense]: https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE
+[PythonHomepage]: https://www.python.org/
+[CPythonRepository]: https://github.com/python/cpython
+[CPythonLicense]: https://docs.python.org/3/license.html
+[UPXRepository]: https://github.com/upx/upx
+[UPXLicense]: https://github.com/upx/upx/blob/devel/LICENSE
+[PyInstallerRepository]: https://github.com/pyinstaller/pyinstaller
+[PyInstallerLicense]: https://pyinstaller.org/en/stable/license.html
+[TkhtmlviewRepository]: https://github.com/bauripalash/tkhtmlview
+[TkhtmlviewLicense]: https://github.com/bauripalash/tkhtmlview/blob/main/LICENSE
+[TtkTextRepository]: https://github.com/Jesse205/TtkText
+[TtkTextLicense]: https://github.com/Jesse205/TtkText/blob/main/LICENSE
