@@ -76,4 +76,4 @@ class TextContextMenu(Menu):
         self.tk_popup(x, y)
 
     def bind_to_widget(self):
-        self.master.bind("<Button-3>", lambda event: self.show(event.x_root, event.y_root), add="+")
+        self.master.bind("<<ContextMenu>>", lambda event: self.show(event.x_root, event.y_root), add="+")
