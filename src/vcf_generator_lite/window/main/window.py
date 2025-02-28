@@ -5,13 +5,14 @@ from typing import override
 
 from ttk_text.scrolled_text import ScrolledText
 
-from vcf_generator_lite.constants import APP_NAME, DEFAULT_INPUT_CONTENT, URL_RELEASES, URL_REPORT, URL_SOURCE, USAGE
+from vcf_generator_lite.constants import APP_NAME, URL_RELEASES, URL_REPORT, URL_SOURCE
 from vcf_generator_lite.util.tkinter.menu import MenuBarWindowExtension, MenuCascade, MenuCommand, MenuSeparator
 from vcf_generator_lite.util.tkinter.widget import auto_wrap_configure_event
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.window.base import ExtendedTk
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
-from vcf_generator_lite.window.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE
+from vcf_generator_lite.window.main.constants import DEFAULT_INPUT_CONTENT, EVENT_ABOUT, EVENT_CLEAN_QUOTES, \
+    EVENT_GENERATE, USAGE
 
 
 class MainWindow(ExtendedTk, MenuBarWindowExtension):
