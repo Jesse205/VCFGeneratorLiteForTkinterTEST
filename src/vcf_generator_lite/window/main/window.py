@@ -5,7 +5,7 @@ from typing import override
 
 from ttk_text.scrolled_text import ScrolledText
 
-from vcf_generator_lite.constants import APP_NAME, URL_RELEASES, URL_REPORT, URL_SOURCE
+from vcf_generator_lite.constants import APP_NAME, URL_LICENSE, URL_RELEASES, URL_REPORT, URL_SOURCE
 from vcf_generator_lite.util.tkinter.menu import MenuBarWindowExtension, MenuCascade, MenuCommand, MenuSeparator
 from vcf_generator_lite.util.tkinter.widget import auto_wrap_configure_event
 from vcf_generator_lite.widget.menu import TextContextMenu
@@ -96,6 +96,12 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
                     ),
                     MenuSeparator,
                     MenuCommand(
+                        label="全选(&A)",
+                        command=lambda: self.focus_get().event_generate("<<SelectAll>>"),
+                        accelerator="Ctrl + A",
+                    ),
+                    MenuSeparator,
+                    MenuCommand(
                         label="移除引号",
                         command=lambda: self.event_generate(EVENT_CLEAN_QUOTES),
                     ),
@@ -114,9 +120,15 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
                     ),
                     MenuSeparator,
                     MenuCommand(
-                        label="提交反馈(&F)",
+                        label="提交反馈(&F)…",
                         command=lambda: webbrowser.open(URL_REPORT),
                     ),
+                    MenuSeparator,
+                    MenuCommand(
+                        label="许可协议(&L)",
+                        command=lambda: webbrowser.open(URL_LICENSE),
+                    ),
+                    MenuSeparator,
                     MenuCommand(
                         label="关于 VCF 生成器 Lite(&A)",
                         command=lambda: self.event_generate(EVENT_ABOUT),
