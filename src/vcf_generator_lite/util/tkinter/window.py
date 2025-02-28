@@ -4,6 +4,8 @@ from contextlib import contextmanager
 from tkinter import Misc, Tk, Toplevel, Wm
 from typing import Optional
 
+from vcf_generator_lite.util.environment import is_windows
+
 type Window = Tk | Toplevel
 
 
@@ -24,12 +26,15 @@ def center_window(window: WindowOrExtension, parent: WindowOrExtension = None):
     vroot_y = window.winfo_vrooty()
     window_max_x = vroot_x + vroot_width - window_width
     window_max_y = vroot_y + vroot_height - window_height
-
-    if parent is not None and parent.geometry():
+    if parent is not None:
         # 使用geometry获取包含窗口修饰的窗口位置
         match = re.match(r"(-?\d+)x(-?\d+)\+(-?\d+)\+(-?\d+)", parent.geometry())
         parent_x = int(match.group(3))
         parent_y = int(match.group(4))
+        # 当窗口最大化时，geometry获取到的位置仍然是正常位置，所以要特殊判断
+        if is_windows and parent.wm_state() == "zoomed":
+            parent_x = window.winfo_vrootx()
+            parent_y = window.winfo_vrooty()
         parent_width = parent.winfo_width()
         parent_height = parent.winfo_height()
         x = parent_x + (parent_width - window_width) // 2
