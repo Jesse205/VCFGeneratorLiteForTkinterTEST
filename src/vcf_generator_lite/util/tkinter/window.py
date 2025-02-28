@@ -105,6 +105,12 @@ class GeometryWindowExtension(ScalingWindowExtension, WindowExtension, ABC):
 
 @contextmanager
 def withdraw_cm(wm: Wm):
+    """
+    窗口隐藏上下文管理器
+
+    专门解决 Tkinter 窗口初始化时因设置属性导致的闪烁问题。通过上下文管理器在初始化期间隐藏窗口，
+    所有属性配置完成后再显示窗口，避免窗口在左上角短暂闪现的异常现象。
+    """
     wm.wm_withdraw()
     yield
     wm.wm_deiconify()

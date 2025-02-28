@@ -31,7 +31,7 @@ class GenerateResult:
     exceptions: list[BaseException]
 
 
-def generate_vcard(contact: Contact):
+def serialize_to_vcard(contact: Contact):
     name_encoded = binascii.b2a_qp(contact.name.encode("utf-8")).decode("utf-8")
     return f"""BEGIN:VCARD
 VERSION:2.1
@@ -55,18 +55,18 @@ class VCardProcessor:
         for callback in self._progress_callbacks:
             callback(progress, determinate)
 
-    def generate(self, input_text: str, output_io: IO) -> Future[GenerateResult]:
+    def start(self, input_text: str, output_io: IO) -> Future[GenerateResult]:
         """启动生成任务"""
         write_queue = Queue()
         future = self.executor.submit(
-            self._process_content,
+            self._process,
             input_text,
             write_queue,
             output_io
         )
         return future
 
-    def _process_content(
+    def _process(
         self,
         input_text: str,
         write_queue: Queue,
@@ -121,7 +121,7 @@ class VCardProcessor:
             for idx, line in enumerate(items, 1):
                 try:
                     contact = parse_contact(line)
-                    vcard = generate_vcard(contact)
+                    vcard = serialize_to_vcard(contact)
                     write_queue.put(vcard)
                 except ValueError as e:
                     logger.error(f"Invalid line {idx}: {e}")

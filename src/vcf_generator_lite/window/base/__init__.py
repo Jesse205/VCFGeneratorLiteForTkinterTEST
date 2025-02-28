@@ -1,14 +1,13 @@
 import logging
 from abc import ABC, abstractmethod
-from tkinter import *
+from tkinter import PhotoImage, Tk, Toplevel, Wm
 from typing import override
 
 from vcf_generator_lite.theme import get_platform_theme
 from vcf_generator_lite.util.display import get_scale_factor
 from vcf_generator_lite.util.resource import get_asset_data
 from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GeometryWindowExtension, \
-    ScalingWindowExtension, WindowExtension, \
-    withdraw_cm
+    ScalingWindowExtension, WindowExtension, withdraw_cm
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
 
 __all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
@@ -17,7 +16,16 @@ logger = logging.getLogger(__name__)
 
 
 class AppWindowExtension(GeometryWindowExtension, ScalingWindowExtension, CenterWindowExtension, WindowExtension, ABC):
+    """
+    应用程序窗口扩展基类，集成多个窗口功能扩展
 
+    特性：
+    - 继承 GeometryWindowExtension: 提供基于物理/虚拟像素的窗口尺寸控制
+    - 继承 ScalingWindowExtension: 支持高DPI屏幕的自适应缩放
+    - 继承 CenterWindowExtension: 实现窗口居中显示功能
+    - 继承 WindowExtension: 基础窗口功能扩展
+    - 抽象类要求子类必须实现 on_init_window 方法
+    """
     def __init__(self):
         super().__init__()
         self.__apply_default_scaling()
