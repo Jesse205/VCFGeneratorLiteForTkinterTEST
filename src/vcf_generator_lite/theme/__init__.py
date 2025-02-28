@@ -1,7 +1,7 @@
 import logging
-import sys
 from typing import Optional
 
+from vcf_generator_lite.util.environment import is_windows
 from vcf_generator_lite.util.tkinter.theme import Theme
 
 __all__ = ["get_platform_theme"]
@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def create_theme() -> Theme:
-    if sys.platform == "win32":
+    if is_windows:
         from vcf_generator_lite.theme.widows_theme import WindowsTheme
         return WindowsTheme()
 
