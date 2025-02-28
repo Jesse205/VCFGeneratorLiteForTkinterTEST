@@ -24,20 +24,20 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
     @override
     def on_init_window(self):
         self.title(APP_NAME)
-        self.wm_minsize_pt(400, 400)
-        self.wm_size_pt(600, 600)
+        self.wm_minsize_pt(300, 300)
+        self.wm_size_pt(450, 450)
         self._create_widgets()
         self._create_menus()
 
     def _create_widgets(self):
         description_label = Label(self, text=USAGE, justify=LEFT)
         description_label.bind("<Configure>", auto_wrap_configure_event, "+")
-        description_label.pack(fill=X, padx="10p", pady="10p")
+        description_label.pack(fill=X, padx="8.25p", pady="8.25p")
 
         self.text_input = ScrolledText(self, undo=True, tabs="2c", tabstyle="wordprocessor")
         self.text_input.insert(0.0, DEFAULT_INPUT_CONTENT)
         self.text_input.edit_reset()
-        self.text_input.pack(fill=BOTH, expand=True, padx="10p", pady=0)
+        self.text_input.pack(fill=BOTH, expand=True, padx="8.25p", pady=0)
         self.text_context_menu = TextContextMenu(self.text_input)
         self.text_context_menu.bind_to_widget()
 
@@ -51,7 +51,7 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
 
         self.generate_button = Button(action_frame, text="生成", default=ACTIVE,
                                       command=lambda: self.event_generate(EVENT_GENERATE))
-        self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
+        self.generate_button.pack(side=RIGHT, padx="8.25p", pady="8.25p")
 
     def _create_menus(self):
         self.add_menu_bar_items(
@@ -144,7 +144,7 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
         return self.text_input.get(1.0, END)[:-1]
 
     def show_progress_bar(self):
-        self.progress_bar.pack(side=LEFT, padx="10p", pady="10p")
+        self.progress_bar.pack(side=LEFT, padx="8.25p", pady="8.25p")
 
     def hide_progress_bar(self):
         self.progress_bar.pack_forget()

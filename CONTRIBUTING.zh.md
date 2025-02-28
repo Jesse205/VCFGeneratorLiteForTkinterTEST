@@ -19,9 +19,10 @@
 1. 确保 [Gitee][RepositoryOnGitee] 或 [GitHub][RepositoryOnGithub] 中没有相关的 PR；
 2. Fork 本项目；
 3. 使用 [Git](https://git-scm.com/) 克隆项目到本地；
-4. 创建分支，如 `feature/xxx` 或 `bugfix/xxx`；
-5. 编写并提交代码；
-6. 向本项目提交 Pull Request。
+4. 阅读[开发指南](./docs/dev/README.md)，熟悉项目开发方法；
+5. 创建分支，如 `feature/xxx` 或 `bugfix/xxx`；
+6. 编写并提交代码；
+7. 向本项目提交 Pull Request。
 
 此外，有一些规范规则，请遵守：
 

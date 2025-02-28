@@ -4,7 +4,6 @@ from tkinter import PhotoImage, Tk, Toplevel, Wm
 from typing import override
 
 from vcf_generator_lite.theme import get_platform_theme
-from vcf_generator_lite.util.display import get_scale_factor
 from vcf_generator_lite.util.resource import get_asset_data
 from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GeometryWindowExtension, \
     ScalingWindowExtension, WindowExtension, withdraw_cm
@@ -28,7 +27,6 @@ class AppWindowExtension(GeometryWindowExtension, ScalingWindowExtension, Center
     """
     def __init__(self):
         super().__init__()
-        self.__apply_default_scaling()
         self.__apply_default_icon()
         self.__apply_default_events()
         self.on_init_window()
@@ -36,9 +34,6 @@ class AppWindowExtension(GeometryWindowExtension, ScalingWindowExtension, Center
     @abstractmethod
     def on_init_window(self):
         pass
-
-    def __apply_default_scaling(self):
-        self.scaling(get_scale_factor(self))
 
     def __apply_default_icon(self):
         logger.debug(f"窗口 {self.winfo_name()} 默认图标为 icon-48.png")

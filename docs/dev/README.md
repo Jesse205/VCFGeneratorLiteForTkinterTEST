@@ -69,11 +69,13 @@ VCFGeneratorLiteForTkinter/
 
 ### 单位系统
 
-- **设计单位**：点（`p`）对应 **有效像素（epx）**；
+- **设计单位**：使用字体单位点（
+  `p`），是[有效像素（epx）](https://learn.microsoft.com/zh-cn/windows/apps/design/layout/screen-sizes-and-breakpoints-for-responsive-design#effective-pixels-and-scale-factor)的
+  **0.75** 倍；
    ```python
-   # 转换示例：12p 在 125% 缩放中表示为 15px
-   Label(root, text="示例", font=("微软雅黑", 12))  # 默认12p字体
+   # 转换示例：9p 在 100% 缩放中表示为 12px
+   Label(root, text="示例", font=("微软雅黑", 9))  # 默认9p字体
    ```
 - **布局原则**：
    - 尽量使用 `pack` 布局管理器，创建响应式 UI；
-   - 组件间距统一使用 `padx=10p, pady=10p`。
+  - 组件间距统一使用 `padx=8.25p, pady=8.25p`。

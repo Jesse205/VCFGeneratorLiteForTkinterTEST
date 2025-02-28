@@ -10,6 +10,6 @@ class WindowsTheme(BaseTheme):
     def apply_theme_with_style(self, master: Tk | Toplevel, style: Style):
         super().apply_theme_with_style(master, style)
         style.theme_use("vista")
-        style.configure("TButton", padding="2p")
+        style.configure("TButton", padding="1p")
         style.configure("InfoHeader.TFrame", background="systemWindow")
         style.configure("TextFrame.TEntry", padding=0, borderwidth="2p", bordercolor="SystemHighlight")

@@ -11,15 +11,15 @@ from tkinter import font
 
 # __________________________________________________________________________________________________
 class Defs:
-    FONT_SIZE = 12
+    FONT_SIZE = 9
     PREFORMATTED_FONT_FAMILY = ("Courier", "DejaVu Sans Mono", "TkFixedFont")
     HEADINGS_FONT_SIZE = {
-        "h1": 38,
-        "h2": 28,
-        "h3": 24,
-        "h4": 20,
-        "h5": 16,
-        "h6": 16,
+        "h1": 28.5,
+        "h2": 21,
+        "h3": 18,
+        "h4": 15,
+        "h5": 12,
+        "h6": 12,
     }
 
 
