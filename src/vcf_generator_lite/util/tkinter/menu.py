@@ -1,6 +1,9 @@
+from abc import ABC
 from dataclasses import dataclass
 from tkinter import Menu
 from typing import Callable, Self, Optional, Literal
+
+from vcf_generator_lite.util.tkinter.window import WindowExtension
 
 
 @dataclass
@@ -62,3 +65,13 @@ def add_menu_items(menu: Menu, items: list[MenuItem]):
                 accelerator=item.accelerator,
                 state=item.state,
             )
+
+
+class MenuBarWindowExtension(WindowExtension, ABC):
+    menu_bar: Optional[Menu] = None
+
+    def add_menu_bar_items(self, *items: MenuItem):
+        if self.menu_bar is None:
+            self.menu_bar = Menu(self, tearoff=False)
+            self.configure({"menu": self.menu_bar})
+        add_menu_items(self.menu_bar, list(items))

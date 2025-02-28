@@ -1,26 +1,27 @@
-from tkinter import PhotoImage, Misc, Event, Frame as TkFrame, Label as TkLabel
+from tkinter import PhotoImage, Event, Frame as TkFrame, Label as TkLabel, Toplevel, Tk
 from tkinter.constants import *
 from tkinter.ttk import Style, Frame, Button, Label
-from typing import Optional
+from typing import Optional, override
 
 from vcf_generator_lite import __version__
 from vcf_generator_lite import constants
-from vcf_generator_lite.window.base import BaseDialog
+from vcf_generator_lite.window.base import ExtendedDialog
 from vcf_generator_lite.util.resource import get_about_html, get_asset_data
-from vcf_generator_lite.util.style.font import extend_font
+from vcf_generator_lite.util.tkinter.font import extend_font
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.widget.tkhtmlview import HTMLScrolledText
 
 EVENT_ON_OK_CLICK = "<<OnOkClick>>"
 
 
-class AboutWindow(BaseDialog):
+class AboutWindow(ExtendedDialog):
     app_icon_image = None
 
+    @override
     def on_init_window(self):
         super().on_init_window()
         self.title(f"关于 {constants.APP_NAME}")
-        self.set_size(500, 400)
+        self.wm_size_pt(500, 400)
         self._create_widgets()
 
     def _create_widgets(self):
@@ -91,11 +92,12 @@ def _on_destroy(event: Event):
         about_controller = None
 
 
-def open_about_window(master: Optional[Misc]) -> tuple[AboutWindow, AboutController]:
+def open_about_window(master: Optional[Tk | Toplevel]) -> tuple[AboutWindow, AboutController]:
     global about_window, about_controller
     if about_window is None or not about_window.winfo_exists():
         about_window = AboutWindow(master)
         about_controller = AboutController(about_window)
         about_window.bind("<Destroy>", _on_destroy, "+")
+        about_window.bind("<<Generate>>", print, "+")
     about_window.focus()
     return about_window, about_controller

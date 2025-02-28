@@ -1,7 +1,7 @@
 from tkinter import *
 from typing import Union, Literal
 
-from vcf_generator_lite.util.menu import add_menu_items, MenuCommand, MenuSeparator
+from vcf_generator_lite.util.tkinter.menu import add_menu_items, MenuCommand, MenuSeparator
 
 
 def boolean_to_state(state: bool) -> Literal["normal", "disabled"]:

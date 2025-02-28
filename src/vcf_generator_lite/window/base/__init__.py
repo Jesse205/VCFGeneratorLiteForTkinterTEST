@@ -1,125 +1,67 @@
 import logging
-import re
-import sys
+from abc import ABC, abstractmethod
 from tkinter import *
-from typing import Union, Optional
+from typing import override
 
 from vcf_generator_lite.theme import get_platform_theme
 from vcf_generator_lite.util.display import get_scale_factor
-from vcf_generator_lite.util.menu import add_menu_items, MenuItem
 from vcf_generator_lite.util.resource import get_asset_data
+from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GeometryWindowExtension, \
+    ScalingWindowExtension, WindowExtension, \
+    withdraw_cm
+from vcf_generator_lite.window.base.constants import EVENT_EXIT
 
-__all__ = ["BaseWindow", "BaseToplevel", "BaseDialog"]
+__all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
 
 logger = logging.getLogger(__name__)
 
-EVENT_EXIT = "<<Exit>>"
 
+class AppWindowExtension(GeometryWindowExtension, ScalingWindowExtension, CenterWindowExtension, WindowExtension, ABC):
 
-class WindowExtension(Misc, Wm):
-    _scale_factor = 1
-    menu_bar: Optional[Menu] = None
-
-    def on_init_window(self):
-        pass
-
-    def window_injector_init(self):
-        self.withdraw()
+    def __init__(self):
+        super().__init__()
         self.__apply_default_scaling()
         self.__apply_default_icon()
         self.__apply_default_events()
-
         self.on_init_window()
-        self.center_window(self.master)
 
-        # 延迟0秒调用center_window，修复WSL中窗口大小获取不正确
-        # after_idle不起作用
-        if sys.platform == "linux":
-            self.after(0, self.center_window)
-        self.deiconify()
+    @abstractmethod
+    def on_init_window(self):
+        pass
 
     def __apply_default_scaling(self):
-        self._scale_factor = get_scale_factor(self)
-        self.tk.call("tk", "scaling", self._scale_factor)
+        self.scaling(get_scale_factor(self))
 
     def __apply_default_icon(self):
-        logger.debug(f"窗口 {self.winfo_name()} 设置图标为 icon-48.png")
-        self.iconphoto(True, PhotoImage(data=get_asset_data("images/icon-48.png")))
+        logger.debug(f"窗口 {self.winfo_name()} 默认图标为 icon-48.png")
+        self.iconphoto(True, PhotoImage(master=self, data=get_asset_data("images/icon-48.png")))
 
     def __apply_default_events(self):
         self.protocol("WM_DELETE_WINDOW", lambda: self.event_generate(EVENT_EXIT))
         self.bind(EVENT_EXIT, lambda _: self.destroy())
 
-    def get_scaled(self, size: int):
-        return int(size * self._scale_factor)
 
-    def get_scaled_float(self, size: float):
-        return size * self._scale_factor
-
-    def set_size(self, width: int, height: int):
-        """
-        设置窗口大小
-        注：窗口大小单位为虚拟像素
-        """
-        super().geometry(f"{self.get_scaled(width)}x{self.get_scaled(height)}")
-
-    def set_minsize(self, width: int, height: int):
-        super().minsize(self.get_scaled(width), self.get_scaled(height))
-
-    def scale_values(self, **kw: Union[int, float]):
-        new_kw = {}
-        for key, value in kw.items():
-            if isinstance(value, int):
-                new_kw[key] = self.get_scaled(value)
-            elif isinstance(value, float):
-                new_kw[key] = self.get_scaled_float(value)
-            else:
-                raise TypeError(f"{key} 的值 {value} 必须为 int 或 float")
-        return new_kw
-
-    def center_window(self, relative_widget: Misc | Wm = None):
-        self.update_idletasks()
-        window_width = self.winfo_width()
-        window_height = self.winfo_height()
-
-        if relative_widget is not None and relative_widget.geometry():
-            match = re.match(r"(\d+)x(\d+)\+(\d+)\+(\d+)", relative_widget.geometry())
-            container_x = int(match.group(3))
-            container_y = int(match.group(4))
-            container_width = int(match.group(1))
-            container_height = int(match.group(2))
-        else:
-            # maxsize不会包含任务栏高度，但是maxsize的值也会算上副屏，所以为了防止窗口超出当前屏幕，这里取最小值
-            max_width, max_height = self.maxsize()
-            container_x = 0
-            container_y = 0
-            container_width = min(max_width, self.winfo_screenwidth())
-            container_height = min(max_height, self.winfo_screenheight())
-        location_x = container_x + max(int((container_width - window_width) / 2), 0)
-        location_y = container_y + max(int((container_height - window_height) / 2), 0)
-        self.geometry(f"+{location_x}+{location_y}")
-
-    def add_menu_bar_items(self, *items: MenuItem):
-        if self.menu_bar is None:
-            self.menu_bar = Menu(self, tearoff=False)
-            self.configure({"menu": self.menu_bar})
-        add_menu_items(self.menu_bar, list(items))
+class ExtendedTk(Tk, AppWindowExtension, ABC):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        with withdraw_cm(self):
+            get_platform_theme().apply_theme(self)
+            AppWindowExtension.__init__(self)
+            self.center()
 
 
-class BaseWindow(Tk, WindowExtension):
-    def __init__(self, screenName=None, baseName=None, className="Tk", useTk=True, sync=False, use=None):
-        super().__init__(screenName, baseName, className, useTk, sync, use)
-        get_platform_theme().apply_theme(self)
-        self.window_injector_init()
+class ExtendedToplevel(Toplevel, AppWindowExtension, ABC):
+    def __init__(self, master: Tk | Toplevel, **kw):
+        super().__init__(master, **kw)
+        with withdraw_cm(self):
+            AppWindowExtension.__init__(self)
+            if isinstance(self.master, Tk) or isinstance(self.master, Toplevel):
+                self.center(self.master)
 
 
-class BaseToplevel(Toplevel, WindowExtension):
-    def __init__(self, master=None, cnf={}, **kw):
-        super().__init__(master, cnf, **kw)
-        self.window_injector_init()
-
-
-class BaseDialog(BaseToplevel):
+class ExtendedDialog(ExtendedToplevel, ABC):
+    @abstractmethod
+    @override
     def on_init_window(self):
         self.bind("<Escape>", lambda _: self.event_generate(EVENT_EXIT))
 

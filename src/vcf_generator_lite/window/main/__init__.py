@@ -3,45 +3,43 @@ import traceback
 import webbrowser
 from concurrent.futures import Future
 from concurrent.futures.thread import ThreadPoolExecutor
-from tkinter import filedialog, Event
+from tkinter import Event, filedialog
 from tkinter.constants import *
-from tkinter.ttk import Label, Frame, Sizegrip, Progressbar, Button
+from tkinter.ttk import Button, Frame, Label, Progressbar, Sizegrip
+from typing import override
 
 from ttk_text.scrolled_text import ScrolledText
 
-from vcf_generator_lite.constants import URL_RELEASES, URL_SOURCE, APP_NAME, DEFAULT_INPUT_CONTENT, USAGE, URL_REPORT
-from vcf_generator_lite.window.about import open_about_window
-from vcf_generator_lite.window.base import BaseWindow, EVENT_EXIT
-from vcf_generator_lite.util import dialog
-from vcf_generator_lite.util.menu import MenuCascade, MenuCommand, MenuSeparator
+from vcf_generator_lite.constants import APP_NAME, DEFAULT_INPUT_CONTENT, URL_RELEASES, URL_REPORT, URL_SOURCE, USAGE
+from vcf_generator_lite.util.tkinter import dialog
+from vcf_generator_lite.util.tkinter.menu import MenuBarWindowExtension, MenuCascade, MenuCommand, MenuSeparator
+from vcf_generator_lite.util.tkinter.widget import auto_wrap_configure_event
 from vcf_generator_lite.util.vcard import GenerateResult, VCardProcessor
-from vcf_generator_lite.util.widget import get_auto_wrap_event
 from vcf_generator_lite.widget.menu import TextContextMenu
+from vcf_generator_lite.window.about import open_about_window
+from vcf_generator_lite.window.base import ExtendedTk
+from vcf_generator_lite.window.base.constants import EVENT_EXIT
+from vcf_generator_lite.window.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, \
+    EVENT_GENERATE, MAX_INVALID_COUNT
 
-MAX_INVALID_COUNT = 200
 
-EVENT_ON_ABOUT_CLICK = "<<OnAboutClick>>"
-EVENT_ON_CLEAN_QUOTES_CLICK = "<<OnCleanQuotesClick>>"
-EVENT_ON_GENERATE_CLICK = "<<OnGenerateClick>>"
-
-
-class MainWindow(BaseWindow):
+class MainWindow(ExtendedTk, MenuBarWindowExtension):
     generate_button = None
     text_input = None
     text_context_menu = None
     progress_bar = None
 
+    @override
     def on_init_window(self):
-        self.anchor(CENTER)
         self.title(APP_NAME)
-        self.set_minsize(400, 400)
-        self.set_size(600, 600)
+        self.wm_minsize_pt(400, 400)
+        self.wm_size_pt(600, 600)
         self._create_widgets()
         self._create_menus()
 
     def _create_widgets(self):
         description_label = Label(self, text=USAGE, justify=LEFT)
-        description_label.bind("<Configure>", get_auto_wrap_event(description_label))
+        description_label.bind("<Configure>", auto_wrap_configure_event, "+")
         description_label.pack(fill=X, padx="10p", pady="10p")
 
         self.text_input = ScrolledText(self, undo=True, tabs="2c", tabstyle="wordprocessor")
@@ -60,7 +58,7 @@ class MainWindow(BaseWindow):
         self.progress_bar = Progressbar(action_frame, orient=HORIZONTAL, length=200)
 
         self.generate_button = Button(action_frame, text="生成", default=ACTIVE,
-                                      command=lambda: self.event_generate(EVENT_ON_GENERATE_CLICK))
+                                      command=lambda: self.event_generate(EVENT_GENERATE))
         self.generate_button.pack(side=RIGHT, padx="10p", pady="10p")
 
     def _create_menus(self):
@@ -107,7 +105,7 @@ class MainWindow(BaseWindow):
                     MenuSeparator,
                     MenuCommand(
                         label="移除引号",
-                        command=lambda: self.event_generate(EVENT_ON_CLEAN_QUOTES_CLICK),
+                        command=lambda: self.event_generate(EVENT_CLEAN_QUOTES),
                     ),
                 ]
             ),
@@ -129,7 +127,7 @@ class MainWindow(BaseWindow):
                     ),
                     MenuCommand(
                         label="关于 VCF 生成器 Lite(&A)",
-                        command=lambda: self.event_generate(EVENT_ON_ABOUT_CLICK),
+                        command=lambda: self.event_generate(EVENT_ABOUT),
                     )
                 ]
             )
@@ -174,26 +172,26 @@ class MainController:
 
     def __init__(self, window: MainWindow):
         self.window = window
-        window.bind(EVENT_ON_ABOUT_CLICK, self.on_about_click)
-        window.bind(EVENT_ON_CLEAN_QUOTES_CLICK, self.on_clean_quotes_click)
-        window.bind(EVENT_ON_GENERATE_CLICK, self.on_generate_click)
-        window.bind("<Control-S>", self.on_generate_click)
-        window.bind("<Control-s>", self.on_generate_click)
-        window.bind("<Return>", self.on_return_click)
+        window.bind(EVENT_ABOUT, self.on_about)
+        window.bind(EVENT_CLEAN_QUOTES, self.on_clean_quotes)
+        window.bind(EVENT_GENERATE, self.on_generate)
+        window.bind("<Control-Lock-S>", self.on_generate)
+        window.bind("<Control-s>", self.on_generate)
+        window.bind("<Return>", self.on_return)
         window.bind(EVENT_EXIT, self.on_exit)
 
-    def on_about_click(self, _):
+    def on_about(self, _):
         open_about_window(self.window)
 
-    def on_clean_quotes_click(self, _):
+    def on_clean_quotes(self, _):
         self._clean_quotes()
 
-    def on_return_click(self, event: Event):
+    def on_return(self, event: Event):
         if event.widget is self.window.text_input:
             return
         self.window.generate_button.invoke()
 
-    def on_generate_click(self, _):
+    def on_generate(self, _):
         text_content = self.window.get_text_content()
         file_io = filedialog.asksaveasfile(parent=self.window, initialfile="phones.vcf",
                                            filetypes=[("vCard 文件", ".vcf")], defaultextension=".vcf")

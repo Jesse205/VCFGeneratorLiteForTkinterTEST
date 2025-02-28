@@ -2,7 +2,7 @@ import logging
 import sys
 from typing import Optional
 
-from vcf_generator_lite.util.style.theme import Theme
+from vcf_generator_lite.util.tkinter.theme import Theme
 
 __all__ = ["get_platform_theme"]
 logger = logging.getLogger(__name__)
