@@ -15,7 +15,7 @@ def is_china_phone(phone: str) -> bool:
 
 
 def parse_contact(person_text: str):
-    info_list: list[str] = person_text.rsplit(" ", 1)
+    info_list: list[str] = person_text.rsplit(None, 1)
     if len(info_list) != 2:
         raise ValueError(f"The person info is illegal: '{person_text}'.")
     name, phone = info_list

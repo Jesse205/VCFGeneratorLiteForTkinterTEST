@@ -5,7 +5,7 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from tkinter import Event, filedialog
 
 from vcf_generator_lite.util.tkinter import dialog
-from vcf_generator_lite.util.vcard import GenerateResult, VCardProcessor
+from vcf_generator_lite.util.vcard import GenerateResult, VCardFileGenerator
 from vcf_generator_lite.window.about import open_about_window
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
 from vcf_generator_lite.window.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE, MAX_INVALID_COUNT
@@ -66,10 +66,10 @@ class MainController:
                 self.window.set_progress(progress)
 
         executor = ThreadPoolExecutor(max_workers=1)
-        processor = VCardProcessor(executor)
-        processor.add_progress_callback(on_update_progress)
-        progress_future = processor.start(text_content, file_io)
-        progress_future.add_done_callback(done)
+        generator = VCardFileGenerator(executor)
+        generator.add_progress_callback(on_update_progress)
+        generate_future = generator.start(text_content, file_io)
+        generate_future.add_done_callback(done)
         executor.shutdown(wait=False)
 
     def on_exit(self, _):
@@ -79,14 +79,13 @@ class MainController:
             self.window.destroy()
 
     def _show_generate_done_dialog(self, display_path: str, generate_result: GenerateResult):
-        invalid_items = generate_result.invalid_items
         title_success = "生成 VCF 文件成功"
         title_failure = "生成 VCF 文件失败"
         title_partial_failure = "生成 VCF 文件部分成功"
         message_success_template = "已导出文件到“{path}”。"
         message_failure_template = "生成 VCF 文件时出现未知异常：\n\n{content}"
         message_partial_failure_template = "以下电话号码无法识别：\n{content}\n\n已导出文件到 {path}，但异常的号码未包含在导出文件中。"
-        invalid_item_template = "第 {line} 行：{content}"
+        invalid_item_template = "第 {row_position} 行：{content}"
         ignored_template = "{content}... 等 {ignored_count} 个。"
 
         if generate_result.exceptions:
@@ -95,12 +94,12 @@ class MainController:
             ]
             dialog.show_error(self.window, title_failure,
                               message_failure_template.format(content="\n\n".join(formatted_exceptions)))
-        elif len(invalid_items) > 0:
+        elif len(generate_result.invalid_items) > 0:
             content = '，'.join([
-                invalid_item_template.format(line=item.line, content=item.content)
-                for item in invalid_items[0:MAX_INVALID_COUNT]
+                invalid_item_template.format(row_position=item.row_position, content=item.content)
+                for item in generate_result.invalid_items[0:MAX_INVALID_COUNT]
             ])
-            if (ignored_count := max(len(invalid_items) - MAX_INVALID_COUNT, 0)) > 0:
+            if (ignored_count := max(len(generate_result.invalid_items) - MAX_INVALID_COUNT, 0)) > 0:
                 content = ignored_template.format(content=content, ignored_count=ignored_count)
             dialog.show_warning(self.window, title_partial_failure, message_partial_failure_template.format(
                 content=content,

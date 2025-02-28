@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class OriginItem:
-    line: int
+    row_position: int
     content: str
 
 
@@ -40,7 +40,7 @@ TEL;CELL:{contact.phone}
 END:VCARD"""
 
 
-class VCardProcessor:
+class VCardFileGenerator:
 
     def __init__(self, executor: ThreadPoolExecutor):
         self.executor = executor
@@ -57,11 +57,10 @@ class VCardProcessor:
 
     def start(self, input_text: str, output_io: IO) -> Future[GenerateResult]:
         """启动生成任务"""
-        write_queue = Queue()
+
         future = self.executor.submit(
             self._process,
             input_text,
-            write_queue,
             output_io
         )
         return future
@@ -69,9 +68,9 @@ class VCardProcessor:
     def _process(
         self,
         input_text: str,
-        write_queue: Queue,
         output_io: IO
     ) -> GenerateResult:
+        write_queue = Queue()
         state = VCardProcessorState(
             total=0,
             processed=0,
@@ -101,7 +100,6 @@ class VCardProcessor:
             for future in done:
                 if exception := future.exception():
                     state.exceptions.append(exception)
-
         return GenerateResult(invalid_items=state.invalid_items, exceptions=state.exceptions)
 
     def _parse_input(
@@ -110,29 +108,27 @@ class VCardProcessor:
         write_queue: Queue,
         state: VCardProcessorState
     ):
-        try:
-            cleaned_content = input_text.replace("\t", " ").strip()
-            items = [
-                line.strip() for line in cleaned_content.split("\n")
-                if line.strip()
-            ]
-            state.total = len(items)
 
-            for idx, line in enumerate(items, 1):
-                try:
+        items = [line.strip() for line in input_text.split("\n")]
+        state.total = len(items)
+
+        for position, line in enumerate(items):
+            try:
+                if line.strip() != "":
                     contact = parse_contact(line)
                     vcard = serialize_to_vcard(contact)
                     write_queue.put(vcard)
-                except ValueError as e:
-                    logger.error(f"Invalid line {idx}: {e}")
-                    state.invalid_items.append(OriginItem(idx, line))
+                else:
                     self._update_progress(state, 1)
-                except Exception as e:
-                    logger.exception(f"Unexpected parsing error")
-                    state.exceptions.append(e)
-                    self._update_progress(state, 1)
-        finally:
-            write_queue.put(None)  # 结束信号
+            except ValueError as e:
+                logger.error(f"Invalid line {position}: {e}")
+                state.invalid_items.append(OriginItem(position, line))
+                self._update_progress(state, 1)
+            except Exception as e:
+                logger.exception(f"Unexpected parsing error")
+                state.exceptions.append(e)
+                self._update_progress(state, 1)
+        write_queue.put(None)  # 结束信号
 
     def _write_output(
         self,
@@ -143,6 +139,8 @@ class VCardProcessor:
         try:
             while (item := queue.get()) is not None:
                 output_io.write(item)
+                output_io.write("\n\n")
+                queue.task_done()
                 self._update_progress(state, 1)
         except IOError as e:
             logger.error(f"File write error %s", e)

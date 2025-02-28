@@ -9,7 +9,7 @@ license = { text = "MIT" }
 readme = "README.md"
 requires-python = "==3.13.*"
 dependencies = [
-    "ttk-text>=0.1.2"
+    "ttk-text>=0.1.3"
 ]
 
 [dependency-groups]
@@ -17,6 +17,7 @@ dev = [
     "pyinstaller<7.0.0,>=6.11.0",
     "pyinstaller-versionfile<4.0.0,>=3.0.0",
     "requests>=2.32.3",
+    "pytest>=8.3.4",
 ]
 
 [project.urls]
@@ -39,6 +40,7 @@ distribution = true
 build_app = { call = "scripts.build_app:main", help = "Build app." }
 prepare_innosetup_extensions = { call = "scripts.prepare_innosetup_extensions:main", help = "Download InnoSetup language files." }
 version = { call = "scripts.version:main", help = "Display or modify the project version number." }
+test = { shell = "pytest", help = "Run tests." }
 
 [tool.pdm.build]
 is-purelib = true
