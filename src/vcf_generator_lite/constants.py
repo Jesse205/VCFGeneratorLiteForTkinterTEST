@@ -1,4 +1,4 @@
-from vcf_generator_lite import __version__
+from vcf_generator_lite.__version__ import __version__
 
 APP_NAME = "VCF 生成器 Lite"
 APP_COPYRIGHT = "Copyright (c) 2023-2025 Jesse205"

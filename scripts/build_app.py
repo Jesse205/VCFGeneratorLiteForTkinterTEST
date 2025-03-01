@@ -9,11 +9,11 @@ import PyInstaller.__main__ as pyinstaller
 
 from scripts.prepare_innosetup_extensions import PATH_INNOSETUP_EXTENSION, main as prepare_innosetup_extensions
 from scripts.utils import get_bits
-from vcf_generator_lite import __version__ as app_version
+from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT
 
 PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
-OUTPUT_BASE_NAME = f"VCFGeneratorLite_v{app_version}_{get_bits()}bit"
+OUTPUT_BASE_NAME = f"VCFGeneratorLite_v{__version__}_{get_bits()}bit"
 
 
 def build_with_pyinstaller():
@@ -24,6 +24,7 @@ def build_with_pyinstaller():
 
 def build_with_pdm_packer():
     print("Building with pdm-packer...")
+    os.environ["PYTHONOPTIMIZE"] = "2"
     result = subprocess.run([
         shutil.which("pdm"),
         "pack",
@@ -48,7 +49,7 @@ def pack_with_innosetup() -> int:
         shutil.which("iscc"),
         "/D" + f"OutputBaseFilename={OUTPUT_BASE_NAME}_setup",
         "/D" + f"MyAppCopyright={APP_COPYRIGHT}",
-        "/D" + f"MyAppVersion={app_version}",
+        "/D" + f"MyAppVersion={__version__}",
         os.path.abspath('setup.iss'),
     ])
     print("Packaging finished.")

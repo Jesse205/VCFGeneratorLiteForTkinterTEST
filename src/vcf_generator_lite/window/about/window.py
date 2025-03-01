@@ -3,7 +3,7 @@ from tkinter.constants import *
 from tkinter.ttk import Button, Frame, Label, Style
 from typing import override
 
-from vcf_generator_lite import __version__
+from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT, APP_NAME
 from vcf_generator_lite.util.resource import get_about_html, get_asset_data
 from vcf_generator_lite.util.tkinter.font import extend_font

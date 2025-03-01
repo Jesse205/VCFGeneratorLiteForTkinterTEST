@@ -29,13 +29,14 @@ def change_version(
     print("Change version to %s in %s." % (version, file_name))
 
 
-def change_init_version(version: str):
+def change_pyproject_version(version: str):
     change_version(
-        file_name="./src/vcf_generator_lite/__init__.py",
-        content_pattern=re.compile(r'^ *__version__ *= *".*" *$', flags=re.M),
-        content_formatter='__version__ = "%s"',
+        file_name="pyproject.toml",
+        content_pattern=re.compile(r'^ *version *= *".*" *$', flags=re.M),
+        content_formatter='version = "%s"',
         version=version
     )
+
 
 def change_version_info(version: str):
     pyinstaller_versionfile.create_versionfile_from_input_file(
@@ -47,8 +48,8 @@ def change_version_info(version: str):
 
 
 def print_version():
-    import vcf_generator_lite
-    print(vcf_generator_lite.__version__)
+    from vcf_generator_lite.__version__ import __version__
+    print(__version__)
 
 
 def main() -> int:
@@ -61,7 +62,7 @@ def main() -> int:
         if not re.match(r"^\d+\.\d+\.\d+$", version):
             print("Invalid version format. Version must be like '1.2.3'.", file=sys.stderr)
             return 1
-        change_init_version(version)
+        change_pyproject_version(version)
         change_version_info(version)
     else:
         print_version()

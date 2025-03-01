@@ -1,6 +1,6 @@
 [project]
 name = "vcf_generator_lite"
-dynamic = ["version"]
+version = "3.0.4"
 description = "A simple VCF generator"
 authors = [
     { name = "Jesse205", email = "2055675594@qq.com" },
@@ -44,10 +44,6 @@ test = { shell = "pytest", help = "Run tests." }
 
 [tool.pdm.build]
 is-purelib = true
-
-[tool.pdm.version]
-source = "file"
-path = "src/vcf_generator_lite/__init__.py"
 
 [[tool.pdm.source]]
 name = "pypi"
