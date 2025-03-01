@@ -1,20 +1,14 @@
-from abc import ABC, abstractmethod
-from tkinter import Toplevel, Tk
+from abc import ABC
+from tkinter import Misc
 from tkinter.ttk import Style
-from typing import final, override
+from typing import override
 
 from vcf_generator_lite.util.tkinter.theme import Theme
 
 
 class BaseTheme(Theme, ABC):
 
-    @final
     @override
-    def apply_theme(self, master: Tk | Toplevel, style: Style=None):
+    def apply_theme(self, master: Misc, style: Style):
         master.option_add("*TextFrame.Text.width", 0, "widgetDefault")
         master.option_add("*TextFrame.Text.height", 0, "widgetDefault")
-        style = Style(master)
-        self.apply_theme_with_style(master, style)
-
-    @abstractmethod
-    def apply_theme_with_style(self, master: Tk | Toplevel, style: Style): pass

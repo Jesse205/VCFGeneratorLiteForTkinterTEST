@@ -1,10 +1,12 @@
 import logging
 from abc import ABC, abstractmethod
 from tkinter import PhotoImage, Tk, Toplevel, Wm
+from tkinter.ttk import Style
 from typing import override
 
-from vcf_generator_lite.theme import get_platform_theme
+from vcf_generator_lite.theme import create_platform_theme
 from vcf_generator_lite.util.resource import get_asset_data
+from vcf_generator_lite.util.tkinter.theme import Theme
 from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GeometryWindowExtension, \
     ScalingWindowExtension, WindowExtension, withdraw_cm
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
@@ -25,6 +27,7 @@ class AppWindowExtension(GeometryWindowExtension, ScalingWindowExtension, Center
     - 继承 WindowExtension: 基础窗口功能扩展
     - 抽象类要求子类必须实现 on_init_window 方法
     """
+
     def __init__(self):
         super().__init__()
         self.__apply_default_icon()
@@ -45,12 +48,19 @@ class AppWindowExtension(GeometryWindowExtension, ScalingWindowExtension, Center
 
 
 class ExtendedTk(Tk, AppWindowExtension, ABC):
+    _theme_applied: bool = False
+
     def __init__(self, **kw):
         super().__init__(**kw)
         with withdraw_cm(self):
-            get_platform_theme().apply_theme(self)
+            if not self._theme_applied:
+                self.set_theme(create_platform_theme())
             AppWindowExtension.__init__(self)
             self.center()
+
+    def set_theme(self, theme: Theme):
+        theme.apply_theme(self, Style(self))
+        self._theme_applied = True
 
 
 class ExtendedToplevel(Toplevel, AppWindowExtension, ABC):

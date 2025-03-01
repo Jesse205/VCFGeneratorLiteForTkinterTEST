@@ -21,6 +21,9 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
     text_context_menu = None
     progress_bar = None
 
+    def __init__(self):
+        super().__init__(baseName="vcf_generator_lite")
+
     @override
     def on_init_window(self):
         self.title(APP_NAME)

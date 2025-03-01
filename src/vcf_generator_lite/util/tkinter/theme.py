@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from tkinter import Toplevel, Tk
+from tkinter import Misc
+from tkinter.ttk import Style
 
 
 class Theme(ABC):
     @abstractmethod
-    def apply_theme(self, master: Tk | Toplevel): pass
+    def apply_theme(self, master: Misc, style: Style): pass
