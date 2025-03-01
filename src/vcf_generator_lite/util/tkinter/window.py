@@ -1,7 +1,8 @@
+import gc
 import re
 from abc import ABC
 from contextlib import contextmanager
-from tkinter import Misc, Tk, Toplevel, Wm
+from tkinter import Misc, Tk, Toplevel, Wm, Event
 from typing import Optional
 
 from vcf_generator_lite.util.environment import is_windows
@@ -106,6 +107,16 @@ class GeometryWindowExtension(ScalingWindowExtension, WindowExtension, ABC):
 
     def wm_minsize_pt(self, width: int, height: int):
         return self.wm_minsize(*self.scale_args(width, height))
+
+
+class GcWindowExtension(WindowExtension, ABC):
+    def __init__(self):
+        super().__init__()
+        self.bind("<Destroy>", self._on_destroy, "+")
+
+    def _on_destroy(self, event: Event):
+        if event.widget == self:
+            gc.collect()
 
 
 @contextmanager

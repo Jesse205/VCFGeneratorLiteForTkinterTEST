@@ -14,7 +14,7 @@ from vcf_generator_lite.window.base.constants import EVENT_EXIT
 
 
 class AboutWindow(ExtendedDialog):
-    app_icon_image = None
+    app_icon_image: PhotoImage = None
 
     @override
     def on_init_window(self):

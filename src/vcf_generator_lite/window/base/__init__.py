@@ -8,7 +8,7 @@ from vcf_generator_lite.theme import create_platform_theme
 from vcf_generator_lite.util.resource import get_asset_data
 from vcf_generator_lite.util.tkinter.theme import Theme
 from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GeometryWindowExtension, \
-    ScalingWindowExtension, WindowExtension, withdraw_cm
+    ScalingWindowExtension, WindowExtension, withdraw_cm, GcWindowExtension
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
 
 __all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
@@ -16,7 +16,8 @@ __all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
 logger = logging.getLogger(__name__)
 
 
-class AppWindowExtension(GeometryWindowExtension, ScalingWindowExtension, CenterWindowExtension, WindowExtension, ABC):
+class AppWindowExtension(GcWindowExtension, GeometryWindowExtension, ScalingWindowExtension, CenterWindowExtension,
+                         WindowExtension, ABC):
     """
     应用程序窗口扩展基类，集成多个窗口功能扩展
 
