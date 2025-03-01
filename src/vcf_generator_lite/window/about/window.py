@@ -32,7 +32,7 @@ class AboutWindow(ExtendedDialog):
             state=DISABLED,
             height=0,
         )
-        details_input.pack(fill=BOTH, expand=True, padx="8.25p", pady=("8.25p", 0))
+        details_input.pack(fill=BOTH, expand=True, padx="7p", pady=("7p", 0))
         details_context_menu = TextContextMenu(details_input)
         details_context_menu.bind_to_widget()
         action_frame = Frame(self)
@@ -43,7 +43,7 @@ class AboutWindow(ExtendedDialog):
             default=ACTIVE,
             command=lambda: self.event_generate(EVENT_EXIT)
         )
-        self.ok_button.pack(side=RIGHT, padx="8.25p", pady="8.25p")
+        self.ok_button.pack(side=RIGHT, padx="7p", pady="7p")
 
     def _create_header(self, master):
         header_frame = Frame(master, style="InfoHeader.TFrame")
@@ -54,10 +54,10 @@ class AboutWindow(ExtendedDialog):
         )  # 保存到 Window 中防止回收内存
         app_icon_label = TkLabel(header_frame, image=self.app_icon_image, background=header_background,
                                  width="36p", height="36p")
-        app_icon_label.pack(side=LEFT, padx="8.25p", pady="8.25p")
+        app_icon_label.pack(side=LEFT, padx="7p", pady="7p")
 
         app_info_frame = TkFrame(header_frame, background=header_background)
-        app_info_frame.pack(side=LEFT, anchor=CENTER, fill=X, expand=True, padx=(0, "8.25p"), pady="8.25p")
+        app_info_frame.pack(side=LEFT, anchor=CENTER, fill=X, expand=True, padx=(0, "7p"), pady="7p")
 
         app_name_label = Label(
             app_info_frame,

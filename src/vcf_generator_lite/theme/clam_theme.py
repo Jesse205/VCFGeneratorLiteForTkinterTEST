@@ -10,10 +10,10 @@ class ClamTheme(BaseTheme):
     def apply_theme(self, master: Misc, style: Style):
         super().apply_theme(master, style)
         style.theme_use("clam")
-        style.configure("TButton", padding="1p")
+        style.configure("TButton", padding="2.5p")
         style.configure("Vertical.TScrollbar", arrowsize="9p")
         style.configure("InfoHeader.TFrame", relief="raised")
-        style.configure("TextFrame.TEntry", padding=0, borderwidth="2p")
+        style.configure("TextFrame.TEntry", padding=0, borderwidth="1.5p")
 
         window_background = style.lookup("TFrame", "background")
         if isinstance(master, Tk):
