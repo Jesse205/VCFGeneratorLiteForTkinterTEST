@@ -6,7 +6,7 @@ from tkinter import Event, filedialog
 
 from vcf_generator_lite.util.tkinter import dialog
 from vcf_generator_lite.util.vcard import GenerateResult, VCardFileGenerator
-from vcf_generator_lite.window.about import open_about_window
+from vcf_generator_lite.window.about import AboutOpener
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
 from vcf_generator_lite.window.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE, MAX_INVALID_COUNT
 from vcf_generator_lite.window.main.window import MainWindow
@@ -17,6 +17,7 @@ class MainController:
 
     def __init__(self, window: MainWindow):
         self.window = window
+        self.about_opener = AboutOpener(window)
         window.bind(EVENT_ABOUT, self.on_about)
         window.bind(EVENT_CLEAN_QUOTES, self.on_clean_quotes)
         window.bind(EVENT_GENERATE, self.on_generate)
@@ -26,7 +27,7 @@ class MainController:
         window.bind(EVENT_EXIT, self.on_exit)
 
     def on_about(self, _):
-        open_about_window(self.window)
+        self.about_opener.open()
 
     def on_clean_quotes(self, _):
         self._clean_quotes()
