@@ -1,4 +1,4 @@
-from tkinter import PhotoImage
+from tkinter import PhotoImage, Misc
 from tkinter.constants import *
 from tkinter.ttk import Button, Frame, Label
 from typing import override
@@ -35,17 +35,10 @@ class AboutWindow(ExtendedDialog):
         details_input.pack(fill=BOTH, expand=True, padx="7p", pady=("7p", 0))
         details_context_menu = TextContextMenu(details_input)
         details_context_menu.bind_to_widget()
-        action_frame = Frame(self)
+        action_frame = self._create_action_bar(self)
         action_frame.pack(fill=X, side=BOTTOM)
-        self.ok_button = Button(
-            action_frame,
-            text="确定",
-            default=ACTIVE,
-            command=lambda: self.event_generate(EVENT_EXIT)
-        )
-        self.ok_button.pack(side=RIGHT, padx="7p", pady="7p")
 
-    def _create_header(self, master):
+    def _create_header(self, master: Misc):
         header_frame = Frame(master, style="InfoHeader.TFrame")
         self.app_icon_image = PhotoImage(
             master=self,
@@ -72,3 +65,14 @@ class AboutWindow(ExtendedDialog):
         app_copyright_label = Label(app_info_frame, text=APP_COPYRIGHT, style="InfoHeaderContent.TLabel")
         app_copyright_label.pack(anchor=W)
         return header_frame
+
+    def _create_action_bar(self, master: Misc):
+        action_frame = Frame(master)
+        self.ok_button = Button(
+            action_frame,
+            text="确定",
+            default=ACTIVE,
+            command=lambda: self.event_generate(EVENT_EXIT)
+        )
+        self.ok_button.pack(side=RIGHT, padx="7p", pady="7p")
+        return action_frame
