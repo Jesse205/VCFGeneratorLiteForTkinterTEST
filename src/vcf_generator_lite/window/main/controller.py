@@ -86,7 +86,7 @@ class MainController:
         message_success_template = "已导出文件到“{path}”。"
         message_failure_template = "生成 VCF 文件时出现未知异常：\n\n{content}"
         message_partial_failure_template = "以下电话号码无法识别：\n{content}\n\n已导出文件到 {path}，但异常的号码未包含在导出文件中。"
-        invalid_item_template = "第 {row_position} 行：{content}"
+        invalid_line_template = "第 {row_position} 行：{content}"
         ignored_template = "{content}... 等 {ignored_count} 个。"
 
         if generate_result.exceptions:
@@ -95,12 +95,12 @@ class MainController:
             ]
             dialog.show_error(self.window, title_failure,
                               message_failure_template.format(content="\n\n".join(formatted_exceptions)))
-        elif len(generate_result.invalid_items) > 0:
+        elif len(generate_result.invalid_lines) > 0:
             content = '，'.join([
-                invalid_item_template.format(row_position=item.row_position, content=item.content)
-                for item in generate_result.invalid_items[0:MAX_INVALID_COUNT]
+                invalid_line_template.format(row_position=item.row_position, content=item.content)
+                for item in generate_result.invalid_lines[0:MAX_INVALID_COUNT]
             ])
-            if (ignored_count := max(len(generate_result.invalid_items) - MAX_INVALID_COUNT, 0)) > 0:
+            if (ignored_count := max(len(generate_result.invalid_lines) - MAX_INVALID_COUNT, 0)) > 0:
                 content = ignored_template.format(content=content, ignored_count=ignored_count)
             dialog.show_warning(self.window, title_partial_failure, message_partial_failure_template.format(
                 content=content,

@@ -11,23 +11,24 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
-class OriginItem:
+class InvalidLine:
     row_position: int
     content: str
+    exception: BaseException
 
 
 @dataclass
-class VCardProcessorState:
+class VCardGeneratorState:
     total: int
     processed: int
     progress: float
-    invalid_items: list[OriginItem]
+    invalid_lines: list[InvalidLine]
     exceptions: list[BaseException]
 
 
 @dataclass(frozen=True)
 class GenerateResult:
-    invalid_items: list[OriginItem]
+    invalid_lines: list[InvalidLine]
     exceptions: list[BaseException]
 
 
@@ -71,11 +72,11 @@ class VCardFileGenerator:
         output_io: IO
     ) -> GenerateResult:
         write_queue = Queue()
-        state = VCardProcessorState(
+        state = VCardGeneratorState(
             total=0,
             processed=0,
             progress=0.0,
-            invalid_items=[],
+            invalid_lines=[],
             exceptions=[]
         )
 
@@ -100,19 +101,19 @@ class VCardFileGenerator:
             for future in done:
                 if exception := future.exception():
                     state.exceptions.append(exception)
-        return GenerateResult(invalid_items=state.invalid_items, exceptions=state.exceptions)
+        return GenerateResult(invalid_lines=state.invalid_lines, exceptions=state.exceptions)
 
     def _parse_input(
         self,
         input_text: str,
         write_queue: Queue,
-        state: VCardProcessorState
+        state: VCardGeneratorState
     ):
 
-        items = [line.strip() for line in input_text.split("\n")]
-        state.total = len(items)
+        lines = [line.strip() for line in input_text.split("\n")]
+        state.total = len(lines)
 
-        for position, line in enumerate(items):
+        for position, line in enumerate(lines):
             try:
                 if line.strip() != "":
                     contact = parse_contact(line)
@@ -121,11 +122,11 @@ class VCardFileGenerator:
                 else:
                     self._update_progress(state, 1)
             except ValueError as e:
-                logger.error(f"Invalid line {position}: {e}")
-                state.invalid_items.append(OriginItem(position, line))
+                logger.error(f"Invalid contact data at line {position}: {e}")
+                state.invalid_lines.append(InvalidLine(position, line, e))
                 self._update_progress(state, 1)
             except Exception as e:
-                logger.exception(f"Unexpected parsing error")
+                logger.exception(f"Unexpected parsing error at line {position}", exc_info=e)
                 state.exceptions.append(e)
                 self._update_progress(state, 1)
         write_queue.put(None)  # 结束信号
@@ -134,7 +135,7 @@ class VCardFileGenerator:
         self,
         queue: Queue,
         output_io: IO,
-        state: VCardProcessorState
+        state: VCardGeneratorState
     ):
         try:
             while (item := queue.get()) is not None:
@@ -149,7 +150,7 @@ class VCardFileGenerator:
             logger.exception("Unexpected write error %s", e)
             state.exceptions.append(e)
 
-    def _update_progress(self, state: VCardProcessorState, increment: int):
+    def _update_progress(self, state: VCardGeneratorState, increment: int):
         if state.total == 0:
             return
         state.processed += increment

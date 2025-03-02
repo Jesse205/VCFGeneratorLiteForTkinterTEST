@@ -33,7 +33,7 @@ def test_vcard_file_generator():
 
     assert generate_result.exceptions == [], "不应有任何异常"
 
-    for item in generate_result.invalid_items:
+    for item in generate_result.invalid_lines:
         assert item.row_position >= input_valid_until, f"第 {input_valid_until} 行前不应解析错误"
         assert item.content == input_list[item.row_position], f"第 {item.row_position} 行数据不匹配"
 
