@@ -1,4 +1,3 @@
-import random
 from concurrent.futures import ThreadPoolExecutor, wait
 from io import StringIO
 
@@ -23,8 +22,7 @@ ignored_input_list = [
     "\t",
 ]
 
-input_list = valid_input_list + invalid_input_list + ignored_input_list
-random.shuffle(input_list)
+input_list = ignored_input_list + invalid_input_list + ignored_input_list + valid_input_list + invalid_input_list + ignored_input_list
 input_content = "\n".join(input_list)
 
 valid_count = len(valid_input_list)
