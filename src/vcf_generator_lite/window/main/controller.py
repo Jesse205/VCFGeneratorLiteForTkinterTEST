@@ -1,3 +1,4 @@
+import os.path
 import re
 import traceback
 from concurrent.futures import Future
@@ -8,12 +9,14 @@ from vcf_generator_lite.util.tkinter import dialog
 from vcf_generator_lite.util.vcard import GenerateResult, VCardFileGenerator, InvalidLine
 from vcf_generator_lite.window.about import AboutOpener
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
-from vcf_generator_lite.window.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE, MAX_INVALID_COUNT
+from vcf_generator_lite.window.invalid_lines import create_invalid_lines_window
+from vcf_generator_lite.window.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE
 from vcf_generator_lite.window.main.window import MainWindow
 
 
 class MainController:
     is_generating = False
+    generate_file_name = "phones.vcf"
 
     def __init__(self, window: MainWindow):
         self.window = window
@@ -41,13 +44,13 @@ class MainController:
         text_content = self.window.get_text_content()
         file_io = filedialog.asksaveasfile(
             parent=self.window,
-            initialfile="phones.vcf",
+            initialfile=self.generate_file_name,
             filetypes=[("vCard 文件", ".vcf")],
             defaultextension=".vcf"
         )
         if file_io is None:
             return
-
+        self.generate_file_name = os.path.basename(file_io.name)
         self.is_generating = True
         self.window.show_progress_bar()
         self.window.set_progress(0)
