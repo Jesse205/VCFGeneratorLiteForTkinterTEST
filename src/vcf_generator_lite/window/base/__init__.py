@@ -6,9 +6,10 @@ from typing import override
 
 from vcf_generator_lite.theme import create_platform_theme
 from vcf_generator_lite.util.resource import get_asset_data
+from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
 from vcf_generator_lite.util.tkinter.theme import Theme
 from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GeometryWindowExtension, \
-    ScalingWindowExtension, WindowExtension, withdraw_cm, GcWindowExtension
+    WindowExtension, withdraw_cm, GcWindowExtension
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
 
 __all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
@@ -16,7 +17,7 @@ __all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
 logger = logging.getLogger(__name__)
 
 
-class AppWindowExtension(GcWindowExtension, GeometryWindowExtension, ScalingWindowExtension, CenterWindowExtension,
+class AppWindowExtension(GcWindowExtension, GeometryWindowExtension, ScalingMiscExtension, CenterWindowExtension,
                          WindowExtension, ABC):
     """
     应用程序窗口扩展基类，集成多个窗口功能扩展
@@ -73,7 +74,14 @@ class ExtendedToplevel(Toplevel, AppWindowExtension, ABC):
                 self.center(self.master)
 
 
-class ExtendedDialog(ExtendedToplevel, ABC):
+class ExtendedDialog(Toplevel, AppWindowExtension, ABC):
+    def __init__(self, master: Tk | Toplevel, **kw):
+        super().__init__(master, **kw)
+        with withdraw_cm(self):
+            AppWindowExtension.__init__(self)
+            if isinstance(self.master, Tk) or isinstance(self.master, Toplevel):
+                self.center(self.master)
+
     @abstractmethod
     @override
     def on_init_window(self):

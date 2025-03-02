@@ -58,9 +58,9 @@ class MainController:
         self.window.set_generate_enabled(False)
 
         def done(future: Future[GenerateResult]):
+            self.is_generating = False
             file_io.close()
             self._show_generate_done_dialog(file_io.name, future.result())
-            self.is_generating = False
             self.window.hide_progress_bar()
             self.window.set_generate_enabled(True)
 
@@ -73,7 +73,7 @@ class MainController:
         generator = VCardFileGenerator(executor)
         generator.add_progress_callback(on_update_progress)
         generate_future = generator.start(text_content, file_io)
-        generate_future.add_done_callback(done)
+        generate_future.add_done_callback(lambda future: self.window.after_idle(done, future))
         executor.shutdown(wait=False)
 
     def on_exit(self, _):
@@ -101,20 +101,21 @@ class MainController:
         ))
 
     def _show_generate_invalid_dialog(self, display_path: str, invalid_lines: list[InvalidLine]):
-        title_invalid = "生成 VCF 文件部分成功"
-        message_invalid_template = "以下电话号码无法识别：\n{content}\n\n已导出文件到 {path}，但异常的号码未包含在导出文件中。"
-        invalid_line_template = "第 {row_position} 行：{content}"
-        ignored_template = "{content}... 等 {ignored_count} 个。"
-        content = '，'.join([
-            invalid_line_template.format(row_position=item.row_position, content=item.content)
-            for item in invalid_lines[0:MAX_INVALID_COUNT]
-        ])
-        if (ignored_count := len(invalid_lines) - MAX_INVALID_COUNT) > 0:
-            content = ignored_template.format(content=content, ignored_count=ignored_count)
-        dialog.show_warning(self.window, title_invalid, message_invalid_template.format(
-            content=content,
-            path=display_path
-        ))
+        create_invalid_lines_window(self.window, display_path, invalid_lines)
+        # title_invalid = "生成 VCF 文件部分成功"
+        # message_invalid_template = "以下电话号码无法识别：\n{content}\n\n已导出文件到 {path}，但异常的号码未包含在导出文件中。"
+        # invalid_line_template = "第 {row_position} 行：{content}"
+        # ignored_template = "{content}... 等 {ignored_count} 个。"
+        # content = '\t'.join([
+        #     table_text(invalid_line_template.format(row_position=item.row_position + 1, content=item.content))
+        #     for item in invalid_lines[0:MAX_INVALID_COUNT]
+        # ])
+        # if (ignored_count := len(invalid_lines) - MAX_INVALID_COUNT) > 0:
+        #     content = ignored_template.format(content=content, ignored_count=ignored_count)
+        # dialog.show_warning(self.window, title_invalid, message_invalid_template.format(
+        #     content=content,
+        #     path=display_path
+        # ))
 
     def _show_generate_success_dialog(self, display_path: str):
         title_success = "生成 VCF 文件成功"

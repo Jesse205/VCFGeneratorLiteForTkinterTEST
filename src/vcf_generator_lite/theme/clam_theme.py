@@ -14,6 +14,7 @@ class ClamTheme(BaseTheme):
         style.configure("Vertical.TScrollbar", arrowsize="9p")
         style.configure("InfoHeader.TFrame", relief="raised")
         style.configure("TextFrame.TEntry", padding=0, borderwidth="1.5p")
+        style.configure("Treeview", rowheight="15p", indent="15p", padding="1.5p")
 
         window_background = style.lookup("TFrame", "background")
         if isinstance(master, Tk):

@@ -16,6 +16,7 @@ class WindowsTheme(BaseTheme):
         style.configure("InfoHeader.TFrame", background="systemWindow")
         style.configure("InfoHeaderContent.TFrame", background="systemWindow")
         style.configure("InfoHeaderContent.TLabel", background="systemWindow")
-
+        style.configure("Treeview", rowheight="15p", indent="15p")
+        style.configure("Heading", height="15p")
         menu_font = nametofont("TkMenuFont")
         master.option_add("*Menu.font", menu_font)

@@ -3,9 +3,9 @@ import re
 from abc import ABC
 from contextlib import contextmanager
 from tkinter import Misc, Tk, Toplevel, Wm, Event
-from typing import Optional
 
 from vcf_generator_lite.util.environment import is_windows
+from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
 
 type Window = Tk | Toplevel
 
@@ -58,43 +58,7 @@ class CenterWindowExtension(WindowExtension, ABC):
         center_window(self, parent)
 
 
-class ScalingWindowExtension(WindowExtension, ABC):
-    _scale_factor: float = 1.0
-
-    def __init__(self):
-        self._scale_factor = self.scaling()
-
-    def scaling(self, factor: Optional[float] = None):
-        """
-        设置或获取GUI缩放比例因子
-
-        当传入factor参数时，设置当前缩放比例并应用新的缩放因子到Tkinter窗口。
-        不传入参数时返回当前缩放比例因子。
-
-        与 tk scaling ?-displayof window? ?number? 相同。
-        """
-        if factor is not None:
-            self._scale_factor = factor
-        return self.tk.call("tk", "scaling", factor)
-
-    def get_scaled(self, value: int | float) -> int | float:
-        if isinstance(value, int):
-            return int(self._scale_factor * value)
-        elif isinstance(value, float):
-            return float(self._scale_factor * value)
-        else:
-            raise TypeError(f"{value} 必须为 int 或 float")
-
-    def scale_kw(self, **kw: int | float):
-        new_kw = {key: self.get_scaled(value) for key, value in kw.items()}
-        return new_kw
-
-    def scale_args(self, *args: int | float):
-        new_args = [self.get_scaled(value) for value in args]
-        return new_args
-
-
-class GeometryWindowExtension(ScalingWindowExtension, WindowExtension, ABC):
+class GeometryWindowExtension(ScalingMiscExtension, WindowExtension, ABC):
     def wm_size(self, width: int, height: int):
         self.wm_geometry(f"{width}x{height}")
 
