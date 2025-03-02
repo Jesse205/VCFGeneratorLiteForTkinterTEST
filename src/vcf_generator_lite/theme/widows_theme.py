@@ -11,5 +11,7 @@ class WindowsTheme(BaseTheme):
         super().apply_theme(master, style)
         style.theme_use("vista")
         style.configure("TButton", padding="2.5p")
-        style.configure("InfoHeader.TFrame", background="systemWindow")
         style.configure("TextFrame.TEntry", padding=0, borderwidth="1.5p", bordercolor="SystemHighlight")
+        style.configure("InfoHeader.TFrame", background="systemWindow")
+        style.configure("InfoHeaderContent.TFrame", background="systemWindow")
+        style.configure("InfoHeaderContent.TLabel", background="systemWindow")

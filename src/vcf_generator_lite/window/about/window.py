@@ -1,6 +1,6 @@
-from tkinter import Frame as TkFrame, Label as TkLabel, PhotoImage
+from tkinter import PhotoImage
 from tkinter.constants import *
-from tkinter.ttk import Button, Frame, Label, Style
+from tkinter.ttk import Button, Frame, Label
 from typing import override
 
 from vcf_generator_lite.__version__ import __version__
@@ -36,7 +36,7 @@ class AboutWindow(ExtendedDialog):
         details_context_menu = TextContextMenu(details_input)
         details_context_menu.bind_to_widget()
         action_frame = Frame(self)
-        action_frame.pack(fill=X)
+        action_frame.pack(fill=X, side=BOTTOM)
         self.ok_button = Button(
             action_frame,
             text="确定",
@@ -47,25 +47,28 @@ class AboutWindow(ExtendedDialog):
 
     def _create_header(self, master):
         header_frame = Frame(master, style="InfoHeader.TFrame")
-        header_background = Style(self).lookup(header_frame.cget("style"), "background")
         self.app_icon_image = PhotoImage(
             master=self,
-            data=get_asset_data("images/icon-48.png")
+            data=get_asset_data("images/icon-48.png"),
         )  # 保存到 Window 中防止回收内存
-        app_icon_label = TkLabel(header_frame, image=self.app_icon_image, background=header_background,
-                                 width="36p", height="36p")
+        app_icon_label = Label(
+            header_frame,
+            image=self.app_icon_image,
+            style="InfoHeaderContent.TLabel",
+            padding=(self.get_scaled(32.0) - 48.0) / 2,
+        )
         app_icon_label.pack(side=LEFT, padx="7p", pady="7p")
 
-        app_info_frame = TkFrame(header_frame, background=header_background)
+        app_info_frame = Frame(header_frame, style="InfoHeaderContent.TFrame")
         app_info_frame.pack(side=LEFT, anchor=CENTER, fill=X, expand=True, padx=(0, "7p"), pady="7p")
 
         app_name_label = Label(
             app_info_frame,
             text=f"{APP_NAME} v{__version__}",
-            background=header_background,
-            font=extend_font("TkDefaultFont", size=12)
+            style="InfoHeaderContent.TLabel",
+            font=extend_font("TkDefaultFont", size=12),
         )
         app_name_label.pack(anchor=W)
-        app_copyright_label = Label(app_info_frame, text=APP_COPYRIGHT, background=header_background)
+        app_copyright_label = Label(app_info_frame, text=APP_COPYRIGHT, style="InfoHeaderContent.TLabel")
         app_copyright_label.pack(anchor=W)
         return header_frame
