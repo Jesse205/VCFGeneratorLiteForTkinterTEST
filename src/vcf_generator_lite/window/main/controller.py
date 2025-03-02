@@ -5,7 +5,7 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from tkinter import Event, filedialog
 
 from vcf_generator_lite.util.tkinter import dialog
-from vcf_generator_lite.util.vcard import GenerateResult, VCardFileGenerator
+from vcf_generator_lite.util.vcard import GenerateResult, VCardFileGenerator, InvalidLine
 from vcf_generator_lite.window.about import AboutOpener
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
 from vcf_generator_lite.window.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE, MAX_INVALID_COUNT
@@ -80,34 +80,43 @@ class MainController:
             self.window.destroy()
 
     def _show_generate_done_dialog(self, display_path: str, generate_result: GenerateResult):
-        title_success = "生成 VCF 文件成功"
+        if generate_result.exceptions:
+            self._show_generate_error_dialog(generate_result.exceptions)
+        elif len(generate_result.invalid_lines) > 0:
+            self._show_generate_invalid_dialog(display_path, generate_result.invalid_lines)
+        else:
+            self._show_generate_success_dialog(display_path)
+
+    def _show_generate_error_dialog(self, exceptions: list[BaseException]):
         title_failure = "生成 VCF 文件失败"
-        title_partial_failure = "生成 VCF 文件部分成功"
-        message_success_template = "已导出文件到“{path}”。"
         message_failure_template = "生成 VCF 文件时出现未知异常：\n\n{content}"
-        message_partial_failure_template = "以下电话号码无法识别：\n{content}\n\n已导出文件到 {path}，但异常的号码未包含在导出文件中。"
+        formatted_exceptions = [
+            "\n".join(traceback.format_exception(exception)) for exception in exceptions
+        ]
+        dialog.show_error(self.window, title_failure, message_failure_template.format(
+            content="\n\n".join(formatted_exceptions)
+        ))
+
+    def _show_generate_invalid_dialog(self, display_path: str, invalid_lines: list[InvalidLine]):
+        title_invalid = "生成 VCF 文件部分成功"
+        message_invalid_template = "以下电话号码无法识别：\n{content}\n\n已导出文件到 {path}，但异常的号码未包含在导出文件中。"
         invalid_line_template = "第 {row_position} 行：{content}"
         ignored_template = "{content}... 等 {ignored_count} 个。"
+        content = '，'.join([
+            invalid_line_template.format(row_position=item.row_position, content=item.content)
+            for item in invalid_lines[0:MAX_INVALID_COUNT]
+        ])
+        if (ignored_count := len(invalid_lines) - MAX_INVALID_COUNT, 0) > 0:
+            content = ignored_template.format(content=content, ignored_count=ignored_count)
+        dialog.show_warning(self.window, title_invalid, message_invalid_template.format(
+            content=content,
+            path=display_path
+        ))
 
-        if generate_result.exceptions:
-            formatted_exceptions = [
-                "\n".join(traceback.format_exception(exception)) for exception in generate_result.exceptions
-            ]
-            dialog.show_error(self.window, title_failure,
-                              message_failure_template.format(content="\n\n".join(formatted_exceptions)))
-        elif len(generate_result.invalid_lines) > 0:
-            content = '，'.join([
-                invalid_line_template.format(row_position=item.row_position, content=item.content)
-                for item in generate_result.invalid_lines[0:MAX_INVALID_COUNT]
-            ])
-            if (ignored_count := max(len(generate_result.invalid_lines) - MAX_INVALID_COUNT, 0)) > 0:
-                content = ignored_template.format(content=content, ignored_count=ignored_count)
-            dialog.show_warning(self.window, title_partial_failure, message_partial_failure_template.format(
-                content=content,
-                path=display_path
-            ))
-        else:
-            dialog.show_info(self.window, title_success, message_success_template.format(path=display_path))
+    def _show_generate_success_dialog(self, display_path: str):
+        title_success = "生成 VCF 文件成功"
+        message_success_template = "已导出文件到“{path}”。"
+        dialog.show_info(self.window, title_success, message_success_template.format(path=display_path))
 
     def _clean_quotes(self):
         origin_text = self.window.get_text_content()
