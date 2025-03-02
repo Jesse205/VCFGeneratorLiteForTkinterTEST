@@ -1,4 +1,5 @@
 from tkinter import Misc
+from tkinter.font import nametofont
 from tkinter.ttk import Style
 from typing import override
 
@@ -15,3 +16,6 @@ class WindowsTheme(BaseTheme):
         style.configure("InfoHeader.TFrame", background="systemWindow")
         style.configure("InfoHeaderContent.TFrame", background="systemWindow")
         style.configure("InfoHeaderContent.TLabel", background="systemWindow")
+
+        menu_font = nametofont("TkMenuFont")
+        master.option_add("*Menu.font", menu_font)
