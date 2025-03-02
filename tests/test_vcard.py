@@ -1,3 +1,4 @@
+import random
 from concurrent.futures import ThreadPoolExecutor, wait
 from io import StringIO
 
@@ -5,19 +6,29 @@ from vcf_generator_lite.util.vcard import VCardFileGenerator
 
 area_tag = "-----"
 
-input_content = f"""
-李四\t13445467890
-王五\t13554678907
-赵六\t13645436748
-{area_tag}
-孙七\t1234567890
-周八\t"13789012345"
-吴九\t13 789012345
-郑十\t1389012345a
-"""
+valid_input_list = [
+    "李    四    13445467890",
+    " 王五\t13554678907",
+    "赵六\t13645436748 ",
+]
+invalid_input_list = [
+    "孙七\t1234567890",
+    "周八\t\"13789012345\"",
+    "吴九\t13 789012345",
+    "郑十\t1389012345a",
+]
+ignored_input_list = [
+    "   ",
+    "",
+    "\t",
+]
 
-input_list = input_content.split("\n")
-input_valid_until = input_list.index(area_tag)
+input_list = valid_input_list + invalid_input_list + ignored_input_list
+random.shuffle(input_list)
+input_content = "\n".join(input_list)
+
+valid_count = len(valid_input_list)
+invalid_count = len(invalid_input_list)
 
 
 def test_vcard_file_generator():
@@ -32,13 +43,14 @@ def test_vcard_file_generator():
     result_list = [item for item in result_io.getvalue().split("\n\n") if item != ""]
 
     assert generate_result.exceptions == [], "不应有任何异常"
+    assert progress_history[-1][0] == 1.0, "末尾进度应为 1.0"
 
+    assert len(generate_result.invalid_lines) >= invalid_count, f"应有 {invalid_count} 个无效行"
     for item in generate_result.invalid_lines:
-        assert item.row_position >= input_valid_until, f"第 {input_valid_until} 行前不应解析错误"
+        assert item.content in invalid_input_list, f"第 {item.row_position} 行数据不应为无效行"
         assert item.content == input_list[item.row_position], f"第 {item.row_position} 行数据不匹配"
 
-    assert progress_history[-1][0] == 1.0, "末尾进度应该为 1.0"
-
+    assert len(result_list) >= valid_count, f"应有 {valid_count} 个有效行"
     for result_item in result_list:
         assert result_item.startswith("BEGIN:VCARD\n"), "VCard 应以 BEGIN:VCARD 开头"
         assert result_item.endswith("\nEND:VCARD"), "VCard 应以 END:VCARD 结尾"
