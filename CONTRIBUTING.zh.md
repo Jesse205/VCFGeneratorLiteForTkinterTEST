@@ -38,9 +38,17 @@
 
 ## 代码规范
 
-- Python（`.py`）：[PEP8](https://www.python.org/dev/peps/pep-0008/)；
-- Markdown（`.md`）：[Markdownlint](https://github.com/DavidAnson/markdownlint)。
-   - 本项目未完全遵守 Markdownlint 规范，详情请参考 [.markdownlint.json](./.markdownlint.json)。
+**Python（`.py`）：**
+
+- 函数参数必须声明类型；
+- 单行最大字符数：120；
+- 其他情况以 [PEP8](https://peps.python.org/pep-0008/) 为准。
+
+**Markdown（`.md`）：**
+
+- 不限制最大行数；
+- 详情请参考 [.markdownlint.json](./.markdownlint.json)；
+- 其他情况以 [Markdownlint](https://github.com/DavidAnson/markdownlint) 为准。
 
 详情请参考 [.editorconfig](./.editorconfig)。
 
