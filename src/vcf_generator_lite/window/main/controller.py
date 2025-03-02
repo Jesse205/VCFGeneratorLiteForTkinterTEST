@@ -106,7 +106,7 @@ class MainController:
             invalid_line_template.format(row_position=item.row_position, content=item.content)
             for item in invalid_lines[0:MAX_INVALID_COUNT]
         ])
-        if (ignored_count := len(invalid_lines) - MAX_INVALID_COUNT, 0) > 0:
+        if (ignored_count := len(invalid_lines) - MAX_INVALID_COUNT) > 0:
             content = ignored_template.format(content=content, ignored_count=ignored_count)
         dialog.show_warning(self.window, title_invalid, message_invalid_template.format(
             content=content,
