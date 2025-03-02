@@ -48,7 +48,7 @@ class AboutWindow(ExtendedDialog):
             header_frame,
             image=self.app_icon_image,
             style="InfoHeaderContent.TLabel",
-            padding=(self.get_scaled(32.0) - 48.0) / 2,
+            padding=(self.get_scaled(36.0) - 48.0) / 2,
         )
         app_icon_label.pack(side=LEFT, padx="7p", pady="7p")
 
