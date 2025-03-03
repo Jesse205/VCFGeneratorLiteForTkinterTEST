@@ -1,11 +1,11 @@
-from tkinter import PhotoImage, Misc
+from tkinter import PhotoImage, Misc, Label as TkLabel
 from tkinter.constants import *
-from tkinter.ttk import Button, Frame, Label
+from tkinter.ttk import Button, Frame, Label, Style
 from typing import override
 
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT, APP_NAME
-from vcf_generator_lite.util.resource import get_about_html, get_asset_data
+from vcf_generator_lite.util.resource import get_about_html, get_asset_scaled_data
 from vcf_generator_lite.util.tkinter.font import extend_font
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.widget.tkhtmlview import HTMLScrolledText
@@ -42,15 +42,22 @@ class AboutWindow(ExtendedDialog):
 
     def _create_header(self, master: Misc):
         header_frame = Frame(master, style="InfoHeader.TFrame")
+        background_color = Style(master).lookup("InfoHeader.TFrame", "background")
         self.app_icon_image = PhotoImage(
             master=self,
-            data=get_asset_data("images/icon-48.png"),
+            data=get_asset_scaled_data([
+                (1.0, "images/icon-48.png"),
+                (1.25, "images/icon-60.png"),
+                (1.5, "images/icon-72.png"),
+
+            ], self.scaling() * 0.75),
         )  # 保存到 Window 中防止回收内存
-        app_icon_label = Label(
+        app_icon_label = TkLabel(
             header_frame,
             image=self.app_icon_image,
-            style="InfoHeaderContent.TLabel",
-            padding=(self.get_scaled(36.0) - 48.0) / 2,
+            background=background_color,
+            width="36p",
+            height="36p",
         )
         app_icon_label.pack(side=LEFT, padx="14p", pady="7p")
 

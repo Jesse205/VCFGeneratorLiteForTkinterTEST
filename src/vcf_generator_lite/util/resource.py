@@ -13,6 +13,14 @@ def get_asset_data(resource: str) -> Optional[bytes]:
     return pkgutil.get_data(_APP_MODULE_NAME, os.path.join('assets', resource))
 
 
+def get_asset_scaled_data(resources: list[(float, str)], scale: float) -> Optional[bytes]:
+    sorted_resources = sorted(resources, key=lambda x: x[0], reverse=True)
+    for resource_scale, resource in sorted_resources:
+        if scale >= resource_scale:
+            return get_asset_data(resource)
+    return get_asset_data(resources[0])
+
+
 def get_asset_path(file_name: str) -> str:
     """
     Get the path to the file in the assets' folder.
