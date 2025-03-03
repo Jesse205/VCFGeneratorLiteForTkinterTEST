@@ -25,12 +25,25 @@ class InvalidLinesWindow(ExtendedDialog):
     def _create_widgets(self):
         header_frame = self._create_header(self)
         header_frame.pack(fill=X)
-        self.treeview = ScrolledTreeview(self, columns=("row", "context"), show='headings', selectmode="browse")
-        self.treeview.column('row', anchor=W, stretch=False, width=self.get_scaled(60), minwidth=self.get_scaled(45))
-        self.treeview.column('context', anchor=W)
-        self.treeview.heading('row', text='行数', anchor=W)
-        self.treeview.heading('context', text='原始内容', anchor=W)
-        self.treeview.pack(fill=BOTH, expand=True, padx="7p", pady=("7p", 0))
+        content_label = Label(self, text="异常的号码：")
+        content_label.pack(fill=X, padx="7p", pady=("7p", "2p"))
+        self.content_tree = ScrolledTreeview(
+            self,
+            columns=("row", "context"),
+            show='headings',
+            selectmode="browse"
+        )
+        self.content_tree.column(
+            column='row',
+            anchor=W,
+            stretch=False,
+            width=self.get_scaled(60),
+            minwidth=self.get_scaled(45)
+        )
+        self.content_tree.column('context', anchor=W)
+        self.content_tree.heading('row', text='行数', anchor=W)
+        self.content_tree.heading('context', text='原始内容', anchor=W)
+        self.content_tree.pack(fill=BOTH, expand=True, padx="7p")
         action_frame = self._create_action_bar(self)
         action_frame.pack(fill=X, side=BOTTOM)
 

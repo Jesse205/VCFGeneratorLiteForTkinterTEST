@@ -16,7 +16,7 @@ class InvalidLinesController:
         window.bind("<Return>", self.on_ok_click)
         window.header_label.configure(text=message_invalid_template.format(path=display_path))
         for item in invalid_lines:
-            window.treeview.insert(
+            window.content_tree.insert(
                 parent='',
                 index='end',
                 id=item.row_position,
