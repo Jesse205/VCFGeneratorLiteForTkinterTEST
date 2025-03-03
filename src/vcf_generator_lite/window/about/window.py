@@ -21,6 +21,8 @@ class AboutWindow(ExtendedDialog):
         super().on_init_window()
         self.title(f"关于 {APP_NAME}")
         self.wm_size_pt(375, 300)
+        self.wm_minsize_pt(375, 300)
+        self.wm_maxsize_pt(375, 300)
         self._create_widgets()
 
     def _create_widgets(self):
@@ -50,10 +52,10 @@ class AboutWindow(ExtendedDialog):
             style="InfoHeaderContent.TLabel",
             padding=(self.get_scaled(36.0) - 48.0) / 2,
         )
-        app_icon_label.pack(side=LEFT, padx="7p", pady="7p")
+        app_icon_label.pack(side=LEFT, padx="14p", pady="7p")
 
         app_info_frame = Frame(header_frame, style="InfoHeaderContent.TFrame")
-        app_info_frame.pack(side=LEFT, anchor=CENTER, fill=X, expand=True, padx=(0, "7p"), pady="7p")
+        app_info_frame.pack(side=LEFT, anchor=CENTER, fill=X, expand=True, padx=(0, "14p"), pady="14p")
 
         app_name_label = Label(
             app_info_frame,

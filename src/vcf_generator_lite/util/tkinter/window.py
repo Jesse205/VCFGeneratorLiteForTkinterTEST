@@ -72,6 +72,9 @@ class GeometryWindowExtension(ScalingMiscExtension, WindowExtension, ABC):
     def wm_minsize_pt(self, width: int, height: int):
         return self.wm_minsize(*self.scale_args(width, height))
 
+    def wm_maxsize_pt(self, width: int, height: int):
+        return self.wm_maxsize(*self.scale_args(width, height))
+
 
 class GcWindowExtension(WindowExtension, ABC):
     def __init__(self):
