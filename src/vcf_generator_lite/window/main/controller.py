@@ -36,7 +36,7 @@ class MainController:
         self._clean_quotes()
 
     def on_return(self, event: Event):
-        if event.widget is self.window.text_input:
+        if event.widget is self.window.content_text:
             return
         self.window.generate_button.invoke()
 

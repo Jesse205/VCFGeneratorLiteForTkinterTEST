@@ -18,7 +18,7 @@ from vcf_generator_lite.window.main.constants import DEFAULT_INPUT_CONTENT, EVEN
 
 class MainWindow(ExtendedTk, MenuBarWindowExtension):
     generate_button = None
-    text_input = None
+    content_text = None
     text_context_menu = None
     progress_bar = None
 
@@ -38,11 +38,11 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
         description_label.bind("<Configure>", auto_wrap_configure_event, "+")
         description_label.pack(fill=X, padx="7p", pady="7p")
 
-        self.text_input = ScrolledText(self, undo=True, tabs="2c", tabstyle="wordprocessor", maxundo=5)
-        self.text_input.insert(0.0, DEFAULT_INPUT_CONTENT)
-        self.text_input.edit_reset()
-        self.text_input.pack(fill=BOTH, expand=True, padx="7p", pady=0)
-        self.text_context_menu = TextContextMenu(self.text_input)
+        self.content_text = ScrolledText(self, undo=True, tabs="2c", tabstyle="wordprocessor", maxundo=5)
+        self.content_text.insert(0.0, DEFAULT_INPUT_CONTENT)
+        self.content_text.edit_reset()
+        self.content_text.pack(fill=BOTH, expand=True, padx="7p", pady=0)
+        self.text_context_menu = TextContextMenu(self.content_text)
         self.text_context_menu.bind_to_widget()
 
         action_frame = self._create_action_bar(self)
@@ -147,10 +147,10 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
         )
 
     def set_text_content(self, content: str):
-        self.text_input.replace(1.0, END, content)
+        self.content_text.replace(1.0, END, content)
 
     def get_text_content(self) -> str:
-        return self.text_input.get(1.0, END)[:-1]
+        return self.content_text.get(1.0, END)[:-1]
 
     def show_progress_bar(self):
         self.progress_bar.pack(side=LEFT, padx="7p", pady="7p")
