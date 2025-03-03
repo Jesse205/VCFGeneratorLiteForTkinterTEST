@@ -17,10 +17,10 @@ class InvalidLinesController:
         window.header_label.configure(text=message_invalid_template.format(path=display_path))
         for item in invalid_lines:
             window.treeview.insert(
-                '',
-                'end',
-                text=invalid_line_position_template.format(row=item.row_position + 1),
-                values=(item.content,)
+                parent='',
+                index='end',
+                id=item.row_position,
+                values=(invalid_line_position_template.format(row=item.row_position + 1), item.content)
             )
 
     def on_ok_click(self, _: Event):
