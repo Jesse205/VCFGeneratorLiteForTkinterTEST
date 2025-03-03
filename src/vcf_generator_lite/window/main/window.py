@@ -1,4 +1,5 @@
 import webbrowser
+from tkinter import Misc
 from tkinter.constants import *
 from tkinter.ttk import Button, Frame, Label, Progressbar, Sizegrip
 from typing import override
@@ -37,24 +38,29 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
         description_label.bind("<Configure>", auto_wrap_configure_event, "+")
         description_label.pack(fill=X, padx="7p", pady="7p")
 
-        self.text_input = ScrolledText(self, undo=True, tabs="2c", tabstyle="wordprocessor")
+        self.text_input = ScrolledText(self, undo=True, tabs="2c", tabstyle="wordprocessor", maxundo=5)
         self.text_input.insert(0.0, DEFAULT_INPUT_CONTENT)
         self.text_input.edit_reset()
         self.text_input.pack(fill=BOTH, expand=True, padx="7p", pady=0)
         self.text_context_menu = TextContextMenu(self.text_input)
         self.text_context_menu.bind_to_widget()
 
-        action_frame = Frame(self)
+        action_frame = self._create_action_bar(self)
         action_frame.pack(fill=X)
 
+    def _create_action_bar(self, master: Misc):
+        action_frame = Frame(master)
         sizegrip = Sizegrip(action_frame)
         sizegrip.place(relx=1, rely=1, anchor=SE)
 
         self.progress_bar = Progressbar(action_frame, orient=HORIZONTAL, length=200)
-
-        self.generate_button = Button(action_frame, text="生成", default=ACTIVE,
-                                      command=lambda: self.event_generate(EVENT_GENERATE))
+        self.generate_button = Button(
+            action_frame, text="生成",
+            default=ACTIVE,
+            command=lambda: self.event_generate(EVENT_GENERATE)
+        )
         self.generate_button.pack(side=RIGHT, padx="7p", pady="7p")
+        return action_frame
 
     def _create_menus(self):
         self.add_menu_bar_items(
