@@ -1,6 +1,6 @@
-from tkinter import Misc
-from tkinter.constants import X, ACTIVE, RIGHT, BOTTOM, BOTH, W, SE
-from tkinter.ttk import Frame, Label, Button, Sizegrip
+from tkinter import Misc, Label as TkLabel
+from tkinter.constants import X, ACTIVE, RIGHT, BOTTOM, BOTH, W, SE, LEFT
+from tkinter.ttk import Frame, Label, Button, Sizegrip, Style
 from typing import override
 
 from vcf_generator_lite.util.tkinter.widget import auto_wrap_configure_event
@@ -21,6 +21,7 @@ class InvalidLinesWindow(ExtendedDialog):
         self.wm_size_pt(375, 300)
         self.wm_minsize_pt(225, 225)
         self._create_widgets()
+        self.bell()
 
     def _create_widgets(self):
         header_frame = self._create_header(self)
@@ -49,10 +50,12 @@ class InvalidLinesWindow(ExtendedDialog):
 
     def _create_header(self, master: Misc):
         header_frame = Frame(master, style="InfoHeader.TFrame")
-
+        background_color = Style(master).lookup("InfoHeader.TFrame", "background")
+        self.header_icon = TkLabel(header_frame, bitmap="warning", background=background_color)
+        self.header_icon.pack(side=LEFT, padx="14p", pady="7p")
         self.header_label = Label(header_frame, style="InfoHeaderContent.TLabel")
         self.header_label.bind("<Configure>", auto_wrap_configure_event, "+")
-        self.header_label.pack(fill=X, padx="7p", pady="14p")
+        self.header_label.pack(fill=X, padx=(0, "14p"), pady="14p")
         return header_frame
 
     def _create_action_bar(self, master: Misc):
