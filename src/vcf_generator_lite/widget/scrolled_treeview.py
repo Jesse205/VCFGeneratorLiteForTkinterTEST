@@ -19,7 +19,7 @@ class ScrolledTreeview(Treeview, ScalingMiscExtension):
             self.vbar = Scrollbar(self, orient="vertical")
             self.vbar.pack(side="right", fill="y", pady="1.5p", padx="1.5p")
             self.configure(yscrollcommand=self.vbar.set)
-            self.apply_padding(right=self.vbar.winfo_reqwidth() + self.get_scaled(3))
+            self.apply_padding(right=self.vbar.winfo_reqwidth() + self.get_scaled(1.5))
             self.vbar.configure(command=self.yview)
 
     def apply_padding(
