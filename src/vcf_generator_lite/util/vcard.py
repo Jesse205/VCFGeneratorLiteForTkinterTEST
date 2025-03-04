@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class InvalidLine:
     row_position: int
     content: str
-    exception: BaseException
+    exception_str: str
 
 
 @dataclass
@@ -123,7 +123,7 @@ class VCardFileGenerator:
                     self._update_progress(state, 1)
             except ValueError as e:
                 logger.error(f"Invalid contact data at line {position}: {e}")
-                state.invalid_lines.append(InvalidLine(position, line, e))
+                state.invalid_lines.append(InvalidLine(position, line, str(e)))
                 self._update_progress(state, 1)
             except Exception as e:
                 logger.exception(f"Unexpected parsing error at line {position}", exc_info=e)

@@ -10,8 +10,7 @@ ignored_template = "{content}... 等 {ignored_count} 个。"
 
 
 class InvalidLinesController:
-    def __init__(self, window: InvalidLinesWindow, display_path: str,
-                 invalid_lines: list[InvalidLine], ):
+    def __init__(self, window: InvalidLinesWindow, display_path: str, invalid_lines: list[InvalidLine]):
         self.window = window
         window.bind("<Return>", self.on_ok_click)
         window.header_label.configure(text=message_invalid_template.format(path=display_path))
