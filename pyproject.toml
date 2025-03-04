@@ -1,6 +1,6 @@
 [project]
 name = "vcf_generator_lite"
-version = "4.0.0"
+version = "4.1.0"
 description = "A simple VCF generator"
 authors = [
     { name = "Jesse205", email = "2055675594@qq.com" },
