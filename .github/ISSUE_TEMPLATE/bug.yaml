@@ -58,11 +58,12 @@ body:
   - type: checkboxes
     id: package-types
     attributes:
-      label: 应用包类型
+      label: 应用分发类型
       description: 您当前正在使用我们应用的什么应用包格式？
       options:
         - label: 安装包
         - label: 便携包
-        - label: ZipApp
+        - label: Zip 应用
+        - label: 未知
     validations:
       required: true

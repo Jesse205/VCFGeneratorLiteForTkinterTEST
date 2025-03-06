@@ -31,42 +31,41 @@ VCF generator, input name and phone number to automatically generate VCF files f
 
 ## Download
 
-### Application Package Types
+### Application Distribution Forms
 
-Choose the most suitable package format based on your usage scenario:
+Choose the most suitable deployment method based on your usage scenario:
 
-| Package Type | Execution Method               | Use Case                                           |
-| ------------ | ------------------------------ | -------------------------------------------------- |
-| Installer    | Install and run                | Long-term use/Desktop shortcut required            |
-| Portable     | Extract and run (USB portable) | No installation/Temporary use                      |
-| ZipApp       | Directly run by double-click   | Quick launch/Cross-platform usage                  |
-| Chocolatey   | One-click CLI deployment       | Automated install/Central management/Rapid updates |
+| Distribution Form | Running Method                             | Applicable Scenarios                   |
+| ----------------- | ------------------------------------------ | -------------------------------------- |
+| Installer         | Install via setup program                  | Long-term use / Need desktop shortcuts |
+| Portable Package  | Extract and use (supports USB portability) | No installation / Temporary use        |
+| Zip Application   | Double-click to run                        | Quick launch / Cross-platform use      |
 
-### System Requirements
+### Environment Requirements
 
-Different packages require specific environments. Select the appropriate package for your system:
+Different application packages have different environment requirements. Please choose the corresponding package based on your system environment.
 
-| Package Type       | Core Dependencies     | Architecture | Special Notes                      |
-| ------------------ | --------------------- | ------------ | ---------------------------------- |
-| Installer/Portable | Windows 7+            | x86_64       | Requires patch files for Windows 7 |
-| ZipApp             | Python 3.13 & Tkinter | Any          | -                                  |
-| Chocolatey         | Chocolatey 2.0.0      | x86_64       | Pre-installed Chocolatey           |
+| Package Type               | Runtime Dependencies          | Architecture    | Prerequisites                                          |
+| -------------------------- | ----------------------------- | --------------- | ------------------------------------------------------ |
+| Installer/Portable Package | Windows 7+ system environment | x86_64          | Windows 7 requires patch files (see below for details) |
+| Zip Application            | Python 3.13 and Tkinter       | No restrictions | Requires Python 3.13 and Tkinter to be installed       |
 
-Note: Your environment must be compatible with the runtime dependencies.
+Note: You also need an environment compatible with the runtime dependencies.
 
 ### File Download List
 
-Get packages through these channels:
+Get the software package through the following channels:
 
 - [Gitee Releases][ReleaseOnGitee]
 - [GitHub Releases][ReleaseOnGithub]
 
-System-specific packages:
+File list for each system:
 
-| OS          | Installer     | Portable Package         | ZipApp File               | Chocolatey    |
-| ----------- | ------------- | ------------------------ | ------------------------- | ------------- |
-| Windows 7+  | `*_setup.exe` | `*_portable_windows.zip` | `vcf_generator_lite.pyzw` | Not available |
-| Linux/macOS | Not available | Not available            | `vcf_generator_lite.pyzw` | -             |
+| Package Type     | Windows                     | Linux                                   | macOS                                   | Android       |
+| ---------------- | --------------------------- | --------------------------------------- | --------------------------------------- | ------------- |
+| Installer        | `*_setup.exe` (recommended) | Not available                           | Not available                           | Not supported |
+| Portable Package | `*_portable.zip`            | Not available                           | Not available                           | Not supported |
+| Zip Application  | `vcf_generator_lite.pyzw`   | `vcf_generator_lite.pyzw` (recommended) | `vcf_generator_lite.pyzw` (recommended) | Not supported |
 
 ### Windows 7 Compatibility Patch
 
