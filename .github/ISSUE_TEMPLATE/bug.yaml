@@ -61,7 +61,7 @@ body:
       label: 应用分发类型
       description: 您当前正在使用我们应用的什么应用包格式？
       options:
-        - label: 安装包
+        - label: 安装器
         - label: 便携包
         - label: Zip 应用
         - label: 未知

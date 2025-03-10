@@ -61,11 +61,11 @@ Get the software package through the following channels:
 
 File list for each system:
 
-| Package Type     | Windows                     | Linux                                   | macOS                                   | Android       |
-| ---------------- | --------------------------- | --------------------------------------- | --------------------------------------- | ------------- |
-| Installer        | `*_setup.exe` (recommended) | Not available                           | Not available                           | Not supported |
-| Portable Package | `*_portable.zip`            | Not available                           | Not available                           | Not supported |
-| Zip Application  | `vcf_generator_lite.pyzw`   | `vcf_generator_lite.pyzw` (recommended) | `vcf_generator_lite.pyzw` (recommended) | Not supported |
+| Package Type     | Windows                     | Linux                         | macOS                         | Android       |
+| ---------------- | --------------------------- | ----------------------------- | ----------------------------- | ------------- |
+| Installer        | `*_setup.exe` (recommended) | Not available                 | Not available                 | Not supported |
+| Portable Package | `*_portable.zip`            | Not available                 | Not available                 | Not supported |
+| Zip Application  | `*_zipapp.pyzw`             | `*_zipapp.pyzw` (recommended) | `*_zipapp.pyzw` (recommended) | Not supported |
 
 ### Windows 7 Compatibility Patch
 

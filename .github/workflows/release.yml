@@ -26,7 +26,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload ${{ github.event.release.tag_name }} \
-            *_portable_windows.zip \
+            *_portable.zip \
             *_setup.exe \
-            vcf_generator_lite.pyzw \
+            *_zipapp.pyzw \
             --clobber --repo $GITHUB_REPOSITORY

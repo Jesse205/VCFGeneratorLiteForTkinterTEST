@@ -48,9 +48,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-portable
-          path: dist/*_portable_windows.zip
+          path: dist/*_portable.zip
       - name: Upload Zip Application
         uses: actions/upload-artifact@v4
         with:
           name: zip-app
-          path: dist/vcf_generator_lite.pyzw
+          path: dist/*_zipapp.pyzw

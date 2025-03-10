@@ -3,17 +3,20 @@ import os
 import shutil
 import subprocess
 import sys
+import sysconfig
 from zipfile import ZipFile
 
 import PyInstaller.__main__ as pyinstaller
 
 from scripts.prepare_innosetup_extensions import PATH_INNOSETUP_EXTENSION, main as prepare_innosetup_extensions
 from scripts.utils import get_bits
-from vcf_generator_lite.__version__ import __version__
+from vcf_generator_lite.__version__ import __version__ as APP_VERSION
 from vcf_generator_lite.constants import APP_COPYRIGHT
 
-PYTHON_VERSION = f"{sys.version_info.major}.{sys.version_info.minor}"
-OUTPUT_BASE_NAME = f"VCFGeneratorLite_v{__version__}_{get_bits()}bit"
+PYTHON_VERSION = sysconfig.get_python_version()
+PLATFORM_PYTHON = f"python-{PYTHON_VERSION}"
+PLATFORM_NATIVE = sysconfig.get_platform()
+OUTPUT_BASE_NAME_TEMPLATE = "VCFGeneratorLite_v{version}_{platform}_{distribution}"
 
 
 def build_with_pyinstaller():
@@ -24,12 +27,17 @@ def build_with_pyinstaller():
 
 def build_with_pdm_packer():
     print("Building with pdm-packer...")
+    file_name = OUTPUT_BASE_NAME_TEMPLATE.format(
+        version=APP_VERSION,
+        platform=PLATFORM_PYTHON,
+        distribution="zipapp"
+    ) + ".pyzw"
     os.environ["PYTHONOPTIMIZE"] = "2"
     result = subprocess.run([
         shutil.which("pdm"),
         "pack",
         "-m", "vcf_generator_lite.__main__:main",
-        "-o", "dist/vcf_generator_lite.pyzw",
+        "-o", os.path.join("dist", file_name),
         "--interpreter", "/usr/bin/env python3.13",
         "--compile",
         "--compress",
@@ -44,12 +52,17 @@ def pack_with_innosetup() -> int:
     if not os.path.isdir(PATH_INNOSETUP_EXTENSION):
         if (result := prepare_innosetup_extensions()) != 0:
             return result
+    file_base_name = OUTPUT_BASE_NAME_TEMPLATE.format(
+        version=APP_VERSION,
+        platform=PLATFORM_NATIVE,
+        distribution="setup"
+    )
     os.environ["PATH"] += os.pathsep + "C:\\Program Files (x86)\\Inno Setup 6\\"
     result = subprocess.run([
         shutil.which("iscc"),
-        "/D" + f"OutputBaseFilename={OUTPUT_BASE_NAME}_setup",
+        "/D" + f"OutputBaseFilename={file_base_name}",
         "/D" + f"MyAppCopyright={APP_COPYRIGHT}",
-        "/D" + f"MyAppVersion={__version__}",
+        "/D" + f"MyAppVersion={APP_VERSION}",
         os.path.abspath('setup.iss'),
     ])
     print("Packaging finished.")
@@ -58,7 +71,12 @@ def pack_with_innosetup() -> int:
 
 def pack_with_zipfile():
     print("Packaging with ZipFile...")
-    with ZipFile(os.path.join("dist", f"{OUTPUT_BASE_NAME}_portable_windows.zip"), "w") as zip_file:
+    file_name = OUTPUT_BASE_NAME_TEMPLATE.format(
+        version=APP_VERSION,
+        platform=PLATFORM_NATIVE,
+        distribution="portable"
+    ) + ".zip"
+    with ZipFile(os.path.join("dist", file_name), "w") as zip_file:
         for path, dirs, files in os.walk(os.path.join("dist", "vcf_generator_lite")):
             for file_path in [os.path.join(path, file) for file in files]:
                 zip_file.write(file_path, os.path.relpath(file_path, "dist"))

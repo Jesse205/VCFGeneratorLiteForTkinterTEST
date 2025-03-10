@@ -30,7 +30,7 @@
 
 | 应用包类型 | 命令                             |
 | ---------- | -------------------------------- |
-| 安装版     | `pdm run build_app -t installer` |
+| 安装器     | `pdm run build_app -t installer` |
 | 便携版     | `pdm run build_app -t portable`  |
 | ZipApp     | `pdm run build_app -t zipapp`    |
 
@@ -78,4 +78,4 @@ VCFGeneratorLiteForTkinter/
    ```
 - **布局原则**：
    - 尽量使用 `pack` 布局管理器，创建响应式 UI；
-  - 组件间距统一使用 `padx=7p, pady=7p`。
+   - 组件间距统一使用 `padx=7p, pady=7p`。
