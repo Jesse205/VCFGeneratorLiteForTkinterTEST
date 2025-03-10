@@ -52,7 +52,7 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 | 软件包类型    | 运行时依赖             | 架构要求 | 前置条件                           |
 | ------------- | ---------------------- | -------- | ---------------------------------- |
 | 安装器/便携包 | Windows 7+ 系统环境    | x86_64   | Windows 7 需补丁文件（见下方说明） |
-| Zip       | Python 3.13 与 Tkinter | 无限制   | 需安装 Python 3.13 与 Tkinter      |
+| Zip 应用      | Python 3.13 与 Tkinter | 无限制   | 需安装 Python 3.13 与 Tkinter      |
 
 <!-- | Chocolatey         | Chocolatey 2.0.0       | x86_64   | 需安装 Chocolatey                            |
 | Android 应用软件包 | Android 系统环境       | 未知     | Windows 11 需安装 WSA，Linux 需安装 Waydroid |
