@@ -1,3 +1,4 @@
+import argparse
 import os
 import re
 import sys
@@ -16,9 +17,9 @@ TEXT_REPLACE_DICT_CHINESE_SIMPLIFIED = {
 }
 
 
-def main() -> int:
+def prepare_innosetup_extensions(download_url: str) -> int:
     print("Preparing InnoSetup extensions.")
-    response = requests.get(URL_CHINESE_SIMPLIFIED_ISL_GITCODE)
+    response = requests.get(download_url)
     if response.status_code != 200:
         print(f"Failed to download Chinese Simplified ISL: {response.status_code}", file=sys.stderr)
         return 1
@@ -32,3 +33,23 @@ def main() -> int:
         f.write(file_text)
     print("Downloaded Chinese Simplified ISL.")
     return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-m", "--mirror",
+        type=str,
+        default="github",
+        choices=["github", "gitcode"],
+        help="文件下载镜像（默认：%(default)s）"
+    )
+    args = parser.parse_args()
+    match args.mirror:
+        case "github":
+            download_url = URL_CHINESE_SIMPLIFIED_ISL_URL
+        case "gitcode":
+            download_url = URL_CHINESE_SIMPLIFIED_ISL_GITCODE
+        case _:
+            download_url = URL_CHINESE_SIMPLIFIED_ISL_URL
+    return prepare_innosetup_extensions(download_url)
