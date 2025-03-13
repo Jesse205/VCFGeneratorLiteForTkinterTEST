@@ -67,6 +67,7 @@ en_us.MyAppPublisherURL=https://github.com/Jesse205
 en_us.MyAppReadmeFile=https://github.com/HelloTool/VCFGeneratorLiteForTkinter/blob/master/README.md
 en_us.MyAppUpdatesURL=https://github.com/HelloTool/VCFGeneratorLiteForTkinter/releases
 en_us.SetupAppRunningOnWin7=Note: You are using Windows 7, you will need to add the following additional files after the installation is complete in order to run: python313.dll and api-ms-win-core-path-l1-1-0.dll.
+en_us.UninstallFailed=Uninstall failed
 
 zh_cn.MyAppName=VCF 生成器 Lite
 zh_cn.MyAppPublisher=Jesse205
@@ -74,8 +75,50 @@ zh_cn.MyAppPublisherURL=https://gitee.com/Jesse205
 zh_cn.MyAppReadmeFile=https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/blob/master/README.md
 zh_cn.MyAppUpdatesURL=https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases
 zh_cn.SetupAppRunningOnWin7=注意: 您正在使用 Windows 7, 您需要在安装完成后额外添加以下文件才能运行：python313.dll 和 api-ms-win-core-path-l1-1-0.dll。
+zh_cn.UninstallFailed=自动卸载失败
 
 [Code]
+
+function GetUninstallString(): String;
+var
+  UninstallPath: String;
+begin
+  UninstallPath :=
+    'Software\Microsoft\Windows\CurrentVersion\Uninstall\' +
+    '{2CA151A5-049F-4AD9-92B1-5F0A244F52A4}_is1';
+  if RegQueryStringValue(HKA, UninstallPath, 'UninstallString', Result) then
+    Exit;
+
+  Result := '';
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+var
+  UninstallCmd: String;
+  ResultCode: Integer;
+  ErrorMessage: String;
+begin
+  if (CurStep = ssInstall) then
+  begin
+    UninstallCmd := GetUninstallString();
+    if UninstallCmd <> '' then
+    begin
+      UninstallCmd := RemoveQuotes(UninstallCmd);
+      if FileExists(UninstallCmd) then
+      begin
+        if not Exec(UninstallCmd, '/SILENT /NORESTART /SUPPRESSMSGBOXES', '',
+            SW_HIDE, ewWaitUntilTerminated, ResultCode) then
+        begin
+          ErrorMessage := CustomMessage('UninstallFailed') + #13#10 +
+            SysErrorMessage(ResultCode) + ' (' + IntToStr(ResultCode) + ')';
+
+          MsgBox(ErrorMessage, mbError, MB_OK);
+        end;
+      end;
+    end;
+  end;
+end;
+
 var
   Win7MessageShown: Boolean;
 
