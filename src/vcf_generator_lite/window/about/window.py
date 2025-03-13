@@ -4,7 +4,7 @@ from tkinter.constants import *
 from tkinter.ttk import Button, Frame, Label, Style
 from typing import override
 
-from vcf_generator_lite import assets, constants
+from vcf_generator_lite import resources, constants
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT, APP_NAME
 from vcf_generator_lite.layout.vertical_dialog_layout import VerticalDialogLayout
@@ -34,7 +34,7 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
         # 保存到 Window 中防止回收内存
         self.app_icon_image = PhotoImage(
             master=self,
-            data=assets.read_binary_variant("images/icon-48.png", [
+            data=resources.read_binary_variant("images/icon-48.png", [
                 (1.5, "images/icon-72.png"),
                 (1.25, "images/icon-60.png"),
 
@@ -68,7 +68,7 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
         content_frame = Frame(parent)
         details_input = HTMLScrolledText(
             content_frame,
-            html=assets.read_text('texts/about.html').format(
+            html=resources.read_text('texts/about.html').format(
                 source_url=constants.URL_SOURCE,
                 release_url=constants.URL_RELEASES,
                 jesse205_email=constants.EMAIL_JESSE205,
@@ -78,7 +78,7 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
                         name=item["name"],
                         license=item["license"],
                         license_url=item["license_url"]
-                    ) for item in json.loads(assets.read_binary('data/os_notice.json'))
+                    ) for item in json.loads(resources.read_binary('data/os_notice.json'))
                 ])
             ),
             state=DISABLED,
