@@ -5,7 +5,7 @@ a = Analysis(
     ['./src/vcf_generator_lite/__main__.py'],
     pathex=[],
     binaries=[],
-    datas=[('./src/vcf_generator_lite/assets', 'vcf_generator_lite/assets')],
+    datas=[('./src/vcf_generator_lite/resources', 'vcf_generator_lite/resources')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
