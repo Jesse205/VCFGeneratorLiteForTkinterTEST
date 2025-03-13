@@ -3,7 +3,7 @@ name = "vcf_generator_lite"
 version = "4.1.2"
 description = "A simple VCF generator"
 authors = [
-    { name = "Jesse205", email = "2055675594@qq.com" },
+    { name = "Jesse205", email = "jesse205@qq.com" },
 ]
 license = { text = "MIT" }
 readme = "README.md"
@@ -21,7 +21,9 @@ dev = [
 ]
 
 [project.urls]
-Repository = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
+repository = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
+github = "https://github.com/HelloTool/VCFGeneratorLiteForTkinter"
+issues = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/issues/new/choose"
 
 [project.gui-scripts]
 vcf-generator-lite = "vcf_generator_lite.__main__:main"
