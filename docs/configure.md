@@ -59,7 +59,7 @@
             style.theme_use("classic")
             style.configure("TButton", padding="1p", width=11)
             style.configure("Vertical.TScrollbar", arrowsize="9p")
-            style.configure("InfoHeader.TFrame", relief="raised")
+            style.configure("DialogHeader.TFrame", relief="raised")
             style.configure("TextFrame.TEntry", padding=0, borderwidth="2p")
 
             window_background = style.lookup("TFrame", "background")
@@ -73,6 +73,19 @@
 
 在 `ClassicTheme` 中，首先应用了 `classic` 主题，然后覆盖了按钮、滚动条、关于对话框信息栏和输入框的样式，最后配置
 `master` 窗口和接下来创建的任何 Toplevel 窗口的背景为主题背景。
+
+### 组件样式
+
+| 样式                         | 作用                                                     |
+| ---------------------------- | -------------------------------------------------------- |
+| `TButton`                    | 按钮样式                                                 |
+| `TEntry`                     | 输入框                                                   |
+| `TextFrame.TEntry`           | [`ttk-text`](https://github.com/Jesse205/TtkText) 输入框 |
+| `TFrame`                     | 框架                                                     |
+| `DialogHeader.TFrame`        | 对话框头部                                               |
+| `DialogHeaderContent.TFrame` | 对话框头部区域                                           |
+| `TLabel`                     | 标签                                                     |
+| `DialogHeaderContent.TLabel` | 对话框头部标签                                           |
 
 ## 最佳实践
 
