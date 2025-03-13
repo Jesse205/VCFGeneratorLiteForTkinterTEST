@@ -7,6 +7,7 @@ from typing import override
 from vcf_generator_lite import assets, constants
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT, APP_NAME
+from vcf_generator_lite.layout.vertical_dialog_layout import VerticalDialogLayout
 from vcf_generator_lite.util.tkinter.font import extend_font
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.widget.tkhtmlview import HTMLScrolledText
@@ -14,7 +15,7 @@ from vcf_generator_lite.window.base import ExtendedDialog
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
 
 
-class AboutWindow(ExtendedDialog):
+class AboutWindow(ExtendedDialog, VerticalDialogLayout):
     app_icon_image: PhotoImage = None
 
     @override
@@ -24,21 +25,12 @@ class AboutWindow(ExtendedDialog):
         self.wm_size_pt(375, 300)
         self.wm_minsize_pt(375, 300)
         self.wm_maxsize_pt(375, 300)
-        self._create_widgets()
+        self._create_widgets(self)
 
-    def _create_widgets(self):
-        header_frame = self._create_header(self)
-        header_frame.pack(fill=X)
-
-        content_frame = self._create_content(self)
-        content_frame.pack(fill=BOTH, expand=True)
-
-        action_frame = self._create_action_bar(self)
-        action_frame.pack(fill=X, side=BOTTOM)
-
-    def _create_header(self, master: Misc):
-        header_frame = Frame(master, style="InfoHeader.TFrame")
-        background_color = Style(master).lookup("InfoHeader.TFrame", "background")
+    @override
+    def _create_header(self, parent: Misc):
+        header_frame = Frame(parent, style="InfoHeader.TFrame")
+        background_color = Style(parent).lookup("InfoHeader.TFrame", "background")
         # 保存到 Window 中防止回收内存
         self.app_icon_image = PhotoImage(
             master=self,
@@ -71,8 +63,9 @@ class AboutWindow(ExtendedDialog):
         app_copyright_label.pack(anchor=W)
         return header_frame
 
-    def _create_content(self, master: Misc):
-        content_frame = Frame(master)
+    @override
+    def _create_content(self, parent: Misc):
+        content_frame = Frame(parent)
         details_input = HTMLScrolledText(
             content_frame,
             html=assets.read_text('texts/about.html').format(
@@ -96,8 +89,9 @@ class AboutWindow(ExtendedDialog):
         details_context_menu.bind_to_widget()
         return content_frame
 
-    def _create_action_bar(self, master: Misc):
-        action_frame = Frame(master)
+    @override
+    def _create_actions(self, parent: Misc):
+        action_frame = Frame(parent)
         self.ok_button = Button(
             action_frame,
             text="确定",
