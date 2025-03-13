@@ -1,11 +1,20 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
+
+resources_dir = './src/vcf_generator_lite/resources/'
+
+resources = []
+for root, dirs, files in os.walk("./src/vcf_generator_lite/resources/"):
+    for file in files:
+        if not file.endswith(".pyc") and not file.endswith(".py"):
+            resources.append((os.path.join(root, file), os.path.relpath(root, './src/')))
 
 # noinspection PyUnresolvedReferences
 a = Analysis(
     ['./src/vcf_generator_lite/__main__.py'],
     pathex=[],
     binaries=[],
-    datas=[('./src/vcf_generator_lite/resources', 'vcf_generator_lite/resources')],
+    datas=resources,
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
