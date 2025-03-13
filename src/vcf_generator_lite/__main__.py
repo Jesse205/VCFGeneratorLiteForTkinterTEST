@@ -7,11 +7,18 @@ from vcf_generator_lite.util.display import enable_dpi_aware
 from vcf_generator_lite.window.main import create_main_window
 
 
+def fix_home_env():
+    """
+    修复 Tkinter 在 Windows 中无法获取 HOME 的问题
+    """
+    os.environ['HOME'] = os.path.expanduser("~")
+
+
 def main():
     log_level = logging.DEBUG if __debug__ else logging.INFO
     logging.basicConfig(level=log_level, stream=sys.stdout)
 
-    os.environ['HOME'] = os.path.expanduser("~")
+    fix_home_env()
     enable_dpi_aware()
 
     logging.info("Starting VCF Generator...")
