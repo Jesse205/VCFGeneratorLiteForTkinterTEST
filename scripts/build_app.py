@@ -14,7 +14,7 @@ from vcf_generator_lite.__version__ import __version__ as APP_VERSION
 from vcf_generator_lite.constants import APP_COPYRIGHT
 
 PYTHON_VERSION = sysconfig.get_python_version()
-PLATFORM_PYTHON = f"python-{PYTHON_VERSION}"
+PLATFORM_PYTHON = f"{sys.implementation.name}-{PYTHON_VERSION}"
 PLATFORM_NATIVE = sysconfig.get_platform()
 OUTPUT_BASE_NAME_TEMPLATE = "VCFGeneratorLite_v{version}_{platform}_{distribution}"
 
