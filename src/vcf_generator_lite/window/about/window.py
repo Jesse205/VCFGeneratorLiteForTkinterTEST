@@ -29,8 +29,8 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
 
     @override
     def _create_header(self, parent: Misc):
-        header_frame = Frame(parent, style="InfoHeader.TFrame")
-        background_color = Style(parent).lookup("InfoHeader.TFrame", "background")
+        header_frame = Frame(parent, style="DialogHeader.TFrame")
+        background_color = Style(parent).lookup("DialogHeader.TFrame", "background")
         # 保存到 Window 中防止回收内存
         self.app_icon_image = PhotoImage(
             master=self,
@@ -49,17 +49,17 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
         )
         app_icon_label.pack(side=LEFT, padx="14p", pady="7p")
 
-        app_info_frame = Frame(header_frame, style="InfoHeaderContent.TFrame")
+        app_info_frame = Frame(header_frame, style="DialogHeaderContent.TFrame")
         app_info_frame.pack(side=LEFT, anchor=CENTER, fill=X, expand=True, padx=(0, "14p"), pady="14p")
 
         app_name_label = Label(
             app_info_frame,
             text=f"{APP_NAME} v{__version__}",
-            style="InfoHeaderContent.TLabel",
+            style="DialogHeaderContent.TLabel",
             font=extend_font("TkDefaultFont", size=12),
         )
         app_name_label.pack(anchor=W)
-        app_copyright_label = Label(app_info_frame, text=APP_COPYRIGHT, style="InfoHeaderContent.TLabel")
+        app_copyright_label = Label(app_info_frame, text=APP_COPYRIGHT, style="DialogHeaderContent.TLabel")
         app_copyright_label.pack(anchor=W)
         return header_frame
 

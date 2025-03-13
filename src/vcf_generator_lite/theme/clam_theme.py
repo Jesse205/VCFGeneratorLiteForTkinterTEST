@@ -18,7 +18,7 @@ class ClamTheme(BaseTheme):
         style.configure("Vertical.TScrollbar", arrowsize="9p")
 
         # 自定义组件
-        style.configure("InfoHeader.TFrame", relief="raised")
+        style.configure("DialogHeader.TFrame", relief="raised")
         style.configure("TextFrame.TEntry", padding=0, borderwidth="1.5p")
 
         # 窗口背景色不会跟随主题变化，需要手动设置

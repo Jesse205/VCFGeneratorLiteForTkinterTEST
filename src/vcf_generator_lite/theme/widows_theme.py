@@ -19,9 +19,9 @@ class WindowsTheme(BaseTheme):
 
         # 自定义组件
         style.configure("TextFrame.TEntry", padding=0, borderwidth="1.5p", bordercolor="SystemHighlight")
-        style.configure("InfoHeader.TFrame", background="systemWindow")
-        style.configure("InfoHeaderContent.TFrame", background="systemWindow")
-        style.configure("InfoHeaderContent.TLabel", background="systemWindow")
+        style.configure("DialogHeader.TFrame", background="systemWindow")
+        style.configure("DialogHeaderContent.TFrame", background="systemWindow")
+        style.configure("DialogHeaderContent.TLabel", background="systemWindow")
 
         # Windows 7 中菜单默认不使用TkMenuFont，因此需要手动设置字体。
         menu_font = nametofont("TkMenuFont")

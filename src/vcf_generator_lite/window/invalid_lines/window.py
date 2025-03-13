@@ -24,11 +24,11 @@ class InvalidLinesWindow(ExtendedDialog, VerticalDialogLayout):
 
     @override
     def _create_header(self, parent: Misc):
-        header_frame = Frame(parent, style="InfoHeader.TFrame")
-        background_color = Style(parent).lookup("InfoHeader.TFrame", "background")
+        header_frame = Frame(parent, style="DialogHeader.TFrame")
+        background_color = Style(parent).lookup("DialogHeader.TFrame", "background")
         self.header_icon = TkLabel(header_frame, bitmap="warning", background=background_color)
         self.header_icon.pack(side=LEFT, padx="14p", pady="7p")
-        self.header_label = Label(header_frame, style="InfoHeaderContent.TLabel")
+        self.header_label = Label(header_frame, style="DialogHeaderContent.TLabel")
         self.header_label.bind("<Configure>", auto_wrap_configure_event, "+")
         self.header_label.pack(fill=X, padx=(0, "14p"), pady="14p")
         return header_frame
