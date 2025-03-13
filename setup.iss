@@ -34,6 +34,7 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 VersionInfoOriginalFileName={#OutputBaseFilename}.exe
 VersionInfoVersion={#MyAppVersion}.0
 VersionInfoCompany={#MyAppPublisher}
+ShowLanguageDialog=auto
 
 [Languages]
 Name: en_us; MessagesFile: "compiler:Default.isl"
