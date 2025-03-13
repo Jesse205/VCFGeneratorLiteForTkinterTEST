@@ -1,11 +1,12 @@
+import json
 from tkinter import PhotoImage, Misc, Label as TkLabel
 from tkinter.constants import *
 from tkinter.ttk import Button, Frame, Label, Style
 from typing import override
 
+from vcf_generator_lite import assets, constants
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT, APP_NAME
-from vcf_generator_lite.util.resource import get_about_html, get_asset_scaled_data
 from vcf_generator_lite.util.tkinter.font import extend_font
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.widget.tkhtmlview import HTMLScrolledText
@@ -28,30 +29,25 @@ class AboutWindow(ExtendedDialog):
     def _create_widgets(self):
         header_frame = self._create_header(self)
         header_frame.pack(fill=X)
-        details_input = HTMLScrolledText(
-            self,
-            html=get_about_html(),
-            state=DISABLED,
-            height=0,
-        )
-        details_input.pack(fill=BOTH, expand=True, padx="7p", pady=("7p", 0))
-        details_context_menu = TextContextMenu(details_input)
-        details_context_menu.bind_to_widget()
+
+        content_frame = self._create_content(self)
+        content_frame.pack(fill=BOTH, expand=True)
+
         action_frame = self._create_action_bar(self)
         action_frame.pack(fill=X, side=BOTTOM)
 
     def _create_header(self, master: Misc):
         header_frame = Frame(master, style="InfoHeader.TFrame")
         background_color = Style(master).lookup("InfoHeader.TFrame", "background")
+        # 保存到 Window 中防止回收内存
         self.app_icon_image = PhotoImage(
             master=self,
-            data=get_asset_scaled_data([
-                (1.0, "images/icon-48.png"),
-                (1.25, "images/icon-60.png"),
+            data=assets.read_binary_variant("images/icon-48.png", [
                 (1.5, "images/icon-72.png"),
+                (1.25, "images/icon-60.png"),
 
-            ], self.scaling() * 0.75),
-        )  # 保存到 Window 中防止回收内存
+            ], lambda scaling: scaling <= self.scaling() * 0.75),
+        )
         app_icon_label = TkLabel(
             header_frame,
             image=self.app_icon_image,
@@ -74,6 +70,31 @@ class AboutWindow(ExtendedDialog):
         app_copyright_label = Label(app_info_frame, text=APP_COPYRIGHT, style="InfoHeaderContent.TLabel")
         app_copyright_label.pack(anchor=W)
         return header_frame
+
+    def _create_content(self, master: Misc):
+        content_frame = Frame(master)
+        details_input = HTMLScrolledText(
+            content_frame,
+            html=assets.read_text('texts/about.html').format(
+                source_url=constants.URL_SOURCE,
+                release_url=constants.URL_RELEASES,
+                jesse205_email=constants.EMAIL_JESSE205,
+                os_notice_html="<br />".join([
+                    '<a href="{url}">{name}</a> - <a href="{license_url}">{license}</a>'.format(
+                        url=item["url"],
+                        name=item["name"],
+                        license=item["license"],
+                        license_url=item["license_url"]
+                    ) for item in json.loads(assets.read_binary('data/os_notice.json'))
+                ])
+            ),
+            state=DISABLED,
+            height=0,
+        )
+        details_input.pack(fill=BOTH, expand=True, padx="7p", pady=("7p", 0))
+        details_context_menu = TextContextMenu(details_input)
+        details_context_menu.bind_to_widget()
+        return content_frame
 
     def _create_action_bar(self, master: Misc):
         action_frame = Frame(master)

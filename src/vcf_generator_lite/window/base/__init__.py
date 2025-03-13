@@ -4,8 +4,8 @@ from tkinter import PhotoImage, Tk, Toplevel, Wm
 from tkinter.ttk import Style
 from typing import override
 
+from vcf_generator_lite import assets
 from vcf_generator_lite.theme import create_platform_theme
-from vcf_generator_lite.util.resource import get_asset_data
 from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
 from vcf_generator_lite.util.tkinter.theme import Theme
 from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GeometryWindowExtension, \
@@ -42,7 +42,7 @@ class AppWindowExtension(GcWindowExtension, GeometryWindowExtension, ScalingMisc
 
     def __apply_default_icon(self):
         logger.debug(f"窗口 {self.winfo_name()} 默认图标为 icon-48.png")
-        self.iconphoto(True, PhotoImage(master=self, data=get_asset_data("images/icon-48.png")))
+        self.iconphoto(True, PhotoImage(master=self, data=assets.read_binary("images/icon-48.png")))
 
     def __apply_default_events(self):
         self.protocol("WM_DELETE_WINDOW", lambda: self.event_generate(EVENT_EXIT))
