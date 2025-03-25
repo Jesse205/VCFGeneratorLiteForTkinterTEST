@@ -34,11 +34,14 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
         # 保存到 Window 中防止回收内存
         self.app_icon_image = PhotoImage(
             master=self,
-            data=resources.read_binary_variant("images/icon-48.png", [
-                (1.5, "images/icon-72.png"),
-                (1.25, "images/icon-60.png"),
-
-            ], lambda scaling: scaling <= self.scaling() * 0.75),
+            data=resources.read_scaled_binary(
+                resources={
+                    1.0: "images/icon-48.png",
+                    1.25: "images/icon-60.png",
+                    1.5: "images/icon-72.png",
+                },
+                scaling=round(self.scaling() * 0.75, 2),
+            ),
         )
         app_icon_label = TkLabel(
             header_frame,

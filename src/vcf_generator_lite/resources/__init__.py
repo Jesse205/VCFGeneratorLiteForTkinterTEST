@@ -1,25 +1,23 @@
 import importlib.resources
-import sys
-from collections.abc import Callable
 
-__module = sys.modules[__name__]
+base_traversable = importlib.resources.files(__name__)
 
 
-def read_text(resource: str, encoding: str = "utf-8", errors: str = "strict") -> str:
-    return importlib.resources.read_text(__module, resource, encoding=encoding, errors=errors)
+def read_text(resource: str, *, encoding: str = "utf-8") -> str:
+    # 为了兼容Python3.12及以下版本，不能使用 importlib.resources.read_text
+    return base_traversable.joinpath(resource).read_text(encoding=encoding)
 
 
 def read_binary(resource: str) -> bytes:
-    return importlib.resources.read_binary(__module, resource)
+    # 为了兼容Python3.12及以下版本，不能使用 importlib.resources.read_binary
+    return base_traversable.joinpath(resource).read_bytes()
 
 
-def read_binary_variant[I](
-    resource: str,
-    variants: list[tuple[I, str]],
-    condition: Callable[[I], bool],
+def read_scaled_binary(
+    resources: dict[float, str],
+    scaling: float,
 ) -> bytes:
-    for key, resource in variants:
-        if condition(key):
-            return read_binary(resource)
-    else:
-        return read_binary(resource)
+    if scaling in resources:
+        return read_binary(resources.get(scaling))
+    closest = min(resources.keys(), key=lambda scaled: scaled - scaling)
+    return read_binary(resources.get(closest))
