@@ -2,7 +2,7 @@
 
 ## 技术栈
 
-- **开发语言**: Python 3.13+
+- **开发语言**: Python 3.12+
 - **GUI 框架**: Tkinter
 - **包管理**: PDM
 - **打包工具**: PyInstaller、ZipApp、InnoSetup 6.4+
@@ -56,12 +56,12 @@ VCFGeneratorLiteForTkinter/
 
 ## 常用命令
 
-| 命令                         | 描述                         |
-| ---------------------------- | ---------------------------- |
-| `pdm run vcf-generator-lite` | 运行应用                     |
-| `pdm run build_app`          | 构建应用                     |
-| `pdm run version`            | 查看当前版本                 |
-| `pdm run version 1.2.3`      | 更新版本号并同步所有配置文件 |
+| 命令                         | 描述                                    |
+| ---------------------------- | --------------------------------------- |
+| `pdm run vcf-generator-lite` | 运行应用                                |
+| `pdm run build_app`          | 构建应用                                |
+| `pdm run version`            | 查看当前版本                            |
+| `pdm run version 1.2.3`      | 更新版本号为 `1.2.3` 并同步所有配置文件 |
 
 您可以通过 `pdm run --list` 查看所有自定义命令。
 

@@ -8,8 +8,8 @@
 [![GitHub repository](https://img.shields.io/badge/GitHub-repository-0969da?logo=github)][RepositoryOnGithub]
 
 **Platforms:**
-[![Windows exe](https://img.shields.io/badge/Windows-exe-0078D4?logo=windows)][ReleaseOnGitee]
-[![Python pyzw](https://img.shields.io/badge/Python-pyzw-3776AB?logo=python&logoColor=f5f5f5)][ReleaseOnGitee]
+[![Windows7+ (exe)](https://img.shields.io/badge/Windows_7+-exe-0078D4?logo=windows)][ReleaseOnGitee]
+[![Python3.12+ (pyzw)](https://img.shields.io/badge/Python_3.12+-pyzw-3776AB?logo=python&logoColor=f5f5f5)][ReleaseOnGitee]
 
 **Languages:**
 [中文](./README.zh.md) |
@@ -48,7 +48,7 @@ Different application packages have different environment requirements. Please c
 | Package Type               | Runtime Dependencies          | Architecture    | Prerequisites                                          |
 | -------------------------- | ----------------------------- | --------------- | ------------------------------------------------------ |
 | Installer/Portable Package | Windows 7+ system environment | x86_64          | Windows 7 requires patch files (see below for details) |
-| Zip Application            | Python 3.13 and Tkinter       | No restrictions | Requires Python 3.13 and Tkinter to be installed       |
+| Zip Application            | Python 3.12+ and Tkinter      | No restrictions | Requires Python 3.12+ and Tkinter to be installed      |
 
 Note: You also need an environment compatible with the runtime dependencies.
 

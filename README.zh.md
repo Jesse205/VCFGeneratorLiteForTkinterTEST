@@ -8,8 +8,8 @@
 [![GitHub 仓库](https://img.shields.io/badge/GitHub-仓库-0969da?logo=github)][RepositoryOnGithub]
 
 **平台：**
-[![Windows exe](https://img.shields.io/badge/Windows-exe-0078D4?logo=windows)][ReleaseOnGitee]
-[![Python pyzw](https://img.shields.io/badge/Python-pyzw-3776AB?logo=python&logoColor=f5f5f5)][ReleaseOnGitee]
+[![Windows7+（exe）](https://img.shields.io/badge/Windows_7+-exe-0078D4?logo=windows)][ReleaseOnGitee]
+[![Python3.12+（pyzw）](https://img.shields.io/badge/Python_3.12+-pyzw-3776AB?logo=python&logoColor=f5f5f5)][ReleaseOnGitee]
 
 **语言：**
 **中文** |
@@ -49,10 +49,10 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 不同的应用包有一不同环境要求，您需要根据您的系统环境选择对应的应用包。
 
-| 软件包类型    | 运行时依赖             | 架构要求 | 前置条件                           |
-| ------------- | ---------------------- | -------- | ---------------------------------- |
-| 安装器/便携包 | Windows 7+ 系统环境    | x86_64   | Windows 7 需补丁文件（见下方说明） |
-| Zip 应用      | Python 3.13 与 Tkinter | 无限制   | 需安装 Python 3.13 与 Tkinter      |
+| 软件包类型    | 运行时依赖              | 架构要求 | 前置条件                           |
+| ------------- | ----------------------- | -------- | ---------------------------------- |
+| 安装器/便携包 | Windows 7+ 系统环境     | x86_64   | Windows 7 需补丁文件（见下方说明） |
+| Zip 应用      | Python 3.12+ 与 Tkinter | 无限制   | 需安装 Python 3.12+ 与 Tkinter     |
 
 <!-- | Chocolatey         | Chocolatey 2.0.0       | x86_64   | 需安装 Chocolatey                            |
 | Android 应用软件包 | Android 系统环境       | 未知     | Windows 11 需安装 WSA，Linux 需安装 Waydroid |
