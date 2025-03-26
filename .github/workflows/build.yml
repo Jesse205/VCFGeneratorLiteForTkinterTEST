@@ -39,6 +39,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          pdm use ${{ matrix.python-version }}
           pdm install -G:all
           pdm install --plugins
 
