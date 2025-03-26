@@ -1,6 +1,9 @@
+import logging
 import re
 from tkinter import Misc
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 
 class ScalingMiscExtension(Misc):
@@ -8,6 +11,9 @@ class ScalingMiscExtension(Misc):
 
     def __init__(self):
         self._scale_factor = self.scaling()
+        if __debug__:
+            logger.debug(f"ScalingMiscExtension init with scale_factor={self._scale_factor}, "
+                         f"system scale is {round(self._scale_factor * 0.75, 2)}.")
 
     def scaling(self, factor: Optional[float] = None):
         """
