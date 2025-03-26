@@ -23,7 +23,7 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
     progress_bar = None
 
     def __init__(self):
-        super().__init__(baseName="vcf_generator_lite")
+        super().__init__(className="VCFGeneratorLite")
 
     @override
     def on_init_window(self):

@@ -13,12 +13,12 @@
 
 ### 文件清单
 
-| 文件名                    | 类型        | 作用域   | 备注                  |
-| ------------------------- | ----------- | -------- | --------------------- |
-| `.vcf_generator_lite.py`  | Python 配置 | 应用专用 | 可覆盖默认程序行为    |
-| `.vcf_generator_lite.tcl` | TCL 配置    | 应用专用 | 优先于全局配置生效    |
-| `.Tk.py`                  | Python 配置 | 全局配置 | 系统级 Python 配置    |
-| `.Tk.tcl`                 | TCL 配置    | 全局配置 | 影响所有 Tkinter 应用 |
+| 文件名                    | 类型        | 作用域   |
+| ------------------------- | ----------- | -------- |
+| `.vcf_generator_lite.py`  | Python 配置 | 应用专用 |
+| `.vcf_generator_lite.tcl` | TCL 配置    | 应用专用 |
+| `.VCFGeneratorLite.py`    | Python 配置 | 全局配置 |
+| `.VCFGeneratorLite.tcl`   | TCL 配置    | 全局配置 |
 
 ### 全局变量
 

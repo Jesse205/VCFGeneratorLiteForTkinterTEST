@@ -53,7 +53,7 @@ class ExtendedTk(Tk, AppWindowExtension, ABC):
     _theme_applied: bool = False
 
     def __init__(self, **kw):
-        super().__init__(**kw)
+        super().__init__(baseName="vcf_generator_lite", **kw)
         with withdraw_cm(self):
             if not self._theme_applied:
                 self.set_theme(create_platform_theme())
