@@ -19,14 +19,26 @@ PLATFORM_NATIVE = sysconfig.get_platform()
 OUTPUT_BASE_NAME_TEMPLATE = "VCFGeneratorLite_v{version}_{platform}_{distribution}"
 
 
+def ensure_dist_dir():
+    if not os.path.isdir("dist"):
+        os.mkdir("dist")
+
+
+def ensure_pyinstaller_output():
+    if not os.path.isdir(os.path.join("dist", "vcf_generator_lite")):
+        raise RuntimeError("PyInstaller build not found.")
+
+
 def build_with_pyinstaller():
     print("Building with PyInstaller...")
+    ensure_dist_dir()
     pyinstaller.run(["vcf_generator_lite.spec", "--noconfirm"])
     print("Building finished.")
 
 
 def build_with_pdm_packer():
     print("Building with pdm-packer...")
+    ensure_dist_dir()
     os.environ["PYTHONOPTIMIZE"] = "2"
     result = subprocess.run([
         shutil.which("pdm"),
@@ -48,6 +60,7 @@ def build_with_pdm_packer():
 
 def pack_with_innosetup() -> int:
     print("Packaging with InnoSetup...")
+    ensure_pyinstaller_output()
     if not os.path.isdir(PATH_INNOSETUP_EXTENSION):
         if (result := prepare_innosetup_extensions()) != 0:
             return result
@@ -70,6 +83,7 @@ def pack_with_innosetup() -> int:
 
 def pack_with_zipfile():
     print("Packaging with ZipFile...")
+    ensure_pyinstaller_output()
     zip_path = os.path.join("dist", OUTPUT_BASE_NAME_TEMPLATE.format(
         version=APP_VERSION,
         platform=PLATFORM_NATIVE,
