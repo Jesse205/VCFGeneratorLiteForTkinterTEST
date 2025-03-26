@@ -24,7 +24,7 @@ def ensure_dist_dir():
         os.mkdir("dist")
 
 
-def ensure_pyinstaller_output():
+def require_pyinstaller_output():
     if not os.path.isdir(os.path.join("dist", "vcf_generator_lite")):
         raise RuntimeError("PyInstaller build not found.")
 
@@ -60,7 +60,7 @@ def build_with_pdm_packer():
 
 def pack_with_innosetup() -> int:
     print("Packaging with InnoSetup...")
-    ensure_pyinstaller_output()
+    require_pyinstaller_output()
     if not os.path.isdir(PATH_INNOSETUP_EXTENSION):
         if (result := prepare_innosetup_extensions()) != 0:
             return result
@@ -83,7 +83,7 @@ def pack_with_innosetup() -> int:
 
 def pack_with_zipfile():
     print("Packaging with ZipFile...")
-    ensure_pyinstaller_output()
+    require_pyinstaller_output()
     zip_path = os.path.join("dist", OUTPUT_BASE_NAME_TEMPLATE.format(
         version=APP_VERSION,
         platform=PLATFORM_NATIVE,

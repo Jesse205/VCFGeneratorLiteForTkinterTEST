@@ -36,10 +36,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-      - name: Install Inno Setup
-        uses: ConorMacBride/install-package@v1
-        with:
-          choco: innosetup
 
       - name: Install Dependencies
         run: |
