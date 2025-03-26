@@ -8,8 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  windows-build:
-    runs-on: windows-latest
+  build:
     strategy:
       matrix:
         include:
@@ -29,6 +28,7 @@ jobs:
             package-type: zipapp
             python-version: 3.13
             upload-path: dist/*_zipapp.pyzw
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python and PDM
