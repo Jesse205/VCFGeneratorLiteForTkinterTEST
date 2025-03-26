@@ -16,15 +16,19 @@ jobs:
           - os: windows-latest
             package-type: installer
             python-version: 3.13
+            upload-path: dist/*_setup.exe
           - os: windows-latest
             package-type: portable
             python-version: 3.13
+            upload-path: dist/*_portable.zip
           - os: ubuntu-latest
             package-type: zipapp
             python-version: 3.12
+            upload-path: dist/*_zipapp.pyzw
           - os: ubuntu-latest
             package-type: zipapp
             python-version: 3.13
+            upload-path: dist/*_zipapp.pyzw
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python and PDM
@@ -41,35 +45,16 @@ jobs:
         run: |
           pdm install -G:all
           pdm install --plugins
+
       - name: Prepare Inno Setup extensions
-        if: ${{matrix.os == 'windows-latest' }}
+        if: ${{ matrix.package-type == 'installer' }}
         run: pdm run prepare_innosetup_extensions
 
-      - name: Build Installer
-        if: ${{ matrix.package-type == 'installer' }}
-        run: pdm run build_app -t installer
-      - name: Build Portable
-        if: ${{ matrix.package-type == 'portable' }}
-        run: pdm run build_app -t portable
-      - name: Build Zip Application
-        if: ${{ matrix.package-type == 'zipapp' }}
-        run: pdm run build_app -t zipapp
+      - name: Build Package
+        run: pdm run build_app -t  ${{ matrix.package-type }}
 
-      - name: Upload Installer
+      - name: Upload Package
         uses: actions/upload-artifact@v4
-        if: ${{ matrix.package-type == 'installer' }}
         with:
-          name: windows-installer
-          path: dist/*_setup.exe
-      - name: Upload Portable
-        uses: actions/upload-artifact@v4
-        if: ${{ matrix.package-type == 'portable' }}
-        with:
-          name: windows-portable
-          path: dist/*_portable.zip
-      - name: Upload Zip Application
-        uses: actions/upload-artifact@v4
-        if: ${{ matrix.package-type == 'zipapp' }}
-        with:
-          name: zip-app
-          path: dist/*_zipapp.pyzw
+          name: ${{ matrix.os }}-${{ matrix.package-type }}-${{ matrix.python-version }}
+          path: ${{ matrix.upload-path }}
