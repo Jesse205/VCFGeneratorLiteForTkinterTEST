@@ -1,10 +1,9 @@
 import gc
-import re
 from abc import ABC
 from contextlib import contextmanager
 from tkinter import Misc, Tk, Toplevel, Wm, Event
+from typing import Optional, Literal
 
-from vcf_generator_lite.util.environment import is_windows
 from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
 
 type Window = Tk | Toplevel
@@ -28,14 +27,9 @@ def center_window(window: WindowOrExtension, parent: WindowOrExtension = None):
     window_max_x = vroot_x + vroot_width - window_width
     window_max_y = vroot_y + vroot_height - window_height
     if parent is not None:
-        # 使用geometry获取包含窗口修饰的窗口位置
-        match = re.match(r"(-?\d+)x(-?\d+)\+(-?\d+)\+(-?\d+)", parent.geometry())
-        parent_x = int(match.group(3))
-        parent_y = int(match.group(4))
-        # 当窗口最大化时，geometry获取到的位置仍然是正常位置，所以要特殊判断
-        if is_windows and parent.wm_state() == "zoomed":
-            parent_x = window.winfo_vrootx()
-            parent_y = window.winfo_vrooty()
+        # 使用winfo_x而不使用winfo_rootx在Windows上有更好的效果，winfo_x是包括边框的位置。
+        parent_x = parent.winfo_x()
+        parent_y = parent.winfo_y()
         parent_width = parent.winfo_width()
         parent_height = parent.winfo_height()
         x = parent_x + (parent_width - window_width) // 2
@@ -84,6 +78,20 @@ class GcWindowExtension(WindowExtension, ABC):
     def _on_destroy(self, event: Event):
         if event.widget == self:
             gc.collect()
+
+
+type WindowingSystem = Literal["x11", "win32", "aqua"]
+
+
+class WindowingSystemWindowExtension(WindowExtension, ABC):
+    _windowing_system_cached: Optional[WindowingSystem] = None
+
+    @property
+    def tk_windowing_system(self) -> WindowingSystem:
+        if self._windowing_system_cached is not None:
+            return self._windowing_system_cached
+        ws = self._windowing_system_cached = self.tk.call('tk', 'windowingsystem')
+        return ws
 
 
 @contextmanager

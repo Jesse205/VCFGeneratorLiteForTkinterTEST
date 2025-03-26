@@ -9,7 +9,7 @@ from vcf_generator_lite.theme import create_platform_theme
 from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
 from vcf_generator_lite.util.tkinter.theme import Theme
 from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GeometryWindowExtension, \
-    WindowExtension, withdraw_cm, GcWindowExtension
+    WindowExtension, withdraw_cm, GcWindowExtension, WindowingSystemWindowExtension
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
 
 __all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
@@ -17,7 +17,8 @@ __all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
 logger = logging.getLogger(__name__)
 
 
-class AppWindowExtension(GcWindowExtension, GeometryWindowExtension, ScalingMiscExtension, CenterWindowExtension,
+class AppWindowExtension(WindowingSystemWindowExtension, GcWindowExtension, GeometryWindowExtension,
+                         ScalingMiscExtension, CenterWindowExtension,
                          WindowExtension, ABC):
     """
     应用程序窗口扩展基类，集成多个窗口功能扩展
@@ -58,6 +59,9 @@ class ExtendedTk(Tk, AppWindowExtension, ABC):
             if not self._theme_applied:
                 self.set_theme(create_platform_theme())
             AppWindowExtension.__init__(self)
+            if self.tk_windowing_system == "x11":
+                self.deiconify()
+                self.wait_visibility()
             self.center()
 
     def set_theme(self, theme: Theme):
@@ -70,8 +74,13 @@ class ExtendedToplevel(Toplevel, AppWindowExtension, ABC):
         super().__init__(master, **kw)
         with withdraw_cm(self):
             AppWindowExtension.__init__(self)
+            if self.tk_windowing_system == "x11":
+                self.deiconify()
+                self.wait_visibility()
             if isinstance(self.master, Tk) or isinstance(self.master, Toplevel):
                 self.center(self.master)
+            else:
+                self.center()
 
 
 class ExtendedDialog(Toplevel, AppWindowExtension, ABC):
@@ -79,8 +88,12 @@ class ExtendedDialog(Toplevel, AppWindowExtension, ABC):
         super().__init__(master, **kw)
         with withdraw_cm(self):
             AppWindowExtension.__init__(self)
+            if self.tk_windowing_system == "x11":
+                self.deiconify()
             if isinstance(self.master, Tk) or isinstance(self.master, Toplevel):
                 self.center(self.master)
+            else:
+                self.center()
 
     @abstractmethod
     @override
