@@ -118,5 +118,5 @@ def main() -> int:
             build_with_pyinstaller()
             pack_with_zipfile()
         case "zipapp":
-            build_with_pdm_packer()
+            return build_with_pdm_packer()
     return 0
