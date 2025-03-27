@@ -85,7 +85,6 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
                 ])
             ),
             state=DISABLED,
-            height=0,
         )
         details_input.pack(fill=BOTH, expand=True, padx="7p", pady=("7p", 0))
         details_context_menu = TextContextMenu(details_input)

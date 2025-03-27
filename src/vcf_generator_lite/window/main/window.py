@@ -27,6 +27,7 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
 
     @override
     def on_init_window(self):
+        super().on_init_window()
         self.title(APP_NAME)
         self.wm_minsize_pt(300, 300)
         self.wm_size_pt(450, 450)

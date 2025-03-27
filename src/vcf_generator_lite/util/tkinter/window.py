@@ -16,42 +16,6 @@ class WindowExtension(Misc, Wm, ABC):
 type WindowOrExtension = Window | WindowExtension
 
 
-def center_window(window: WindowOrExtension, parent: WindowOrExtension = None):
-    window.update_idletasks()
-    window_width = window.winfo_width()
-    window_height = window.winfo_height()
-    vroot_width = window.winfo_vrootwidth()
-    vroot_height = window.winfo_vrootheight()
-    vroot_x = window.winfo_vrootx()
-    vroot_y = window.winfo_vrooty()
-    window_max_x = vroot_x + vroot_width - window_width
-    window_max_y = vroot_y + vroot_height - window_height
-    if parent is not None:
-        # 使用winfo_x而不使用winfo_rootx在Windows上有更好的效果，winfo_x是包括边框的位置。
-        parent_x = parent.winfo_x()
-        parent_y = parent.winfo_y()
-        parent_width = parent.winfo_width()
-        parent_height = parent.winfo_height()
-        x = parent_x + (parent_width - window_width) // 2
-        y = parent_y + (parent_height - window_height) // 2
-    else:
-        # maxsize不会包含任务栏高度，但是maxsize的值也会算上副屏，所以为了防止窗口超出当前屏幕，这里取最小值
-        parent_maxsize = window.maxsize()
-        parent_width = min(parent_maxsize[0], vroot_width)
-        parent_height = min(parent_maxsize[1], vroot_height)
-        x = (parent_width - window_width) // 2
-        y = (parent_height - window_height) // 2
-    x = max(min(x, window_max_x), vroot_x)
-    y = max(min(y, window_max_y), vroot_y)
-    window.geometry(f"+{x}+{y}")
-
-
-class CenterWindowExtension(WindowExtension, ABC):
-
-    def center(self, parent: WindowOrExtension = None):
-        center_window(self, parent)
-
-
 class GeometryWindowExtension(ScalingMiscExtension, WindowExtension, ABC):
     def wm_size(self, width: int, height: int):
         self.wm_geometry(f"{width}x{height}")
@@ -92,6 +56,34 @@ class WindowingSystemWindowExtension(WindowExtension, ABC):
             return self._windowing_system_cached
         ws = self._windowing_system_cached = self.tk.call('tk', 'windowingsystem')
         return ws
+
+
+class CenterWindowExtension(WindowingSystemWindowExtension, WindowExtension, ABC):
+
+    def center(self, reference_window: WindowOrExtension = None):
+        if self.tk_windowing_system == "x11":
+            self.deiconify()
+        self.update()
+        # 在拥有副屏的情况下，winfo_vrootwidth会比屏幕宽度长，所以应该与屏幕宽度取最小值
+        screen_width = min(self.winfo_screenwidth(), self.winfo_vrootwidth())
+        screen_height = min(self.winfo_screenheight(), self.winfo_vrootheight())
+        if reference_window is not None:
+            # 使用winfo_x而不使用winfo_rootx在Windows上有更好的效果，winfo_x是包括边框的位置。
+            x = reference_window.winfo_x() + (reference_window.winfo_width() - self.winfo_width()) // 2
+            y = reference_window.winfo_y() + (reference_window.winfo_height() - self.winfo_height()) // 2
+        else:
+            x = (screen_width - self.winfo_width()) // 2
+            y = (screen_height - self.winfo_height()) // 2
+        vroot_x = self.winfo_vrootx()
+        vroot_y = self.winfo_vrooty()
+        window_max_x = vroot_x + screen_width - self.winfo_width()
+        window_max_y = vroot_y + screen_height - self.winfo_height()
+        x = max(min(x, window_max_x), vroot_x)
+        y = max(min(y, window_max_y), vroot_y)
+        self.geometry(f"+{x}+{y}")
+
+    def center_reference_master(self):
+        self.center(self.master if isinstance(self.master, Tk) or isinstance(self.master, Toplevel) else None)
 
 
 @contextmanager
