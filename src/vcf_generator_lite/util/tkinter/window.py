@@ -83,7 +83,7 @@ class CenterWindowExtension(WindowingSystemWindowExtension, WindowExtension, ABC
         self.geometry(f"+{x}+{y}")
 
     def center_reference_master(self):
-        self.center(self.master if isinstance(self.master, Tk) or isinstance(self.master, Toplevel) else None)
+        self.center(self.master if isinstance(self.master, Tk | Toplevel) else None)
 
 
 @contextmanager
