@@ -5,7 +5,7 @@ description = "A simple VCF generator"
 authors = [
     { name = "Jesse205", email = "jesse205@qq.com" },
 ]
-license = { text = "MIT" }
+license = "Apache-2.0"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
 dependencies = [

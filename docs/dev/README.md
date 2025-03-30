@@ -21,7 +21,7 @@
    - [InnoSetup](https://jrsoftware.org/isinfo.php)（仅 Windows）
 2. **初始化项目**：
    ```bash
-   pdm install # 安装项目依赖
+   pdm install -G:all # 安装项目依赖
    pdm install --plugins  # 安装 PDM 插件
    pdm run prepare_innosetup_extensions  # 下载 InnoSetup 文件
    ```

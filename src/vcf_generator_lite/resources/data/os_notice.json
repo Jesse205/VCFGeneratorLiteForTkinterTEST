@@ -16,5 +16,11 @@
     "url": "https://github.com/python/cpython",
     "license": "Python Software Foundation License Version 2",
     "license_url": "https://docs.python.org/3/license.html"
+  },
+  {
+    "name": "TtkText",
+    "url": "https://github.com/Jesse205/TtkText",
+    "license": "MIT License",
+    "license_url": "https://github.com/Jesse205/TtkText/blob/main/LICENSE"
   }
 ]
