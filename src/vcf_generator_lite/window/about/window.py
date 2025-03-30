@@ -76,12 +76,8 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
                 release_url=constants.URL_RELEASES,
                 jesse205_email=constants.EMAIL_JESSE205,
                 os_notice_html="<br />".join([
-                    '<a href="{url}">{name}</a> - <a href="{license_url}">{license}</a>'.format(
-                        url=item["url"],
-                        name=item["name"],
-                        license=item["license"],
-                        license_url=item["license_url"]
-                    ) for item in json.loads(resources.read_binary('data/os_notice.json'))
+                    '<a href="{url}">{name}</a> - <a href="{license_url}">{license}</a>'.format(**item)
+                    for item in json.loads(resources.read_binary('data/os_notices.json'))
                 ])
             ),
             state=DISABLED,
