@@ -21,9 +21,9 @@ dev = [
 ]
 
 [project.urls]
-repository = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
-github = "https://github.com/HelloTool/VCFGeneratorLiteForTkinter"
-issues = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/issues/new/choose"
+Repository = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
+Github = "https://github.com/HelloTool/VCFGeneratorLiteForTkinter"
+Issues = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/issues/new/choose"
 
 [project.gui-scripts]
 vcf-generator-lite = "vcf_generator_lite.__main__:main"
