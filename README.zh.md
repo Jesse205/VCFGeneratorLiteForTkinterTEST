@@ -23,7 +23,7 @@ _该应用程序目前仅支持中文。_
 VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通讯录内的 VCF 文件。
 
 [![许可证](https://img.shields.io/github/license/HelloTool/VCFGeneratorLiteForTkinter?label=%E8%AE%B8%E5%8F%AF%E8%AF%81)](./LICENSE)
-[![贡献者公约](https://img.shields.io/badge/贡献者公约-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.zh.md)
+[![贡献者公约](https://img.shields.io/badge/贡献者公约-2.1-4baaaa.svg)](./docs/CODE_OF_CONDUCT.zh.md)
 
 ## 软件截图
 
@@ -121,6 +121,10 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 > 电话：13333333333
 > ```
 
+## 开发与贡献
+
+请参阅[《开发指南》](./docs/dev/README.md)与[《贡献指南》](./docs/CONTRIBUTING.md)。
+
 ## 许可证
 
 本项目以 Apache 2.0 许可证发布，详情请参阅 [LICENSE](./LICENSE)。
@@ -151,10 +155,6 @@ limitations under the License.
 | [PyInstaller][PyInstallerRepository]  | [GPL-2.0 license][PyInstallerLicense] | 打包为 APP                     |
 | [tkhtmlview][TkhtmlviewRepository]    | [MIT License][TkhtmlviewLicense]      | 显示 HTML 内容（已修改源代码） |
 | [TtkText][TtkTextRepository]          | [MIT License][TtkTextLicense]         | 提供现代UI的富文本编辑器       |
-
-## 开发与贡献
-
-请参阅[《开发指南》](./docs/dev/README.md)与[《贡献指南》](./CONTRIBUTING.zh.md)。
 
 [RepositoryOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/
 [RepositoryOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/

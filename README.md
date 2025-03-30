@@ -23,7 +23,7 @@ _The application currently only supports the Chinese language._
 VCF generator, input name and phone number to automatically generate VCF files for batch import into the address book.
 
 [![License](https://img.shields.io/github/license/HelloTool/VCFGeneratorLiteForTkinter)](./LICENSE)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./docs/CODE_OF_CONDUCT.md)
 
 ## Screenshot
 
@@ -110,6 +110,10 @@ File list for each system:
 > Phone: 13333333333
 > ```
 
+## Development & Contribution
+
+Please refer to the [Development Guide (Chinese)](./docs/dev/README.md) and the [Contribution Guide (Chinese)](./docs/CONTRIBUTING.md).
+
 ## License
 
 This project is released under the Apache 2.0 license.For details,please refer to [LICENSE](./LICENSE).
@@ -140,10 +144,6 @@ limitations under the License.
 | [PyInstaller][PyInstallerRepository]  | [GPL-2.0 license][PyInstallerLicense] | Packaging into an APP                          |
 | [tkhtmlview][TkhtmlviewRepository]    | [MIT License][TkhtmlviewLicense]      | Displaying HTML content (source code modified) |
 | [TtkText][TtkTextRepository]          | [MIT License][TtkTextLicense]         | Provides a rich-text editor for modern UI      |
-
-## Development & Contribution
-
-Please refer to the [Development Guide](./docs/dev/README.md) and the [Contribution Guide](./CONTRIBUTING.zh.md).
 
 [RepositoryOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/
 [RepositoryOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/

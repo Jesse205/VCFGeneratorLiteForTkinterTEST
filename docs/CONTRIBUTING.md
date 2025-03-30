@@ -19,7 +19,7 @@
 1. 确保 [Gitee][RepositoryOnGitee] 或 [GitHub][RepositoryOnGithub] 中没有相关的 PR；
 2. Fork 本项目；
 3. 使用 [Git](https://git-scm.com/) 克隆项目到本地；
-4. 阅读[开发指南](./docs/dev/README.md)，熟悉项目开发方法；
+4. 阅读[开发指南](./dev/README.md)，熟悉项目开发方法；
 5. 创建分支，如 `feature/xxx` 或 `bugfix/xxx`；
 6. 编写并提交代码；
 7. 向本项目提交 Pull Request。
@@ -47,10 +47,10 @@
 **Markdown（`.md`）：**
 
 - 不限制最大行数；
-- 详情请参考 [.markdownlint.json](./.markdownlint.json)；
+- 详情请参考 `.markdownlint.json`；
 - 其他情况以 [Markdownlint](https://github.com/DavidAnson/markdownlint) 为准。
 
-详情请参考 [.editorconfig](./.editorconfig)。
+详情请参考 `.editorconfig`。
 
 ## GIT 提交规范
 
