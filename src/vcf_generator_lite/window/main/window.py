@@ -112,7 +112,7 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
                     ),
                     MenuSeparator,
                     MenuCommand(
-                        label="移除引号",
+                        label="移除引号(&Q)",
                         command=lambda: self.event_generate(EVENT_CLEAN_QUOTES),
                     ),
                 ]
