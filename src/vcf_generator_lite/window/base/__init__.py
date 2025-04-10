@@ -34,13 +34,13 @@ class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
     def __init__(self):
         super().__init__()
         with withdraw_cm(self):
-            self.on_init_window()
+            self._configure_ui()
             if self.tk_windowing_system != "x11":
                 self.center_reference_master()
         if self.tk_windowing_system == "x11":
             self.center_reference_master()
 
-    def on_init_window(self):
+    def _configure_ui(self):
         self.__apply_default_icon()
         self.__apply_default_events()
 
@@ -61,10 +61,10 @@ class ExtendedTk(Tk, AppWindowExtension, ABC):
         AppWindowExtension.__init__(self)
 
     @override
-    def on_init_window(self):
+    def _configure_ui(self):
         if not self._theme_applied:
             self.set_theme(create_platform_theme())
-        super().on_init_window()
+        super()._configure_ui()
 
     def set_theme(self, theme: Theme):
         theme.apply_theme(self, Style(self))
@@ -83,8 +83,8 @@ class ExtendedDialog(Toplevel, AppWindowExtension, ABC):
         AppWindowExtension.__init__(self)
 
     @override
-    def on_init_window(self):
-        super().on_init_window()
+    def _configure_ui(self):
+        super()._configure_ui()
         self.bind("<Escape>", lambda _: self.event_generate(EVENT_EXIT))
 
         if isinstance(self.master, Wm):

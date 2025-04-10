@@ -26,8 +26,8 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
         super().__init__(className="VCFGeneratorLite")
 
     @override
-    def on_init_window(self):
-        super().on_init_window()
+    def _configure_ui(self):
+        super()._configure_ui()
         self.title(APP_NAME)
         self.wm_minsize_pt(300, 300)
         self.wm_size_pt(450, 450)

@@ -13,8 +13,8 @@ from vcf_generator_lite.window.base.constants import EVENT_EXIT
 class InvalidLinesWindow(ExtendedDialog, VerticalDialogLayout):
 
     @override
-    def on_init_window(self):
-        super().on_init_window()
+    def _configure_ui(self):
+        super()._configure_ui()
         self.title("生成 VCF 文件完成")
         self.resizable(True, True)
         self.wm_size_pt(375, 300)
