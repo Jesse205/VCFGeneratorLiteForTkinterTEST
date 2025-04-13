@@ -7,7 +7,7 @@ CHINA_PHONE_PATTERN = re.compile(r"^1[356789]\d{9}$")
 @dataclass(frozen=True)
 class Contact:
     name: str
-    phone: int
+    phone: str
 
 
 def is_china_phone(phone: str) -> bool:
@@ -21,6 +21,6 @@ def parse_contact(person_text: str):
     name, phone = info_list
     if not name:
         raise ValueError(f"The name is illegal: '{name}'.")
-    if not phone.isnumeric() or not is_china_phone(phone):
+    if not is_china_phone(phone):
         raise ValueError(f"The phone number is illegal: '{phone}'.")
-    return Contact(name, int(phone))
+    return Contact(name, phone)
