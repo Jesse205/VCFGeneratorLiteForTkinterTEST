@@ -1,0 +1,27 @@
+name: Test
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: windows-latest # TODO: Use ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.12", "3.13" ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PDM with Python ${{ matrix.python-version }}
+        uses: pdm-project/setup-pdm@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pdm use ${{ matrix.python-version }}
+          pdm install -G:all
+      - name: Test with pytest
+        run: pdm run test
+
