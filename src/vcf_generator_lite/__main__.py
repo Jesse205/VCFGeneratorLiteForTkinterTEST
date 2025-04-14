@@ -14,18 +14,23 @@ def fix_home_env():
     os.environ['HOME'] = os.path.expanduser("~")
 
 
-def main():
+def setup_logging():
     log_level = logging.DEBUG if __debug__ else logging.INFO
     logging.basicConfig(level=log_level, stream=sys.stdout)
 
+
+def main():
+    setup_logging()
     fix_home_env()
     enable_dpi_aware()
 
     logging.info("Starting VCF Generator...")
-
     print(f"💡Tip: The source code is hosted at {constants.URL_SOURCE}")
+
     main_window, _ = create_main_window()
     main_window.mainloop()
+
+    logging.info("Exiting VCF Generator...")
 
 
 if __name__ == "__main__":

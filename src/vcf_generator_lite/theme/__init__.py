@@ -1,11 +1,7 @@
-import logging
-
 from vcf_generator_lite.util.environment import is_windows
 from vcf_generator_lite.util.tkinter.theme import Theme
 
 __all__ = ["create_platform_theme"]
-
-logger = logging.getLogger(__name__)
 
 
 def create_platform_theme() -> Theme:

@@ -8,13 +8,12 @@ from vcf_generator_lite import resources
 from vcf_generator_lite.theme import create_platform_theme
 from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
 from vcf_generator_lite.util.tkinter.theme import Theme
-from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GeometryWindowExtension, \
-    WindowExtension, withdraw_cm, GcWindowExtension, WindowingSystemWindowExtension
+from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GcWindowExtension, GeometryWindowExtension, \
+    WindowExtension, WindowingSystemWindowExtension, withdraw_cm
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
 
 __all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
-
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
@@ -45,7 +44,7 @@ class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
         self.__apply_default_events()
 
     def __apply_default_icon(self):
-        logger.debug(f"窗口 {self.winfo_name()} 默认图标为 icon-48.png")
+        _logger.debug(f"窗口 {self.winfo_name()} 默认图标为 icon-48.png")
         self.iconphoto(True, PhotoImage(master=self, data=resources.read_binary("images/icon-48.png")))
 
     def __apply_default_events(self):

@@ -1,13 +1,13 @@
 import binascii
 import logging
-from concurrent.futures import Future, ThreadPoolExecutor, FIRST_EXCEPTION, wait
+from concurrent.futures import FIRST_EXCEPTION, Future, ThreadPoolExecutor, wait
 from dataclasses import dataclass
 from queue import Queue
-from typing import IO, Callable
+from typing import Callable, IO
 
-from vcf_generator_lite.util.contact import parse_contact, Contact
+from vcf_generator_lite.util.contact import Contact, parse_contact
 
-logger = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -122,11 +122,11 @@ class VCardFileGenerator:
                 else:
                     self._update_progress(state, 1)
             except ValueError as e:
-                logger.error(f"Invalid contact data at line {position}: {e}")
+                _logger.warning(f"Invalid contact data at line {position}: {e}")
                 state.invalid_lines.append(InvalidLine(position, line, str(e)))
                 self._update_progress(state, 1)
             except Exception as e:
-                logger.exception(f"Unexpected parsing error at line {position}", exc_info=e)
+                _logger.exception(f"Unexpected parsing error at line {position}", exc_info=e)
                 state.exceptions.append(e)
                 self._update_progress(state, 1)
         write_queue.put(None)  # 结束信号
@@ -144,10 +144,10 @@ class VCardFileGenerator:
                 queue.task_done()
                 self._update_progress(state, 1)
         except IOError as e:
-            logger.error(f"File write error %s", e)
+            _logger.error(f"File write error %s", exc_info=e)
             state.exceptions.append(e)
         except Exception as e:
-            logger.exception("Unexpected write error %s", e)
+            _logger.exception("Unexpected write error %s", exc_info=e)
             state.exceptions.append(e)
 
     def _update_progress(self, state: VCardGeneratorState, increment: int):
