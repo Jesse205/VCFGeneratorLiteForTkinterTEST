@@ -5,8 +5,8 @@ from concurrent.futures import Future
 from concurrent.futures.thread import ThreadPoolExecutor
 from tkinter import Event, filedialog
 
+from vcf_generator_lite.models.vcf_generator import GenerateResult, InvalidLine, VCFGeneratorTask
 from vcf_generator_lite.util.tkinter import dialog
-from vcf_generator_lite.util.vcard import GenerateResult, VCardFileGenerator, InvalidLine
 from vcf_generator_lite.window.about import AboutOpener
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
 from vcf_generator_lite.window.invalid_lines import create_invalid_lines_window
@@ -70,9 +70,13 @@ class MainController:
                 self.window.set_progress(progress)
 
         executor = ThreadPoolExecutor(max_workers=1)
-        generator = VCardFileGenerator(executor)
-        generator.add_progress_callback(on_update_progress)
-        generate_future = generator.start(text_content, file_io)
+        generator = VCFGeneratorTask(
+            executor=executor,
+            progress_listener=on_update_progress,
+            input_text=text_content,
+            output_io=file_io,
+        )
+        generate_future = generator.start()
         generate_future.add_done_callback(lambda future: self.window.after_idle(done, future))
         executor.shutdown(wait=False)
 
