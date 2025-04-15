@@ -40,8 +40,8 @@ class ProcessDpiAwareness(Enum):
 
 
 class Windows81Display(WindowsVistaDisplay):
-
-    def get_default_scale_factor(self, misc: Misc) -> float:
+    @staticmethod
+    def get_default_scale_factor(misc: Misc) -> float:
         try:
             monitor_handle = windll.user32.MonitorFromWindow(
                 HWND(misc.winfo_id()),
@@ -59,9 +59,10 @@ class Windows81Display(WindowsVistaDisplay):
         except (AttributeError, OSError) as e:
             _logger.warning(f"Failed to enable DPI awareness from Windows 8.1 API, fallback to Windows 2000 API.")
             _logger.warning(e)
-            return super().get_default_scale_factor(misc)
+            return WindowsVistaDisplay.get_default_scale_factor(misc)
 
-    def enable_dpi_aware(self):
+    @staticmethod
+    def enable_dpi_aware():
         try:
             result: int = windll.shcore.SetProcessDpiAwareness(ProcessDpiAwareness.PROCESS_SYSTEM_DPI_AWARE.value)
             if result != 0:
@@ -69,4 +70,4 @@ class Windows81Display(WindowsVistaDisplay):
         except (AttributeError, OSError) as e:
             _logger.warning(f"Failed to enable DPI awareness from Windows 8.1 API, fallback to Windows Vista API.")
             _logger.warning(e)
-            super().enable_dpi_aware()
+            WindowsVistaDisplay.enable_dpi_aware()

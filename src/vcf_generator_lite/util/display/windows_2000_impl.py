@@ -24,7 +24,8 @@ def get_dc(hwnd: HWND):
 
 
 class Windows2000Display(Display, ABC):
-    def get_default_scale_factor(self, misc: Misc) -> float:
+    @staticmethod
+    def get_default_scale_factor(misc: Misc) -> float:
         with get_dc(HWND(misc.winfo_id())) as hdc:
             dpi_x = windll.gdi32.GetDeviceCaps(hdc, LOGPIXELSX)
             dpi_y = windll.gdi32.GetDeviceCaps(hdc, LOGPIXELSY)
