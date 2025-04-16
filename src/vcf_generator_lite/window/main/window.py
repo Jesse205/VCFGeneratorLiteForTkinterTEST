@@ -70,7 +70,7 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
                 label="文件(&F)",
                 items=[
                     MenuCommand(
-                        label="开始生成(&S)",
+                        label="开始生成(&S)…",
                         command=lambda: self.event_generate(EVENT_GENERATE),
                         accelerator="Ctrl + S",
                     ),
