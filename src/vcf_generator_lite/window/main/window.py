@@ -56,7 +56,8 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
 
         self.progress_bar = Progressbar(action_frame, orient=HORIZONTAL, length=200)
         self.generate_button = Button(
-            action_frame, text="生成",
+            action_frame,
+            text="开始生成",
             default=ACTIVE,
             command=lambda: self.event_generate(EVENT_GENERATE)
         )
@@ -68,6 +69,12 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
             MenuCascade(
                 label="文件(&F)",
                 items=[
+                    MenuCommand(
+                        label="开始生成(&S)",
+                        command=lambda: self.event_generate(EVENT_GENERATE),
+                        accelerator="Ctrl + S",
+                    ),
+                    MenuSeparator,
                     MenuCommand(
                         label="退出(&X)",
                         command=lambda: self.event_generate(EVENT_EXIT),
