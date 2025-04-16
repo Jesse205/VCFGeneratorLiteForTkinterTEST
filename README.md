@@ -138,7 +138,6 @@ limitations under the License.
 
 | Project                               | License                               | Purpose                                        |
 | ------------------------------------- | ------------------------------------- | ---------------------------------------------- |
-| [Fluent Emoji][FluentEmojiRepository] | [MIT license][FluentEmojiLicense]     | Used as application icons                      |
 | [Python][CPythonRepository]           | [Python license][CPythonLicense]      | Provides runtime environment                   |
 | [UPX][UPXRepository]                  | [UPX license][UPXLicense]             | Code compression                               |
 | [PyInstaller][PyInstallerRepository]  | [GPL-2.0 license][PyInstallerLicense] | Packaging into an APP                          |
@@ -151,8 +150,6 @@ limitations under the License.
 [ReleaseOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
 [PythonWin7RepositoryOnGithub]: https://github.com/adang1345/PythonWin7
 
-[FluentEmojiRepository]: https://github.com/microsoft/fluentui-emoji
-[FluentEmojiLicense]: https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE
 [PythonHomepage]: https://www.python.org/
 [CPythonRepository]: https://github.com/python/cpython
 [CPythonLicense]: https://docs.python.org/3/license.html

@@ -1,11 +1,5 @@
 [
   {
-    "name": "Fluent Emoji",
-    "url": "https://github.com/microsoft/fluentui-emoji",
-    "license": "MIT License",
-    "license_url": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
-  },
-  {
     "name": "tkhtmlview",
     "url": "https://github.com/bauripalash/tkhtmlview",
     "license": "MIT License",
