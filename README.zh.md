@@ -27,7 +27,7 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 ## 软件截图
 
-<img src="./docs/images/screenshots/Snipaste_2025-02-08_10-30-21.png" width="600" alt="Snipaste_2025-02-08_10-30-21.png" />
+<img src="./docs/images/screenshots/Snipaste_2025-04-17_07-24-28.webp" width="600" alt="主窗口" />
 
 ## 下载
 

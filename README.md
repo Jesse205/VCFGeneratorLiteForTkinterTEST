@@ -27,7 +27,7 @@ VCF generator, input name and phone number to automatically generate VCF files f
 
 ## Screenshot
 
-<img src="./docs/images/screenshots/Snipaste_2025-02-08_10-30-21.png" width="600" alt="Snipaste_2025-02-08_10-30-21.png" />
+<img src="./docs/images/screenshots/Snipaste_2025-04-17_07-24-28.webp" width="600" alt="Main window" />
 
 ## Download
 
