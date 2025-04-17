@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./docs/images/icon.png" width="192" alt="App icon" />
+<img src="./docs/images/icon.svg" width="192" alt="App icon" />
 
 # VCF 生成器 Lite
 
@@ -27,7 +27,7 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 ## 软件截图
 
-<img src="./docs/images/screenshots/Snipaste_2025-04-17_07-24-28.webp" width="600" alt="主窗口" />
+<img src="./docs/images/screenshots/main_window.webp" width="600" alt="主窗口" />
 
 ## 下载
 

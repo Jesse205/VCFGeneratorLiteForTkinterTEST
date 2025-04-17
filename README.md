@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./docs/images/icon.png" width="192" alt="App icon" />
+<img src="./docs/images/icon.svg" width="192" alt="App icon" />
 
 # VCF Generator Lite
 
@@ -27,7 +27,7 @@ VCF generator, input name and phone number to automatically generate VCF files f
 
 ## Screenshot
 
-<img src="./docs/images/screenshots/Snipaste_2025-04-17_07-24-28.webp" width="600" alt="Main window" />
+<img src="./docs/images/screenshots/main_window.webp" width="600" alt="Main window" />
 
 ## Download
 
