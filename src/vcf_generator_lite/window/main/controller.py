@@ -15,12 +15,13 @@ from vcf_generator_lite.window.main.window import MainWindow
 
 
 class MainController:
-    is_generating = False
-    generate_file_name = "phones.vcf"
 
     def __init__(self, window: MainWindow):
         self.window = window
         self.about_opener = AboutOpener(window)
+        self.is_generating: bool = False
+        self.generate_file_name: str = "phones.vcf"
+
         window.bind(EVENT_ABOUT, self.on_about)
         window.bind(EVENT_CLEAN_QUOTES, self.on_clean_quotes)
         window.bind(EVENT_GENERATE, self.on_generate)

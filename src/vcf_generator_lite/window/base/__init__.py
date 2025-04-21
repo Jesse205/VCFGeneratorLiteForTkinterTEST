@@ -53,10 +53,10 @@ class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
 
 
 class ExtendedTk(Tk, AppWindowExtension, ABC):
-    _theme_applied: bool = False
 
     def __init__(self, **kw):
         super().__init__(baseName="vcf_generator_lite", **kw)
+        self._theme_applied: bool = False
         AppWindowExtension.__init__(self)
 
     @override

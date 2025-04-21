@@ -17,10 +17,9 @@ from vcf_generator_lite.window.main.constants import DEFAULT_INPUT_CONTENT, EVEN
 
 
 class MainWindow(ExtendedTk, MenuBarWindowExtension):
-    generate_button = None
-    content_text = None
-    text_context_menu = None
-    progress_bar = None
+    generate_button: Button
+    content_text: ScrolledText
+    progress_bar: Progressbar
 
     def __init__(self):
         super().__init__(className="VCFGeneratorLite")
@@ -43,8 +42,8 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
         self.content_text.insert(0.0, DEFAULT_INPUT_CONTENT)
         self.content_text.edit_reset()
         self.content_text.pack(fill=BOTH, expand=True, padx="7p", pady=0)
-        self.text_context_menu = TextContextMenu(self.content_text)
-        self.text_context_menu.bind_to_widget()
+        text_context_menu = TextContextMenu(self.content_text)
+        text_context_menu.bind_to_widget()
 
         action_frame = self._create_action_bar(self)
         action_frame.pack(fill=X)

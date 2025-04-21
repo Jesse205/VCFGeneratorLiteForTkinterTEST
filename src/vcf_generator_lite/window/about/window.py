@@ -1,10 +1,10 @@
 import json
-from tkinter import PhotoImage, Misc, Label as TkLabel
+from tkinter import Label as TkLabel, Misc, PhotoImage
 from tkinter.constants import *
 from tkinter.ttk import Button, Frame, Label, Style
 from typing import override
 
-from vcf_generator_lite import resources, constants
+from vcf_generator_lite import constants, resources
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT, APP_NAME
 from vcf_generator_lite.layout.vertical_dialog_layout import VerticalDialogLayout
@@ -16,7 +16,7 @@ from vcf_generator_lite.window.base.constants import EVENT_EXIT
 
 
 class AboutWindow(ExtendedDialog, VerticalDialogLayout):
-    app_icon_image: PhotoImage = None
+    app_icon_image: PhotoImage
 
     @override
     def _configure_ui(self):

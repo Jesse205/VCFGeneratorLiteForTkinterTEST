@@ -1,8 +1,9 @@
 import gc
 from abc import ABC
 from contextlib import contextmanager
+from functools import cached_property
 from tkinter import Event, Misc, Tk, Toplevel, Wm
-from typing import Literal, Optional
+from typing import Literal
 
 from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
 
@@ -48,14 +49,9 @@ type WindowingSystem = Literal["x11", "win32", "aqua"]
 
 
 class WindowingSystemWindowExtension(WindowExtension, ABC):
-    _windowing_system_cached: Optional[WindowingSystem] = None
-
-    @property
+    @cached_property
     def tk_windowing_system(self) -> WindowingSystem:
-        if self._windowing_system_cached is not None:
-            return self._windowing_system_cached
-        ws = self._windowing_system_cached = self.tk.call('tk', 'windowingsystem')
-        return ws
+        return self.tk.call('tk', 'windowingsystem')
 
 
 class CenterWindowExtension(WindowingSystemWindowExtension, WindowExtension, ABC):
