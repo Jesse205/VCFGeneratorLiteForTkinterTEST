@@ -1,8 +1,8 @@
 import gc
 from abc import ABC
 from contextlib import contextmanager
-from tkinter import Misc, Tk, Toplevel, Wm, Event
-from typing import Optional, Literal
+from tkinter import Event, Misc, Tk, Toplevel, Wm
+from typing import Literal, Optional
 
 from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
 
@@ -76,8 +76,8 @@ class CenterWindowExtension(WindowingSystemWindowExtension, WindowExtension, ABC
             y = (screen_height - self.winfo_height()) // 2
         vroot_x = self.winfo_vrootx()
         vroot_y = self.winfo_vrooty()
-        window_max_x = vroot_x + screen_width - self.winfo_width()
-        window_max_y = vroot_y + screen_height - self.winfo_height()
+        window_max_x = screen_width - self.winfo_width()
+        window_max_y = screen_height - self.winfo_height()
         x = max(min(x, window_max_x), vroot_x)
         y = max(min(y, window_max_y), vroot_y)
         self.geometry(f"+{x}+{y}")
