@@ -34,10 +34,7 @@ class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
         super().__init__()
         with withdraw_cm(self):
             self._configure_ui()
-            if self.tk_windowing_system != "x11":
-                self.center_reference_master()
-        if self.tk_windowing_system == "x11":
-            self.center_reference_master()
+        self.center_reference_master()
 
     def _configure_ui(self):
         self.__apply_default_icon()
