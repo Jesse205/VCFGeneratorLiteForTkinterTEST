@@ -59,24 +59,22 @@ class CenterWindowExtension(WindowingSystemWindowExtension, WindowExtension, ABC
     def center(self, reference_window: WindowOrExtension = None):
         self.update_idletasks()
         self.deiconify()
-        # 在拥有副屏的情况下，winfo_vrootwidth会比屏幕宽度长，所以应该与屏幕宽度取最小值
-        screen_width = min(self.winfo_screenwidth(), self.winfo_vrootwidth())
-        screen_height = min(self.winfo_screenheight(), self.winfo_vrootheight())
-        # 在Windows上，winfo_x包括边框的位置。
-        geometry_offset_x = self.winfo_x() - self.winfo_rootx()
-        geometry_offset_y = self.winfo_y() - self.winfo_rooty()
         if reference_window is not None:
             x = reference_window.winfo_rootx() + (reference_window.winfo_width() - self.winfo_width()) // 2
             y = reference_window.winfo_rooty() + (reference_window.winfo_height() - self.winfo_height()) // 2
         else:
-            x = (screen_width - self.winfo_width()) // 2
-            y = (screen_height - self.winfo_height()) // 2
-        vroot_x = self.winfo_vrootx()
-        vroot_y = self.winfo_vrooty()
-        window_max_x = screen_width - self.winfo_width()
-        window_max_y = screen_height - self.winfo_height()
-        x = max(min(x, window_max_x), vroot_x)
-        y = max(min(y, window_max_y), vroot_y)
+            # 在拥有副屏的情况下，winfo_vrootwidth会比屏幕宽度长，所以应该与屏幕宽度取最小值
+            screen_available_width = min(self.winfo_screenwidth(), self.winfo_vrootwidth())
+            screen_available_height = min(self.winfo_screenheight(), self.winfo_vrootheight())
+            x = (screen_available_width - self.winfo_width()) // 2
+            y = (screen_available_height - self.winfo_height()) // 2
+        window_max_x = self.winfo_vrootwidth() - self.winfo_width()
+        window_max_y = self.winfo_vrootheight() - self.winfo_height()
+        x = max(min(x, window_max_x), self.winfo_vrootx())
+        y = max(min(y, window_max_y), self.winfo_vrooty())
+        # 在Windows上，winfo_x包括边框的位置。
+        geometry_offset_x = self.winfo_x() - self.winfo_rootx()
+        geometry_offset_y = self.winfo_y() - self.winfo_rooty()
         self.geometry(f"+{x + geometry_offset_x}+{y + geometry_offset_y}")
 
     def center_reference_master(self):
