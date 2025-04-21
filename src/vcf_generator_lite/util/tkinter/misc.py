@@ -15,7 +15,7 @@ class ScalingMiscExtension(Misc):
             logger.debug(f"ScalingMiscExtension init with scale_factor={self._scale_factor}, "
                          f"system scale is {round(self._scale_factor * 0.75, 2)}.")
 
-    def scaling(self, factor: Optional[float] = None):
+    def scaling(self, factor: Optional[float] = None) -> float | None:
         """
         设置或获取GUI缩放比例因子
 
