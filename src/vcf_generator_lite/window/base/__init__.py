@@ -34,7 +34,7 @@ class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
         super().__init__()
         with withdraw_cm(self):
             self._configure_ui()
-        self.center_reference_master()
+        self.center()
 
     def _configure_ui(self):
         self.__apply_default_icon()

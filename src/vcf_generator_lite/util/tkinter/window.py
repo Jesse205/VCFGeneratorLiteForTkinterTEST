@@ -5,6 +5,7 @@ from functools import cached_property
 from tkinter import Event, Misc, Tk, Toplevel, Wm
 from typing import Literal
 
+from vcf_generator_lite.util.graphics import Offset
 from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
 
 type Window = Tk | Toplevel
@@ -15,6 +16,14 @@ class WindowExtension(Misc, Wm, ABC):
 
 
 type WindowOrExtension = Window | WindowExtension
+
+
+class GeometryOffsetWindowExtension(WindowExtension, ABC):
+    def client_to_geometry_offset(self) -> Offset:
+        return Offset(
+            x=self.winfo_x() - self.winfo_rootx(),
+            y=self.winfo_y() - self.winfo_rooty()
+        )
 
 
 class GeometryWindowExtension(ScalingMiscExtension, WindowExtension, ABC):
@@ -54,31 +63,46 @@ class WindowingSystemWindowExtension(WindowExtension, ABC):
         return self.tk.call('tk', 'windowingsystem')
 
 
-class CenterWindowExtension(WindowingSystemWindowExtension, WindowExtension, ABC):
+class CenterWindowExtension(GeometryOffsetWindowExtension, WindowExtension, ABC):
 
-    def center(self, reference_window: WindowOrExtension = None):
+    def center_reference_rect(self, rect_x: int, rect_y: int, rect_width: int, rect_height: int):
         self.update_idletasks()
         self.deiconify()
-        if reference_window is not None:
-            x = reference_window.winfo_rootx() + (reference_window.winfo_width() - self.winfo_width()) // 2
-            y = reference_window.winfo_rooty() + (reference_window.winfo_height() - self.winfo_height()) // 2
-        else:
-            # 在拥有副屏的情况下，winfo_vrootwidth会比屏幕宽度长，所以应该与屏幕宽度取最小值
-            screen_available_width = min(self.winfo_screenwidth(), self.winfo_vrootwidth())
-            screen_available_height = min(self.winfo_screenheight(), self.winfo_vrootheight())
-            x = (screen_available_width - self.winfo_width()) // 2
-            y = (screen_available_height - self.winfo_height()) // 2
-        window_max_x = self.winfo_vrootwidth() - self.winfo_width()
-        window_max_y = self.winfo_vrootheight() - self.winfo_height()
-        x = max(min(x, window_max_x), self.winfo_vrootx())
-        y = max(min(y, window_max_y), self.winfo_vrooty())
-        # 在Windows上，winfo_x包括边框的位置。
-        geometry_offset_x = self.winfo_x() - self.winfo_rootx()
-        geometry_offset_y = self.winfo_y() - self.winfo_rooty()
-        self.geometry(f"+{x + geometry_offset_x}+{y + geometry_offset_y}")
+        client_x_min = self.winfo_vrootx()
+        client_x_max = self.winfo_vrootwidth() - self.winfo_width()
+        client_y_min = self.winfo_vrooty()
+        client_y_max = self.winfo_vrootheight() - self.winfo_height()
+        client_x = rect_x + (rect_width - self.winfo_width()) // 2
+        client_x = max(min(client_x, client_x_max), client_x_min)
+        client_y = rect_y + (rect_height - self.winfo_height()) // 2
+        client_y = max(min(client_y, client_y_max), client_y_min)
+        # 在Windows上，winfo_x/y是窗口坐标，而winfo_rootx/y是工作区坐标，geometry接收窗口坐标，所以需要将工作区坐标转换为窗口坐标。
+        geometry_offset = self.client_to_geometry_offset()
+        window_x = client_x + geometry_offset.x
+        window_y = client_y + geometry_offset.y
+        self.geometry(f"+{window_x}+{window_y}")
+
+    def center_reference_screen(self):
+        self.center_reference_rect(
+            rect_x=0,
+            rect_y=0,
+            rect_width=self.winfo_screenwidth(),
+            rect_height=self.winfo_screenheight(),
+        )
 
     def center_reference_master(self):
-        self.center(self.master if isinstance(self.master, Tk | Toplevel) else None)
+        self.center_reference_rect(
+            rect_x=self.master.winfo_rootx(),
+            rect_y=self.master.winfo_rooty(),
+            rect_width=self.master.winfo_width(),
+            rect_height=self.master.winfo_height(),
+        )
+
+    def center(self):
+        if self.master is None:
+            self.center_reference_screen()
+        else:
+            self.center_reference_master()
 
 
 @contextmanager
