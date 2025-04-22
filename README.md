@@ -3,15 +3,15 @@
 
 # VCF Generator Lite
 
-**Repositories:**
+**Repositories**:
 [![Gitee repository](https://img.shields.io/badge/Gitee-repository-C71D23?logo=gitee)][RepositoryOnGitee]
 [![GitHub repository](https://img.shields.io/badge/GitHub-repository-0969da?logo=github)][RepositoryOnGithub]
 
-**Platforms:**
+**Platforms**:
 [![Windows7+ (exe)](https://img.shields.io/badge/Windows_7+-exe-0078D4?logo=windows)][ReleaseOnGitee]
 [![Python3.12+ (pyzw)](https://img.shields.io/badge/Python_3.12+-pyzw-3776AB?logo=python&logoColor=f5f5f5)][ReleaseOnGitee]
 
-**Languages:**
+**Languages**:
 [中文](./README.zh.md) |
 **English** |
 <small>More translations are welcome!</small>

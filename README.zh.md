@@ -3,15 +3,15 @@
 
 # VCF 生成器 Lite
 
-**仓库：**
+**仓库**：
 [![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee)][RepositoryOnGitee]
 [![GitHub 仓库](https://img.shields.io/badge/GitHub-仓库-0969da?logo=github)][RepositoryOnGithub]
 
-**平台：**
+**平台**：
 [![Windows7+（exe）](https://img.shields.io/badge/Windows_7+-exe-0078D4?logo=windows)][ReleaseOnGitee]
 [![Python3.12+（pyzw）](https://img.shields.io/badge/Python_3.12+-pyzw-3776AB?logo=python&logoColor=f5f5f5)][ReleaseOnGitee]
 
-**语言：**
+**语言**：
 **中文** |
 [English](./README.md) |
 <small>期待您的翻译！</small>
