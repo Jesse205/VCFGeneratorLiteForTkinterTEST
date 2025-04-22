@@ -1,11 +1,10 @@
 import re
-from dataclasses import dataclass
+from typing import NamedTuple
 
 CHINA_PHONE_PATTERN = re.compile(r"^1[356789]\d{9}$")
 
 
-@dataclass(frozen=True)
-class Contact:
+class Contact(NamedTuple):
     name: str
     phone: str
 
