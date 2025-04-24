@@ -46,12 +46,10 @@ Choose the most suitable deployment method based on your usage scenario:
 
 Different application packages have different environment requirements. Please choose the corresponding package based on your system environment.
 
-| Package Type               | Runtime Dependencies          | Architecture    | Prerequisites                                          |
-| -------------------------- | ----------------------------- | --------------- | ------------------------------------------------------ |
-| Installer/Portable Package | Windows 7+ system environment | x86_64          | Windows 7 requires patch files (see below for details) |
-| Zip Application            | Python 3.12+ and Tkinter      | No restrictions | Requires Python 3.12+ and Tkinter to be installed      |
-
-Note: You also need an environment compatible with the runtime dependencies.
+| Package Type               | System Environment       | Architecture    | Notes                                                  |
+| -------------------------- | ------------------------ | --------------- | ------------------------------------------------------ |
+| Installer/Portable Package | Windows 7+               | x86_64          | Windows 7 requires patch files (see below for details) |
+| Zip Application            | Python 3.12+ and Tkinter | No restrictions | -                                                      |
 
 ### File Download List
 
@@ -111,6 +109,26 @@ File list for each system:
 > Phone: 13333333333
 > ```
 
+## Compatibility
+
+### Application Compatibility
+
+| System Environment | Feature         | Compatibility                                                                                  |
+| ------------------ | --------------- | ---------------------------------------------------------------------------------------------- |
+| Windows 10+        | Dark Mode       | Dark mode not supported                                                                        |
+| Windows 10+        | Display Scaling | Unable to auto-scale when switching DPI; scaling adaptation is handled by the operating system |
+| Windows 10+        | Display Scaling | Icon scaling only supports 100%, 125%, and 150% levels                                         |
+| Windows 10+        | Font Scaling    | Font scaling not supported                                                                     |
+| Windows 7 - 8.1    | App Launch      | Requires patch                                                                                 |
+
+### vCard File Compatibility
+
+This APP only supports generating version 2.1 vCard files that contain only name and phone number.
+
+| Third-party Application | Compatibility                                              |
+| ----------------------- | ---------------------------------------------------------- |
+| Windows Contacts        | Chinese names may appear garbled in non-UTF-8 environments |
+
 ## Development & Contribution
 
 Please refer to the [Development Guide (Chinese)](./docs/dev/README.md) and the [Contribution Guide (Chinese)](./docs/CONTRIBUTING.md).
@@ -137,13 +155,13 @@ limitations under the License.
 
 ## Open Source Notice
 
-| Project                               | License                               | Purpose                                        |
-| ------------------------------------- | ------------------------------------- | ---------------------------------------------- |
-| [Python][CPythonRepository]           | [Python license][CPythonLicense]      | Provides runtime environment                   |
-| [UPX][UPXRepository]                  | [UPX license][UPXLicense]             | Code compression                               |
-| [PyInstaller][PyInstallerRepository]  | [GPL-2.0 license][PyInstallerLicense] | Packaging into an APP                          |
-| [tkhtmlview][TkhtmlviewRepository]    | [MIT License][TkhtmlviewLicense]      | Displaying HTML content (source code modified) |
-| [TtkText][TtkTextRepository]          | [MIT License][TtkTextLicense]         | Provides a rich-text editor for modern UI      |
+| Project                              | License                               | Purpose                                        |
+| ------------------------------------ | ------------------------------------- | ---------------------------------------------- |
+| [Python][CPythonRepository]          | [Python license][CPythonLicense]      | Provides runtime environment                   |
+| [UPX][UPXRepository]                 | [UPX license][UPXLicense]             | Code compression                               |
+| [PyInstaller][PyInstallerRepository] | [GPL-2.0 license][PyInstallerLicense] | Packaging into an APP                          |
+| [tkhtmlview][TkhtmlviewRepository]   | [MIT License][TkhtmlviewLicense]      | Displaying HTML content (source code modified) |
+| [TtkText][TtkTextRepository]         | [MIT License][TtkTextLicense]         | Provides a rich-text editor for modern UI      |
 
 [RepositoryOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/
 [RepositoryOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/

@@ -50,16 +50,14 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 
 不同的应用包有一不同环境要求，您需要根据您的系统环境选择对应的应用包。
 
-| 软件包类型    | 运行时依赖              | 架构要求 | 前置条件                           |
+| 软件包类型    | 系统环境                | 架构要求 | 特别说明                           |
 | ------------- | ----------------------- | -------- | ---------------------------------- |
-| 安装器/便携包 | Windows 7+ 系统环境     | x86_64   | Windows 7 需补丁文件（见下方说明） |
-| Zip 应用      | Python 3.12+ 与 Tkinter | 无限制   | 需安装 Python 3.12+ 与 Tkinter     |
+| 安装器/便携包 | Windows 7+              | x86_64   | Windows 7 需补丁文件（见下方说明） |
+| Zip 应用      | Python 3.12+ 与 Tkinter | 无限制   | -                                  |
 
 <!-- | Chocolatey         | Chocolatey 2.0.0       | x86_64   | 需安装 Chocolatey                            |
 | Android 应用软件包 | Android 系统环境       | 未知     | Windows 11 需安装 WSA，Linux 需安装 Waydroid |
 | 网站               | 浏览器                 | 无限制   | 需安装浏览器                                 | -->
-
-注：您还需要与运行时依赖兼容的环境。
 
 ### 文件下载列表
 
@@ -122,6 +120,26 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 > 电话：13333333333
 > ```
 
+## 兼容性
+
+### 应用兼容性
+
+| 系统环境        | 特性     | 兼容性                                          |
+| --------------- | -------- | ----------------------------------------------- |
+| Windows 10+     | 深色模式 | 不支持深色模式                                  |
+| Windows 10+     | 显示缩放 | 切换 DPI 时无法自动缩放，缩放适配由操作系统完成 |
+| Windows 10+     | 显示缩放 | 仅支持 100%、125%、150% 级别图标缩放            |
+| Windows 10+     | 字体缩放 | 不支持字体缩放                                  |
+| Windows 7 - 8.1 | 应用启动 | 需要补丁                                        |
+
+### vCard 文件兼容性
+
+本 APP 仅支持生成仅包含姓名和电话的 2.1 版本 vCard 文件。
+
+| 第三方应用     | 兼容性                      |
+| -------------- | --------------------------- |
+| Windows 联系人 | 非 UTF-8 环境下中文姓名乱码 |
+
 ## 开发与贡献
 
 请参阅[《开发指南》](./docs/dev/README.md)与[《贡献指南》](./docs/CONTRIBUTING.md)。
@@ -148,13 +166,13 @@ limitations under the License.
 
 ## 开源声明
 
-| 项目                                  | 许可证                                | 目的                           |
-| ------------------------------------- | ------------------------------------- | ------------------------------ |
-| [Python][CPythonRepository]           | [Python license][CPythonLicense]      | 提供运行时环境                 |
-| [UPX][UPXRepository]                  | [UPX license][UPXLicense]             | 压缩代码                       |
-| [PyInstaller][PyInstallerRepository]  | [GPL-2.0 license][PyInstallerLicense] | 打包为 APP                     |
-| [tkhtmlview][TkhtmlviewRepository]    | [MIT License][TkhtmlviewLicense]      | 显示 HTML 内容（已修改源代码） |
-| [TtkText][TtkTextRepository]          | [MIT License][TtkTextLicense]         | 提供现代UI的富文本编辑器       |
+| 项目                                 | 许可证                                | 目的                           |
+| ------------------------------------ | ------------------------------------- | ------------------------------ |
+| [Python][CPythonRepository]          | [Python license][CPythonLicense]      | 提供运行时环境                 |
+| [UPX][UPXRepository]                 | [UPX license][UPXLicense]             | 压缩代码                       |
+| [PyInstaller][PyInstallerRepository] | [GPL-2.0 license][PyInstallerLicense] | 打包为 APP                     |
+| [tkhtmlview][TkhtmlviewRepository]   | [MIT License][TkhtmlviewLicense]      | 显示 HTML 内容（已修改源代码） |
+| [TtkText][TtkTextRepository]         | [MIT License][TtkTextLicense]         | 提供现代UI的富文本编辑器       |
 
 [RepositoryOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/
 [RepositoryOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/
