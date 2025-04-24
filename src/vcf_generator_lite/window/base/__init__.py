@@ -52,8 +52,9 @@ class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
 class ExtendedTk(Tk, AppWindowExtension, ABC):
 
     def __init__(self, **kw):
-        super().__init__(baseName="vcf_generator_lite", **kw)
+        # __init__中加载的配置文件中可能需要设置主题，因此必须先设置标志
         self._theme_applied: bool = False
+        super().__init__(baseName="vcf_generator_lite", **kw)
         AppWindowExtension.__init__(self)
 
     @override
