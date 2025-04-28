@@ -19,8 +19,8 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
     app_icon_image: PhotoImage
 
     @override
-    def _configure_ui(self):
-        super()._configure_ui()
+    def _configure_ui_withdraw(self):
+        super()._configure_ui_withdraw()
         self.title(f"关于 {APP_NAME}")
         self.wm_size_pt(375, 300)
         self.wm_minsize_pt(375, 300)

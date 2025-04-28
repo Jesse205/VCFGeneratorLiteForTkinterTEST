@@ -33,12 +33,16 @@ class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
     def __init__(self):
         super().__init__()
         with withdraw_cm(self):
-            self._configure_ui()
-        self.center()
+            self._configure_ui_withdraw()
+            self.update_idletasks()  # 在deiconify前调用可以一定程度上防止首次启动时窗口闪烁
+        self._configure_ui()
 
-    def _configure_ui(self):
+    def _configure_ui_withdraw(self):
         self.__apply_default_icon()
         self.__apply_default_events()
+
+    def _configure_ui(self):
+        self.center()
 
     def __apply_default_icon(self):
         _logger.debug(f"窗口 {self.winfo_name()} 默认图标为 icon-48.png")
@@ -58,10 +62,10 @@ class ExtendedTk(Tk, AppWindowExtension, ABC):
         AppWindowExtension.__init__(self)
 
     @override
-    def _configure_ui(self):
+    def _configure_ui_withdraw(self):
         if not self._theme_applied:
             self.set_theme(create_platform_theme())
-        super()._configure_ui()
+        super()._configure_ui_withdraw()
 
     def set_theme(self, theme: Theme):
         theme.apply_theme(self, Style(self))
@@ -80,8 +84,8 @@ class ExtendedDialog(Toplevel, AppWindowExtension, ABC):
         AppWindowExtension.__init__(self)
 
     @override
-    def _configure_ui(self):
-        super()._configure_ui()
+    def _configure_ui_withdraw(self):
+        super()._configure_ui_withdraw()
         self.bind("<Escape>", lambda _: self.event_generate(EVENT_EXIT))
 
         if isinstance(self.master, Wm):

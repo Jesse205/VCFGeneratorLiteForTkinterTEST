@@ -25,13 +25,18 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
         super().__init__(className="VCFGeneratorLite")
 
     @override
-    def _configure_ui(self):
-        super()._configure_ui()
+    def _configure_ui_withdraw(self):
+        super()._configure_ui_withdraw()
         self.title(APP_NAME)
         self.wm_minsize_pt(300, 300)
         self.wm_size_pt(450, 450)
         self._create_widgets()
         self._create_menus()
+
+    @override
+    def _configure_ui(self):
+        super()._configure_ui()
+        self.content_text.focus_set()
 
     def _create_widgets(self):
         description_label = Label(self, text=USAGE, justify=LEFT)
@@ -44,8 +49,6 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
         self.content_text.pack(fill=BOTH, expand=True, padx="7p", pady=0)
         text_context_menu = TextContextMenu(self.content_text)
         text_context_menu.bind_to_widget()
-        # noinspection PyTypeChecker
-        self.after(0, self.content_text.focus_set)
 
         action_frame = self._create_action_bar(self)
         action_frame.pack(fill=X)

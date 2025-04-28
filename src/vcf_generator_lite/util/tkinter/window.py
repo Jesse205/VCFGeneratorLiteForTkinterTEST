@@ -66,8 +66,6 @@ class WindowingSystemWindowExtension(WindowExtension, ABC):
 class CenterWindowExtension(GeometryOffsetWindowExtension, WindowExtension, ABC):
 
     def center_reference_rect(self, rect_x: int, rect_y: int, rect_width: int, rect_height: int):
-        self.update_idletasks()
-        self.deiconify()
         client_x_min = self.winfo_vrootx()
         client_x_max = client_x_min + self.winfo_vrootwidth() - self.winfo_width()
         client_y_min = self.winfo_vrooty()
