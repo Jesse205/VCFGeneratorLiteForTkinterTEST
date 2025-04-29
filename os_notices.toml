@@ -1,0 +1,29 @@
+[[notices]]
+name = "CPython"
+repository = "https://github.com/python/cpython"
+license = "Python license"
+license-url = "https://docs.python.org/3/license.html"
+copyrights = [
+    "Copyright © 2001 Python Software Foundation. All rights reserved.",
+    "Copyright © 2000 BeOpen.com. All rights reserved.",
+    "Copyright © 1995-2001 Corporation for National Research Initiatives. All rights reserved.",
+    "Copyright © 1991-1995 Stichting Mathematisch Centrum. All rights reserved.",
+]
+
+[[notices]]
+name = "tkhtmlview"
+repository = "https://github.com/bauripalash/tkhtmlview"
+license = "MIT License"
+license-url = "https://github.com/bauripalash/tkhtmlview/blob/f7ded5584773f3470a98cf078f10cafb8eca14ba/LICENSE"
+copyrights = [
+    "Copyright (c) 2020 Palash Bauri",
+    "Copyright (c) 2018 paolo-gurisatti",
+]
+
+[[notices]]
+name = "TtkText"
+dependency = "ttk-text"
+repository = "https://github.com/Jesse205/TtkText"
+license = "MIT License"
+license-url = "https://github.com/Jesse205/TtkText/blob/v{version}/LICENSE"
+copyrights = ["Copyright (c) 2025 Jesse205"]

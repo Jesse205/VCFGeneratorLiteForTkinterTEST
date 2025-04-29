@@ -1,4 +1,3 @@
-import json
 from tkinter import Label as TkLabel, Misc, PhotoImage
 from tkinter.constants import *
 from tkinter.ttk import Button, Frame, Label, Style
@@ -72,13 +71,10 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
         details_input = HTMLScrolledText(
             content_frame,
             html=resources.read_text('texts/about.html').format(
-                source_url=constants.URL_SOURCE,
+                repository_url=constants.URL_REPOSITORY,
                 release_url=constants.URL_RELEASES,
                 jesse205_email=constants.EMAIL_JESSE205,
-                os_notice_html="<br />".join([
-                    '<a href="{url}">{name}</a> - <a href="{license_url}">{license}</a>'.format(**item)
-                    for item in json.loads(resources.read_binary('data/os_notices.json'))
-                ])
+                os_notices_url=constants.URL_OS_NOTICES,
             ),
             state=DISABLED,
         )

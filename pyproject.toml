@@ -43,6 +43,7 @@ build_app = { call = "scripts.build_app:main", help = "Build app." }
 prepare_innosetup_extensions = { call = "scripts.prepare_innosetup_extensions:main", help = "Download InnoSetup language files." }
 version = { call = "scripts.version:main", help = "Display or modify the project version number." }
 test = { shell = "pytest", help = "Run tests." }
+docs_generate_os_notices = { call = "scripts.docs.generate_os_notices:main", help = "Generate Open Source notices." }
 
 [tool.pdm.build]
 is-purelib = true

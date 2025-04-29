@@ -1,15 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint/refs/heads/main/schema/markdownlint-config-schema.json",
   "line-length": false,
-  "no-inline-html": {
-    "allowed_elements": [
-      "img",
-      "div",
-      "small",
-      "details",
-      "summary"
-    ]
-  },
+  "no-inline-html": false,
   "first-line-heading": false,
   "no-hard-tabs": {
     "ignore_code_languages": [

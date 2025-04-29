@@ -6,7 +6,7 @@ from typing import override
 
 from ttk_text.scrolled_text import ScrolledText
 
-from vcf_generator_lite.constants import APP_NAME, URL_LICENSE, URL_RELEASES, URL_REPORT, URL_SOURCE
+from vcf_generator_lite.constants import APP_NAME, URL_LICENSE, URL_RELEASES, URL_REPORT, URL_REPOSITORY
 from vcf_generator_lite.util.tkinter.menu import MenuBarWindowExtension, MenuCascade, MenuCommand, MenuSeparator
 from vcf_generator_lite.util.tkinter.widget import auto_wrap_configure_event
 from vcf_generator_lite.widget.menu import TextContextMenu
@@ -132,8 +132,8 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
                 label="帮助(&H)",
                 items=[
                     MenuCommand(
-                        label="开源仓库(&O)",
-                        command=lambda: webbrowser.open(URL_SOURCE),
+                        label="源代码仓库(&O)",
+                        command=lambda: webbrowser.open(URL_REPOSITORY),
                     ),
                     MenuCommand(
                         label="版本发布网址(&R)",
