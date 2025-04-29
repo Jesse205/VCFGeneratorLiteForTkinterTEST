@@ -38,15 +38,10 @@ class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
         self._configure_ui()
 
     def _configure_ui_withdraw(self):
-        self.__apply_default_icon()
         self.__apply_default_events()
 
     def _configure_ui(self):
         self.center()
-
-    def __apply_default_icon(self):
-        _logger.debug(f"窗口 {self.winfo_name()} 默认图标为 icon-48.png")
-        self.iconphoto(True, PhotoImage(master=self, data=resources.read_binary("images/icon-48.png")))
 
     def __apply_default_events(self):
         self.protocol("WM_DELETE_WINDOW", lambda: self.event_generate(EVENT_EXIT))
@@ -66,6 +61,10 @@ class ExtendedTk(Tk, AppWindowExtension, ABC):
         if not self._theme_applied:
             self.set_theme(create_platform_theme())
         super()._configure_ui_withdraw()
+        self.__apply_default_icon()
+
+    def __apply_default_icon(self):
+        self.iconphoto(True, PhotoImage(master=self, data=resources.read_binary("images/icon-48.png")))
 
     def set_theme(self, theme: Theme):
         theme.apply_theme(self, Style(self))
