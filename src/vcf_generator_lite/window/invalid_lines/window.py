@@ -57,7 +57,7 @@ class InvalidLinesWindow(ExtendedDialog, VerticalDialogLayout):
             minwidth=self.get_scaled(45)
         )
         self.content_tree.column('context', anchor=W)
-        self.content_tree.heading('row', text='行数', anchor=W)
+        self.content_tree.heading('row', text='位置', anchor=W)
         self.content_tree.heading('context', text='原始内容', anchor=W)
         self.content_tree.pack(fill=BOTH, expand=True, padx="7p")
         return content_frame

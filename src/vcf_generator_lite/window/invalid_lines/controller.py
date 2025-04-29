@@ -3,10 +3,8 @@ from tkinter import Event
 from vcf_generator_lite.models.vcf_generator import InvalidLine
 from vcf_generator_lite.window.invalid_lines.window import InvalidLinesWindow
 
-message_invalid_template = "已导出文件到 {path}，但部分异常的号码未包含在导出文件中。"
+message_invalid_template = "已导出文件到 {path}，异常的号码已被忽略。"
 invalid_line_position_template = "第 {row} 行"
-invalid_line_template = "第 {row_position} 行：{content}"
-ignored_template = "{content}... 等 {ignored_count} 个。"
 
 
 class InvalidLinesController:
