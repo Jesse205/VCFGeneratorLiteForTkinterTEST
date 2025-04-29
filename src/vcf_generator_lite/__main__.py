@@ -25,7 +25,7 @@ def main():
     enable_dpi_aware()
 
     logging.info("Starting VCF Generator...")
-    print(f"💡Tip: The source code is hosted at {constants.URL_REPORT}")
+    print(f"💡Tip: The source code is hosted at {constants.URL_REPOSITORY}")
 
     main_window, _ = create_main_window()
     main_window.mainloop()
