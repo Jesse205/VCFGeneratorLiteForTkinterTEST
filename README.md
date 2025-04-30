@@ -135,7 +135,7 @@ Please refer to the [Development Guide (Chinese)](./docs/dev/README.md) and the 
 
 ## License
 
-This project is released under the Apache 2.0 license.For details,please refer to [LICENSE](./LICENSE).
+This project is released under the Apache 2.0 license. For details, please refer to [LICENSE](./LICENSE).
 
 ```txt
 Copyright 2023-2025 Jesse205
