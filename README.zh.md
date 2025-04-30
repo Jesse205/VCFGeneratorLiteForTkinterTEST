@@ -166,28 +166,10 @@ limitations under the License.
 
 ## 开源声明
 
-| 项目                                 | 许可证                                | 目的                           |
-| ------------------------------------ | ------------------------------------- | ------------------------------ |
-| [Python][CPythonRepository]          | [Python license][CPythonLicense]      | 提供运行时环境                 |
-| [UPX][UPXRepository]                 | [UPX license][UPXLicense]             | 压缩代码                       |
-| [PyInstaller][PyInstallerRepository] | [GPL-2.0 license][PyInstallerLicense] | 打包为 APP                     |
-| [tkhtmlview][TkhtmlviewRepository]   | [MIT License][TkhtmlviewLicense]      | 显示 HTML 内容（已修改源代码） |
-| [TtkText][TtkTextRepository]         | [MIT License][TtkTextLicense]         | 提供现代UI的富文本编辑器       |
+请参见 [《开源声明》](./docs/legal/os_notices.md)
 
 [RepositoryOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/
 [RepositoryOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/
 [ReleaseOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
 [ReleaseOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
 [PythonWin7RepositoryOnGithub]: https://github.com/adang1345/PythonWin7
-
-[PythonHomepage]: https://www.python.org/
-[CPythonRepository]: https://github.com/python/cpython
-[CPythonLicense]: https://docs.python.org/3/license.html
-[UPXRepository]: https://github.com/upx/upx
-[UPXLicense]: https://github.com/upx/upx/blob/devel/LICENSE
-[PyInstallerRepository]: https://github.com/pyinstaller/pyinstaller
-[PyInstallerLicense]: https://pyinstaller.org/en/stable/license.html
-[TkhtmlviewRepository]: https://github.com/bauripalash/tkhtmlview
-[TkhtmlviewLicense]: https://github.com/bauripalash/tkhtmlview/blob/main/LICENSE
-[TtkTextRepository]: https://github.com/Jesse205/TtkText
-[TtkTextLicense]: https://github.com/Jesse205/TtkText/blob/main/LICENSE

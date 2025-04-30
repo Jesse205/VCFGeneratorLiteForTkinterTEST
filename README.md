@@ -155,28 +155,10 @@ limitations under the License.
 
 ## Open Source Notice
 
-| Project                              | License                               | Purpose                                        |
-| ------------------------------------ | ------------------------------------- | ---------------------------------------------- |
-| [Python][CPythonRepository]          | [Python license][CPythonLicense]      | Provides runtime environment                   |
-| [UPX][UPXRepository]                 | [UPX license][UPXLicense]             | Code compression                               |
-| [PyInstaller][PyInstallerRepository] | [GPL-2.0 license][PyInstallerLicense] | Packaging into an APP                          |
-| [tkhtmlview][TkhtmlviewRepository]   | [MIT License][TkhtmlviewLicense]      | Displaying HTML content (source code modified) |
-| [TtkText][TtkTextRepository]         | [MIT License][TtkTextLicense]         | Provides a rich-text editor for modern UI      |
+Please refer to [Open Source Notice (Chinese)](./docs/legal/os_notices.md)
 
 [RepositoryOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/
 [RepositoryOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/
 [ReleaseOnGitee]: https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
 [ReleaseOnGithub]: https://github.com/HelloTool/VCFGeneratorLiteForTkinter/releases/latest
 [PythonWin7RepositoryOnGithub]: https://github.com/adang1345/PythonWin7
-
-[PythonHomepage]: https://www.python.org/
-[CPythonRepository]: https://github.com/python/cpython
-[CPythonLicense]: https://docs.python.org/3/license.html
-[UPXRepository]: https://github.com/upx/upx
-[UPXLicense]: https://github.com/upx/upx/blob/devel/LICENSE
-[PyInstallerRepository]: https://github.com/pyinstaller/pyinstaller
-[PyInstallerLicense]: https://pyinstaller.org/en/stable/license.html
-[TkhtmlviewRepository]: https://github.com/bauripalash/tkhtmlview
-[TkhtmlviewLicense]: https://github.com/bauripalash/tkhtmlview/blob/main/LICENSE
-[TtkTextRepository]: https://github.com/Jesse205/TtkText
-[TtkTextLicense]: https://github.com/Jesse205/TtkText/blob/main/LICENSE
