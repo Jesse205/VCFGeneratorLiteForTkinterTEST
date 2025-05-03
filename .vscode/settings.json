@@ -2,7 +2,7 @@
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "pyproject.toml": "pdm.lock, .editorconfig, .markdownlint.json",
-    "vcf_generator_lite.spec": "setup.iss, metadata.yml, versionfile.txt",
+    "vcf_generator_lite.spec": "setup.iss, metadata.yml, versionfile.txt, os_notices.*",
     "*": "${basename}.*.${extname}",
   }
 }
