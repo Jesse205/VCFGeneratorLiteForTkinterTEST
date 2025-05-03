@@ -28,10 +28,10 @@ def format_url(url: str, notice: Notice) -> str:
     return url.format(version=importlib.metadata.version(notice["dependency"]))
 
 
-def process_notices(notices: list[Notice]):
+def generate_notices(config: NoticesConfig):
     return [
-        {**notice, "license-url": format_url(notice["license-url"], notice)}
-        for notice in notices
+        {**notice, "license-url": format_url(notice["license-url"], notice=notice)}
+        for notice in config["notices"]
     ]
 
 
@@ -42,7 +42,7 @@ def main() -> int:
     with open(config["output"], "w", encoding="utf-8") as f:
         output = runpy.run_path(
             config["template"],
-            init_globals={"notices": process_notices(notices=config["notices"])},
+            init_globals={"notices": generate_notices(config)},
         )["output"]
         f.write(output)
     return 0
