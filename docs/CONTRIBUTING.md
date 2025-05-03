@@ -44,20 +44,7 @@
 
 ## GIT 提交规范
 
-遵循 Angular 的 [Commit Message Format](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-commit-message-format)。
-
-### 类型
-
-必须是以下之一：
-
-- **build**：影响构建系统或外部依赖性的变化（示例范围：Gulp，Groccoli，NPM）
-- **ci**：更改我们的 CI 配置文件和脚本（示例：Github Actions，SauceLabs）
-- **docs**：仅更改文档
-- **feat**：一个新功能
-- **fix**：一个 bug 修复
-- **perf**：改进的代码更改可改善性能
-- **refactor**：代码更改既不修复错误也不添加功能
-- **test**：添加丢失的测试或纠正现有测试
+遵循 [约定式提交](https://www.conventionalcommits.org/zh-hans/v1.0.0/)。
 
 ## UI 设计
 
