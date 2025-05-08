@@ -11,10 +11,11 @@ class WindowsTheme(BaseTheme):
     def apply_theme(self, master: Misc, style: Style):
         super().apply_theme(master, style)
         style.theme_use("vista")
-
+        default_font = nametofont("TkMenuFont")
+        default_font_size = int(default_font.actual("size"))
         # 重写部分配置以适配高分屏
         style.configure("TButton", padding="2.5p")
-        style.configure("Treeview", rowheight="15p")
+        style.configure("Treeview", rowheight=f"{default_font_size + 6}p")
         style.configure("Heading", padding="1.5p")
 
         # 自定义组件

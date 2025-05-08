@@ -1,4 +1,5 @@
-from tkinter import Tk, Misc
+from tkinter import Misc, Tk
+from tkinter.font import nametofont
 from tkinter.ttk import Style
 from typing import override
 
@@ -10,10 +11,12 @@ class ClamTheme(BaseTheme):
     def apply_theme(self, master: Misc, style: Style):
         super().apply_theme(master, style)
         style.theme_use("clam")
+        default_font = nametofont("TkMenuFont")
+        default_font_size = int(default_font.actual("size"))
 
         # 重写部分配置以适配高分屏
         style.configure("TButton", padding="2.5p")
-        style.configure("Treeview", rowheight="15p")
+        style.configure("Treeview", rowheight=f"{default_font_size + 6}p")
         style.configure("Heading", padding="2.25p")
         style.configure("Vertical.TScrollbar", arrowsize="9p")
 

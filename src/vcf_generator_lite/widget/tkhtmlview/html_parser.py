@@ -288,11 +288,11 @@ class HTMLTextParser(HTMLParser):
                     except:
                         pass
             elif k in (
-                HTML.Attrs.HREF,
-                HTML.Attrs.SRC,
-                HTML.Attrs.WIDTH,
-                HTML.Attrs.HEIGHT,
-                HTML.Attrs.TYPE,
+                    HTML.Attrs.HREF,
+                    HTML.Attrs.SRC,
+                    HTML.Attrs.WIDTH,
+                    HTML.Attrs.HEIGHT,
+                    HTML.Attrs.TYPE,
             ):
                 attrs_dict[k] = v
         return attrs_dict
@@ -646,8 +646,8 @@ class HTMLTextParser(HTMLParser):
             data = f"{data} "  # FIXME: attaching a space in blind is wrong
             data = self._remove_multi_spaces(data)
             if len(self.html_tags) and self.html_tags[-1] in (
-                HTML.Tag.UL,
-                HTML.Tag.OL,
+                    HTML.Tag.UL,
+                    HTML.Tag.OL,
             ):
                 self._w.insert(tk.INSERT, "\t" * 2 * len(self.list_tags))
 
@@ -712,12 +712,15 @@ class HTMLTextParser(HTMLParser):
 
         # add tags
         self.hlink_slots = []
+        default_font_scaling = int(self.default_font.actual("size")) / 9
         for key, tag in self._w_tags.items():
             if "config" in tag:  # HF change justify to left for tkinter (only supports left, right, center)
                 if tag["config"].get("justify") == "justify":
                     tag["config"]["justify"] = "left"
             self._w.tag_add(key, tag[WTag.START_INDEX], tag[WTag.END_INDEX])
             tag_font = self.default_font.copy() if self.default_font is not None else font.Font()
+            if "size" in tag[Fnt.KEY]:
+                tag[Fnt.KEY]["size"] = int(default_font_scaling * tag[Fnt.KEY]["size"])
             tag_font.config(**tag[Fnt.KEY])
             self._w.tag_config(key, font=tag_font, selectforeground=self.default_selectforeground,
                                selectbackground=self.default_selectbackground, **tag[WCfg.KEY])

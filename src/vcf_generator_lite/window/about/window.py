@@ -7,7 +7,7 @@ from vcf_generator_lite import constants, resources
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT, APP_NAME
 from vcf_generator_lite.layout.vertical_dialog_layout import VerticalDialogLayout
-from vcf_generator_lite.util.tkinter.font import extend_font
+from vcf_generator_lite.util.tkinter.font import extend_font_scale
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.widget.tkhtmlview import HTMLScrolledText
 from vcf_generator_lite.window.base import ExtendedDialog
@@ -58,7 +58,7 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
             app_info_frame,
             text=f"{APP_NAME} v{__version__}",
             style="DialogHeaderContent.TLabel",
-            font=extend_font("TkDefaultFont", size=12),
+            font=extend_font_scale("TkDefaultFont", 12 / 9),
         )
         app_name_label.pack(anchor=W)
         app_copyright_label = Label(app_info_frame, text=APP_COPYRIGHT, style="DialogHeaderContent.TLabel")

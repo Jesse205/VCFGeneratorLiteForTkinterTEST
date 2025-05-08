@@ -4,7 +4,7 @@ from tkinter.ttk import Button, Frame, Label, Sizegrip
 from typing import override
 
 from vcf_generator_lite.layout.vertical_dialog_layout import VerticalDialogLayout
-from vcf_generator_lite.util.tkinter.font import extend_font
+from vcf_generator_lite.util.tkinter.font import extend_font_scale
 from vcf_generator_lite.util.tkinter.widget import auto_wrap_configure_event
 from vcf_generator_lite.widget.scrolled_treeview import ScrolledTreeview
 from vcf_generator_lite.window.base import ExtendedDialog
@@ -29,7 +29,7 @@ class InvalidLinesWindow(ExtendedDialog, VerticalDialogLayout):
         self.header_icon = Label(
             header_frame,
             text="\u26A0",
-            font=extend_font("TkDefaultFont", size=24),
+            font=extend_font_scale("TkDefaultFont", 24 / 9),
             style="DialogHeaderContent.TLabel"
         )
         self.header_icon.pack(side=LEFT, padx="14p", pady="7p")

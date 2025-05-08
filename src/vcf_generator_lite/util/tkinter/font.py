@@ -1,6 +1,5 @@
 from tkinter.font import nametofont
-from typing import TypedDict, Literal
-from typing import Unpack
+from typing import Literal, TypedDict
 
 
 class FontConfig(TypedDict, total=False):
@@ -12,7 +11,7 @@ class FontConfig(TypedDict, total=False):
     overstrike: bool
 
 
-def extend_font(origin_name: str, **options: Unpack[FontConfig]):
+def extend_font_scale(origin_name: str, scale: float):
     font = nametofont(origin_name).copy()
-    font.config(**options)
+    font.configure(size=round(int(font.actual("size")) * scale))
     return font
