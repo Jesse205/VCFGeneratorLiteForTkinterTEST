@@ -1,6 +1,6 @@
 from tkinter import Event
 
-from vcf_generator_lite.models.vcf_generator import InvalidLine
+from vcf_generator_lite.services.vcf_generator import InvalidLine
 from vcf_generator_lite.window.invalid_lines.window import InvalidLinesWindow
 
 message_invalid_template = "已导出文件到 {path}，异常的号码已被忽略。"

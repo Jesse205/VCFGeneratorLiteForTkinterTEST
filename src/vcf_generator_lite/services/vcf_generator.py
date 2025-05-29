@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from queue import Queue
 from typing import Callable, IO, Optional
 
-from vcf_generator_lite.util.contact import Contact, parse_contact
+from vcf_generator_lite.models.contact import Contact, parse_contact
 
 _logger = logging.getLogger(__name__)
 

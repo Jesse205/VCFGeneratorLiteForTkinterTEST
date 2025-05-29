@@ -5,7 +5,7 @@ from concurrent.futures import Future
 from concurrent.futures.thread import ThreadPoolExecutor
 from tkinter import Event, filedialog
 
-from vcf_generator_lite.models.vcf_generator import GenerateResult, InvalidLine, VCFGeneratorTask
+from vcf_generator_lite.services.vcf_generator import GenerateResult, InvalidLine, VCFGeneratorTask
 from vcf_generator_lite.util.tkinter import dialog
 from vcf_generator_lite.window.about import AboutOpener
 from vcf_generator_lite.window.base.constants import EVENT_EXIT
