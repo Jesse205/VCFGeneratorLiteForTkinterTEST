@@ -78,23 +78,6 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 | Android 应用软件包 | 暂未提供                  | 暂未提供                          | 不支持                            | 暂未提供（推荐） |
 | 网站               | 暂未提供                  | 暂未提供                          | 不支持                            | 暂未提供         | -->
 
-### Windows 7 特别说明
-
-<details>
-<summary>兼容性补丁安装指南（仅 Windows 7 用户）</summary>
-
-1. **获取 Python 嵌入包**：从 [PythonWin7][PythonWin7RepositoryOnGithub] 仓库下载：
-    - `python-3.13.2-embed-amd64.zip`
-2. **提取 DLL 文件**：解压下载的 ZIP 包，从中获取以下文件：
-    - `python313.dll`  
-    - `api-ms-win-core-path-l1-1-0.dll`
-3. **应用补丁**：
-    1. 完成软件安装
-    2. 打开安装目录下的 `_internal` 文件夹
-    3. 将下载的两个 DLL 文件覆盖到该目录
-
-</details>
-
 ## 使用方法
 
 1. 把名字和电话以每行 `姓名 电话号码` 的格式复制到下面的编辑框内；
@@ -128,9 +111,26 @@ VCF 生成器，输入姓名与手机号则自动生成用于批量导入到通�
 | --------------- | -------- | ----------------------------------------------- |
 | Windows 10+     | 深色模式 | 不支持深色模式                                  |
 | Windows 10+     | 显示缩放 | 切换 DPI 时无法自动缩放，缩放适配由操作系统完成 |
-| Windows 10+     | 显示缩放 | 仅支持 100%、125%、150% 级别图标缩放            |
 | Windows 10+     | 字体缩放 | 不支持字体缩放                                  |
+| Windows 7+      | 显示缩放 | 仅支持 100%、125%、150% 级别图标缩放            |
 | Windows 7 - 8.1 | 应用启动 | 需要补丁                                        |
+
+#### 特别说明
+
+<details>
+<summary>兼容性补丁安装指南（仅 Windows 7 用户）</summary>
+
+1. **获取 Python 嵌入包**：从 [PythonWin7][PythonWin7RepositoryOnGithub] 仓库下载：
+    - `python-3.13.2-embed-amd64.zip`
+2. **提取 DLL 文件**：解压下载的 ZIP 包，从中获取以下文件：
+    - `python313.dll`  
+    - `api-ms-win-core-path-l1-1-0.dll`
+3. **应用补丁**：
+    1. 完成软件安装
+    2. 打开安装目录下的 `_internal` 文件夹
+    3. 将下载的两个 DLL 文件覆盖到该目录
+
+</details>
 
 ### vCard 文件兼容性
 

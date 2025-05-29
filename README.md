@@ -66,23 +66,6 @@ File list for each system:
 | Portable Package | `*_portable.zip`            | Not available                 | Not available                 | Not supported |
 | Zip Application  | `*_zipapp.pyzw`             | `*_zipapp.pyzw` (recommended) | `*_zipapp.pyzw` (recommended) | Not supported |
 
-### Windows 7 Compatibility Patch
-
-<details>
-<summary>Patch instructions (Windows 7 ONLY)</summary>
-
-1. **Download Python embed package** from [PythonWin7][PythonWin7RepositoryOnGithub]:
-   - `python-3.13.2-embed-amd64.zip`
-2. **Extract required DLLs**:
-   - `python313.dll`
-   - `api-ms-win-core-path-l1-1-0.dll`
-3. **Apply patch**:
-   1. Complete software installation
-   2. Navigate to `_internal` folder in installation directory
-   3. Replace existing files with the extracted DLLs
-
-</details>
-
 ## Usage
 
 1. Open the app.
@@ -117,9 +100,26 @@ File list for each system:
 | ------------------ | --------------- | ---------------------------------------------------------------------------------------------- |
 | Windows 10+        | Dark Mode       | Dark mode not supported                                                                        |
 | Windows 10+        | Display Scaling | Unable to auto-scale when switching DPI; scaling adaptation is handled by the operating system |
-| Windows 10+        | Display Scaling | Icon scaling only supports 100%, 125%, and 150% levels                                         |
 | Windows 10+        | Font Scaling    | Font scaling not supported                                                                     |
+| Windows 7+         | Display Scaling | Icon scaling only supports 100%, 125%, and 150% levels                                         |
 | Windows 7 - 8.1    | App Launch      | Requires patch                                                                                 |
+
+#### Special Notes
+
+<details>
+<summary>Compatibility Patch Guide (Windows 7 ONLY)</summary>
+
+1. **Download Python embed package** from [PythonWin7][PythonWin7RepositoryOnGithub]:
+   - `python-3.13.2-embed-amd64.zip`
+2. **Extract required DLLs**:
+   - `python313.dll`
+   - `api-ms-win-core-path-l1-1-0.dll`
+3. **Apply patch**:
+   1. Complete software installation
+   2. Navigate to `_internal` folder in installation directory
+   3. Replace existing files with the extracted DLLs
+
+</details>
 
 ### vCard File Compatibility
 
