@@ -64,6 +64,8 @@ class MainWindow(ExtendedTk, VerticalDialogLayout, MenuBarWindowExtension):
         sizegrip.place(relx=1, rely=1, anchor=SE)
 
         self.progress_bar = Progressbar(action_frame, orient=HORIZONTAL, length=200)
+        self.progress_label = Label(action_frame, text="正在生成……")
+
         self.generate_button = Button(
             action_frame,
             text="开始生成",
@@ -169,11 +171,13 @@ class MainWindow(ExtendedTk, VerticalDialogLayout, MenuBarWindowExtension):
     def get_text_content(self) -> str:
         return self.content_text.get(1.0, END)[:-1]
 
-    def show_progress_bar(self):
+    def show_progress(self):
         self.progress_bar.pack(side=LEFT, padx="7p", pady="7p")
+        self.progress_label.pack(side=LEFT, padx=(0, "7p"), pady="7p")
 
-    def hide_progress_bar(self):
+    def hide_progress(self):
         self.progress_bar.pack_forget()
+        self.progress_label.pack_forget()
 
     def set_progress(self, progress: float):
         self.progress_bar.configure(value=progress)
