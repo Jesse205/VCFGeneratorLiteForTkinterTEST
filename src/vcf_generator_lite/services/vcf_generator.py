@@ -33,11 +33,11 @@ class GenerateResult:
 
 
 def serialize_to_vcard(contact: Contact):
-    name_encoded = binascii.b2a_qp(contact.name.encode("utf-8")).decode("utf-8")
     return f"""BEGIN:VCARD
 VERSION:2.1
-FN;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{name_encoded}
-TEL;CELL:{contact.phone}
+FN;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{binascii.b2a_qp(contact.name.encode("utf-8")).decode("utf-8")}
+TEL;CELL:{contact.phone}{f"""
+NOTE;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{contact.note}""" if contact.note else ""}
 END:VCARD"""
 
 

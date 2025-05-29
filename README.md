@@ -69,11 +69,11 @@ File list for each system:
 ## Usage
 
 1. Open the app.
-2. Copy the name and phone number in the format of `Name PhoneNumber` on each line into the editing box below;
+2. Copy the name and phone number in the format of `Name PhoneNumber Note` on each line into the editing box below. The note can be ignored.
    ```text
-   Hardy Buck	13445467890
-   Alva Mackintosh	13554678907
-   Hobart Baker	13645436748
+   Isaac Newton	13445467890	British mathematician
+   Muhammad		13554678907
+   Confucius		13645436748
    ```
 3. Click "生成" (Generate), select a path to save the file.
 4. Copy the generated VCF file to your phone, select "Contacts" when opening the file, and then follow the prompts.
@@ -85,11 +85,12 @@ File list for each system:
 > - The program will automatically remove excess spaces from the input box.
 > - If there are multiple spaces in each line, all characters before the last space will be treated as names.
 >
-> For example, ` Hardy Buck   13333333333   ` will be recognized as
+> For example, ` Han Meimei   13333333333   A   well-known girl` will be recognized as
 >
 > ```text
-> Name: Hardy Buck
+> Name: Han Meimei
 > Phone: 13333333333
+> Note: A well-known girl
 > ```
 
 ## Compatibility
