@@ -15,7 +15,6 @@ def is_china_mobile_phone(phone: str) -> bool:
 
 
 def parse_contact(person_text: str):
-    # 修改分割逻辑以支持备注字段
     parts = person_text.split()
     if len(parts) < 2:
         raise ValueError(f"The person info is illegal: '{person_text}'.")
