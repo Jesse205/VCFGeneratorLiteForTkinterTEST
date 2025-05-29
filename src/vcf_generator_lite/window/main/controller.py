@@ -61,8 +61,8 @@ class MainController:
         def done(future: Future[GenerateResult]):
             self.is_generating = False
             file_io.close()
-            self._show_generate_done_dialog(file_io.name, future.result())
             self.window.hide_progress()
+            self._show_generate_done_dialog(file_io.name, future.result())
             self.window.set_generate_enabled(True)
 
         def on_update_progress(progress: float, determinate: bool):
