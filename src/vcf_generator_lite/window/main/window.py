@@ -7,6 +7,7 @@ from typing import override
 from ttk_text.scrolled_text import ScrolledText
 
 from vcf_generator_lite.constants import APP_NAME, URL_LICENSE, URL_RELEASES, URL_REPORT, URL_REPOSITORY
+from vcf_generator_lite.layout.vertical_dialog_layout import VerticalDialogLayout
 from vcf_generator_lite.util.tkinter.menu import MenuBarWindowExtension, MenuCascade, MenuCommand, MenuSeparator
 from vcf_generator_lite.util.tkinter.widget import auto_wrap_configure_event
 from vcf_generator_lite.widget.menu import TextContextMenu
@@ -16,7 +17,7 @@ from vcf_generator_lite.window.main.constants import DEFAULT_INPUT_CONTENT, EVEN
     EVENT_GENERATE, USAGE
 
 
-class MainWindow(ExtendedTk, MenuBarWindowExtension):
+class MainWindow(ExtendedTk, VerticalDialogLayout, MenuBarWindowExtension):
     generate_button: Button
     content_text: ScrolledText
     progress_bar: Progressbar
@@ -30,7 +31,7 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
         self.title(APP_NAME)
         self.wm_minsize_pt(300, 300)
         self.wm_size_pt(450, 450)
-        self._create_widgets()
+        self._create_widgets(self)
         self._create_menus()
 
     @override
@@ -38,22 +39,26 @@ class MainWindow(ExtendedTk, MenuBarWindowExtension):
         super()._configure_ui()
         self.content_text.focus_set()
 
-    def _create_widgets(self):
-        description_label = Label(self, text=USAGE, justify=LEFT)
+    @override
+    def _create_header(self, parent: Misc):
+        description_label = Label(parent, text=USAGE, justify=LEFT)
         description_label.bind("<Configure>", auto_wrap_configure_event, "+")
         description_label.pack(fill=X, padx="7p", pady="7p")
+        return description_label
 
-        self.content_text = ScrolledText(self, undo=True, tabs="2c", tabstyle="wordprocessor", maxundo=5)
+    @override
+    def _create_content(self, master: Misc):
+        content_frame = Frame(master)
+        self.content_text = ScrolledText(content_frame, undo=True, tabs="2c", tabstyle="wordprocessor", maxundo=5)
         self.content_text.insert(0.0, DEFAULT_INPUT_CONTENT)
         self.content_text.edit_reset()
         self.content_text.pack(fill=BOTH, expand=True, padx="7p", pady=0)
         text_context_menu = TextContextMenu(self.content_text)
         text_context_menu.bind_to_widget()
+        return content_frame
 
-        action_frame = self._create_action_bar(self)
-        action_frame.pack(fill=X)
-
-    def _create_action_bar(self, master: Misc):
+    @override
+    def _create_actions(self, master: Misc):
         action_frame = Frame(master)
         sizegrip = Sizegrip(action_frame)
         sizegrip.place(relx=1, rely=1, anchor=SE)
