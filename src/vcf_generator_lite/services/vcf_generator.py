@@ -32,12 +32,20 @@ class GenerateResult:
     exceptions: list[BaseException]
 
 
+def utf8_to_qp(text: str) -> str:
+    return binascii.b2a_qp(text.encode("utf-8")).decode("utf-8")
+
+
 def serialize_to_vcard(contact: Contact):
+    items: list[str] = [
+        "VERSION:2.1",
+        f"FN;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{utf8_to_qp(contact.name)}",
+        f"TEL;CELL:{contact.phone}"
+    ]
+    if contact.note:
+        items.append(f"NOTE;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{utf8_to_qp(contact.note)}")
     return f"""BEGIN:VCARD
-VERSION:2.1
-FN;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{binascii.b2a_qp(contact.name.encode("utf-8")).decode("utf-8")}
-TEL;CELL:{contact.phone}{f"""
-NOTE;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{contact.note}""" if contact.note else ""}
+{"\n".join(items)}
 END:VCARD"""
 
 
