@@ -20,7 +20,7 @@ _The application currently only supports the Chinese language._
 
 </div>
 
-VCF generator, input name and phone number to automatically generate VCF files for batch import into the address book.
+VCF generator, input name and phone number to automatically generate VCF files for batch importing into the address book.
 
 [![License](https://img.shields.io/github/license/HelloTool/VCFGeneratorLiteForTkinter)](./LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./docs/CODE_OF_CONDUCT.md)
@@ -51,7 +51,7 @@ Different application packages have different environment requirements. Please c
 | Installer/Portable Package | Windows 7+               | x86_64          | Windows 7 requires patch files (see below for details) |
 | Zip Application            | Python 3.12+ and Tkinter | No restrictions | -                                                      |
 
-### File Download List
+### Get the Software Package
 
 Get the software package through the following channels:
 
@@ -69,7 +69,7 @@ File list for each system:
 ## Usage
 
 1. Open the app.
-2. Copy the name and phone number in the format of `Name PhoneNumber Note` on each line into the editing box below. The note can be ignored.
+2. Copy the name and phone number in the format of `Name PhoneNumber Note` on each line into the editing box below. The note can be omitted.
    ```text
    Isaac Newton	13445467890	British mathematician
    Muhammad		13554678907
@@ -79,19 +79,19 @@ File list for each system:
 4. Copy the generated VCF file to your phone, select "Contacts" when opening the file, and then follow the prompts.
 5. Wait for the import to complete.
 
-> [!NOTE]
+> [!NOTE] Note
 >
 > - Tabs will be automatically converted to spaces for processing.
-> - The program will automatically remove excess spaces from the input box.
+> - The program will automatically remove extra spaces from the input box.
 > - If there are multiple spaces in each line, all characters before the last space will be treated as names.
 >
 > For example, ` Han Meimei   13333333333   A   well-known girl` will be recognized as
 >
-> ```text
-> Name: Han Meimei
-> Phone: 13333333333
-> Note: A well-known girl
-> ```
+>
+> > - Name: Han Meimei
+> > - Phone: 13333333333
+> > - Note: A well-known girl
+>
 
 ## Compatibility
 
@@ -103,7 +103,7 @@ File list for each system:
 | Windows 10+        | Display Scaling | Unable to auto-scale when switching DPI; scaling adaptation is handled by the operating system |
 | Windows 10+        | Font Scaling    | Font scaling not supported                                                                     |
 | Windows 7+         | Display Scaling | Icon scaling only supports 100%, 125%, and 150% levels                                         |
-| Windows 7 - 8.1    | App Launch      | Requires patch                                                                                 |
+| Windows 7 ~ 8.1    | App Launch      | Requires patches                                                                               |
 
 #### Special Notes
 
@@ -124,7 +124,7 @@ File list for each system:
 
 ### vCard File Compatibility
 
-This APP only supports generating version 2.1 vCard files that contain only name and phone number.
+This app only supports generating version 2.1 vCard files that contain only name and phone number.
 
 | Third-party Application | Compatibility                                              |
 | ----------------------- | ---------------------------------------------------------- |
