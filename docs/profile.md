@@ -51,7 +51,7 @@
 1. 打开配置文件：`~/.vcf_generator_lite.py`
 2. 添加配置代码：
     ````python
-    from tkinter import Misc, Tk
+    from tkinter import Tk
     from tkinter.ttk import Style
     from typing import override
 
@@ -60,8 +60,8 @@
 
     class ClassicTheme(BaseTheme):
         @override
-        def apply_theme(self, master: Misc, style: Style):
-            super().apply_theme(master, style)
+        def apply_tk(self, master: Tk, style: Style):
+            super().apply_tk(master, style)
             style.theme_use("classic")
             style.configure("TButton", padding="1p", width=11)
             style.configure("Vertical.TScrollbar", arrowsize="9p")
@@ -69,8 +69,7 @@
             style.configure("TextFrame.TEntry", padding=0, borderwidth="2p")
 
             window_background = style.lookup("TFrame", "background")
-            if isinstance(master, Tk):
-                master.configure(background=window_background)
+            master.configure(background=window_background)
             master.option_add("*Toplevel.background", window_background)
 
 

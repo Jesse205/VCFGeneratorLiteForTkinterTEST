@@ -7,10 +7,10 @@ from typing import override
 from vcf_generator_lite import resources
 from vcf_generator_lite.theme import create_platform_theme
 from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
-from vcf_generator_lite.util.tkinter.theme import Theme
+from vcf_generator_lite.util.tkinter.theme import EnhancedTheme
 from vcf_generator_lite.util.tkinter.window import CenterWindowExtension, GcWindowExtension, GeometryWindowExtension, \
     WindowExtension, WindowingSystemWindowExtension, withdraw_cm
-from vcf_generator_lite.window.base.constants import EVENT_EXIT
+from vcf_generator_lite.window.base.constants import EVENT_ENHANCED_THEME_CHANGED, EVENT_EXIT
 
 __all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
 _logger = logging.getLogger(__name__)
@@ -49,6 +49,7 @@ class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
 
 
 class ExtendedTk(Tk, AppWindowExtension, ABC):
+    theme: EnhancedTheme
 
     def __init__(self, **kw):
         # __init__中加载的配置文件中可能需要设置主题，因此必须先设置标志
@@ -66,8 +67,11 @@ class ExtendedTk(Tk, AppWindowExtension, ABC):
     def __apply_default_icon(self):
         self.iconphoto(True, PhotoImage(master=self, data=resources.read_binary("images/icon-48.png")))
 
-    def set_theme(self, theme: Theme):
-        theme.apply_theme(self, Style(self))
+    def set_theme(self, theme: EnhancedTheme):
+        self.theme = theme
+        theme.apply_tk(self, Style(self))
+        theme.apply_window(self, Style(self))
+        self.event_generate(EVENT_ENHANCED_THEME_CHANGED, )
         self._theme_applied = True
 
 
@@ -76,11 +80,18 @@ class ExtendedToplevel(Toplevel, AppWindowExtension, ABC):
         super().__init__(master, **kw)
         AppWindowExtension.__init__(self)
 
+    @override
+    def _configure_ui_withdraw(self):
+        super()._configure_ui_withdraw()
+        self.__apply_theme()
 
-class ExtendedDialog(Toplevel, AppWindowExtension, ABC):
-    def __init__(self, master: Tk | Toplevel, **kw):
-        super().__init__(master, **kw)
-        AppWindowExtension.__init__(self)
+    def __apply_theme(self):
+        root: ExtendedTk = self.nametowidget(".")
+        root.theme.apply_window(self, Style(self))
+        root.bind(EVENT_ENHANCED_THEME_CHANGED, lambda _: root.theme.apply_window(self, Style(self)))
+
+
+class ExtendedDialog(ExtendedToplevel, ABC):
 
     @override
     def _configure_ui_withdraw(self):

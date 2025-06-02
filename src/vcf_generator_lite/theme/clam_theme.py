@@ -1,4 +1,4 @@
-from tkinter import Misc, Tk
+from tkinter import Tk, Toplevel
 from tkinter.font import nametofont
 from tkinter.ttk import Style
 from typing import override
@@ -8,10 +8,10 @@ from vcf_generator_lite.theme.base import BaseTheme
 
 class ClamTheme(BaseTheme):
     @override
-    def apply_theme(self, master: Misc, style: Style):
-        super().apply_theme(master, style)
+    def apply_tk(self, master: Tk, style: Style):
+        super().apply_tk(master, style)
         style.theme_use("clam")
-        default_font = nametofont("TkMenuFont")
+        default_font = nametofont("TkDefaultFont")
         default_font_size = int(default_font.actual("size"))
 
         # 重写部分配置以适配高分屏
@@ -24,8 +24,9 @@ class ClamTheme(BaseTheme):
         style.configure("DialogHeader.TFrame", relief="raised")
         style.configure("TextFrame.TEntry", padding=0, borderwidth="1.5p")
 
+    @override
+    def apply_window(self, master: Tk | Toplevel, style: Style):
+        super().apply_window(master, style)
         # 窗口背景色不会跟随主题变化，需要手动设置
         window_background = style.lookup("TFrame", "background")
-        if isinstance(master, Tk):
-            master.configure(background=window_background)
-        master.option_add("*Toplevel.background", window_background)
+        master.configure(background=window_background)
