@@ -165,7 +165,7 @@ class WTag:
 DEFAULT_STACK = {
     WCfg.KEY: {
         WCfg.BACKGROUND: [],
-        WCfg.FOREGROUND: [("__DEFAULT__", "black")],
+        WCfg.FOREGROUND: [],
         WCfg.JUSTIFY: [("__DEFAULT__", "left")],
         WCfg.TABS: [("__DEFAULT__", ())],
     },
@@ -742,6 +742,9 @@ class HTMLTextParser(HTMLParser):
         self.stack = deepcopy(DEFAULT_STACK)
         self.stack[WCfg.KEY][WCfg.BACKGROUND].append(
             ("__DEFAULT__", w.cget("background"))
+        )
+        self.stack[WCfg.KEY][WCfg.FOREGROUND].append(
+            ("__DEFAULT__", w.cget("foreground"))
         )
         # self.stack[Fnt.KEY][Fnt.FAMILY].append(
         #     ("__DEFAULT__", None)
