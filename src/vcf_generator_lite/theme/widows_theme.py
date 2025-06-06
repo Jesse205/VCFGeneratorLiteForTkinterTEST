@@ -27,4 +27,4 @@ class WindowsTheme(BaseTheme):
 
         # Windows 7 中菜单默认不使用TkMenuFont，因此需要手动设置字体。
         menu_font = nametofont("TkMenuFont")
-        master.option_add("*Menu.font", menu_font, "widgetDefault")
+        master.option_add("*Menu.font", menu_font, "startupFile")
