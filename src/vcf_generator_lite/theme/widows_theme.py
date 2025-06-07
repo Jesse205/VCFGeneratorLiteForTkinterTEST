@@ -20,7 +20,7 @@ class WindowsTheme(BaseTheme):
         style.configure("Heading", padding="1.5p")
 
         # 自定义组件
-        style.configure("TextFrame.TEntry", padding=0, borderwidth="1.5p", bordercolor="SystemHighlight")
+        style.configure("ThemedText.TEntry", padding=0, borderwidth="1.5p", bordercolor="SystemHighlight")
         style.configure("DialogHeader.TFrame", background="systemWindow")
         style.configure("DialogHeaderContent.TFrame", background="systemWindow")
         style.configure("DialogHeaderContent.TLabel", background="systemWindow")

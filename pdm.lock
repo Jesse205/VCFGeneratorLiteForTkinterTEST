@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:7855242919711f1c2532cbba516ed1fd3986d6b066f5f518102fe76f302abcb4"
+content_hash = "sha256:8e2bad0cfb07cbca3baa603f30e212ba80dc36cb271de30005bb26895d8c0089"
 
 [[metadata.targets]]
 requires_python = ">=3.12,<3.14"
@@ -356,13 +356,13 @@ files = [
 
 [[package]]
 name = "ttk-text"
-version = "0.1.3"
+version = "0.2.0"
 requires_python = ">=3.8"
 summary = "Themed Tkinter Text widget with modern styling support."
 groups = ["default"]
 files = [
-    {file = "ttk_text-0.1.3-py3-none-any.whl", hash = "sha256:bea07e86889da34518c230fa91b8361d87e4cd24e43e7085b4605fbc92761308"},
-    {file = "ttk_text-0.1.3.tar.gz", hash = "sha256:808730f7e51684169e0d938d3151f4ad91a2c0d4aa263dd18e1883413a4d49f9"},
+    {file = "ttk_text-0.2.0-py3-none-any.whl", hash = "sha256:3c7cd79c7328d016c047ec33a02afe7c4563d8093bfe0c9b26fa32dfeb569135"},
+    {file = "ttk_text-0.2.0.tar.gz", hash = "sha256:5aafb072d112fad876d5db1b7e13fa16bf5222dd07678993adce70714ef44fb0"},
 ]
 
 [[package]]

@@ -22,7 +22,7 @@ class ClamTheme(BaseTheme):
 
         # 自定义组件
         style.configure("DialogHeader.TFrame", relief="raised")
-        style.configure("TextFrame.TEntry", padding=0, borderwidth="1.5p")
+        style.configure("ThemedText.TEntry", padding=0, borderwidth="1.5p")
 
     @override
     def apply_window(self, master: Tk | Toplevel, style: Style):
