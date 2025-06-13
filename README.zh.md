@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./docs/images/icon.svg" width="192" alt="App icon" />
+<img src="./docs/images/icon.svg" width="192" height="192" alt="App icon" />
 
 # VCF 生成器 Lite
 
