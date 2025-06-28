@@ -52,18 +52,18 @@ body:
         - label: Android
         - label: OpenHarmony
         - label: Unix
-        - label: Others
+        - label: 其他操作系统
     validations:
       required: true
   - type: checkboxes
     id: package-types
     attributes:
-      label: 应用分发类型
-      description: 您当前正在使用我们应用的什么应用包格式？
+      label: 软件包类型
+      description: 您当前正在使用我们应用的什么软件包类型？
       options:
-        - label: 安装器
-        - label: 便携包
-        - label: Zip 应用
+        - label: 安装器 (*_setup.exe)
+        - label: 便携包 (*_portable.zip)
+        - label: Zip 应用 (*_zipapp.pyzw)
         - label: 未知
     validations:
       required: true

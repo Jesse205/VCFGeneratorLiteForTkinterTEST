@@ -32,33 +32,29 @@ VCF generator, input name and phone number to automatically generate VCF files f
 
 ## Download
 
-### Application Distribution Forms
+### Package Types
 
-Choose the most suitable deployment method based on your usage scenario:
+This application provides multiple package types, and you can make your selection according to the table below:
 
-| Distribution Form | Running Method                             | Applicable Scenarios                   |
-| ----------------- | ------------------------------------------ | -------------------------------------- |
-| Installer         | Install via setup program                  | Long-term use / Need desktop shortcuts |
-| Portable Package  | Extract and use (supports USB portability) | No installation / Temporary use        |
-| Zip Application   | Double-click to run                        | Quick launch / Cross-platform use      |
+| Package Type     | Running Method                             | Applicable Scenarios                   |
+| ---------------- | ------------------------------------------ | -------------------------------------- |
+| Installer        | Install via setup program                  | Long-term use / Need desktop shortcuts |
+| Portable Package | Extract and use (supports USB portability) | No installation / Temporary use        |
+| Zip Application  | Double-click to run                        | Quick launch / Cross-platform use      |
 
-### Environment Requirements
+| Package Type               | System Environment       | Notes                                                                  |
+| -------------------------- | ------------------------ | ---------------------------------------------------------------------- |
+| Installer/Portable Package | Windows 7+ 64-bits       | Windows 7 requires patch files (See the "Compatibility" section below) |
+| Zip Application            | Python 3.12+ and Tkinter | -                                                                      |
 
-Different application packages have different environment requirements. Please choose the corresponding package based on your system environment.
-
-| Package Type               | System Environment       | Architecture    | Notes                                                  |
-| -------------------------- | ------------------------ | --------------- | ------------------------------------------------------ |
-| Installer/Portable Package | Windows 7+               | x86_64          | Windows 7 requires patch files (see below for details) |
-| Zip Application            | Python 3.12+ and Tkinter | No restrictions | -                                                      |
-
-### Get the Software Package
+### Get the Packages
 
 Get the software package through the following channels:
 
 - [Gitee Releases][ReleaseOnGitee]
 - [GitHub Releases][ReleaseOnGithub]
 
-File list for each system:
+Users of different systems need to download different files. You can make your selection according to the table below:
 
 | Package Type     | Windows                     | Linux                         | macOS                         | Android       |
 | ---------------- | --------------------------- | ----------------------------- | ----------------------------- | ------------- |
