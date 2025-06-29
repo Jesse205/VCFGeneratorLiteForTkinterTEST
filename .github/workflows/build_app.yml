@@ -1,0 +1,58 @@
+name: Build App
+
+on:
+  workflow_call:
+    inputs:
+      os:
+        description: Operating System
+        type: string
+        required: true
+      package-type:
+        description: Package Type
+        type: string
+        required: true
+      python-version:
+        description: Python Version
+        type: string
+      artifact-path:
+        description: Artifact Path
+        type: string
+        required: true
+      artifact-name:
+        description: Artifact Name
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ${{ inputs.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python and PDM
+        uses: pdm-project/setup-pdm@v4
+        with:
+          python-version: ${{ inputs.python-version }}
+          architecture: x64
+
+      - name: Install Dependencies
+        run: |
+          pdm use ${{ inputs.python-version }}
+          pdm install -G:all
+          pdm install --plugins
+
+      - name: Prepare Inno Setup extensions
+        if: ${{ inputs.package-type == 'installer' && startsWith(inputs.os, 'windows') }}
+        run: pdm run prepare_innosetup_extensions
+
+      - name: Build Package
+        run: pdm run build_app -t ${{ inputs.package-type }}
+
+      - name: Upload Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.artifact-path }}
+          if-no-files-found: warn

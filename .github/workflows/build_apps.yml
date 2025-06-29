@@ -1,0 +1,83 @@
+name: Build Apps
+
+on:
+  workflow_dispatch:
+    inputs:
+      build-windows-installer:
+        description: Build Windows Installer
+        type: boolean
+        default: true
+      build-windows-portable:
+        description: Build Windows Portable
+        type: boolean
+        default: true
+      build-python312-zipapp:
+        description: Build Python 3.12 Zip Application
+        type: boolean
+        default: true
+      build-python313-zipapp:
+        description: Build Python 3.13 Zip Application
+        type: boolean
+        default: true
+  workflow_call:
+    inputs:
+      build-windows-installer:
+        description: Build Windows Installer
+        type: boolean
+        default: false
+      build-windows-portable:
+        description: Build Windows Portable
+        type: boolean
+        default: false
+      build-python312-zipapp:
+        description: Build Python 3.12 Zip Application
+        type: boolean
+        default: false
+      build-python313-zipapp:
+        description: Build Python 3.13 Zip Application
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows-installer:
+    if: ${{ inputs.build-windows-installer }}
+    uses: ./.github/workflows/build_app.yml
+    with:
+      os: windows-latest
+      package-type: installer
+      python-version: 3.13
+      artifact-path: dist/*_setup.exe
+      artifact-name: windows-installer
+  
+  build-windows-portable:
+    if: ${{ inputs.build-windows-portable }}
+    uses: ./.github/workflows/build_app.yml
+    with:
+      os: windows-latest
+      package-type: portable
+      python-version: 3.13
+      artifact-path: dist/*_portable.zip
+      artifact-name: windows-portable
+
+  build-python312-zipapp:
+    if: ${{ inputs.build-python312-zipapp }}
+    uses: ./.github/workflows/build_app.yml
+    with:
+      os: ubuntu-latest
+      package-type: zipapp
+      python-version: 3.12
+      artifact-path: dist/*_zipapp.pyzw
+      artifact-name: python312-zipapp
+  
+  build-python313-zipapp:
+    if: ${{ inputs.build-python313-zipapp }}
+    uses: ./.github/workflows/build_app.yml
+    with:
+      os: ubuntu-latest
+      package-type: zipapp
+      python-version: 3.13
+      artifact-path: dist/*_zipapp.pyzw
+      artifact-name: python313-zipapp
