@@ -8,11 +8,18 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    uses: ./.github/workflows/build.yml
+  build-apps:
+    uses: ./.github/workflows/build_apps.yml
+    name: Build Apps
     secrets: inherit
+    with:
+      build-windows-installer: true
+      build-windows-portable: true
+      build-python312-zipapp: true
+      build-python313-zipapp: true
   release:
-    needs: build
+    name: Release
+    needs: build-apps
     runs-on: ubuntu-latest
     permissions:
       contents: write
