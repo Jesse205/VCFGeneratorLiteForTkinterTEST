@@ -4,5 +4,9 @@
     "pyproject.toml": "pdm.lock, .editorconfig, .markdownlint.json",
     "vcf_generator_lite.spec": "setup.iss, metadata.yml, versionfile.txt, os_notices.*",
     "*": "${basename}.*.${extname}",
-  }
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  },
 }
