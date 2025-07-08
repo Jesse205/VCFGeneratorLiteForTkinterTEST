@@ -1,4 +1,4 @@
-name: Build Apps
+name: Build All Apps
 
 on:
   workflow_dispatch:
@@ -45,7 +45,7 @@ jobs:
   build-windows-installer:
     if: ${{ inputs.build-windows-installer }}
     name: Build Windows Installer
-    uses: ./.github/workflows/build_app.yml
+    uses: ./.github/workflows/build.yml
     with:
       os: windows-latest
       package-type: installer
@@ -56,7 +56,7 @@ jobs:
   build-windows-portable:
     if: ${{ inputs.build-windows-portable }}
     name: Build Windows Portable
-    uses: ./.github/workflows/build_app.yml
+    uses: ./.github/workflows/build.yml
     with:
       os: windows-latest
       package-type: portable
@@ -67,7 +67,7 @@ jobs:
   build-python312-zipapp:
     if: ${{ inputs.build-python312-zipapp }}
     name: Build Python 3.12 Zip Application
-    uses: ./.github/workflows/build_app.yml
+    uses: ./.github/workflows/build.yml
     with:
       os: ubuntu-latest
       package-type: zipapp
@@ -78,7 +78,7 @@ jobs:
   build-python313-zipapp:
     if: ${{ inputs.build-python313-zipapp }}
     name: Build Python 3.13 Zip Application
-    uses: ./.github/workflows/build_app.yml
+    uses: ./.github/workflows/build.yml
     with:
       os: ubuntu-latest
       package-type: zipapp

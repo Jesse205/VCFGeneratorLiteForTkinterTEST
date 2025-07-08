@@ -9,8 +9,8 @@ permissions:
 
 jobs:
   build-apps:
-    uses: ./.github/workflows/build_apps.yml
-    name: Build Apps
+    uses: ./.github/workflows/build_all.yml
+    name: Build All Apps
     secrets: inherit
     with:
       build-windows-installer: true
