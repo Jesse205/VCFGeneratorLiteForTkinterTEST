@@ -4,7 +4,7 @@ from tkinter import PhotoImage, Tk, Toplevel, Wm
 from tkinter.ttk import Style
 from typing import override
 
-from vcf_generator_lite import resources
+from vcf_generator_lite.util import resources
 from vcf_generator_lite.theme import create_platform_theme
 from vcf_generator_lite.util.tkinter.misc import ScalingMiscExtension
 from vcf_generator_lite.util.tkinter.theme import EnhancedTheme

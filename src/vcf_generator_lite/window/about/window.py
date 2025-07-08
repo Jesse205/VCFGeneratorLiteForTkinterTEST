@@ -3,10 +3,11 @@ from tkinter.constants import *
 from tkinter.ttk import Button, Frame, Label, Style
 from typing import override
 
-from vcf_generator_lite import constants, resources
+from vcf_generator_lite import constants
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT, APP_NAME
 from vcf_generator_lite.layout.vertical_dialog_layout import VerticalDialogLayout
+from vcf_generator_lite.util import resources
 from vcf_generator_lite.util.tkinter.font import extend_font_scale
 from vcf_generator_lite.widget.menu import TextContextMenu
 from vcf_generator_lite.widget.tkhtmlview import HTMLScrolledText

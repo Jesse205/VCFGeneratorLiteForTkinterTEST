@@ -1,6 +1,6 @@
 import importlib.resources
 
-base_traversable = importlib.resources.files(__name__)
+base_traversable = importlib.resources.files("vcf_generator_lite.resources")
 
 
 def read_text(resource: str, *, encoding: str = "utf-8") -> str:
@@ -19,5 +19,6 @@ def read_scaled_binary(
 ) -> bytes:
     if scaling in resources:
         return read_binary(resources.get(scaling))
-    closest = min(resources.keys(), key=lambda scaled: scaled - scaling)
+    avaliable = [scaled for scaled in resources.keys() if scaled <= scaling or scaled == 1.0]
+    closest = min(avaliable, key=lambda scaled: scaling - scaled)
     return read_binary(resources.get(closest))
