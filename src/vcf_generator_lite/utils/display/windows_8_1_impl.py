@@ -43,10 +43,7 @@ class Windows81Display(WindowsVistaDisplay):
     @staticmethod
     def get_default_scale_factor(misc: Misc) -> float:
         try:
-            monitor_handle = windll.user32.MonitorFromWindow(
-                HWND(misc.winfo_id()),
-                DWORD(MONITOR_DEFAULTTONEAREST)
-            )
+            monitor_handle = windll.user32.MonitorFromWindow(HWND(misc.winfo_id()), DWORD(MONITOR_DEFAULTTONEAREST))
             dpi_x, dpi_y = UINT(), UINT()
             windll.shcore.GetDpiForMonitor(
                 monitor_handle,

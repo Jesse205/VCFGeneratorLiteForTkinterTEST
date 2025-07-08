@@ -14,10 +14,10 @@ class InvalidLinesController:
         window.header_label.configure(text=message_invalid_template.format(path=display_path))
         for item in invalid_lines:
             window.content_tree.insert(
-                parent='',
-                index='end',
+                parent="",
+                index="end",
                 id=item.row_position,
-                values=(invalid_line_position_template.format(row=item.row_position + 1), item.content)
+                values=(invalid_line_position_template.format(row=item.row_position + 1), item.content),
             )
 
     def on_ok_click(self, _: Event):

@@ -71,7 +71,7 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
         content_frame = Frame(parent)
         details_input = HTMLScrolledText(
             content_frame,
-            html=resources.read_text('texts/about.html').format(
+            html=resources.read_text("texts/about.html").format(
                 repository_url=constants.URL_REPOSITORY,
                 release_url=constants.URL_RELEASES,
                 jesse205_email=constants.EMAIL_JESSE205,
@@ -88,10 +88,7 @@ class AboutWindow(ExtendedDialog, VerticalDialogLayout):
     def _create_actions(self, parent: Misc):
         action_frame = Frame(parent)
         self.ok_button = Button(
-            action_frame,
-            text="确定",
-            default=ACTIVE,
-            command=lambda: self.event_generate(EVENT_EXIT)
+            action_frame, text="确定", default=ACTIVE, command=lambda: self.event_generate(EVENT_EXIT)
         )
         self.ok_button.pack(side=RIGHT, padx="7p", pady="7p")
         return action_frame

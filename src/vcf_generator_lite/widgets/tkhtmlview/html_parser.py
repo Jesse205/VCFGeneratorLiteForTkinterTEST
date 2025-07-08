@@ -1,6 +1,7 @@
 """
 HTML parser
 """
+
 import tkinter as tk
 import webbrowser
 from collections import OrderedDict
@@ -288,11 +289,11 @@ class HTMLTextParser(HTMLParser):
                     except:
                         pass
             elif k in (
-                    HTML.Attrs.HREF,
-                    HTML.Attrs.SRC,
-                    HTML.Attrs.WIDTH,
-                    HTML.Attrs.HEIGHT,
-                    HTML.Attrs.TYPE,
+                HTML.Attrs.HREF,
+                HTML.Attrs.SRC,
+                HTML.Attrs.WIDTH,
+                HTML.Attrs.HEIGHT,
+                HTML.Attrs.TYPE,
             ):
                 attrs_dict[k] = v
         return attrs_dict
@@ -355,9 +356,7 @@ class HTMLTextParser(HTMLParser):
         # ------------------------------------------------------------------------------------------
         # -------------------------------------------------------------------------------- [ COLOR ]
         if HTML.Style.COLOR in attrs[HTML.Attrs.STYLE].keys():
-            self._stack_add(
-                tag, WCfg.FOREGROUND, attrs[HTML.Attrs.STYLE][HTML.Style.COLOR]
-            )
+            self._stack_add(tag, WCfg.FOREGROUND, attrs[HTML.Attrs.STYLE][HTML.Style.COLOR])
         elif tag == HTML.Tag.A and attrs[HTML.Attrs.HREF]:
             self._stack_add(tag, WCfg.FOREGROUND, self.default_highlightcolor)
         else:
@@ -399,13 +398,7 @@ class HTMLTextParser(HTMLParser):
                     size = int(attrs[HTML.Attrs.STYLE][HTML.Style.FONT_SIZE][:-2])
             elif attrs[HTML.Attrs.STYLE][HTML.Style.FONT_SIZE].endswith(r"%"):
                 if attrs[HTML.Attrs.STYLE][HTML.Style.FONT_SIZE][:-1].isdigit():
-                    size = int(
-                        (
-                            int(attrs[HTML.Attrs.STYLE][HTML.Style.FONT_SIZE][:-1])
-                            * Defs.FONT_SIZE
-                        )
-                        / 100
-                    )
+                    size = int((int(attrs[HTML.Attrs.STYLE][HTML.Style.FONT_SIZE][:-1]) * Defs.FONT_SIZE) / 100)
             self._stack_add(tag, Fnt.SIZE, size)
         elif tag.startswith("h") and len(tag) == 2:
             self._stack_add(tag, Fnt.SIZE, Defs.HEADINGS_FONT_SIZE[tag])
@@ -413,13 +406,8 @@ class HTMLTextParser(HTMLParser):
             self._stack_add(tag, Fnt.SIZE)
 
         # --------------------------------------------------------------------------- [ TEXT_ALIGN ]
-        if (
-            HTML.Style.TEXT_ALIGN in attrs[HTML.Attrs.STYLE].keys()
-            and tag in HTML.TEXT_ALIGN_TAGS
-        ):
-            self._stack_add(
-                tag, WCfg.JUSTIFY, attrs[HTML.Attrs.STYLE][HTML.Style.TEXT_ALIGN]
-            )
+        if HTML.Style.TEXT_ALIGN in attrs[HTML.Attrs.STYLE].keys() and tag in HTML.TEXT_ALIGN_TAGS:
+            self._stack_add(tag, WCfg.JUSTIFY, attrs[HTML.Attrs.STYLE][HTML.Style.TEXT_ALIGN])
         else:
             self._stack_add(tag, WCfg.JUSTIFY)
 
@@ -428,16 +416,10 @@ class HTMLTextParser(HTMLParser):
             if tag == HTML.Tag.STRONG:
                 self._stack_add(tag, Fnt.UNDERLINE, False)
                 self._stack_add(tag, Fnt.OVERSTRIKE, False)
-            elif (
-                HTML.StyleTextDecoration.UNDERLINE
-                in attrs[HTML.Attrs.STYLE][HTML.Style.TEXT_DECORATION]
-            ):
+            elif HTML.StyleTextDecoration.UNDERLINE in attrs[HTML.Attrs.STYLE][HTML.Style.TEXT_DECORATION]:
                 self._stack_add(tag, Fnt.UNDERLINE, True)
                 self._stack_add(tag, Fnt.OVERSTRIKE, False)
-            elif (
-                HTML.StyleTextDecoration.LINE_THROUGH
-                in attrs[HTML.Attrs.STYLE][HTML.Style.TEXT_DECORATION]
-            ):
+            elif HTML.StyleTextDecoration.LINE_THROUGH in attrs[HTML.Attrs.STYLE][HTML.Style.TEXT_DECORATION]:
                 self._stack_add(tag, Fnt.UNDERLINE, False)
                 self._stack_add(tag, Fnt.OVERSTRIKE, True)
             else:
@@ -474,10 +456,7 @@ class HTMLTextParser(HTMLParser):
 
             elif tag == HTML.Tag.OL:
                 # ---------------------------------------------------------------- [ ORDERED_LISTS ]
-                if (
-                    attrs[HTML.Attrs.TYPE]
-                    and attrs[HTML.Attrs.TYPE] in HTML.TypeOrderedList.__dict__.values()
-                ):
+                if attrs[HTML.Attrs.TYPE] and attrs[HTML.Attrs.TYPE] in HTML.TypeOrderedList.__dict__.values():
                     list_type = attrs[HTML.Attrs.TYPE]
                 else:
                     list_type = HTML.TypeOrderedList._1
@@ -573,11 +552,7 @@ class HTMLTextParser(HTMLParser):
             else:
                 self.html_tags.append(tag)
 
-        if (
-            tag in HTML.NEW_LINE_TAGS
-            and self.strip
-            and self._w.index("end-1c") != "1.0"
-        ):
+        if tag in HTML.NEW_LINE_TAGS and self.strip and self._w.index("end-1c") != "1.0":
             if tag in (HTML.Tag.DIV,):
                 self._insert_new_line()
             elif tag in (HTML.Tag.UL, HTML.Tag.OL):
@@ -646,8 +621,8 @@ class HTMLTextParser(HTMLParser):
             data = f"{data} "  # FIXME: attaching a space in blind is wrong
             data = self._remove_multi_spaces(data)
             if len(self.html_tags) and self.html_tags[-1] in (
-                    HTML.Tag.UL,
-                    HTML.Tag.OL,
+                HTML.Tag.UL,
+                HTML.Tag.OL,
             ):
                 self._w.insert(tk.INSERT, "\t" * 2 * len(self.list_tags))
 
@@ -722,12 +697,15 @@ class HTMLTextParser(HTMLParser):
             if "size" in tag[Fnt.KEY]:
                 tag[Fnt.KEY]["size"] = int(default_font_scaling * tag[Fnt.KEY]["size"])
             tag_font.config(**tag[Fnt.KEY])
-            self._w.tag_config(key, font=tag_font, selectforeground=self.default_selectforeground,
-                               selectbackground=self.default_selectbackground, **tag[WCfg.KEY])
+            self._w.tag_config(
+                key,
+                font=tag_font,
+                selectforeground=self.default_selectforeground,
+                selectbackground=self.default_selectbackground,
+                **tag[WCfg.KEY],
+            )
             if tag[Bind.KEY][Bind.LINK]:
-                self.hlink_slots.append(
-                    HLinkSlot(self._w, key, tag[Bind.KEY][Bind.LINK])
-                )
+                self.hlink_slots.append(HLinkSlot(self._w, key, tag[Bind.KEY][Bind.LINK]))
                 self._w.tag_bind(key, "<Button-1>", self.hlink_slots[-1].call)
                 self._w.tag_bind(key, "<Leave>", self.hlink_slots[-1].leave)
                 self._w.tag_bind(key, "<Enter>", self.hlink_slots[-1].enter)
@@ -740,12 +718,8 @@ class HTMLTextParser(HTMLParser):
         self.default_selectforeground = w.cget("selectforeground")
         self.default_highlightcolor = w.cget("highlightcolor")
         self.stack = deepcopy(DEFAULT_STACK)
-        self.stack[WCfg.KEY][WCfg.BACKGROUND].append(
-            ("__DEFAULT__", w.cget("background"))
-        )
-        self.stack[WCfg.KEY][WCfg.FOREGROUND].append(
-            ("__DEFAULT__", w.cget("foreground"))
-        )
+        self.stack[WCfg.KEY][WCfg.BACKGROUND].append(("__DEFAULT__", w.cget("background")))
+        self.stack[WCfg.KEY][WCfg.FOREGROUND].append(("__DEFAULT__", w.cget("foreground")))
         # self.stack[Fnt.KEY][Fnt.FAMILY].append(
         #     ("__DEFAULT__", None)
         # )

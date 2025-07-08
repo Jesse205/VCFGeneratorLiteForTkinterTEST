@@ -13,8 +13,13 @@ from vcf_generator_lite.utils.tkinter.widget import auto_wrap_configure_event
 from vcf_generator_lite.widgets.menu import TextContextMenu
 from vcf_generator_lite.windows.base import ExtendedTk
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
-from vcf_generator_lite.windows.main.constants import DEFAULT_INPUT_CONTENT, EVENT_ABOUT, EVENT_CLEAN_QUOTES, \
-    EVENT_GENERATE, USAGE
+from vcf_generator_lite.windows.main.constants import (
+    DEFAULT_INPUT_CONTENT,
+    EVENT_ABOUT,
+    EVENT_CLEAN_QUOTES,
+    EVENT_GENERATE,
+    USAGE,
+)
 
 
 class MainWindow(ExtendedTk, VerticalDialogLayout, MenuBarWindowExtension):
@@ -67,10 +72,7 @@ class MainWindow(ExtendedTk, VerticalDialogLayout, MenuBarWindowExtension):
         self.progress_label = Label(action_frame, text="正在生成……")
 
         self.generate_button = Button(
-            action_frame,
-            text="开始生成",
-            default=ACTIVE,
-            command=lambda: self.event_generate(EVENT_GENERATE)
+            action_frame, text="开始生成", default=ACTIVE, command=lambda: self.event_generate(EVENT_GENERATE)
         )
         self.generate_button.pack(side=RIGHT, padx="7p", pady="7p")
         return action_frame
@@ -90,8 +92,8 @@ class MainWindow(ExtendedTk, VerticalDialogLayout, MenuBarWindowExtension):
                         label="退出(&X)",
                         command=lambda: self.event_generate(EVENT_EXIT),
                         accelerator="Alt + F4",
-                    )
-                ]
+                    ),
+                ],
             ),
             MenuCascade(
                 label="编辑(&E)",
@@ -133,7 +135,7 @@ class MainWindow(ExtendedTk, VerticalDialogLayout, MenuBarWindowExtension):
                         label="移除引号(&Q)",
                         command=lambda: self.event_generate(EVENT_CLEAN_QUOTES),
                     ),
-                ]
+                ],
             ),
             MenuCascade(
                 label="帮助(&H)",
@@ -160,9 +162,9 @@ class MainWindow(ExtendedTk, VerticalDialogLayout, MenuBarWindowExtension):
                     MenuCommand(
                         label="关于 VCF 生成器 Lite(&A)",
                         command=lambda: self.event_generate(EVENT_ABOUT),
-                    )
-                ]
-            )
+                    ),
+                ],
+            ),
         )
 
     def set_text_content(self, content: str):

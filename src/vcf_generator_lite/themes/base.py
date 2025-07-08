@@ -15,4 +15,5 @@ class BaseTheme(EnhancedTheme, ABC):
         master.option_add("*ThemedTextFrame.Text.height", 0, "startupFile")
 
     @override
-    def apply_window(self, master: Tk | Toplevel, style: Style): pass
+    def apply_window(self, master: Tk | Toplevel, style: Style):
+        pass

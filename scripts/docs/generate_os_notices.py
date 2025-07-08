@@ -17,9 +17,7 @@ Notice = TypedDict(
     },
 )
 
-NoticesConfig = TypedDict(
-    "NoticesConfig", {"template": str, "output": str, "notices": list[Notice]}
-)
+NoticesConfig = TypedDict("NoticesConfig", {"template": str, "output": str, "notices": list[Notice]})
 
 
 def format_url(url: str, notice: Notice) -> str:
@@ -29,10 +27,7 @@ def format_url(url: str, notice: Notice) -> str:
 
 
 def generate_notices(config: NoticesConfig):
-    return [
-        {**notice, "license-url": format_url(notice["license-url"], notice=notice)}
-        for notice in config["notices"]
-    ]
+    return [{**notice, "license-url": format_url(notice["license-url"], notice=notice)} for notice in config["notices"]]
 
 
 def main() -> int:

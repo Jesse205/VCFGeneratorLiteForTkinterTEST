@@ -6,9 +6,7 @@ from vcf_generator_lite.windows.invalid_lines.window import InvalidLinesWindow
 
 
 def create_invalid_lines_window(
-    master: Tk | Toplevel,
-    display_path: str,
-    invalid_lines: list[InvalidLine]
+    master: Tk | Toplevel, display_path: str, invalid_lines: list[InvalidLine]
 ) -> tuple[InvalidLinesWindow, InvalidLinesController]:
     invalid_lines_window = InvalidLinesWindow(master)
     invalid_lines_controller = InvalidLinesController(invalid_lines_window, display_path, invalid_lines)

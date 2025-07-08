@@ -4,10 +4,16 @@ import sys
 
 import requests
 
-URL_CHINESE_SIMPLIFIED_ISL_URL = "https://raw.github.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl"
-URL_CHINESE_SIMPLIFIED_ISL_LATEST = "https://github.com/kira-96/Inno-Setup-Chinese-Simplified-Translation/raw/refs/heads/main/ChineseSimplified.isl"
+URL_CHINESE_SIMPLIFIED_ISL_URL = (
+    "https://raw.github.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl"
+)
+URL_CHINESE_SIMPLIFIED_ISL_LATEST = (
+    "https://github.com/kira-96/Inno-Setup-Chinese-Simplified-Translation/raw/refs/heads/main/ChineseSimplified.isl"
+)
 # 国内使用 GitCode 加速下载
-URL_CHINESE_SIMPLIFIED_ISL_GITCODE = "https://raw.gitcode.com/gh_mirrors/is/issrc/raw/main/Files/Languages/Unofficial/ChineseSimplified.isl"
+URL_CHINESE_SIMPLIFIED_ISL_GITCODE = (
+    "https://raw.gitcode.com/gh_mirrors/is/issrc/raw/main/Files/Languages/Unofficial/ChineseSimplified.isl"
+)
 
 PATH_INNOSETUP_EXTENSION = "./.innosetup"
 PATH_CHINESE_SIMPLIFIED = os.path.join(PATH_INNOSETUP_EXTENSION, "Languages", "ChineseSimplified.isl")
@@ -33,11 +39,12 @@ def prepare_innosetup_extensions(download_url: str) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-m", "--mirror",
+        "-m",
+        "--mirror",
         type=str,
         default="latest",
         choices=["github", "gitcode", "latest"],
-        help="文件下载镜像（默认：%(default)s）"
+        help="文件下载镜像（默认：%(default)s）",
     )
     args = parser.parse_args()
     match args.mirror:

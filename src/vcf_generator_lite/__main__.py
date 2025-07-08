@@ -11,7 +11,7 @@ def fix_home_env():
     """
     修复 Tkinter 在 Windows 中无法获取 HOME 的问题
     """
-    os.environ['HOME'] = os.path.expanduser("~")
+    os.environ["HOME"] = os.path.expanduser("~")
 
 
 def setup_logging():

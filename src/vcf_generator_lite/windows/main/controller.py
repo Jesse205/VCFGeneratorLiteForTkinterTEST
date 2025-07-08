@@ -47,7 +47,7 @@ class MainController:
             parent=self.window,
             initialfile=self.generate_file_name,
             filetypes=[("vCard 文件", ".vcf")],
-            defaultextension=".vcf"
+            defaultextension=".vcf",
         )
         if file_io is None:
             return
@@ -98,12 +98,10 @@ class MainController:
     def _show_generate_error_dialog(self, exceptions: list[BaseException]):
         title_failure = "生成 VCF 文件失败"
         message_failure_template = "生成 VCF 文件时出现未知异常：\n\n{content}"
-        formatted_exceptions = [
-            "\n".join(traceback.format_exception(exception)) for exception in exceptions
-        ]
-        dialog.show_error(self.window, title_failure, message_failure_template.format(
-            content="\n\n".join(formatted_exceptions)
-        ))
+        formatted_exceptions = ["\n".join(traceback.format_exception(exception)) for exception in exceptions]
+        dialog.show_error(
+            self.window, title_failure, message_failure_template.format(content="\n\n".join(formatted_exceptions))
+        )
 
     def _show_generate_invalid_dialog(self, display_path: str, invalid_lines: list[InvalidLine]):
         create_invalid_lines_window(self.window, display_path, invalid_lines)
@@ -115,5 +113,5 @@ class MainController:
 
     def _clean_quotes(self):
         origin_text = self.window.get_text_content()
-        new_text = re.sub(r'"\s*(([^"\s][^"]*[^"\s])|[^"\s]?)\s*"', r'\1', origin_text, flags=re.S)
+        new_text = re.sub(r'"\s*(([^"\s][^"]*[^"\s])|[^"\s]?)\s*"', r"\1", origin_text, flags=re.S)
         self.window.set_text_content(new_text)

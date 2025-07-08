@@ -8,17 +8,29 @@ from vcf_generator_lite.utils import resources
 from vcf_generator_lite.themes import create_platform_theme
 from vcf_generator_lite.utils.tkinter.misc import ScalingMiscExtension
 from vcf_generator_lite.utils.tkinter.theme import EnhancedTheme
-from vcf_generator_lite.utils.tkinter.window import CenterWindowExtension, GcWindowExtension, GeometryWindowExtension, \
-    WindowExtension, WindowingSystemWindowExtension, withdraw_cm
+from vcf_generator_lite.utils.tkinter.window import (
+    CenterWindowExtension,
+    GcWindowExtension,
+    GeometryWindowExtension,
+    WindowExtension,
+    WindowingSystemWindowExtension,
+    withdraw_cm,
+)
 from vcf_generator_lite.windows.base.constants import EVENT_ENHANCED_THEME_CHANGED, EVENT_EXIT
 
 __all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
 _logger = logging.getLogger(__name__)
 
 
-class AppWindowExtension(GcWindowExtension, GeometryWindowExtension,
-                         ScalingMiscExtension, CenterWindowExtension,
-                         WindowingSystemWindowExtension, WindowExtension, ABC):
+class AppWindowExtension(
+    GcWindowExtension,
+    GeometryWindowExtension,
+    ScalingMiscExtension,
+    CenterWindowExtension,
+    WindowingSystemWindowExtension,
+    WindowExtension,
+    ABC,
+):
     """
     应用程序窗口扩展基类，集成多个窗口功能扩展
 
@@ -71,7 +83,9 @@ class ExtendedTk(Tk, AppWindowExtension, ABC):
         self.theme = theme
         theme.apply_tk(self, Style(self))
         theme.apply_window(self, Style(self))
-        self.event_generate(EVENT_ENHANCED_THEME_CHANGED, )
+        self.event_generate(
+            EVENT_ENHANCED_THEME_CHANGED,
+        )
         self._theme_applied = True
 
 

@@ -20,10 +20,7 @@ type WindowOrExtension = Window | WindowExtension
 
 class GeometryOffsetWindowExtension(WindowExtension, ABC):
     def client_to_geometry_offset(self) -> Offset:
-        return Offset(
-            x=self.winfo_x() - self.winfo_rootx(),
-            y=self.winfo_y() - self.winfo_rooty()
-        )
+        return Offset(x=self.winfo_x() - self.winfo_rootx(), y=self.winfo_y() - self.winfo_rooty())
 
 
 class GeometryWindowExtension(ScalingMiscExtension, WindowExtension, ABC):
@@ -60,7 +57,7 @@ type WindowingSystem = Literal["x11", "win32", "aqua"]
 class WindowingSystemWindowExtension(WindowExtension, ABC):
     @cached_property
     def tk_windowing_system(self) -> WindowingSystem:
-        return self.tk.call('tk', 'windowingsystem')
+        return self.tk.call("tk", "windowingsystem")
 
 
 class CenterWindowExtension(GeometryOffsetWindowExtension, WindowExtension, ABC):

@@ -31,48 +31,60 @@ class TextContextMenu(Menu):
         state_by_selected = boolean_to_state(self.is_selected())
         is_master_editable = state_to_boolean(self.master.cget("state"))
         if is_master_editable:
-            add_menu_items(self, [
+            add_menu_items(
+                self,
+                [
+                    MenuCommand(
+                        label="撤销(&U)",
+                        command=lambda: self.master.event_generate("<<Undo>>"),
+                    ),
+                    MenuCommand(
+                        label="重做(&R)",
+                        command=lambda: self.master.event_generate("<<Redo>>"),
+                    ),
+                    MenuSeparator,
+                    MenuCommand(
+                        label="剪切(&T)",
+                        command=lambda: self.master.event_generate("<<Cut>>"),
+                        state=state_by_selected,
+                    ),
+                ],
+            )
+        add_menu_items(
+            self,
+            [
                 MenuCommand(
-                    label="撤销(&U)",
-                    command=lambda: self.master.event_generate("<<Undo>>"),
+                    label="复制(&C)",
+                    command=lambda: self.master.event_generate("<<Copy>>"),
+                    state=state_by_selected,
                 ),
-                MenuCommand(
-                    label="重做(&R)",
-                    command=lambda: self.master.event_generate("<<Redo>>"),
-                ),
+            ],
+        )
+        if is_master_editable:
+            add_menu_items(
+                self,
+                [
+                    MenuCommand(
+                        label="粘贴(&P)",
+                        command=lambda: self.master.event_generate("<<Paste>>"),
+                    ),
+                    MenuCommand(
+                        label="删除(&D)",
+                        command=lambda: self.master.event_generate("<<Clear>>"),
+                        state=state_by_selected,
+                    ),
+                ],
+            )
+        add_menu_items(
+            self,
+            [
                 MenuSeparator,
                 MenuCommand(
-                    label="剪切(&T)",
-                    command=lambda: self.master.event_generate("<<Cut>>"),
-                    state=state_by_selected,
+                    label="全选(&A)",
+                    command=lambda: self.master.event_generate("<<SelectAll>>"),
                 ),
-            ])
-        add_menu_items(self, [
-            MenuCommand(
-                label="复制(&C)",
-                command=lambda: self.master.event_generate("<<Copy>>"),
-                state=state_by_selected,
-            ),
-        ])
-        if is_master_editable:
-            add_menu_items(self, [
-                MenuCommand(
-                    label="粘贴(&P)",
-                    command=lambda: self.master.event_generate("<<Paste>>"),
-                ),
-                MenuCommand(
-                    label="删除(&D)",
-                    command=lambda: self.master.event_generate("<<Clear>>"),
-                    state=state_by_selected,
-                ),
-            ])
-        add_menu_items(self, [
-            MenuSeparator,
-            MenuCommand(
-                label="全选(&A)",
-                command=lambda: self.master.event_generate("<<SelectAll>>"),
-            )
-        ])
+            ],
+        )
         self.tk_popup(x, y)
 
     def bind_to_widget(self):

@@ -40,20 +40,25 @@ def build_with_pdm_packer():
     print("Building with pdm-packer...")
     ensure_dist_dir()
     os.environ["PYTHONOPTIMIZE"] = "2"
-    result = subprocess.run([
-        shutil.which("pdm"),
-        "pack",
-        "-m", "vcf_generator_lite.__main__:main",
-        "-o", os.path.join("dist", OUTPUT_BASE_NAME_TEMPLATE.format(
-            version=APP_VERSION,
-            platform=PLATFORM_PYTHON,
-            distribution="zipapp"
-        ) + ".pyzw"),
-        "--interpreter", f"/usr/bin/env python{PYTHON_VERSION}",
-        "--compile",
-        "--compress",
-        "--no-py",
-    ])
+    result = subprocess.run(
+        [
+            shutil.which("pdm"),
+            "pack",
+            "-m",
+            "vcf_generator_lite.__main__:main",
+            "-o",
+            os.path.join(
+                "dist",
+                OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform=PLATFORM_PYTHON, distribution="zipapp")
+                + ".pyzw",
+            ),
+            "--interpreter",
+            f"/usr/bin/env python{PYTHON_VERSION}",
+            "--compile",
+            "--compress",
+            "--no-py",
+        ]
+    )
     print("Building finished.")
     return result.returncode
 
@@ -66,17 +71,20 @@ def pack_with_innosetup() -> int:
             return result
 
     os.environ["PATH"] += os.pathsep + "C:\\Program Files (x86)\\Inno Setup 6\\"
-    result = subprocess.run([
-        shutil.which("iscc"),
-        "/D" + f"OutputBaseFilename={OUTPUT_BASE_NAME_TEMPLATE.format(
+    result = subprocess.run(
+        [
+            shutil.which("iscc"),
+            "/D"
+            + f"OutputBaseFilename={OUTPUT_BASE_NAME_TEMPLATE.format(
             version=APP_VERSION,
             platform=PLATFORM_NATIVE,
             distribution="setup"
         )}",
-        "/D" + f"MyAppCopyright={APP_COPYRIGHT}",
-        "/D" + f"MyAppVersion={APP_VERSION}",
-        os.path.abspath('setup.iss'),
-    ])
+            "/D" + f"MyAppCopyright={APP_COPYRIGHT}",
+            "/D" + f"MyAppVersion={APP_VERSION}",
+            os.path.abspath("setup.iss"),
+        ]
+    )
     print("Packaging finished.")
     return result.returncode
 
@@ -84,11 +92,11 @@ def pack_with_innosetup() -> int:
 def pack_with_zipfile():
     print("Packaging with ZipFile...")
     require_pyinstaller_output()
-    zip_path = os.path.join("dist", OUTPUT_BASE_NAME_TEMPLATE.format(
-        version=APP_VERSION,
-        platform=PLATFORM_NATIVE,
-        distribution="portable"
-    ) + ".zip")
+    zip_path = os.path.join(
+        "dist",
+        OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform=PLATFORM_NATIVE, distribution="portable")
+        + ".zip",
+    )
     with ZipFile(zip_path, "w") as zip_file:
         for path, dirs, files in os.walk(os.path.join("dist", "vcf_generator_lite")):
             for file_path in [os.path.join(path, file) for file in files]:
@@ -99,11 +107,12 @@ def pack_with_zipfile():
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-t", "--type",
+        "-t",
+        "--type",
         type=str,
         default="installer",
         choices=["installer", "portable", "zipapp"],
-        help="应用打包类型（默认：%(default)s）"
+        help="应用打包类型（默认：%(default)s）",
     )
     args = parser.parse_args()
 

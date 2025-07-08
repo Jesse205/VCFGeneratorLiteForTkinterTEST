@@ -12,8 +12,10 @@ class ScalingMiscExtension(Misc):
     def __init__(self):
         self._scale_factor = self.scaling()
         if __debug__:
-            logger.debug(f"ScalingMiscExtension init with scale_factor={self._scale_factor}, "
-                         f"system scale is {round(self._scale_factor * 0.75, 2)}.")
+            logger.debug(
+                f"ScalingMiscExtension init with scale_factor={self._scale_factor}, "
+                f"system scale is {round(self._scale_factor * 0.75, 2)}."
+            )
 
     def scaling(self, factor: Optional[float] = None) -> float | None:
         """

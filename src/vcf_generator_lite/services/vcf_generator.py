@@ -40,7 +40,7 @@ def serialize_to_vcard(contact: Contact):
     items: list[str] = [
         "VERSION:2.1",
         f"FN;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{utf8_to_qp(contact.name)}",
-        f"TEL;CELL:{contact.phone}"
+        f"TEL;CELL:{contact.phone}",
     ]
     if contact.note:
         items.append(f"NOTE;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:{utf8_to_qp(contact.note)}")
@@ -55,19 +55,13 @@ class VCFGeneratorTask:
         executor: ThreadPoolExecutor,
         progress_listener: Optional[Callable[[float, bool], None]],
         input_text: str,
-        output_io: IO
+        output_io: IO,
     ):
         self._executor = executor
         self._progress_listener = progress_listener
         self._input_text = input_text
         self._output_io = output_io
-        self._state = VCardGeneratorState(
-            total=0,
-            processed=0,
-            progress=0.0,
-            invalid_lines=[],
-            exceptions=[]
-        )
+        self._state = VCardGeneratorState(total=0, processed=0, progress=0.0, invalid_lines=[], exceptions=[])
         self._write_queue = Queue()
 
     def start(self) -> Future[GenerateResult]:
@@ -84,10 +78,7 @@ class VCFGeneratorTask:
             for future in done:
                 if exception := future.exception():
                     self._state.exceptions.append(exception)
-        return GenerateResult(
-            invalid_lines=self._state.invalid_lines,
-            exceptions=self._state.exceptions
-        )
+        return GenerateResult(invalid_lines=self._state.invalid_lines, exceptions=self._state.exceptions)
 
     def _parse_input(self):
         lines = [line.strip() for line in self._input_text.split("\n")]

@@ -12,7 +12,7 @@ valid_input_list = [
 ]
 invalid_input_list = [
     "孙七\t1234567890",
-    "周八\t\"13789012345\"",
+    '周八\t"13789012345"',
     "吴九\t13 789012345",
     "郑十\t1389012345a",
 ]
@@ -22,7 +22,14 @@ ignored_input_list = [
     "\t",
 ]
 
-input_list = ignored_input_list + invalid_input_list + ignored_input_list + valid_input_list + invalid_input_list + ignored_input_list
+input_list = (
+    ignored_input_list
+    + invalid_input_list
+    + ignored_input_list
+    + valid_input_list
+    + invalid_input_list
+    + ignored_input_list
+)
 input_content = "\n".join(input_list)
 
 valid_count = len(valid_input_list)

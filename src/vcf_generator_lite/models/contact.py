@@ -23,7 +23,7 @@ def parse_contact(person_text: str):
         if is_china_mobile_phone(part):
             phone = part
             name = " ".join(parts[:i])
-            note_parts = parts[i + 1:]
+            note_parts = parts[i + 1 :]
             note = " ".join(note_parts) if note_parts else None
             break
     else:

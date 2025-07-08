@@ -15,11 +15,7 @@ def get_exe_style_version(version: str):
 
 
 def change_version(
-    file_name: str,
-    content_pattern: Pattern[str],
-    content_formatter: str,
-    version: str,
-    encoding="utf-8"
+    file_name: str, content_pattern: Pattern[str], content_formatter: str, version: str, encoding="utf-8"
 ):
     with open(file_name, "r", encoding=encoding) as f:
         origin_content = f.read()
@@ -34,27 +30,26 @@ def change_pyproject_version(version: str):
         file_name="pyproject.toml",
         content_pattern=re.compile(r'^ *version *= *".*" *$', flags=re.M),
         content_formatter='version = "%s"',
-        version=version
+        version=version,
     )
 
 
 def change_version_info(version: str):
     pyinstaller_versionfile.create_versionfile_from_input_file(
-        output_file="versionfile.txt",
-        input_file="metadata.yml",
-        version=get_exe_style_version(version)
+        output_file="versionfile.txt", input_file="metadata.yml", version=get_exe_style_version(version)
     )
     print("Change version to %s in %s." % (version, "versionfile.txt"))
 
 
 def print_version():
     from vcf_generator_lite.__version__ import __version__
+
     print(__version__)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("version", nargs='?', type=str)
+    parser.add_argument("version", nargs="?", type=str)
     args = parser.parse_args()
 
     version = args.version

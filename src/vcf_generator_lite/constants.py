@@ -9,6 +9,8 @@ URL_RELEASES = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/releases"
 URL_REPOSITORY = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter"
 URL_REPORT = "https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/issues/new/choose"
 URL_LICENSE = f"https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/blob/{SOURCE_REFERENCE}/LICENSE"
-URL_OS_NOTICES = f"https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/blob/{SOURCE_REFERENCE}/docs/legal/os_notices.md"
+URL_OS_NOTICES = (
+    f"https://gitee.com/HelloTool/VCFGeneratorLiteForTkinter/blob/{SOURCE_REFERENCE}/docs/legal/os_notices.md"
+)
 
 EMAIL_JESSE205 = "jesse205@qq.com"

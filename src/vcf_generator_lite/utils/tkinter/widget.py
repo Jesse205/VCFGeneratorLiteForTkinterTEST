@@ -15,7 +15,7 @@ def update_padding(
     left: Optional[int | str] = None,
     top: Optional[int | str] = None,
     right: Optional[int | str] = None,
-    bottom: Optional[int | str] = None
+    bottom: Optional[int | str] = None,
 ):
     origin_padding = widget.cget("padding") or (0,)
     origin_left = origin_padding[0] if len(origin_padding) >= 1 else 0
@@ -26,5 +26,5 @@ def update_padding(
         left if left is not None else origin_left,
         top if top is not None else origin_top,
         right if right is not None else origin_right,
-        bottom if bottom is not None else origin_bottom
+        bottom if bottom is not None else origin_bottom,
     )

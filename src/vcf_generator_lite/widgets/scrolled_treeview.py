@@ -28,21 +28,23 @@ class ScrolledTreeview(Treeview, ScalingMiscExtension):
         left: Optional[int | float | str] = None,
         top: Optional[int | float | str] = None,
         right: Optional[int | float | str] = None,
-        bottom: Optional[int | float | str] = None
+        bottom: Optional[int | float | str] = None,
     ):
         avoid_padding = (
             left if left is not None else 0,
             top if top is not None else 0,
             right if right is not None else 0,
-            bottom if bottom is not None else 0
+            bottom if bottom is not None else 0,
         )
         padding = self._get_widget_padding()
-        self.configure(padding=(
-            padding[0] - self._previous_avoid_padding[0] + avoid_padding[0],
-            padding[1] - self._previous_avoid_padding[1] + avoid_padding[1],
-            padding[2] - self._previous_avoid_padding[2] + avoid_padding[2],
-            padding[3] - self._previous_avoid_padding[3] + avoid_padding[3],
-        ))
+        self.configure(
+            padding=(
+                padding[0] - self._previous_avoid_padding[0] + avoid_padding[0],
+                padding[1] - self._previous_avoid_padding[1] + avoid_padding[1],
+                padding[2] - self._previous_avoid_padding[2] + avoid_padding[2],
+                padding[3] - self._previous_avoid_padding[3] + avoid_padding[3],
+            )
+        )
         self._previous_avoid_padding = avoid_padding
 
     def _get_widget_padding(self):

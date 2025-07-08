@@ -28,9 +28,9 @@ class InvalidLinesWindow(ExtendedDialog, VerticalDialogLayout):
         header_frame = Frame(parent, style="DialogHeader.TFrame")
         self.header_icon = Label(
             header_frame,
-            text="\u26A0",
+            text="\u26a0",
             font=extend_font_scale("TkDefaultFont", 24 / 9),
-            style="DialogHeaderContent.TLabel"
+            style="DialogHeaderContent.TLabel",
         )
         self.header_icon.pack(side=LEFT, padx="14p", pady="7p")
         self.header_label = Label(header_frame, style="DialogHeaderContent.TLabel")
@@ -44,21 +44,14 @@ class InvalidLinesWindow(ExtendedDialog, VerticalDialogLayout):
         content_label = Label(content_frame, text="异常的号码：")
         content_label.pack(fill=X, padx="7p", pady=("7p", "2p"))
         self.content_tree = ScrolledTreeview(
-            content_frame,
-            columns=("row", "context"),
-            show='headings',
-            selectmode="browse"
+            content_frame, columns=("row", "context"), show="headings", selectmode="browse"
         )
         self.content_tree.column(
-            column='row',
-            anchor=W,
-            stretch=False,
-            width=self.get_scaled(60),
-            minwidth=self.get_scaled(45)
+            column="row", anchor=W, stretch=False, width=self.get_scaled(60), minwidth=self.get_scaled(45)
         )
-        self.content_tree.column('context', anchor=W)
-        self.content_tree.heading('row', text='位置', anchor=W)
-        self.content_tree.heading('context', text='原始内容', anchor=W)
+        self.content_tree.column("context", anchor=W)
+        self.content_tree.heading("row", text="位置", anchor=W)
+        self.content_tree.heading("context", text="原始内容", anchor=W)
         self.content_tree.pack(fill=BOTH, expand=True, padx="7p")
         return content_frame
 
@@ -68,10 +61,7 @@ class InvalidLinesWindow(ExtendedDialog, VerticalDialogLayout):
         sizegrip = Sizegrip(action_frame)
         sizegrip.place(relx=1, rely=1, anchor=SE)
         self.ok_button = Button(
-            action_frame,
-            text="确定",
-            default=ACTIVE,
-            command=lambda: self.event_generate(EVENT_EXIT)
+            action_frame, text="确定", default=ACTIVE, command=lambda: self.event_generate(EVENT_EXIT)
         )
         self.ok_button.pack(side=RIGHT, padx="7p", pady="7p")
         return action_frame
