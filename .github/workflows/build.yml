@@ -43,10 +43,10 @@ jobs:
           pdm use ${{ inputs.python-version }}
           pdm install -G:all
           pdm install --plugins
-
-      - name: Prepare Inno Setup extensions
-        if: ${{ inputs.package-type == 'installer' && startsWith(inputs.os, 'windows') }}
-        run: pdm run prepare_innosetup_extensions
+      
+      - name: Prepare UPX for Windows
+        if: ${{ startsWith(inputs.os, 'windows') && (inputs.package-type == 'portable' || inputs.package-type == 'installer') }}
+        run: choco install upx
 
       - name: Build Package
         run: pdm run build_app -t ${{ inputs.package-type }}
