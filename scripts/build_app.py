@@ -8,7 +8,10 @@ from zipfile import ZipFile
 
 import PyInstaller.__main__ as pyinstaller
 
-from scripts.prepare_innosetup_extensions import PATH_INNOSETUP_EXTENSION, main as prepare_innosetup_extensions
+from scripts.prepare_innosetup_extensions import (
+    PATH_INNOSETUP_EXTENSION,
+    prepare_innosetup_extensions,
+)
 from scripts.utils import require_64_bits
 from vcf_generator_lite.__version__ import __version__ as APP_VERSION
 from vcf_generator_lite.constants import APP_COPYRIGHT
@@ -49,7 +52,9 @@ def build_with_pdm_packer():
             "-o",
             os.path.join(
                 "dist",
-                OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform=PLATFORM_PYTHON, distribution="zipapp")
+                OUTPUT_BASE_NAME_TEMPLATE.format(
+                    version=APP_VERSION, platform=PLATFORM_PYTHON, distribution="zipapp"
+                )
                 + ".pyzw",
             ),
             "--interpreter",
@@ -94,7 +99,9 @@ def pack_with_zipfile():
     require_pyinstaller_output()
     zip_path = os.path.join(
         "dist",
-        OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform=PLATFORM_NATIVE, distribution="portable")
+        OUTPUT_BASE_NAME_TEMPLATE.format(
+            version=APP_VERSION, platform=PLATFORM_NATIVE, distribution="portable"
+        )
         + ".zip",
     )
     with ZipFile(zip_path, "w") as zip_file:
