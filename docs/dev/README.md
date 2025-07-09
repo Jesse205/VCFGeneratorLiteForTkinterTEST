@@ -40,17 +40,17 @@
 
 ```txt
 VCFGeneratorLiteForTkinter/
+├── scripts/                      # 构建脚本
 ├── src/                          # 源代码
 │   └── vcf_generator_lite/
-│       ├── windows/              # 窗口
+│       ├── core/                 # 业务逻辑
+│       ├── resources/            # 静态资源（图标、数据等）
+│       ├── themes/               # 应用主题
 │       ├── utils/                # 工具类
 │       ├── widgets/              # 自定义组件（增强型输入框等）
-│       ├── themes/               # 应用主题
-│       ├── resources/            # 静态资源（图标、数据等）
-│       ├── services/             # 业务逻辑
+│       ├── windows/              # 窗口
 │       ├── __main__.py           # 程序入口
 │       └── constants.py          # 全局常量（名称、链接等）
-├── scripts/                      # 构建脚本
 ├── pyproject.toml                # 项目配置
 ├── vcf_generator_lite.spec       # PyInstaller 配置
 ├── setup.iss                     # InnoSetup 安装脚本

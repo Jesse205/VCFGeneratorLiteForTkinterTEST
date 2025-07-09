@@ -1,7 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor, wait
 from io import StringIO
 
-from vcf_generator_lite.services.vcf_generator import VCFGeneratorTask
+from vcf_generator_lite.core.vcf_generator import VCFGeneratorTask
 
 area_tag = "-----"
 

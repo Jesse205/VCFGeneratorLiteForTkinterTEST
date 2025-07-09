@@ -5,12 +5,20 @@ from concurrent.futures import Future
 from concurrent.futures.thread import ThreadPoolExecutor
 from tkinter import Event, filedialog
 
-from vcf_generator_lite.services.vcf_generator import GenerateResult, InvalidLine, VCFGeneratorTask
+from vcf_generator_lite.core.vcf_generator import (
+    GenerateResult,
+    InvalidLine,
+    VCFGeneratorTask,
+)
 from vcf_generator_lite.utils.tkinter import dialog
 from vcf_generator_lite.windows.about import AboutOpener
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
 from vcf_generator_lite.windows.invalid_lines import create_invalid_lines_window
-from vcf_generator_lite.windows.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE
+from vcf_generator_lite.windows.main.constants import (
+    EVENT_ABOUT,
+    EVENT_CLEAN_QUOTES,
+    EVENT_GENERATE,
+)
 from vcf_generator_lite.windows.main.window import MainWindow
 
 
@@ -83,7 +91,11 @@ class MainController:
 
     def on_exit(self, _):
         if self.is_generating:
-            dialog.show_warning(self.window, "正在生成文件", "文件正在生成中，无法关闭窗口。请稍后重试。")
+            dialog.show_warning(
+                self.window,
+                "正在生成文件",
+                "文件正在生成中，无法关闭窗口。请稍后重试。",
+            )
         else:
             self.window.destroy()
 
@@ -100,7 +112,9 @@ class MainController:
         message_failure_template = "生成 VCF 文件时出现未知异常：\n\n{content}"
         formatted_exceptions = ["\n".join(traceback.format_exception(exception)) for exception in exceptions]
         dialog.show_error(
-            self.window, title_failure, message_failure_template.format(content="\n\n".join(formatted_exceptions))
+            self.window,
+            title_failure,
+            message_failure_template.format(content="\n\n".join(formatted_exceptions)),
         )
 
     def _show_generate_invalid_dialog(self, display_path: str, invalid_lines: list[InvalidLine]):
@@ -109,7 +123,11 @@ class MainController:
     def _show_generate_success_dialog(self, display_path: str):
         title_success = "生成 VCF 文件成功"
         message_success_template = "已导出文件到“{path}”。"
-        dialog.show_info(self.window, title_success, message_success_template.format(path=display_path))
+        dialog.show_info(
+            self.window,
+            title_success,
+            message_success_template.format(path=display_path),
+        )
 
     def _clean_quotes(self):
         origin_text = self.window.get_text_content()

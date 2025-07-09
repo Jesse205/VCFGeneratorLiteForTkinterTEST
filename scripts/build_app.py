@@ -52,9 +52,7 @@ def build_with_pdm_packer():
             "-o",
             os.path.join(
                 "dist",
-                OUTPUT_BASE_NAME_TEMPLATE.format(
-                    version=APP_VERSION, platform=PLATFORM_PYTHON, distribution="zipapp"
-                )
+                OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform=PLATFORM_PYTHON, distribution="zipapp")
                 + ".pyzw",
             ),
             "--interpreter",
@@ -99,9 +97,7 @@ def pack_with_zipfile():
     require_pyinstaller_output()
     zip_path = os.path.join(
         "dist",
-        OUTPUT_BASE_NAME_TEMPLATE.format(
-            version=APP_VERSION, platform=PLATFORM_NATIVE, distribution="portable"
-        )
+        OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform=PLATFORM_NATIVE, distribution="portable")
         + ".zip",
     )
     with ZipFile(zip_path, "w") as zip_file:

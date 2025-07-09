@@ -4,15 +4,19 @@ import sys
 
 import requests
 
-URL_CHINESE_SIMPLIFIED_ISL_URL = "https://raw.github.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl"
-URL_CHINESE_SIMPLIFIED_ISL_LATEST = "https://github.com/kira-96/Inno-Setup-Chinese-Simplified-Translation/raw/refs/heads/main/ChineseSimplified.isl"
+URL_CHINESE_SIMPLIFIED_ISL_URL = (
+    "https://raw.github.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl"
+)
+URL_CHINESE_SIMPLIFIED_ISL_LATEST = (
+    "https://github.com/kira-96/Inno-Setup-Chinese-Simplified-Translation/raw/refs/heads/main/ChineseSimplified.isl"
+)
 # 国内使用 GitCode 加速下载
-URL_CHINESE_SIMPLIFIED_ISL_GITCODE = "https://raw.gitcode.com/gh_mirrors/is/issrc/raw/main/Files/Languages/Unofficial/ChineseSimplified.isl"
+URL_CHINESE_SIMPLIFIED_ISL_GITCODE = (
+    "https://raw.gitcode.com/gh_mirrors/is/issrc/raw/main/Files/Languages/Unofficial/ChineseSimplified.isl"
+)
 
 PATH_INNOSETUP_EXTENSION = "./.innosetup"
-PATH_CHINESE_SIMPLIFIED = os.path.join(
-    PATH_INNOSETUP_EXTENSION, "Languages", "ChineseSimplified.isl"
-)
+PATH_CHINESE_SIMPLIFIED = os.path.join(PATH_INNOSETUP_EXTENSION, "Languages", "ChineseSimplified.isl")
 
 
 def prepare_innosetup_extensions(
@@ -31,9 +35,7 @@ def prepare_innosetup_extensions(
     file_text = file_text.replace("\r", "")
 
     os.makedirs(os.path.dirname(PATH_CHINESE_SIMPLIFIED), exist_ok=True)
-    with open(
-        PATH_CHINESE_SIMPLIFIED, "wt", encoding=response.encoding, newline="\r\n"
-    ) as f:
+    with open(PATH_CHINESE_SIMPLIFIED, "wt", encoding=response.encoding, newline="\r\n") as f:
         f.write(file_text)
     print("Downloaded Chinese Simplified ISL.")
     return 0
