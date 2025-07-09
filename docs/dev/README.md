@@ -4,7 +4,7 @@
 
 - **IDE**: [Visual Studio Code](https://code.visualstudio.com/) 或者 [PyCharm](https://www.jetbrains.com/zh-cn/pycharm/)
 - **开发语言**: [Python 3.12+][PythonHomepage]
-- **UI 框架**: [Tkinter](https://docs.python.org/zh-cn/3/library/tk.html)
+- **UI 框架**: [Tkinter][TkinterHomepage]
 - **包管理**: [PDM][PDMHomepage]
 - **测试工具**: [pytest](https://docs.pytest.org/en/7.4.x/)
 - **检查工具**: [Black](https://black.readthedocs.io/)
@@ -26,7 +26,6 @@
    ```bash
    pdm install -G:all # 安装项目依赖
    pdm install --plugins  # 安装 PDM 插件
-   pdm run prepare_innosetup_extensions  # 下载 InnoSetup 文件
    ```
 
 ## 📦 构建应用
