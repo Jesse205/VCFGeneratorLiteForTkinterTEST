@@ -22,6 +22,13 @@ on:
         description: Artifact Name
         type: string
         required: true
+    outputs:
+      artifact-id:
+        value: ${{ jobs.build.outputs.artifact-id }}
+      artifact-url:
+        value: ${{ jobs.build.outputs.artifact-url }}
+      artifact-digest:
+        value: ${{ jobs.build.outputs.artifact-digest }}
 
 permissions:
   contents: read
@@ -53,8 +60,13 @@ jobs:
         run: pdm run build_app -t ${{ inputs.package-type }}
 
       - name: Upload Package
+        id: upload-package
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
           path: ${{ inputs.artifact-path }}
           if-no-files-found: error
+    outputs:
+      artifact-id: ${{ steps.upload-package.outputs.artifact-id }}
+      artifact-url: ${{ steps.upload-package.outputs.artifact-url }}
+      artifact-digest: ${{ steps.upload-package.outputs.artifact-digest }}
