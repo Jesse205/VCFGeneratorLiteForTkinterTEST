@@ -113,7 +113,7 @@ Please refer to the [Development Guide (Chinese)](./docs/dev/README.md) and the 
 This project is released under the Apache 2.0 license. For details, please refer to [LICENSE](./LICENSE).
 
 ```txt
-Copyright 2023-2025 Jesse205
+Copyright 2023-2026 Jesse205
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
