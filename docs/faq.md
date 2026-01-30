@@ -1,4 +1,4 @@
-# 问题与解答
+# 常见问题
 
 ## 为什么生成文件时界面卡顿？
 
@@ -6,7 +6,7 @@
 
 如果您在使用 ZIP 应用时遇到界面卡顿的问题，以考虑使用支持自由线程的 Python 解释器来运行您的应用，这样可以避免 GIL 带来的限制，从而提升多线程应用的性能。
 
-有关自由线程的更多信息，请参考 [自由线程的 CPython][free-threaded-cpython]。
+有关自由线程的更多信息，请参阅 [自由线程的 CPython][free-threaded-cpython]。
 
 [gil]: https://docs.python.org/zh-cn/3.13/glossary.html#term-global-interpreter-lock
 [free-threaded-cpython]: https://docs.python.org/zh-cn/3.14/whatsnew/3.13.html#whatsnew313-free-threaded-cpython

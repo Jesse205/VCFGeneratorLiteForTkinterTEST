@@ -18,8 +18,7 @@
 
 </div>
 
-VCF Generator Lite is a lightweight tool that quickly converts name and phone number lists into VCF files for batch
-import to mobile contacts.
+VCF Generator Lite is a lightweight tool that quickly converts name and phone number lists into VCF files for batch import to mobile contacts.
 
 [![License](https://img.shields.io/github/license/HelloTool/VCFGeneratorLiteWithTkinter)](./LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./docs/CODE_OF_CONDUCT.md)
@@ -49,18 +48,14 @@ Users of different systems need to download different files. You can make your s
 
 ## Usage
 
-1. Open the app.
-2. Copy the name and phone number in the format of `Name PhoneNumber Note` on each line into the text field below. The
-   note can be omitted.
+1. Copy the name and phone number in the format of `Name PhoneNumber Note` on each line into the text field below. The note can be omitted.
    ```text
    Isaac Newton	13445467890	British mathematician
    Muhammad		13554678907
    Confucius		13645436748
    ```
-3. Click "Generate", select a path to save the file.
-4. Transfer the generated VCF file to your phone, select "Contacts" when opening the file, and follow the prompts to
-   complete the import.
-5. Wait for the import to complete.
+2. Click "Generate", select a path to save the file.
+3. You can use the generated VCF file wherever you need it. For details, please refer to [Using VCF Files](#using-vcf-files) below.
 
 > [!NOTE]
 >
@@ -75,6 +70,37 @@ Users of different systems need to download different files. You can make your s
 > > - Note: A well-known girl
 >
 
+### Using VCF Files
+
+<details>
+<summary>Import to Mobile Contacts</summary>
+
+1. Transfer the VCF file to your phone.
+2. Open the VCF file and select **Contacts**, then follow the prompts.
+3. Wait for the import to complete.
+
+</details>
+
+<details>
+<summary>Import to QQ Mail</summary>
+
+1. Open the new version of the QQ Mail website.
+2. In the sidebar, select **Apps > Contacts**, then choose **Manage > Import contacts**.
+3. In the dialog box that appears, click the **Select File** button and select your VCF file.
+4. Click **Start to import**.
+
+</details>
+
+<details>
+<summary>Import to Lark</summary>
+
+1. Open the Lark client.
+2. In the sidebar, select **Contacts > Email Contacts**, then choose the **Add > Import contacts** button.
+3. In the dialog box that appears, select or drag your VCF file.
+4. Click **Import**.
+
+</details>
+
 ## Compatibility
 
 ### System Requirements
@@ -84,7 +110,7 @@ Users of different systems need to download different files. You can make your s
 | Windows Installer & Portable | Windows 8.1 or later          |
 | Python ZIP Application       | Python 3.12 or later, Tkinter |
 
-If you wish to use this application on Windows 8 or earlier versions, please refer to [Running on Older Windows](./docs/compatibility/runs-on-older-windows.md).
+If you wish to use this application on Windows 8 or earlier versions, please see [Running on Older Windows](./docs/compatibility/runs-on-older-windows.md).
 
 On Windows systems, to launch the Python Zip Application by double-clicking, you need to install either the [Python Launcher][pylauncher] or [Python Install Manager][pymanager].
 
@@ -104,13 +130,9 @@ If you want to use dark mode in Windows, you can [enable high contrast mode][win
 - Known Issues:
   - Windows Contacts may display garbled characters in non-UTF-8 environments
 
-## Development & Contribution
-
-Please refer to the [Development Guide (Chinese)](./docs/dev/README.md) and the [Contribution Guide (Chinese)](./docs/CONTRIBUTING.md).
-
 ## License
 
-This project is released under the Apache 2.0 license. For details, please refer to [LICENSE](./LICENSE).
+This project is licensed under the Apache 2.0 license. For details, please refer to the [LICENSE file](./LICENSE).
 
 ```txt
 Copyright 2023-2026 Jesse205
@@ -128,13 +150,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-## Open Source Notice
-
-Please refer to [Open Source Notice (Chinese)](./docs/legal/os-notices.md)
-
 ## Special Thanks
 
 Parts of the code in this project were generated with the assistance of AI coding tools (DeepSeek, Tongyi Lingma).
+
+## More Documentation
+
+- [Development Guide (Chinese)](./docs/dev/README.md)
+- [Contribution Guide (Chinese)](./docs/CONTRIBUTING.md)
+- [FAQ (Chinese)](./docs/faq.md)
+- [Open Source Notice (Chinese)](./docs/legal/os-notices.md)
 
 [repository-gitee]: https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/
 [repository-github]: https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/

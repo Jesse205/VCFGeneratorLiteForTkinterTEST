@@ -42,8 +42,7 @@ Alex\t13645436748
 usage = """Instructions:
 1. Copy names and phone numbers in the format "Name PhoneNumber Notes" (notes optional) into the edit box below.
 2. Click "Generate" and select a path to save the file.
-3. Copy the generated VCF file to your phone, open it with "Contacts", and follow the prompts.
-4. Wait for the import to complete."""
+3. You can use the generated VCF file wherever you need it, such as importing it into your phone or Lark."""
 
 [save_vcf_window]
 title = "Select File Save Location"
