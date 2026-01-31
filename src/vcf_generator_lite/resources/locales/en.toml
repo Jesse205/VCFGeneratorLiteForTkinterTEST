@@ -42,7 +42,7 @@ Alex\t13645436748
 usage = """Instructions:
 1. Copy names and phone numbers in the format "Name PhoneNumber Notes" (notes optional) into the edit box below.
 2. Click "Generate" and select a path to save the file.
-3. You can use the generated VCF file wherever you need it, such as importing it into your phone or Lark."""
+3. You can use the generated vCard file wherever you need it, such as importing it into your phone or Lark."""
 
 [save_vcf_window]
 title = "Select File Save Location"
@@ -57,19 +57,19 @@ title = "Save Failed"
 message = "System error: {reason}"
 
 [vcf_generate_success_message_box]
-title = "VCF File Generated Successfully"
+title = "vCard File Generated Successfully"
 message = "File exported to {path}."
 
 [vcf_generate_error_message_box]
-title = "Failed to Generate VCF File"
-message = "An unknown error occurred while generating the VCF file:\n\n{content}"
+title = "Failed to Generate vCard File"
+message = "An unknown error occurred while generating the vCard file:\n\n{content}"
 
 [vcf_generating_exit_message_box]
-title = "Generating VCF File"
+title = "Generating vCard File"
 message = "Please wait for the file generation to complete"
 
 [vcf_generate_invalid_window]
-title = "VCF File Generation Complete"
+title = "vCard File Generation Complete"
 message = "File exported to {path}, invalid numbers have been ignored."
 label_invalid_numbers = "Invalid numbers: "
 heading_row = "Position"

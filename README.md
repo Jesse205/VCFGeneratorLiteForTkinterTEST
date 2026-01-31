@@ -18,7 +18,7 @@
 
 </div>
 
-VCF Generator Lite is a lightweight tool that quickly converts name and phone number lists into VCF files for batch import to mobile contacts.
+VCF Generator Lite is a lightweight tool that quickly converts name and phone number lists into vCard files for batch import to mobile contacts.
 
 [![License](https://img.shields.io/github/license/HelloTool/VCFGeneratorLiteWithTkinter)](./LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./docs/CODE_OF_CONDUCT.md)
@@ -55,7 +55,7 @@ Users of different systems need to download different files. You can make your s
    Confucius		13645436748
    ```
 2. Click "Generate", select a path to save the file.
-3. You can use the generated VCF file wherever you need it. For details, please refer to [Using VCF Files](#using-vcf-files) below.
+3. You can use the generated vCard file wherever you need it. For details, please refer to [Using vCard Files](#using-vcard-files) below.
 
 > [!NOTE]
 >
@@ -70,13 +70,13 @@ Users of different systems need to download different files. You can make your s
 > > - Note: A well-known girl
 >
 
-### Using VCF Files
+### Using vCard Files
 
 <details>
 <summary>Import to Mobile Contacts</summary>
 
-1. Transfer the VCF file to your phone.
-2. Open the VCF file and select **Contacts**, then follow the prompts.
+1. Transfer the vCard file to your phone.
+2. Open the vCard file and select **Contacts**, then follow the prompts.
 3. Wait for the import to complete.
 
 </details>
@@ -86,7 +86,7 @@ Users of different systems need to download different files. You can make your s
 
 1. Open the new version of the QQ Mail website.
 2. In the sidebar, select **Apps > Contacts**, then choose **Manage > Import contacts**.
-3. In the dialog box that appears, click the **Select File** button and select your VCF file.
+3. In the dialog box that appears, click the **Select File** button and select your vCard file.
 4. Click **Start to import**.
 
 </details>
@@ -96,7 +96,7 @@ Users of different systems need to download different files. You can make your s
 
 1. Open the Lark client.
 2. In the sidebar, select **Contacts > Email Contacts**, then choose the **Add > Import contacts** button.
-3. In the dialog box that appears, select or drag your VCF file.
+3. In the dialog box that appears, select or drag your vCard file.
 4. Click **Import**.
 
 </details>
