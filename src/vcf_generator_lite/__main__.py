@@ -25,11 +25,11 @@ def fix_home_env():
 def setup_logging():
     handler = logging.StreamHandler()
     handler.setStream(sys.stdout)
-    log_format = "{log_color} {asctime} {levelname:8} {name:50.50} {message}"
+    log_format = "{asctime} {levelname:8} {name:50.50} {message}"
     if ColoredFormatter:
-        formatter = ColoredFormatter(log_format, style="{")
+        formatter = ColoredFormatter("{log_color}" + log_format, style="{")
     else:
-        formatter = logging.Formatter(log_format, style="{", defaults={"log_color": ""})
+        formatter = logging.Formatter(log_format, style="{")
 
     handler.setFormatter(formatter)
     logging.basicConfig(
