@@ -14,13 +14,13 @@ from vcf_generator_lite.utils.tkinter.busy import tk_busy_forget, tk_buy_hold
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
 from vcf_generator_lite.windows.invalid_lines import create_invalid_lines_window
 from vcf_generator_lite.windows.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE
-from vcf_generator_lite.windows.main.window import MainWindow
+from vcf_generator_lite.windows.main.window import VCFGeneratorLiteApp
 
 logger = logging.getLogger(__name__)
 
 
 class MainController:
-    def __init__(self, window: MainWindow):
+    def __init__(self, window: VCFGeneratorLiteApp):
         self.window = window
         self.is_generating: bool = False
         self.generate_file_name: str = "phones.vcf"

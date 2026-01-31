@@ -8,12 +8,12 @@ from vcf_generator_lite.utils.tkinter.font import extend_font_scale
 from vcf_generator_lite.utils.tkinter.misc import scale_kw
 from vcf_generator_lite.utils.tkinter.widget import enable_auto_wrap
 from vcf_generator_lite.widgets.scrolled_treeview import ScrolledTreeview
-from vcf_generator_lite.windows.base import ExtendedDialog
+from vcf_generator_lite.windows.base import EhancedDialog
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
 from vcf_generator_lite.windows.invalid_lines.common import st
 
 
-class InvalidLinesWindow(ExtendedDialog, VerticalDialogLayout):
+class InvalidLinesWindow(EhancedDialog, VerticalDialogLayout):
     @override
     def _configure_ui_withdraw(self):
         super()._configure_ui_withdraw()

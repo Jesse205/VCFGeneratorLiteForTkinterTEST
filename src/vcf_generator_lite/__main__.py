@@ -5,7 +5,7 @@ import sys
 from vcf_generator_lite import constants
 from vcf_generator_lite.utils.dpi_aware import enable_dpi_aware
 from vcf_generator_lite.utils.locales import scope
-from vcf_generator_lite.windows.main import create_main_window
+from vcf_generator_lite.windows.main import create_app
 
 try:
     from colorlog import ColoredFormatter
@@ -46,9 +46,9 @@ def main():
     logging.info(startup_t("starting"))
     print(startup_t("source_tip").format(url=constants.URL_REPOSITORY))
 
-    main_window, _ = create_main_window()
+    app, _ = create_app()
 
-    main_window.mainloop()
+    app.mainloop()
 
     logging.info(startup_t("exiting"))
 

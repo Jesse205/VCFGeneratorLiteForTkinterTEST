@@ -15,7 +15,7 @@ from vcf_generator_lite.utils.tkinter.window import (
 )
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
 
-__all__ = ["ExtendedTk", "ExtendedToplevel", "ExtendedDialog"]
+__all__ = ["EhancedTk", "EhancedToplevel", "EhancedDialog"]
 _logger = logging.getLogger(__name__)
 
 
@@ -55,7 +55,7 @@ class AppWindowExtension(
         self.bind(EVENT_EXIT, lambda _: self.destroy())
 
 
-class ExtendedTk(Tk, AppWindowExtension, ABC):
+class EhancedTk(Tk, AppWindowExtension, ABC):
     def __init__(self, **kw):
         super().__init__(baseName="vcf_generator_lite", **kw)
         self.theme_name: str | None = None
@@ -85,7 +85,7 @@ class ExtendedTk(Tk, AppWindowExtension, ABC):
         self.apply_theme_patch()
 
 
-class ExtendedToplevel(Toplevel, AppWindowExtension, ABC):
+class EhancedToplevel(Toplevel, AppWindowExtension, ABC):
     def __init__(self, master: Tk | Toplevel, **kw):
         super().__init__(master, **kw)
         AppWindowExtension.__init__(self)
@@ -95,7 +95,7 @@ class ExtendedToplevel(Toplevel, AppWindowExtension, ABC):
         super()._configure_ui_withdraw()
 
 
-class ExtendedDialog(ExtendedToplevel, ABC):
+class EhancedDialog(EhancedToplevel, ABC):
     @override
     def _configure_ui_withdraw(self):
         super()._configure_ui_withdraw()

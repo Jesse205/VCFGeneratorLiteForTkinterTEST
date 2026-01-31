@@ -27,7 +27,7 @@ from vcf_generator_lite.utils.tkinter.accelerators import (
 from vcf_generator_lite.utils.tkinter.menu import parse_menu_label
 from vcf_generator_lite.utils.tkinter.widget import enable_auto_wrap
 from vcf_generator_lite.widgets.text_menu import TextContextMenu
-from vcf_generator_lite.windows.base import ExtendedTk
+from vcf_generator_lite.windows.base import EhancedTk
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
 from vcf_generator_lite.windows.main.constants import (
     ACCELERATOR_GENERATE,
@@ -39,7 +39,7 @@ from vcf_generator_lite.windows.main.constants import (
 st = scope("main_window")
 
 
-class MainWindow(ExtendedTk, VerticalDialogLayout):
+class VCFGeneratorLiteApp(EhancedTk, VerticalDialogLayout):
     generate_button: Button
     content_text: ScrolledText
     progress_bar: Progressbar
