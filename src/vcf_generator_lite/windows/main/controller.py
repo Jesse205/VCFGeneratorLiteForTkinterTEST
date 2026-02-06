@@ -5,6 +5,7 @@ import traceback
 from concurrent.futures import Future
 from concurrent.futures.thread import ThreadPoolExecutor
 from tkinter import Event, filedialog, messagebox
+from typing import IO
 
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT
@@ -45,10 +46,10 @@ class MainController:
         self.window.generate_button.invoke()
 
     def on_generate(self, _: Event):
-        if self.is_generating:
-            return
-        text_content = self.window.get_text_content()
-        file_io = None
+        self.generate_file()
+
+    def pick_output_file(self) -> IO[str] | None:
+        file_io: IO[str] | None = None
         try:
             file_io = filedialog.asksaveasfile(
                 title=t("save_vcf_window.title"),
@@ -62,16 +63,22 @@ class MainController:
                 title=t("save_vcf_permission_denied_message_box.title"),
                 message=t("save_vcf_permission_denied_message_box.message"),
             )
-            return
         except OSError as e:
             messagebox.showerror(
                 title=t("save_vcf_os_error_message_box.title"),
                 message=t("save_vcf_os_error_message_box.message").format(reason=str(e)),
             )
+        return file_io
+
+    def generate_file(self):
+        if self.is_generating:
             return
 
+        file_io = self.pick_output_file()
         if file_io is None:
             return
+
+        origin_text = self.window.get_text_content()
         self.generate_file_name = os.path.basename(file_io.name)
         self.is_generating = True
         self.window.show_progress()
@@ -81,34 +88,39 @@ class MainController:
         tk_buy_hold(self.window.generate_button)
         self.window.update()
 
-        def done(future: Future[GenerateResult]):
-            self.is_generating = False
-            try:
-                file_io.close()
-            except BaseException as e:
-                logger.error("Closing file failed: {}", e)
-            self.window.hide_progress()
-            self.window.update()
-            self._show_generate_done_dialog(file_io.name, future.result())
-            self.window.set_generate_enabled(True)
-            tk_busy_forget(self.window.generate_button)
-            self.window.update()
-
-        def on_update_progress(progress: float, determinate: bool):
-            self.window.set_progress_determinate(determinate)
-            if determinate:
-                self.window.set_progress(progress)
-
-        executor = ThreadPoolExecutor(max_workers=1)
         generator = VCFGeneratorTask(
-            executor=executor,
-            progress_listener=on_update_progress,
-            input_text=text_content,
+            executor=ThreadPoolExecutor(max_workers=1),
+            progress_listener=self.on_generate_file_update_progress,
+            input_text=origin_text,
             output_io=file_io,
         )
         generate_future = generator.start()
-        generate_future.add_done_callback(lambda future: self.window.after_idle(done, future))
-        executor.shutdown(wait=False)
+        generate_future.add_done_callback(
+            lambda future: self.window.after_idle(self.on_generate_file_done, future, file_io)
+        )
+        generate_future.add_done_callback(lambda _: self.window.after_idle(callable, file_io))
+
+    def on_generate_file_update_progress(self, progress: float, determinate: bool):
+        self.window.set_progress_determinate(determinate)
+        if determinate:
+            self.window.set_progress(progress)
+
+    def on_generate_file_done(
+        self,
+        future: Future[GenerateResult],
+        file_io: IO[str],
+    ):
+        try:
+            file_io.close()
+        except BaseException as e:
+            logger.error("Closing file failed: {}.", e)
+        self.is_generating = False
+        self.window.hide_progress()
+        self.window.update()
+        self._show_generate_done_dialog(file_io.name, future.result())
+        self.window.set_generate_enabled(True)
+        tk_busy_forget(self.window.generate_button)
+        self.window.update()
 
     def on_exit(self, _: Event):
         if self.is_generating:
