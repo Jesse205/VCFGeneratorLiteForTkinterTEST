@@ -32,7 +32,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload ${{ github.event.release.tag_name }} \
-            *_portable.zip \
-            *_setup.exe \
-            *_zipapp.pyzw \
+            *-portable.zip \
+            *-setup.exe \
+            *.pyzw \
             --clobber --repo $GITHUB_REPOSITORY

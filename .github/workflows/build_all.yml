@@ -42,7 +42,7 @@ jobs:
       os: windows-latest
       package-type: innosetup
       python-version: 3.14t
-      artifact-path: dist/*_setup.exe
+      artifact-path: dist/*-setup.exe
       artifact-name: windows-installer
 
   build-windows-portable:
@@ -53,7 +53,7 @@ jobs:
       os: windows-latest
       package-type: portable
       python-version: 3.14t
-      artifact-path: dist/*_portable.zip
+      artifact-path: dist/*-portable.zip
       artifact-name: windows-portable
 
   build-python3-zipapp:
@@ -64,5 +64,5 @@ jobs:
       os: ubuntu-latest
       package-type: zipapp
       python-version: 3.14t
-      artifact-path: dist/*_zipapp.pyzw
+      artifact-path: dist/*.pyzw
       artifact-name: python3-zipapp

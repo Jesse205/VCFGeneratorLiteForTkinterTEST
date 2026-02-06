@@ -40,11 +40,11 @@ Download the software from the following channels:
 
 Users of different systems need to download different files. You can make your selection according to the table below:
 
-| Platform       | Package Type           | File                                                         |
-| -------------- | ---------------------- | ------------------------------------------------------------ |
-| Windows        | Installer              | VCFGeneratorLite\_\<version\>\_**win-amd64**\_*setup.exe*    |
-| Windows        | Portable               | VCFGeneratorLite\_\<version\>\_**win-amd64**\_*portable.zip* |
-| Cross-platform | Python ZIP Application | VCFGeneratorLite\_\<version\>\_**python3**\_*zipapp.pyzw*    |
+| Platform       | Package Type           | File                                                      |
+| -------------- | ---------------------- | --------------------------------------------------------- |
+| Windows        | Installer              | VCFGeneratorLite-\<version\>-**win-amd64**-*setup.exe*    |
+| Windows        | Portable               | VCFGeneratorLite-\<version\>-**win-amd64**-*portable.zip* |
+| Cross-platform | Python ZIP Application | VCFGeneratorLite-\<version\>-**py3**.*pyzw*               |
 
 ## Usage
 
