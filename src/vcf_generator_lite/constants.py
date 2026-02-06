@@ -1,6 +1,7 @@
 from vcf_generator_lite.__version__ import __version__
 
 APP_COPYRIGHT = "Copyright © 2023-2026 Jesse205"
+APP_DESCRIPTON = "A lightweight tool that quickly converts name and phone number lists into vCard files for batch import to mobile contacts."
 
 SOURCE_REFERENCE = "master" if __debug__ else "v" + __version__
 

@@ -1,8 +1,10 @@
+import argparse
 import logging
 import os
 import sys
 
-from vcf_generator_lite import constants
+from vcf_generator_lite.__version__ import __version__
+from vcf_generator_lite.constants import APP_DESCRIPTON, URL_REPOSITORY
 from vcf_generator_lite.utils.dpi_aware import enable_dpi_aware
 from vcf_generator_lite.utils.locales import scope
 from vcf_generator_lite.windows.main import create_app
@@ -38,19 +40,43 @@ def setup_logging():
     )
 
 
-def main():
+def setup_common_argparser(parser: argparse.ArgumentParser):
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=f"vcf-generator-lite {__version__}",
+    )
+
+
+def setup_gui_argparser(parser: argparse.ArgumentParser):
+    setup_common_argparser(parser)
+
+
+def launch_gui(args: argparse.Namespace):
     setup_logging()
     fix_home_env()
     enable_dpi_aware()
 
     logging.info("Starting VCF Generator...")
-    print(startup_t("source_tip").format(url=constants.URL_REPOSITORY))
+    print(startup_t("source_tip").format(url=URL_REPOSITORY))
 
     app, _ = create_app()
-
     app.mainloop()
 
     logging.info("Exiting VCF Generator...")
+
+
+def main_gui():
+    parser = argparse.ArgumentParser(description=APP_DESCRIPTON)
+    parser.description = APP_DESCRIPTON
+    setup_gui_argparser(parser)
+    args = parser.parse_args()
+    launch_gui(args)
+
+
+def main():
+    main_gui()
 
 
 if __name__ == "__main__":

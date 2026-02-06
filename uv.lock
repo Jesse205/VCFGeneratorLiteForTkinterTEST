@@ -472,6 +472,11 @@ dependencies = [
     { name = "ttk-text" },
 ]
 
+[package.optional-dependencies]
+console = [
+    { name = "colorlog" },
+]
+
 [package.dev-dependencies]
 build = [
     { name = "pyinstaller" },
@@ -496,7 +501,11 @@ test = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "ttk-text", specifier = "==0.3.0" }]
+requires-dist = [
+    { name = "colorlog", marker = "extra == 'console'", specifier = ">=6.9.0" },
+    { name = "ttk-text", specifier = "==0.3.0" },
+]
+provides-extras = ["console"]
 
 [package.metadata.requires-dev]
 build = [
