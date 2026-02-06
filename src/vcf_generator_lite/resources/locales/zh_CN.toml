@@ -4,9 +4,6 @@ button_ok = "确定"
 [startup]
 source_tip = "💡提示：源码已托管到 {url}"
 
-starting = "正在启动 VCF 生成器..."
-exiting = "正在退出 VCF 生成器..."
-
 [main_window]
 button_generate = "开始生成"
 label_generating = "正在生成……"

@@ -43,14 +43,14 @@ def main():
     fix_home_env()
     enable_dpi_aware()
 
-    logging.info(startup_t("starting"))
+    logging.info("Starting VCF Generator...")
     print(startup_t("source_tip").format(url=constants.URL_REPOSITORY))
 
     app, _ = create_app()
 
     app.mainloop()
 
-    logging.info(startup_t("exiting"))
+    logging.info("Exiting VCF Generator...")
 
 
 if __name__ == "__main__":

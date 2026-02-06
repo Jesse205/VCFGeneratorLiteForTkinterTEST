@@ -4,9 +4,6 @@ button_ok = "OK"
 [startup]
 source_tip = "💡Tip: Source code is hosted at {url}"
 
-starting = "Starting VCF Generator..."
-exiting = "Exiting VCF Generator..."
-
 [main_window]
 button_generate = "Generate"
 label_generating = "Generating..."
