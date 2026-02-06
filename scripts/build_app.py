@@ -1,9 +1,12 @@
 import argparse
+from glob import iglob
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import sys
 import sysconfig
+import zipapp
 from zipfile import ZipFile
 
 import PyInstaller.__main__ as pyinstaller
@@ -15,7 +18,7 @@ from vcf_generator_lite.constants import APP_COPYRIGHT
 PYTHON_VERSION = sysconfig.get_python_version()
 PLATFORM_PYTHON = f"{sys.implementation.name}-{PYTHON_VERSION}"
 PLATFORM_NATIVE = sysconfig.get_platform()
-OUTPUT_BASE_NAME_TEMPLATE = "vcf-generator-lite-v{version}-{platform}-{distribution}"
+OUTPUT_BASE_NAME_TEMPLATE = "VCFGeneratorLite-v{version}-{platform}-{distribution}"
 
 
 def ensure_dist_dir():
@@ -138,6 +141,39 @@ def pack_with_zipfile():
     print("Packaging finished.")
 
 
+def build_with_zipapp():
+    zipapp_path = Path("./build/zipapp")
+    site_packages_path = zipapp_path / "site-packages"
+    shutil.rmtree(zipapp_path)
+    export_result = subprocess.run(["uv", "export", "--no-dev", "--no-editable"], capture_output=True, text=True)
+    subprocess.run(
+        ["uv", "pip", "sync", "-", "--target", site_packages_path],
+        input=export_result.stdout,
+        text=True,
+    )
+
+    # 清理无用内容
+    shutil.rmtree(site_packages_path / "bin")
+    os.remove(site_packages_path / ".lock")
+    for info_dirs in iglob(str(site_packages_path / "*.dist-info")):
+        for file in Path(info_dirs).iterdir():
+            if file.name not in ("METADATA",):
+                file.unlink()
+
+    zipapp.create_archive(
+        site_packages_path,
+        target=os.path.join(
+            "dist",
+            OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform="py3", distribution="zipapp") + ".pyzw",
+        ),
+        main="vcf_generator_lite.__main__:main",
+        compressed=True,
+    )
+
+    print("Building finished.")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -159,9 +195,7 @@ def main() -> int:
             build_with_pyinstaller()
             pack_with_zipfile()
         case "zipapp":
-            # TODO: Implement pack with zipapp
-            raise NotImplementedError("Pack with zipapp is not implemented yet.")
-            # return build_with_pdm_packer()
+            return build_with_zipapp()
         case _:
             raise ValueError(f"Invalid type: {type_}")
     return 0
