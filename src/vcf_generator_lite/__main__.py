@@ -4,7 +4,7 @@ import os
 import sys
 
 from vcf_generator_lite.__version__ import __version__
-from vcf_generator_lite.constants import APP_DESCRIPTON, URL_REPOSITORY
+from vcf_generator_lite.constants import URL_REPOSITORY
 from vcf_generator_lite.utils.dpi_aware import enable_dpi_aware
 from vcf_generator_lite.utils.locales import scope
 from vcf_generator_lite.windows.main import create_app
@@ -13,6 +13,8 @@ try:
     from colorlog import ColoredFormatter
 except ImportError:
     ColoredFormatter = None
+
+APP_DESCRIPTON = "A lightweight tool that quickly converts name and phone number lists into vCard files for batch import to mobile contacts."
 
 startup_t = scope("startup")
 
