@@ -171,7 +171,7 @@ class MainController:
             message=t("vcf_generate_success_message_box.message").format(path=display_path),
             detail=t("vcf_generate_success_message_box.detail").format(
                 total=generate_result.total,
-                time=generate_result.time_elapsed,
+                time=round(generate_result.time_elapsed, 3),
             ),
         )
 
