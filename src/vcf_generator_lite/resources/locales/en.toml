@@ -56,6 +56,8 @@ message = "System error: {reason}"
 [vcf_generate_success_message_box]
 title = "vCard File Generated Successfully"
 message = "File exported to {path}."
+detail = """Number of contacts: {total}
+Time elapsed: {time} seconds"""
 
 [vcf_generate_error_message_box]
 title = "Failed to Generate vCard File"

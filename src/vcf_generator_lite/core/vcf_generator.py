@@ -1,13 +1,14 @@
 import binascii
-from collections.abc import Callable
 import logging
+import time
+from collections.abc import Callable
 from concurrent.futures import FIRST_EXCEPTION, Future, ThreadPoolExecutor, wait
 from dataclasses import dataclass, field
-from queue import Queue
-from threading import Lock
+from threading import Lock, RLock
 from typing import IO, NamedTuple
 
 from vcf_generator_lite.models.contact import Contact, PhoneNotFoundError, parse_contact
+from vcf_generator_lite.utils.deque_queue import DequeQueue
 
 _logger = logging.getLogger(__name__)
 
@@ -26,12 +27,15 @@ class VCardGeneratorState:
     progress: float = 0
     invalid_lines: list[InvalidLine] = field(default_factory=list)
     running: bool = False
+    start_time: float = 0.0
 
 
 @dataclass(frozen=True)
 class GenerateResult:
     invalid_lines: list[InvalidLine]
-    exception: BaseException | None = None
+    exception: BaseException | None
+    time_elapsed: float
+    total: int
 
 
 class WriteQueueItem(NamedTuple):
@@ -70,8 +74,12 @@ class VCFGeneratorTask:
         self._input_text = input_text
         self._output_io = output_io
         self._state = VCardGeneratorState()
+        self._count_lock = RLock()
+        self._processed_lock = RLock()
+        self._progress_lock = RLock()
         self._lock = Lock()
-        self._write_queue: Queue[WriteQueueItem | None] = Queue()
+        # 使用 deque 会比原生的 queue 性能高
+        self._write_queue: DequeQueue[WriteQueueItem | None] = DequeQueue(10)
 
     def start(self) -> Future[GenerateResult]:
         future = self._executor.submit(self._process)
@@ -79,10 +87,12 @@ class VCFGeneratorTask:
 
     def _process(self) -> GenerateResult:
         self._state.running = True
+        self._state.start_time = time.time()
         with ThreadPoolExecutor(max_workers=2, thread_name_prefix="VCFGenerator") as pipeline_executor:
-            parse_future = pipeline_executor.submit(self._parse_input)
             write_future = pipeline_executor.submit(self._write_output)
+            parse_future = pipeline_executor.submit(self._parse_input)
             done, _ = wait([parse_future, write_future], return_when=FIRST_EXCEPTION)
+        end_time = time.time()
         self._state.running = False
 
         exception: BaseException | None = None
@@ -93,6 +103,8 @@ class VCFGeneratorTask:
         return GenerateResult(
             invalid_lines=self._state.invalid_lines,
             exception=exception,
+            time_elapsed=end_time - self._state.start_time,
+            total=self._state.total,
         )
 
     def _parse_input(self) -> None:
@@ -103,11 +115,12 @@ class VCFGeneratorTask:
             if not self._state.running:
                 break
             if line.strip() == "":
-                self._finish_item()
+                self._skip_item()
                 continue
             try:
                 contact = parse_contact(line)
                 vcard = serialize_to_vcard(contact)
+
                 self._write_queue.put(WriteQueueItem(row_position=position, origin_content=line, vcard=vcard))
             except PhoneNotFoundError as e:
                 self._finish_item()
@@ -134,7 +147,7 @@ class VCFGeneratorTask:
                         InvalidLine(row_position=item.row_position, content=item.origin_content, exception=e)
                     )
             finally:
-                self._write_queue.task_done()
+                # self._write_queue.task_done()
                 self._finish_item()
 
     def _notify_progress(self):
@@ -142,15 +155,22 @@ class VCFGeneratorTask:
             return
         self._progress_listener(self._state.progress, self._state.total > 0)
 
-    def _increment_progress(self, increment: int = 1):
+    def _update_progress(self):
         if self._state.total == 0:
             return
-        with self._lock:
-            self._state.processed += increment
-            new_progress = round(min(self._state.processed / self._state.total, 1.0), 1)
-            if self._state.progress != new_progress:
-                self._state.progress = new_progress
-                self._notify_progress()
+        new_progress = round(min(self._state.processed / self._state.total, 1.0), 1)
+        if self._state.progress != new_progress:
+            with self._progress_lock:
+                if self._state.progress != new_progress:
+                    self._state.progress = new_progress
+                    self._notify_progress()
+
+    def _skip_item(self):
+        with self._count_lock:
+            self._state.total -= 1
+        self._update_progress()
 
     def _finish_item(self):
-        self._increment_progress()
+        with self._processed_lock:
+            self._state.processed += 1
+        self._update_progress()

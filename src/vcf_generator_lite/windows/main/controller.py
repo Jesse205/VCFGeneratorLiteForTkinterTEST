@@ -150,7 +150,7 @@ class MainController:
         elif len(generate_result.invalid_lines) > 0:
             self._show_generate_invalid_dialog(display_path, generate_result.invalid_lines)
         else:
-            self._show_generate_success_dialog(display_path)
+            self._show_generate_success_dialog(display_path, generate_result)
 
     def _show_generate_error_dialog(self, exception: BaseException):
         messagebox.showerror(
@@ -164,11 +164,15 @@ class MainController:
     def _show_generate_invalid_dialog(self, display_path: str, invalid_lines: list[InvalidLine]):
         create_invalid_lines_window(self.window, display_path, invalid_lines)
 
-    def _show_generate_success_dialog(self, display_path: str):
+    def _show_generate_success_dialog(self, display_path: str, generate_result: GenerateResult):
         messagebox.showinfo(
             parent=self.window,
             title=t("vcf_generate_success_message_box.title"),
             message=t("vcf_generate_success_message_box.message").format(path=display_path),
+            detail=t("vcf_generate_success_message_box.detail").format(
+                total=generate_result.total,
+                time=generate_result.time_elapsed,
+            ),
         )
 
     def _clean_quotes(self):

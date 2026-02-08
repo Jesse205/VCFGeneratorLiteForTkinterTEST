@@ -56,6 +56,8 @@ message = "系统错误：{reason}"
 [vcf_generate_success_message_box]
 title = "生成 vCard 文件成功"
 message = "已导出文件到 {path}。"
+detail="""名片数量：{total}
+消耗时间：{time} 秒"""
 
 [vcf_generate_error_message_box]
 title = "生成 vCard 文件失败"
