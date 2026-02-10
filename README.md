@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./docs/images/icon.svg" width="192" height="192" alt="App icon" />
+<img src="./assets/images/icon.svg" width="192" height="192" alt="App icon" />
 
 # VCF Generator Lite ![with Tkinter](https://img.shields.io/badge/with-Tkinter-00319C)
 
@@ -21,13 +21,13 @@
 VCF Generator Lite is a lightweight tool that quickly converts name and phone number lists into vCard files for batch import to mobile contacts.
 
 [![License](https://img.shields.io/github/license/HelloTool/VCFGeneratorLiteWithTkinter)](./LICENSE)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./docs/CODE_OF_CONDUCT.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.md)
 
 [![Test](https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml/badge.svg)](https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml)
 
 ## Screenshot
 
-<img src="./docs/images/screenshots/main_window.webp" width="600" alt="Main window" />
+<img src="./assets/images/screenshots/main_window.webp" width="600" alt="Main window" />
 
 ## Get the App
 
@@ -125,10 +125,10 @@ If you want to use dark mode in Windows, you can [enable high contrast mode][win
 
 ### File Compatibility
 
-- vCard Version: 2.1
-- Supported Fields: Name, Phone Number, Note
-- Known Issues:
-  - Windows Contacts may display garbled characters in non-UTF-8 environments
+- **vCard Version**: 2.1
+- **Supported Fields**: Name, Phone Number, Note
+- **Known Issues**:
+  - **Windows Contacts**: May display garbled characters in non-UTF-8 environments.
 
 ## License
 
@@ -150,16 +150,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-## Special Thanks
+## Thanks
 
-Parts of the code in this project were generated with the assistance of AI coding tools (DeepSeek, Tongyi Lingma).
+- **AI Coding Assistants**: Parts of the code and test code in this project were generated with the assistance of AI coding assistants.
+  - DeepSeek
+  - Tongyi Lingma
+- **Open Source Code**: This project uses some open source code. For details, please see [Open Source Notices (Chinese)](./docs/legal/os-notices.md).
 
 ## More Documentation
 
 - [Development Guide (Chinese)](./docs/dev/README.md)
 - [Contribution Guide (Chinese)](./docs/CONTRIBUTING.md)
 - [FAQ (Chinese)](./docs/faq.md)
-- [Open Source Notice (Chinese)](./docs/legal/os-notices.md)
 
 [repository-gitee]: https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/
 [repository-github]: https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/
