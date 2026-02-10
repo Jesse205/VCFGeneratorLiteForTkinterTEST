@@ -439,11 +439,11 @@ wheels = [
 
 [[package]]
 name = "ttk-text"
-version = "0.3.0"
+version = "0.3.1"
 source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/" }
-sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/d9/d5/db8584883dc791eaa03ab8ad6d586b9c48ed161761ccd8d89a62511540f0/ttk_text-0.3.0.tar.gz", hash = "sha256:6e2bc3706c395c93694531717b108b51f3f7b2fac4e19ddef697d6854b1b37c3", size = 6561, upload-time = "2026-01-11T22:35:55.168Z" }
+sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/ee/d7/3915e878355586ef860dc238b9f5572f126a839f4939239a504376e7dced/ttk_text-0.3.1.tar.gz", hash = "sha256:274b6e83fe36d46cce41755a3abe40ce4e005cf03e84f7243fb905536f75a343", size = 7348, upload-time = "2026-02-10T18:43:15.389Z" }
 wheels = [
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/15/b8/b7a33300fc5758b303d5b8e6f4bb827d56030f8b1b8332e2033c8fef0a32/ttk_text-0.3.0-py3-none-any.whl", hash = "sha256:e7fee74bfd28dd0eba8474918cd74d2391ead9f482564ddf0142a0655eae5233", size = 7785, upload-time = "2026-01-11T22:35:56.227Z" },
+    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/6f/26/2388ae8bdcbfe3704bbb2847b1198c853c1dc322fa6cf7930a4e61cc00da/ttk_text-0.3.1-py3-none-any.whl", hash = "sha256:944cd1e04dcd326ce3f6d9058b4ce7da297c423f010b4a9e7fcc396131e5d4b0", size = 8866, upload-time = "2026-02-10T18:43:14.236Z" },
 ]
 
 [[package]]
@@ -503,7 +503,7 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "colorlog", marker = "extra == 'console'", specifier = ">=6.9.0" },
-    { name = "ttk-text", specifier = "==0.3.0" },
+    { name = "ttk-text", specifier = "==0.3.1" },
 ]
 provides-extras = ["console"]
 

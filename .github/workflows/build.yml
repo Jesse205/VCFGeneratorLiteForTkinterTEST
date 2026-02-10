@@ -48,8 +48,7 @@ jobs:
           python-version-file: ".python-version"
 
       - name: Install Dependencies
-        run: |
-          uv sync
+        run: uv sync
       
       # Do not use UPX for speed.
       # - name: Prepare UPX for Windows

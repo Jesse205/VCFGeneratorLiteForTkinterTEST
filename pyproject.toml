@@ -6,7 +6,7 @@ authors = [{ name = "Jesse205", email = "jesse205@qq.com" }]
 license = "Apache-2.0"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["ttk-text==0.3.0"]
+dependencies = ["ttk-text==0.3.1"]
 import-names = ["vcf_generator_lite"]
 
 [project.optional-dependencies]
@@ -37,8 +37,14 @@ Issues = "https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/issues/new/cho
 vcf-generator-lite = "vcf_generator_lite.__main__:main"
 
 [build-system]
-requires = ["uv_build>=0.9.22,<0.10.0"]
+requires = ["uv_build>=0.10.1,<0.11.0"]
 build-backend = "uv_build"
+
+[tool.uv]
+required-version = ">=0.10.1"
+
+[tool.uv.pip]
+universal = true
 
 [tool.ruff]
 line-length = 120
@@ -72,11 +78,6 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --strict-markers --strict-config"
 xfail_strict = true
-filterwarnings = [
-    "error",
-    "ignore::DeprecationWarning",
-]
+filterwarnings = ["error", "ignore::DeprecationWarning"]
 log_cli = true
 log_cli_level = "INFO"
-log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s (%(filename)s:%(lineno)d)"
-log_cli_date_format = "%Y-%m-%d %H:%M:%S"

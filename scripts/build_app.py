@@ -42,9 +42,8 @@ def build_with_uv():
     uv_path = shutil.which("uv")
     if uv_path is None:
         print("uv not found.", file=sys.stderr)
-        return 1
-    result = subprocess.run([uv_path, "build"])
-    return result.returncode
+        sys.exit(1)
+    subprocess.run([uv_path, "build"], check=True)
 
 
 def build_with_pdm_packer():
@@ -54,7 +53,7 @@ def build_with_pdm_packer():
     if pdm_path is None:
         print("pdm not found.", file=sys.stderr)
         return 1
-    result = subprocess.run(
+    subprocess.run(
         [
             pdm_path,
             "pack",
@@ -73,12 +72,12 @@ def build_with_pdm_packer():
             **os.environ,
             "PYTHONOPTIMIZE": "2",
         },
+        check=True,
     )
     print("Building finished.")
-    return result.returncode
 
 
-def pack_with_innosetup() -> int:
+def pack_with_innosetup():
     print("Packaging with InnoSetup...")
     require_pyinstaller_output()
     if not os.path.isdir(PATH_INNOSETUP_EXTENSION):
@@ -89,7 +88,7 @@ def pack_with_innosetup() -> int:
     iscc_path = shutil.which("iscc", path=search_path)
     if iscc_path is None:
         print("InnoSetup not found.", file=sys.stderr)
-        return 1
+        sys.exit(1)
 
     architectures_allowed = "x86compatible"
     architectures_install_in64_bit_mode = ""
@@ -104,7 +103,7 @@ def pack_with_innosetup() -> int:
         case _:
             raise ValueError(f"Invalid platform: {PLATFORM_NATIVE}")
 
-    result = subprocess.run(
+    subprocess.run(
         [
             iscc_path,
             "/D"
@@ -120,10 +119,10 @@ def pack_with_innosetup() -> int:
             "/D" + f"ArchitecturesAllowed={architectures_allowed}",
             "/D" + f"ArchitecturesInstallIn64BitMode={architectures_install_in64_bit_mode}",
             os.path.abspath("vcf_generator_lite.iss"),
-        ]
+        ],
+        check=True,
     )
     print("Packaging finished.")
-    return result.returncode
 
 
 def pack_with_zipfile():
@@ -142,14 +141,23 @@ def pack_with_zipfile():
 
 
 def build_with_zipapp():
-    zipapp_path = Path("./build/zipapp")
+    zipapp_path = Path("build/zipapp")
     site_packages_path = zipapp_path / "site-packages"
-    shutil.rmtree(zipapp_path)
-    export_result = subprocess.run(["uv", "export", "--no-dev", "--no-editable"], capture_output=True, text=True)
+    if zipapp_path.is_dir():
+        shutil.rmtree(zipapp_path)
+    elif zipapp_path.is_file():
+        os.remove(zipapp_path)
+    export_result = subprocess.run(
+        ["uv", "export", "--no-dev", "--no-editable"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
     subprocess.run(
         ["uv", "pip", "sync", "-", "--target", site_packages_path],
         input=export_result.stdout,
         text=True,
+        check=True,
     )
 
     # 清理无用内容
@@ -171,10 +179,9 @@ def build_with_zipapp():
     )
 
     print("Building finished.")
-    return 0
 
 
-def main() -> int:
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-t",
@@ -190,16 +197,15 @@ def main() -> int:
     match type_:
         case "innosetup":
             build_with_pyinstaller()
-            return pack_with_innosetup()
+            pack_with_innosetup()
         case "portable":
             build_with_pyinstaller()
             pack_with_zipfile()
         case "zipapp":
-            return build_with_zipapp()
+            build_with_zipapp()
         case _:
             raise ValueError(f"Invalid type: {type_}")
-    return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
