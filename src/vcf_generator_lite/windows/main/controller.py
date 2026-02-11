@@ -11,7 +11,6 @@ from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT
 from vcf_generator_lite.core.vcf_generator import GenerateResult, InvalidLine, VCFGeneratorTask
 from vcf_generator_lite.utils.locales import t
-from vcf_generator_lite.utils.tkinter.busy import tk_busy_forget, tk_buy_hold
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
 from vcf_generator_lite.windows.invalid_lines import create_invalid_lines_window
 from vcf_generator_lite.windows.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE
@@ -41,7 +40,7 @@ class MainController:
         self._clean_quotes()
 
     def on_return(self, event: Event):
-        if event.widget is self.window.content_text:
+        if event.widget in self.window.content_text.frame.winfo_children():
             return
         self.window.generate_button.invoke()
 
@@ -81,11 +80,12 @@ class MainController:
         origin_text = self.window.get_text_content()
         self.generate_file_name = os.path.basename(file_io.name)
         self.is_generating = True
-        self.window.show_progress()
+
         self.window.set_progress(progress=0)
         self.window.set_progress_determinate(False)
-        self.window.set_generate_enabled(False)
-        tk_buy_hold(self.window.generate_button)
+
+        self.window.set_generating(True)
+
         self.window.update()
 
         generator = VCFGeneratorTask(
@@ -115,12 +115,13 @@ class MainController:
         except BaseException as e:
             logger.error("Closing file failed: {}.", e)
         self.is_generating = False
-        self.window.hide_progress()
+
+        self.window.set_generating(False)
         self.window.update()
-        self._show_generate_done_dialog(file_io.name, future.result())
-        self.window.set_generate_enabled(True)
-        tk_busy_forget(self.window.generate_button)
-        self.window.update()
+
+        result = future.result()
+
+        self._show_generate_done_dialog(file_io.name, result)
 
     def on_exit(self, _: Event):
         if self.is_generating:

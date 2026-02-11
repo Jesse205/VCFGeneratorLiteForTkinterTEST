@@ -24,6 +24,7 @@ from vcf_generator_lite.utils.tkinter.accelerators import (
     ACCELERATOR_UNDO,
     get_accelerator_redo,
 )
+from vcf_generator_lite.utils.tkinter.busy import tk_busy_forget, tk_buy_hold
 from vcf_generator_lite.utils.tkinter.menu import parse_menu_label
 from vcf_generator_lite.utils.tkinter.widget import enable_auto_wrap
 from vcf_generator_lite.widgets.text_menu import TextContextMenu
@@ -246,5 +247,12 @@ class VCFGeneratorLiteApp(EhancedTk, VerticalDialogLayout):
             self.progress_bar.configure(mode="indeterminate", maximum=10)
             self.progress_bar.start()
 
-    def set_generate_enabled(self, enabled: bool):
-        self.generate_button.configure(state="normal" if enabled else "disabled")
+    def set_generating(self, generating: bool):
+        if generating:
+            self.generate_button.configure(state="disabled")
+            tk_buy_hold(self.generate_button)
+            self.show_progress()
+        else:
+            self.generate_button.configure(state="normal")
+            tk_busy_forget(self.generate_button)
+            self.hide_progress()
