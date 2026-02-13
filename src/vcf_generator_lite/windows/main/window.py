@@ -1,5 +1,5 @@
 import urllib.parse
-from tkinter import Menu, Misc
+from tkinter import Menu, Misc, Text
 from tkinter.ttk import Button, Frame, Label, Progressbar, Sizegrip
 from typing import override
 
@@ -27,6 +27,7 @@ from vcf_generator_lite.utils.tkinter.accelerators import (
 from vcf_generator_lite.utils.tkinter.busy import tk_busy_forget, tk_buy_hold
 from vcf_generator_lite.utils.tkinter.menu import parse_menu_label
 from vcf_generator_lite.utils.tkinter.widget import enable_auto_wrap
+from vcf_generator_lite.widgets.line_number_bar import LineNumberBar
 from vcf_generator_lite.widgets.text_menu import TextContextMenu
 from vcf_generator_lite.windows.base import EhancedTk
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
@@ -77,9 +78,20 @@ class VCFGeneratorLiteApp(EhancedTk, VerticalDialogLayout):
         self.content_text.insert(0.0, st("input_example"))
         self.content_text.edit_reset()
         self.content_text.pack(fill="both", expand=True, padx="7p", pady=0)
+        self.content_text.bind("<<ThemeChanged>>", lambda _: self.__update_line_numbers_padding(), "+")
+
+        self.line_numbers = LineNumberBar(self.content_text.frame)
+        self.line_numbers.bind_text(self.content_text)
+        self.line_numbers.grid(row=1, column=0, sticky="ns")
+        self.content_text.frame.bind_widget(self.line_numbers, penetration_state=True)
+        self.__update_line_numbers_padding()
+
         text_context_menu = TextContextMenu(self.content_text)
         text_context_menu.bind_to_widget()
         return content_frame
+
+    def __update_line_numbers_padding(self):
+        self.line_numbers.grid(pady=Text.grid_info(self.content_text).get("pady", None))
 
     @override
     def _create_actions(self, parent: Misc):
