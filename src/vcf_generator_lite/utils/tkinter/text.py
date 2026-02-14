@@ -23,3 +23,9 @@ def get_display_lines_fast(text: Text, index1: str, index2: str):
         return 1
 
     return round((index2_y - index1_y) / line_height)
+
+
+def select_lines(text: Text, first_row: int, last_row: int):
+    text.tag_remove("sel", "1.0", "end")
+    text.tag_add("sel", f"{first_row}.0", f"{last_row + 1}.0")
+    text.mark_set("insert", f"{last_row + 1}.0")
