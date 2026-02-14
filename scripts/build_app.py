@@ -18,7 +18,7 @@ from vcf_generator_lite.constants import APP_COPYRIGHT
 PYTHON_VERSION = sysconfig.get_python_version()
 PLATFORM_PYTHON = f"{sys.implementation.name}-{PYTHON_VERSION}"
 PLATFORM_NATIVE = sysconfig.get_platform()
-OUTPUT_BASE_NAME_TEMPLATE = "VCFGeneratorLite-v{version}-{platform}-{distribution}"
+OUTPUT_BASE_NAME_TEMPLATE = "VCFGeneratorLite-v{version}-{variant}"
 
 
 def ensure_dist_dir():
@@ -62,7 +62,7 @@ def build_with_pdm_packer():
             "-o",
             os.path.join(
                 "dist",
-                OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform="py3", distribution="zipapp") + ".pyzw",
+                OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, variant="py3") + ".pyzw",
             ),
             "--interpreter",
             "/usr/bin/env python3",
@@ -108,11 +108,7 @@ def pack_with_innosetup():
             iscc_path,
             "/D"
             + f"OutputBaseFilename={
-                OUTPUT_BASE_NAME_TEMPLATE.format(
-                    version=APP_VERSION,
-                    platform=PLATFORM_NATIVE,
-                    distribution='setup',
-                )
+                OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, variant=f'{PLATFORM_NATIVE}-setup')
             }",
             "/D" + f"MyAppCopyright={APP_COPYRIGHT}",
             "/D" + f"MyAppVersion={APP_VERSION}",
@@ -130,8 +126,7 @@ def pack_with_zipfile():
     require_pyinstaller_output()
     zip_path = os.path.join(
         "dist",
-        OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform=PLATFORM_NATIVE, distribution="portable")
-        + ".zip",
+        OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform=f"{PLATFORM_NATIVE}-portable") + ".zip",
     )
     with ZipFile(zip_path, "w") as zip_file:
         for path, _dirs, files in os.walk(os.path.join("dist", "vcf_generator_lite")):
@@ -165,14 +160,17 @@ def build_with_zipapp():
     os.remove(site_packages_path / ".lock")
     for info_dirs in iglob(str(site_packages_path / "*.dist-info")):
         for file in Path(info_dirs).iterdir():
-            if file.name not in ("METADATA",):
-                file.unlink()
+            if file.name not in ("METADATA", "licenses"):
+                if file.is_file():
+                    file.unlink()
+                else:
+                    shutil.rmtree(file)
 
     zipapp.create_archive(
         site_packages_path,
         target=os.path.join(
             "dist",
-            OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, platform="py3", distribution="zipapp") + ".pyzw",
+            OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, variant="py3") + ".pyzw",
         ),
         main="vcf_generator_lite.__main__:main",
         compressed=True,
