@@ -136,6 +136,7 @@ def pack_with_zipfile():
 
 
 def build_with_zipapp():
+    ensure_dist_dir()
     zipapp_path = Path("build/zipapp")
     site_packages_path = zipapp_path / "site-packages"
     if zipapp_path.is_dir():
