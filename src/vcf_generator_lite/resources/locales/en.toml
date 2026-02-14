@@ -37,9 +37,9 @@ Alex\t13645436748
 """
 
 usage = """Instructions:
-1. Copy names and phone numbers in the format "Name PhoneNumber Notes" (notes optional) into the edit box below.
+1. Copy names and phone numbers in the format "Name Phone Notes" (notes optional) into the edit box below.
 2. Click "Generate" and select a path to save the file.
-3. You can use the generated vCard file wherever you need it, such as importing it into your phone or Lark."""
+3. You can use the generated vCard file wherever you need it, such as importing it into your phone or email."""
 
 [save_vcf_window]
 title = "Select File Save Location"

@@ -25,6 +25,13 @@ VCF Generator Lite is a lightweight tool that quickly converts name and phone nu
 
 [![Test](https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml/badge.svg)](https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml)
 
+## Features
+
+- **Smart Parsing**: Batch contacts in `Name Phone Note` format (note optional), automatically handles tabs and spaces.
+- **Batch Generation**: Combines all contacts into a single `.vcf` file.
+- **Number Validation**: Automatically skips invalid numbers and quickly locates error rows.
+- **Editing Assistance**: Displays line numbers in text area, supports one-click quote removal.
+
 ## Screenshot
 
 <img src="./assets/images/screenshots/main_window.webp" width="600" alt="Main window" />
@@ -48,13 +55,13 @@ Users of different systems need to download different files. You can make your s
 
 ## Usage
 
-1. Copy the name and phone number in the format of `Name PhoneNumber Note` on each line into the text field below. The note can be omitted.
+1. Copy the name and phone number in the format of `Name Phone Note` on each line into the text field below. The note can be omitted.
    ```text
    Isaac Newton	13445467890	British mathematician
    Muhammad		13554678907
    Confucius		13645436748
    ```
-2. Click "Generate", select a path to save the file.
+2. Click **Generate**, select a path to save the file.
 3. You can use the generated vCard file wherever you need it. For details, please refer to [Using vCard Files](#using-vcard-files) below.
 
 > [!NOTE]

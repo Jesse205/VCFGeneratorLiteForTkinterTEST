@@ -45,7 +45,7 @@
    1. 打开 **VxKex NEXT 全局设置**（可在开始菜单中找到）。
    2. 将本软件目录下的 `vcf_generator_lite.exe` 添加到应用程序列表中。
 
-**对于 Python ZIP 应用：**
+**对于 Python ZIP 应用用户：**
 
 1. **安装 VxKex NEXT**：从 [VxKex NEXT Release][vxkex-next_release_github] 下载最新版本并安装。
 2. **安装 Python**：
