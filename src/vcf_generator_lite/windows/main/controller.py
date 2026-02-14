@@ -121,13 +121,6 @@ class MainController:
 
         result = future.result()
 
-        # self.window.content_text.tag_configure("invalid_line", foreground="red")
-
-        # for invalid_line in result.invalid_lines:
-        #     self.window.content_text.tag_add(
-        #         "invalid_line", f"{invalid_line.row_position + 1}.0", f"{invalid_line.row_position + 1}.end"
-        #     )
-
         self._show_generate_done_dialog(file_io.name, result)
 
     def on_exit(self, _: Event):
