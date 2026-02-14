@@ -111,12 +111,13 @@ class VCFGeneratorTask:
         lines = [line.strip() for line in self._input_text.split("\n")]
         self._state.total = len(lines)
         self._notify_progress()
-        for position, line in enumerate(lines):
+        for index, line in enumerate(lines):
             if not self._state.running:
                 break
             if line.strip() == "":
                 self._skip_item()
                 continue
+            position = index + 1
             try:
                 contact = parse_contact(line)
                 vcard = serialize_to_vcard(contact)
