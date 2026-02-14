@@ -84,8 +84,8 @@ class MainController:
         self.window.set_progress(progress=0)
         self.window.set_progress_determinate(False)
 
+        self.window.content_text.edit_modified(False)
         self.window.set_generating(True)
-
         self.window.update()
 
         generator = VCFGeneratorTask(
@@ -170,7 +170,8 @@ class MainController:
         )
 
     def _show_generate_invalid_dialog(self, display_path: str, invalid_lines: list[InvalidLine]):
-        create_invalid_lines_window(self.window, display_path, invalid_lines)
+        _, invalid_lines_controller = create_invalid_lines_window(self.window, display_path, invalid_lines)
+        invalid_lines_controller.set_line_enter_listener(self.__on_select_invalid_line)
 
     def _show_generate_success_dialog(self, display_path: str, generate_result: GenerateResult):
         messagebox.showinfo(
@@ -182,6 +183,14 @@ class MainController:
                 time=round(generate_result.time_elapsed, 3),
             ),
         )
+
+    def __on_select_invalid_line(self, line: int):
+        if not self.window.content_text.edit_modified():
+            self.window.deiconify()
+            self.window.lift()
+            self.window.content_text.focus()
+            self.window.content_text.see(f"{line}.0")
+            self.window.content_text.tag_add("sel", f"{line}.0", f"{line}.end")
 
     def _clean_quotes(self):
         origin_text = self.window.get_text_content()
