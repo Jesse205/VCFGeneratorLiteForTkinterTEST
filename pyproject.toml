@@ -68,7 +68,7 @@ reportMissingParameterType = "none"
 reportUnknownVariableType = "none"
 reportUnnecessaryIsInstance = "none"
 reportImplicitOverride = "error"
-ignore = ["typings"]
+ignore = ["typings", "build", "dist", ".venv"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
