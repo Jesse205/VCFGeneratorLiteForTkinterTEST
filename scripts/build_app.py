@@ -150,7 +150,7 @@ def build_with_zipapp():
         check=True,
     )
     subprocess.run(
-        ["uv", "pip", "sync", "-", "--target", site_packages_path],
+        ["uv", "pip", "sync", "-", "--no-cache", "--target", site_packages_path],
         input=export_result.stdout,
         text=True,
         check=True,
