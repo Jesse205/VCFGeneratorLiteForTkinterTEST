@@ -11,6 +11,7 @@ from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT
 from vcf_generator_lite.core.vcf_generator import GenerateResult, InvalidLine, VCFGeneratorTask
 from vcf_generator_lite.utils.locales import t
+from vcf_generator_lite.utils.tkinter.text import search_line, select_text
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
 from vcf_generator_lite.windows.invalid_lines import create_invalid_lines_window
 from vcf_generator_lite.windows.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE
@@ -120,7 +121,6 @@ class MainController:
         self.window.update()
 
         result = future.result()
-
         self._show_generate_done_dialog(file_io.name, result)
 
     def on_exit(self, _: Event):
@@ -177,13 +177,19 @@ class MainController:
             ),
         )
 
-    def __on_select_invalid_line(self, line: int):
-        if not self.window.content_text.edit_modified():
+    def __on_select_invalid_line(self, line: int, data: str):
+        actual_line: int | None = None
+        if self.window.content_text.get(f"{line}.0", f"{line}.end") == data:
+            actual_line = line
+        else:
+            search_row = search_line(self.window.content_text, data, line)
+            actual_line = int(search_row) if search_row else None
+
+        if actual_line:
             self.window.deiconify()
             self.window.lift()
             self.window.content_text.focus()
-            self.window.content_text.see(f"{line}.0")
-            self.window.content_text.tag_add("sel", f"{line}.0", f"{line}.end")
+            select_text(self.window.content_text, f"{actual_line}.0", f"{actual_line}.end")
 
     def _clean_quotes(self):
         origin_text = self.window.get_text_content()

@@ -25,7 +25,36 @@ def get_display_lines_fast(text: Text, index1: str, index2: str):
     return round((index2_y - index1_y) / line_height)
 
 
-def select_lines(text: Text, first_row: int, last_row: int):
+def select_text(text: Text, first: str, last: str):
     text.tag_remove("sel", "1.0", "end")
-    text.tag_add("sel", f"{first_row}.0", f"{last_row + 1}.0")
-    text.mark_set("insert", f"{last_row + 1}.0")
+    text.tag_add("sel", first, last)
+    text.mark_set("insert", last)
+
+
+def select_lines(text: Text, first_row: int, last_row: int):
+    select_text(text, f"{first_row}.0", f"{last_row + 1}.0")
+
+
+def search_line(text: Text, search_text: str, near_row: int, max_offset: int = 20) -> int | None:
+    """
+    在 ``near_row`` 周围搜索整行，仅当 ``search_text`` 完全匹配该行时返回行号。
+
+    为了防止数据过大时卡顿，默认会限制最大 20 的搜索范围。
+
+    :return: 行号，未找到时返回 ``None``
+    :rtype: int | None
+    """
+    line_count = int(text.index("end").split(".")[0]) - 1
+    for offset in range(0, min(max(line_count - near_row, near_row) + 1, max_offset)):
+        top_row = near_row - offset
+        bottom_row = near_row + offset
+
+        if top_row > 0:
+            top_line_text = text.get(f"{top_row}.0", f"{top_row}.end")
+            if search_text == top_line_text:
+                return top_row
+
+        if bottom_row <= line_count:
+            bottom_line_text = text.get(f"{bottom_row}.0", f"{bottom_row}.end")
+            if search_text == bottom_line_text:
+                return bottom_row
