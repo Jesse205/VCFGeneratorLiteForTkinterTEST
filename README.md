@@ -32,7 +32,7 @@ VCF Generator Lite is a lightweight tool that quickly converts name and phone nu
 - **Number Validation**: Automatically skips invalid numbers and quickly locates error rows.
 - **Editing Assistance**: Displays line numbers in text area, supports one-click quote removal.
 
-## Screenshot
+## Screenshots
 
 <img src="./assets/images/screenshots/main_window.zh-CN.webp" width="451" alt="Main window" />
 <img src="./assets/images/screenshots/invalid_lines_window.zh-CN.webp" width="376" alt="Invalid Lines Window" />
