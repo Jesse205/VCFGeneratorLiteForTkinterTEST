@@ -34,7 +34,8 @@ VCF Generator Lite is a lightweight tool that quickly converts name and phone nu
 
 ## Screenshot
 
-<img src="./assets/images/screenshots/main_window.zh-CN.webp" width="600" alt="Main window" />
+<img src="./assets/images/screenshots/main_window.zh-CN.webp" width="451" alt="Main window" />
+<img src="./assets/images/screenshots/invalid_lines_window.zh-CN.webp" width="376" alt="Invalid Lines Window" />
 
 ## Get the App
 
