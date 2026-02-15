@@ -1,7 +1,7 @@
 import logging
 from abc import ABC
 from tkinter import Event, PhotoImage, Tk, Toplevel, Wm
-from tkinter.ttk import Frame, Style
+from tkinter.ttk import Style
 from typing import override
 
 from vcf_generator_lite.themes import create_theme_patch
@@ -43,8 +43,9 @@ class AppWindowExtension(
         self._configure_ui()
 
     def _configure_ui_withdraw(self):
-        self.root_frame = Frame(self)
-        self.root_frame.place(relwidth=1, relheight=1)
+        # 为了在系统主题切换时正确更新背景而浪费系统资源没必要，并且还要其他地方不会更新配色，用户只能重启解决。
+        # self.root_frame = Frame(self)
+        # self.root_frame.place(relwidth=1, relheight=1)
         self.__apply_default_events()
 
     def _configure_ui(self):

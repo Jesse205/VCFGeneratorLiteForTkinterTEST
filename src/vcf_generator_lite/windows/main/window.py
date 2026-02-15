@@ -73,8 +73,7 @@ class VCFGeneratorLiteApp(EhancedTk, VerticalDialogLayout):
 
     @override
     def _create_content(self, parent: Misc):
-        content_frame = Frame(parent)
-        self.content_text = ScrolledText(content_frame, undo=True, tabs="2c", tabstyle="wordprocessor", maxundo=5)
+        self.content_text = ScrolledText(parent, undo=True, tabs="2c", tabstyle="wordprocessor", maxundo=5)
         self.content_text.insert(0.0, st("input_example"))
         self.content_text.edit_reset()
         self.content_text.pack(fill="both", expand=True, padx="7p", pady=0)
@@ -88,7 +87,7 @@ class VCFGeneratorLiteApp(EhancedTk, VerticalDialogLayout):
 
         text_context_menu = TextContextMenu(self.content_text)
         text_context_menu.bind_to_widget()
-        return content_frame
+        return self.content_text
 
     def __update_line_numbers_padding(self):
         self.line_numbers.grid(pady=Text.grid_info(self.content_text).get("pady", None))
