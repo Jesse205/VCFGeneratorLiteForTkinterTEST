@@ -20,10 +20,10 @@
 
 VCF 生成器 Lite 是一款轻量级工具，可将姓名和手机号列表快速转换为 vCard 文件，方便批量导入手机通讯录。
 
-[![许可证](https://img.shields.io/github/license/HelloTool/VCFGeneratorLiteWithTkinter?label=%E8%AE%B8%E5%8F%AF%E8%AF%81)](./LICENSE)
+[![许可证](https://img.shields.io/github/license/hellotool/VCFGeneratorLiteWithTkinter?label=%E8%AE%B8%E5%8F%AF%E8%AF%81)](./LICENSE)
 [![贡献者公约](https://img.shields.io/badge/贡献者公约-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.zh-CN.md)
 
-[![Test](https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml/badge.svg)](https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml)
+[![Test](https://github.com/hellotool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml/badge.svg)](https://github.com/hellotool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml)
 
 ## 特性
 
@@ -171,10 +171,10 @@ limitations under the License.
 - [贡献指南](./CONTRIBUTING.md)
 - [常见问题](./docs/faq.md)
 
-[repository-gitee]: https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/
-[repository-github]: https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/
-[release-gitee]: https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/releases/latest
-[release-github]: https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/releases/latest
+[repository-gitee]: https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/
+[repository-github]: https://github.com/hellotool/VCFGeneratorLiteWithTkinter/
+[release-gitee]: https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/releases/latest
+[release-github]: https://github.com/hellotool/VCFGeneratorLiteWithTkinter/releases/latest
 [pylauncher]: https://docs.python.org/zh-cn/3.15/using/windows.html#python-launcher-for-windows-deprecated
 [pymanager]: https://docs.python.org/zh-cn/3.15/using/windows.html#python-install-manager
 [windows-high-contrast-support]: https://support.microsoft.com/zh-cn/windows/%E5%9C%A8-windows-%E4%B8%AD%E6%9B%B4%E6%94%B9%E9%A2%9C%E8%89%B2%E5%AF%B9%E6%AF%94%E5%BA%A6-fedc744c-90ac-69df-aed5-c8a90125e696

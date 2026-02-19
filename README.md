@@ -20,10 +20,10 @@
 
 VCF Generator Lite is a lightweight tool that quickly converts name and phone number lists into vCard files for batch import to mobile contacts.
 
-[![License](https://img.shields.io/github/license/HelloTool/VCFGeneratorLiteWithTkinter)](./LICENSE)
+[![License](https://img.shields.io/github/license/hellotool/VCFGeneratorLiteWithTkinter)](./LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.md)
 
-[![Test](https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml/badge.svg)](https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml)
+[![Test](https://github.com/hellotool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml/badge.svg)](https://github.com/hellotool/VCFGeneratorLiteWithTkinter/actions/workflows/test.yml)
 
 ## Features
 
@@ -171,10 +171,10 @@ limitations under the License.
 - [Contribution Guide (Chinese)](./CONTRIBUTING.md)
 - [FAQ (Chinese)](./docs/faq.md)
 
-[repository-gitee]: https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/
-[repository-github]: https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/
-[release-gitee]: https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/releases/latest
-[release-github]: https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/releases/latest
+[repository-gitee]: https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/
+[repository-github]: https://github.com/hellotool/VCFGeneratorLiteWithTkinter/
+[release-gitee]: https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/releases/latest
+[release-github]: https://github.com/hellotool/VCFGeneratorLiteWithTkinter/releases/latest
 [pylauncher]: https://docs.python.org/zh-cn/3.15/using/windows.html#python-launcher-for-windows-deprecated
 [pymanager]: https://docs.python.org/zh-cn/3.15/using/windows.html#python-install-manager
 [windows-high-contrast-support]: https://support.microsoft.com/en-us/windows/turn-high-contrast-mode-on-or-off-in-windows-909e9d89-a0f9-a3a9-b993-7a6dcee85025

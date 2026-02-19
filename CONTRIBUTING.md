@@ -72,12 +72,12 @@
 
 详见 [视觉设计](./docs/dev/visual.md)
 
-[repository-gitee]: https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/
-[repository-github]: https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/
-[issues-gitee]: https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/issues
-[issues-github]: https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/issues
+[repository-gitee]: https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/
+[repository-github]: https://github.com/hellotool/VCFGeneratorLiteWithTkinter/
+[issues-gitee]: https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/issues
+[issues-github]: https://github.com/hellotool/VCFGeneratorLiteWithTkinter/issues
 
-[markdownlint-repository-github]: https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/
+[markdownlint-repository-github]: https://github.com/hellotool/VCFGeneratorLiteWithTkinter/
 [git-homepage]: https://git-scm.com/
 [conventionalcommits-homepage]: https://www.conventionalcommits.org/zh-hans/v1.0.0/
 

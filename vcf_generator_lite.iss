@@ -50,17 +50,17 @@ MyAppName=VCF Generator Lite
 en_us.MyAppName=VCF Generator Lite
 en_us.MyAppPublisher=Jesse205
 en_us.MyAppPublisherURL=https://github.com/Jesse205
-en_us.MyAppReadmeFile=https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/blob/master/README.md
-en_us.MyAppUpdatesURL=https://github.com/HelloTool/VCFGeneratorLiteWithTkinter/releases
-en_us.SetupAppRunningOnWin7=Note: You are using Windows 7. You need to replace program files with compatible version. For details, please visit https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/blob/master/docs/compatibility/runs-on-older-windows.md
+en_us.MyAppReadmeFile=https://github.com/hellotool/VCFGeneratorLiteWithTkinter/blob/master/README.md
+en_us.MyAppUpdatesURL=https://github.com/hellotool/VCFGeneratorLiteWithTkinter/releases
+en_us.SetupAppRunningOnWin7=Note: You are using Windows 7. You need to replace program files with compatible version. For details, please visit https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/blob/master/docs/compatibility/runs-on-older-windows.md
 en_us.UninstallFailed=Uninstall failed
 
 zh_cn.MyAppName=VCF 生成器 Lite
 zh_cn.MyAppPublisher=Jesse205
 zh_cn.MyAppPublisherURL=https://gitee.com/Jesse205
-zh_cn.MyAppReadmeFile=https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/blob/master/README.md
-zh_cn.MyAppUpdatesURL=https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/releases
-zh_cn.SetupAppRunningOnWin7=注意: 您正在使用 Windows 7，您需要使用兼容的版本替换掉程序文件。详情请见 https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/blob/master/docs/compatibility/runs-on-older-windows.md
+zh_cn.MyAppReadmeFile=https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/blob/master/README.md
+zh_cn.MyAppUpdatesURL=https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/releases
+zh_cn.SetupAppRunningOnWin7=注意: 您正在使用 Windows 7，您需要使用兼容的版本替换掉程序文件。详情请见 https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/blob/master/docs/compatibility/runs-on-older-windows.md
 zh_cn.UninstallFailed=自动卸载失败
 
 [Code]
