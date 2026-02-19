@@ -38,7 +38,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['./icon.ico'],
+    icon=['./assets/images/icon.ico'],
     version="vcf_generator_lite_versionfile.txt" if os.path.exists("vcf_generator_lite_versionfile.txt") else None,
 )
 
@@ -51,5 +51,5 @@ coll = COLLECT(
     upx=True,
     upx_exclude=[],
     name='vcf_generator_lite',
-    icon=['./icon.ico']
+    icon=['./assets/images/icon.ico']
 )
