@@ -167,8 +167,8 @@ limitations under the License.
 
 ## More Documentation
 
-- [Development Guide (Chinese)](./docs/dev/README.md)
-- [Contribution Guide (Chinese)](./docs/CONTRIBUTING.md)
+- [Development Guide (Chinese)](./docs/dev/index.md)
+- [Contribution Guide (Chinese)](./CONTRIBUTING.md)
 - [FAQ (Chinese)](./docs/faq.md)
 
 [repository-gitee]: https://gitee.com/HelloTool/VCFGeneratorLiteWithTkinter/
