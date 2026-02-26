@@ -178,11 +178,11 @@ class MainController:
         )
 
     def __on_select_invalid_line(self, line: int, data: str):
-        actual_line: int | None = None
+        actual_line: int | None
         if self.window.content_text.get(f"{line}.0", f"{line}.end") == data:
             actual_line = line
         else:
-            search_row = search_line(self.window.content_text, data, line)
+            search_row = search_line(self.window.content_text, data, line, strip=True)
             actual_line = int(search_row) if search_row else None
 
         if actual_line:

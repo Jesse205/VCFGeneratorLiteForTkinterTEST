@@ -35,7 +35,7 @@ def select_lines(text: Text, first_row: int, last_row: int):
     select_text(text, f"{first_row}.0", f"{last_row + 1}.0")
 
 
-def search_line(text: Text, search_text: str, near_row: int, max_offset: int = 20) -> int | None:
+def search_line(text: Text, search_text: str, near_row: int, max_offset: int = 20, strip=True) -> int | None:
     """
     在 ``near_row`` 周围搜索整行，仅当 ``search_text`` 完全匹配该行时返回行号。
 
@@ -44,6 +44,9 @@ def search_line(text: Text, search_text: str, near_row: int, max_offset: int = 2
     :return: 行号，未找到时返回 ``None``
     :rtype: int | None
     """
+    if strip:
+        search_text = search_text.strip()
+
     line_count = int(text.index("end").split(".")[0]) - 1
     for offset in range(0, min(max(line_count - near_row, near_row) + 1, max_offset)):
         top_row = near_row - offset
@@ -51,10 +54,11 @@ def search_line(text: Text, search_text: str, near_row: int, max_offset: int = 2
 
         if top_row > 0:
             top_line_text = text.get(f"{top_row}.0", f"{top_row}.end")
-            if search_text == top_line_text:
+            if search_text == top_line_text.strip():
                 return top_row
 
         if bottom_row <= line_count:
             bottom_line_text = text.get(f"{bottom_row}.0", f"{bottom_row}.end")
-            if search_text == bottom_line_text:
+            if search_text == bottom_line_text.strip():
                 return bottom_row
+    return None
