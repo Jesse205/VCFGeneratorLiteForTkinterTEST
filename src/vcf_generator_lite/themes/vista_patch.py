@@ -9,12 +9,13 @@ class VistaThemePatch(BaseThemePatch):
     @override
     def __init__(self, app: Tk):
         super().__init__(app)
-        default_font = nametofont("TkDefaultFont")
-        default_font_size = int(default_font.actual("size"))
+
+        treeview_font = nametofont(self.style.lookup("Treeview", "font", default="TkDefaultFont"))
+        treeview_font_metrics = treeview_font.metrics()
 
         # 重写部分配置以适配高分屏
         self.style.configure("TButton", padding="2.5p")
-        self.style.configure("Treeview", rowheight=f"{default_font_size + 6}p")
+        self.style.configure("Treeview", rowheight=treeview_font_metrics.get("linespace") + app.winfo_pixels("2.5p"))
         self.style.configure("Heading", padding="1.5p")
 
         # 自定义组件
@@ -24,5 +25,4 @@ class VistaThemePatch(BaseThemePatch):
         self.style.configure("DialogHeaderContent.TLabel", background="systemWindow")
 
         # Windows 7 中菜单默认不使用 TkMenuFont，因此需要手动设置字体。
-        menu_font = nametofont("TkMenuFont")
-        app.option_add("*Menu.font", menu_font, "startupFile")
+        app.option_add("*Menu.font", "TkMenuFont", "startupFile")
