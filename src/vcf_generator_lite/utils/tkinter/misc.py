@@ -28,6 +28,7 @@ def scaling(master: Misc, factor: float | None = None) -> float | None:
     if factor is not None:
         master.tk.call("tk", "scaling", factor)
         setattr(main_window, "_scaling", factor)
+        return None
     else:
         factor = getattr(main_window, "_scaling", None)
         if factor is None:
@@ -37,10 +38,12 @@ def scaling(master: Misc, factor: float | None = None) -> float | None:
 
 
 @overload
-def scaled(master: Misc, value: int) -> int: ...
+def scale(master: Misc, value: int) -> int: ...
 @overload
-def scaled(master: Misc, value: float) -> float: ...
-def scaled(master: Misc, value: int | float) -> int | float:
+def scale(master: Misc, value: float) -> float: ...
+
+
+def scale(master: Misc, value: int | float) -> int | float:
     if isinstance(value, int):
         return int(scaling(master) * value)
     else:
@@ -52,8 +55,8 @@ def scale_args(master: Misc, *args: int) -> tuple[int, ...]: ...
 @overload
 def scale_args(master: Misc, *args: float) -> tuple[float, ...]: ...
 def scale_args(master: Misc, *args: int | float) -> tuple[Any, ...]:
-    return tuple(scaled(master, value) for value in args)
+    return tuple(scale(master, value) for value in args)
 
 
 def scale_kw(master: Misc, **kwargs: int | float) -> dict[str, Any]:
-    return {key: scaled(master, value) for key, value in kwargs.items()}
+    return {key: scale(master, value) for key, value in kwargs.items()}
