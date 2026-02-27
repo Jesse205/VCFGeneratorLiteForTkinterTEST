@@ -40,11 +40,6 @@ ShowLanguageDialog=auto
 Name: en_us; MessagesFile: "compiler:Default.isl"
 Name: zh_cn; MessagesFile: ".innosetup\Languages\ChineseSimplified.isl"
 
-[LangOptions]
-
-; The language file does not contain the correct font, so we should set the correct font.
-; https://learn.microsoft.com/zh-cn/windows/win32/uxguide/text-ui#guidelines
-
 [CustomMessages]
 MyAppName=VCF Generator Lite
 en_us.MyAppName=VCF Generator Lite
