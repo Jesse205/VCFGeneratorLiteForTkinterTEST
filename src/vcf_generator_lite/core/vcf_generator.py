@@ -2,10 +2,10 @@ import binascii
 import logging
 import time
 from collections.abc import Callable
-from concurrent.futures import FIRST_EXCEPTION, Future, ThreadPoolExecutor, wait
+from concurrent.futures import FIRST_EXCEPTION, ThreadPoolExecutor, wait
 from dataclasses import dataclass, field
-from threading import Lock, RLock
-from typing import IO, NamedTuple
+from threading import Lock, RLock, Thread
+from typing import IO, NamedTuple, override
 
 from vcf_generator_lite.models.contact import Contact, PhoneNotFoundError, parse_contact
 from vcf_generator_lite.utils.deque_queue import DequeQueue
@@ -61,16 +61,17 @@ def serialize_to_vcard(contact: Contact):
     return "\n".join(filtered_items)
 
 
-class VCFGeneratorTask:
+class VCFGeneratorTask(Thread):
     def __init__(
         self,
-        executor: ThreadPoolExecutor,
-        progress_listener: Callable[[float, bool], None] | None,
         input_text: str,
         output_io: IO[str],
+        progress_listener: Callable[[float, bool], None] | None = None,
+        result_listener: Callable[[GenerateResult], None] | None = None,
     ):
-        self._executor = executor
+        super().__init__()
         self._progress_listener = progress_listener
+        self._result_listener = result_listener
         self._input_text = input_text
         self._output_io = output_io
         self._state = VCardGeneratorState()
@@ -80,12 +81,10 @@ class VCFGeneratorTask:
         self._lock = Lock()
         # 使用 deque 会比原生的 queue 性能高
         self._write_queue: DequeQueue[WriteQueueItem | None] = DequeQueue(10)
+        self.result: GenerateResult | None = None
 
-    def start(self) -> Future[GenerateResult]:
-        future = self._executor.submit(self._process)
-        return future
-
-    def _process(self) -> GenerateResult:
+    @override
+    def run(self):
         self._state.running = True
         self._state.start_time = time.time()
         with ThreadPoolExecutor(max_workers=2, thread_name_prefix="VCFGenerator") as pipeline_executor:
@@ -100,12 +99,15 @@ class VCFGeneratorTask:
             exception = future.exception()
             if exception:
                 break
-        return GenerateResult(
+
+        self.result = GenerateResult(
             invalid_lines=self._state.invalid_lines,
             exception=exception,
             time_elapsed=end_time - self._state.start_time,
             total=self._state.total,
         )
+        if self._result_listener:
+            self._result_listener(self.result)
 
     def _parse_input(self) -> None:
         lines = [line.strip() for line in self._input_text.split("\n")]

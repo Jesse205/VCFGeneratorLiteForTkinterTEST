@@ -1,5 +1,5 @@
-from concurrent.futures import ThreadPoolExecutor, wait
 from io import StringIO
+
 from vcf_generator_lite.core.vcf_generator import VCFGeneratorTask
 
 
@@ -54,20 +54,18 @@ class TestVCFGeneratorIntegration:
         progress_history = []
         result_io = StringIO()
 
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            generator = VCFGeneratorTask(
-                executor=executor,
-                progress_listener=lambda progress, determinate: progress_history.append((progress, determinate)),
-                input_text=self.input_content,
-                output_io=result_io,
-            )
-            generate_future = generator.start()
-            wait([generate_future])
+        generator = VCFGeneratorTask(
+            input_text=self.input_content,
+            output_io=result_io,
+            progress_listener=lambda progress, determinate: progress_history.append((progress, determinate)),
+        )
+        generator.start()
+        generator.join()
 
-        generate_result = generate_future.result()
+        assert generator.result is not None, "结果监听器未被调用"
 
         # 验证没有异常
-        assert generate_result.exception is None, "不应有意外的异常"
+        assert generator.result.exception is None, "不应有意外的异常"
 
         # 验证进度报告
         assert len(progress_history) > 0, "应该有进度报告"
@@ -75,8 +73,8 @@ class TestVCFGeneratorIntegration:
         assert progress_history[-1][1] is True, "进度应该是确定性的"
 
         # 验证无效行
-        assert len(generate_result.invalid_lines) == self.invalid_count, f"应有 {self.invalid_count} 个无效行"
-        for item in generate_result.invalid_lines:
+        assert len(generator.result.invalid_lines) == self.invalid_count, f"应有 {self.invalid_count} 个无效行"
+        for item in generator.result.invalid_lines:
             assert item.content in self.INVALID_INPUT_LIST, f"第 {item.row_position} 行数据不应为无效行"
 
         # 验证生成的 VCard 内容
@@ -95,20 +93,18 @@ class TestVCFGeneratorIntegration:
         progress_history = []
         result_io = StringIO()
 
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            generator = VCFGeneratorTask(
-                executor=executor,
-                progress_listener=lambda progress, determinate: progress_history.append((progress, determinate)),
-                input_text="",
-                output_io=result_io,
-            )
-            generate_future = generator.start()
-            wait([generate_future])
+        generator = VCFGeneratorTask(
+            input_text="",
+            output_io=result_io,
+            progress_listener=lambda progress, determinate: progress_history.append((progress, determinate)),
+        )
+        generator.start()
+        generator.join()  # 等待线程完成
 
-        generate_result = generate_future.result()
+        assert generator.result is not None, "结果监听器未被调用"
 
-        assert generate_result.exception is None
-        assert len(generate_result.invalid_lines) == 0
+        assert generator.result.exception is None
+        assert len(generator.result.invalid_lines) == 0
         assert result_io.getvalue() == ""
         # 对于空输入，可能没有进度报告，或者进度为 0（因为 total 变为 0）
         # 这是当前实现的行为，我们接受它
@@ -122,20 +118,18 @@ class TestVCFGeneratorIntegration:
         result_io = StringIO()
         invalid_content = "\n".join(self.INVALID_INPUT_LIST)
 
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            generator = VCFGeneratorTask(
-                executor=executor,
-                progress_listener=lambda progress, determinate: progress_history.append((progress, determinate)),
-                input_text=invalid_content,
-                output_io=result_io,
-            )
-            generate_future = generator.start()
-            wait([generate_future])
+        generator = VCFGeneratorTask(
+            input_text=invalid_content,
+            output_io=result_io,
+            progress_listener=lambda progress, determinate: progress_history.append((progress, determinate)),
+        )
+        generator.start()
+        generator.join()  # 等待线程完成
 
-        generate_result = generate_future.result()
+        assert generator.result is not None, "结果监听器未被调用"
 
-        assert generate_result.exception is None
-        assert len(generate_result.invalid_lines) == len(self.INVALID_INPUT_LIST)
+        assert generator.result.exception is None
+        assert len(generator.result.invalid_lines) == len(self.INVALID_INPUT_LIST)
         assert result_io.getvalue() == ""
         # 应该有进度报告且最终为 1.0
         if progress_history:

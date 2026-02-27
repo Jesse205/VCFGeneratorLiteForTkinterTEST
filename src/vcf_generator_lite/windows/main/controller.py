@@ -2,8 +2,6 @@ import logging
 import os.path
 import re
 import traceback
-from concurrent.futures import Future
-from concurrent.futures.thread import ThreadPoolExecutor
 from tkinter import Event, filedialog, messagebox
 from typing import IO
 
@@ -89,28 +87,23 @@ class MainController:
         self.window.set_generating(True)
         self.window.update()
 
+        def on_generate_file_result(result: GenerateResult):
+            self.window.after_idle(self.on_generate_file_done, result, file_io)
+
         generator = VCFGeneratorTask(
-            executor=ThreadPoolExecutor(max_workers=1),
-            progress_listener=self.on_generate_file_update_progress,
             input_text=origin_text,
             output_io=file_io,
+            progress_listener=self.on_generate_file_update_progress,
+            result_listener=on_generate_file_result,
         )
-        generate_future = generator.start()
-        generate_future.add_done_callback(
-            lambda future: self.window.after_idle(self.on_generate_file_done, future, file_io)
-        )
-        generate_future.add_done_callback(lambda _: self.window.after_idle(callable, file_io))
+        generator.start()
 
     def on_generate_file_update_progress(self, progress: float, determinate: bool):
         self.window.set_progress_determinate(determinate)
         if determinate:
             self.window.set_progress(progress)
 
-    def on_generate_file_done(
-        self,
-        future: Future[GenerateResult],
-        file_io: IO[str],
-    ):
+    def on_generate_file_done(self, result: GenerateResult, file_io: IO[str]):
         try:
             file_io.close()
         except BaseException as e:
@@ -120,7 +113,6 @@ class MainController:
         self.window.set_generating(False)
         self.window.update()
 
-        result = future.result()
         self._show_generate_done_dialog(file_io.name, result)
 
     def on_exit(self, _: Event):
