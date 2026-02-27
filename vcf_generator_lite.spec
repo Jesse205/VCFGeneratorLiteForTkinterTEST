@@ -28,7 +28,8 @@ def get_exe_style_version() -> tuple[int, int, int, int]:
     while len(version_list) < 4:
         version_list.append("0")
 
-    # TODO: 解析语义化版本的其他格式，例如 1.0.0-alpha.1
+    # TODO: 解析 Python 包版本的其他格式，例如 1.0.0.alpha1
+    # https://packaging.python.org/en/latest/specifications/version-specifiers/
     return (int(version_list[0]), int(version_list[1]), int(version_list[2]), 0)
 
 
