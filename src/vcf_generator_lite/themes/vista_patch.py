@@ -24,5 +24,8 @@ class VistaThemePatch(BaseThemePatch):
         self.style.configure("DialogHeaderContent.TFrame", background="systemWindow")
         self.style.configure("DialogHeaderContent.TLabel", background="systemWindow")
 
+        select_background = self.style.lookup("TEntry", "selectbackground", ["focus"])
+        app.option_add("*ThemedText.Text.inactiveSelectBackground", select_background, "startupFile")
+
         # Windows 7 中菜单默认不使用 TkMenuFont，因此需要手动设置字体。
         app.option_add("*Menu.font", "TkMenuFont", "startupFile")
