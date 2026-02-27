@@ -2,6 +2,7 @@ import logging
 import os.path
 import re
 import traceback
+from pathlib import PurePath
 from tkinter import Event, filedialog, messagebox
 from typing import IO
 
@@ -113,7 +114,9 @@ class MainController:
         self.window.set_generating(False)
         self.window.update()
 
-        self._show_generate_done_dialog(file_io.name, result)
+        # 在 Windows 中转换为 Windows 的路径分隔符
+        display_path = str(PurePath(file_io.name))
+        self._show_generate_done_dialog(display_path, result)
 
     def on_exit(self, _: Event):
         if self.is_generating:
