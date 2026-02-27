@@ -60,15 +60,17 @@ VCFGeneratorLiteWithTkinter/
 
 ## 常用命令
 
-| 命令                              | 描述                                    |
-| --------------------------------- | --------------------------------------- |
-| `uv run vcf-generator-lite`       | 运行应用                                |
-| `uv run pytest`                   | 测试应用                                |
-| `uv run ruff format`              | 格式化所有代码                          |
-| `uv run ruff check`               | 检查所有代码                            |
-| `uv run scripts/build_app.py`     | 构建应用                                |
-| `uv run scripts/version.py`       | 查看当前版本                            |
-| `uv run scripts/version.py 1.2.3` | 更新版本号为 `1.2.3` 并同步所有配置文件 |
+| 命令                                 | 描述                           |
+| ------------------------------------ | ------------------------------ |
+| `uv run vcf-generator-lite`          | 运行应用                       |
+| `uv run pytest`                      | 测试应用                       |
+| `uv run ruff format`                 | 格式化所有代码                 |
+| `uv run ruff check`                  | 检查所有代码                   |
+| `uv run scripts/build_app.py`        | 构建应用                       |
+| `uv version`                         | 查看当前版本                   |
+| `uv version 1.2.3`                   | 更新版本号为 `1.2.3`           |
+| `uv version --bump patch --bump dev` | 更新补丁版本，并更新为开发版本 |
+| `uv version --bump stable`           | 更新为稳定版本                 |
 
 ## 🎨 UI 开发规范
 
