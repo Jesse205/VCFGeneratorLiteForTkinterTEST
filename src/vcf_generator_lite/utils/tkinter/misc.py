@@ -2,6 +2,8 @@ import logging
 from tkinter import Misc, Tk
 from typing import Any, overload
 
+ATTR_SCALING_CACHED = "_scaling_cached"
+
 logger = logging.getLogger(__name__)
 
 
@@ -27,13 +29,14 @@ def scaling(master: Misc, factor: float | None = None) -> float | None:
     root = get_root(master)
     if factor is not None:
         master.tk.call("tk", "scaling", factor)
-        setattr(root, "_scaling_cached", factor)
+        setattr(root, ATTR_SCALING_CACHED, factor)
         return None
     else:
-        factor = getattr(root, "_scaling_cached", None)
-        if factor is None:
-            factor = master.tk.call("tk", "scaling")
-            setattr(root, "_scaling_cached", factor)
+        if hasattr(root, ATTR_SCALING_CACHED):
+            return getattr(root, ATTR_SCALING_CACHED)
+
+        factor = master.tk.call("tk", "scaling")
+        setattr(root, ATTR_SCALING_CACHED, factor)
         return factor
 
 
