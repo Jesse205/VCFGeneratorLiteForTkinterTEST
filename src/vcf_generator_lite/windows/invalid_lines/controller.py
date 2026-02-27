@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from tkinter import Event
+from tkinter import Event, EventType
 
 from vcf_generator_lite.core.vcf_generator import InvalidLine
 from vcf_generator_lite.models.contact import PhoneNotFoundError
@@ -22,7 +22,8 @@ class InvalidLinesController:
     ):
         self.window = window
         self.__line_enter_listener: Callable[[int, str], None] | None = None
-        window.bind("<Return>", self.__on_ok_click)
+        window.bind("<Return>", self.__on_return)
+
         window.header_label.configure(text=st("message").format(path=display_path))
         for item in invalid_lines:
             window.content_tree.insert(
@@ -35,14 +36,24 @@ class InvalidLinesController:
                     get_locale_exception(item.exception),
                 ),
             )
-        window.bind("<Double-Button-1>", self.__on_tree_view_enter)
+        window.content_tree.bind("<Double-Button-1>", self.__on_tree_view_enter)
+        window.content_tree.bind("<Return>", self.__on_tree_view_enter)
 
-    def __on_ok_click(self, _: Event):
+    def __on_return(self, event: Event):
+        if event.widget is self.window.content_tree:
+            return
         self.window.ok_button.invoke()
 
-    def __on_tree_view_enter(self, _: Event):
+    def __on_tree_view_enter(self, event: Event):
         selection = self.window.content_tree.selection()
-        if self.__line_enter_listener and len(selection) > 0:
+        if (
+            self.__line_enter_listener
+            and len(selection) > 0
+            and (
+                self.window.content_tree.identify_region(event.x, event.y) == "cell"
+                or event.type != EventType.ButtonPress
+            )
+        ):
             line = int(selection[0])
             data = self.window.content_tree.item(line, "values")[1]
             self.__line_enter_listener(line, data)
