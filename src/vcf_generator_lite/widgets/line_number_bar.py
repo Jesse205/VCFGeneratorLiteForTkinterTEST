@@ -63,6 +63,7 @@ class LineNumberBar(Text):
             font=text_widget["font"],
             background=background,
             selectbackground=background,
+            inactiveselectbackground=background,
             borderwidth=text_widget["borderwidth"],
             highlightthickness=text_widget["highlightthickness"],
             highlightcolor=background,
