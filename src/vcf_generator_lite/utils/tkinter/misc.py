@@ -5,7 +5,7 @@ from typing import Any, overload
 logger = logging.getLogger(__name__)
 
 
-def get_main_window(misc: Misc) -> Tk:
+def get_root(misc: Misc) -> Tk:
     return misc.nametowidget(".")
 
 
@@ -24,16 +24,16 @@ def scaling(master: Misc, factor: float | None = None) -> float | None:
 
     - Tk 手册页：https://www.tcl-lang.org/man/tcl8.6/TkCmd/tk.htm
     """
-    main_window = get_main_window(master)
+    root = get_root(master)
     if factor is not None:
         master.tk.call("tk", "scaling", factor)
-        setattr(main_window, "_scaling", factor)
+        setattr(root, "_scaling_cached", factor)
         return None
     else:
-        factor = getattr(main_window, "_scaling", None)
+        factor = getattr(root, "_scaling_cached", None)
         if factor is None:
             factor = master.tk.call("tk", "scaling")
-            setattr(main_window, "_scaling", factor)
+            setattr(root, "_scaling_cached", factor)
         return factor
 
 
