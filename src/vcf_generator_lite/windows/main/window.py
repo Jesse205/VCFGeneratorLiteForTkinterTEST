@@ -26,6 +26,7 @@ from vcf_generator_lite.windows.base import EhancedTk
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
 from vcf_generator_lite.windows.main.constants import (
     ACCELERATOR_GENERATE,
+    ACCELERATOR_GENERATE_AQUA,
     EVENT_ABOUT,
     EVENT_CLEAN_QUOTES,
     EVENT_GENERATE,
@@ -124,7 +125,7 @@ class VCFGeneratorLiteApp(EhancedTk, VerticalDialogLayout):
         file_menu.add_command(
             **parse_menu_label(st("menu_file_generate")),
             command=lambda: self.event_generate(EVENT_GENERATE),
-            accelerator=ACCELERATOR_GENERATE,
+            accelerator=ACCELERATOR_GENERATE_AQUA if self._windowingsystem == "aqua" else ACCELERATOR_GENERATE,
         )
         file_menu.add_separator()
         # 通常不提供退出的快捷键
