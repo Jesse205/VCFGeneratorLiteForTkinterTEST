@@ -16,14 +16,7 @@ from vcf_generator_lite.constants import (
 from vcf_generator_lite.layouts.vertical_dialog_layout import VerticalDialogLayout
 from vcf_generator_lite.utils.external_app import open_url_with_fallback
 from vcf_generator_lite.utils.locales import scope, t
-from vcf_generator_lite.utils.tkinter.accelerators import (
-    ACCELERATOR_COPY,
-    ACCELERATOR_CUT,
-    ACCELERATOR_PASTE,
-    ACCELERATOR_SELECT_ALL,
-    ACCELERATOR_UNDO,
-    get_accelerator_redo,
-)
+from vcf_generator_lite.utils.tkinter.accelerators import get_default_accelerators
 from vcf_generator_lite.utils.tkinter.busy import tk_busy_forget, tk_buy_hold
 from vcf_generator_lite.utils.tkinter.menu import parse_menu_label
 from vcf_generator_lite.utils.tkinter.widget import enable_auto_wrap
@@ -143,37 +136,39 @@ class VCFGeneratorLiteApp(EhancedTk, VerticalDialogLayout):
         return file_menu
 
     def _create_edit_menu(self, master: Misc):
+        default_accelerators = get_default_accelerators(self)
+
         edit_menu = Menu(master, tearoff=False)
         edit_menu.add_command(
             **parse_menu_label(st("menu_edit_undo")),
             command=lambda: self.__generate_focus_event("<<Undo>>"),
-            accelerator=ACCELERATOR_UNDO,
+            accelerator=default_accelerators.undo,
         )
         edit_menu.add_command(
             **parse_menu_label(st("menu_edit_redo")),
             command=lambda: self.__generate_focus_event("<<Redo>>"),
-            accelerator=get_accelerator_redo(self),
+            accelerator=default_accelerators.redo,
         )
         edit_menu.add_separator()
         edit_menu.add_command(
             **parse_menu_label(st("menu_edit_cut")),
             command=lambda: self.__generate_focus_event("<<Cut>>"),
-            accelerator=ACCELERATOR_CUT,
+            accelerator=default_accelerators.cut,
         )
         edit_menu.add_command(
             **parse_menu_label(st("menu_edit_copy")),
             command=lambda: self.__generate_focus_event("<<Copy>>"),
-            accelerator=ACCELERATOR_COPY,
+            accelerator=default_accelerators.copy,
         )
         edit_menu.add_command(
             **parse_menu_label(st("menu_edit_paste")),
             command=lambda: self.__generate_focus_event("<<Paste>>"),
-            accelerator=ACCELERATOR_PASTE,
+            accelerator=default_accelerators.paste,
         )
         edit_menu.add_command(
             **parse_menu_label(st("menu_edit_select_all")),
             command=lambda: self.__generate_focus_event("<<SelectAll>>"),
-            accelerator=ACCELERATOR_SELECT_ALL,
+            accelerator=default_accelerators.select_all,
         )
         edit_menu.add_separator()
         edit_menu.add_command(
@@ -183,7 +178,7 @@ class VCFGeneratorLiteApp(EhancedTk, VerticalDialogLayout):
         return edit_menu
 
     def _create_help_menu(self, master: Misc):
-        help_menu = Menu(master, tearoff=False)
+        help_menu = Menu(master, tearoff=False, name="help")
         help_menu.add_command(
             **parse_menu_label(st("menu_help_repository")),
             command=lambda: open_url_with_fallback(self, URL_REPOSITORY),
