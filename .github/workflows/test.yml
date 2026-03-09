@@ -1,10 +1,19 @@
 name: Test
 
 on:
-  # push:
-  #   branches: [ "master" ]
+  push:
+    branches:
+      - "releases/**"
+    paths:
+      - "**.py"
   pull_request:
-    branches: [ "master" ]
+    types:
+      - opened
+      - reopened
+      - edited
+      - synchronize
+    branches:
+      - master
   workflow_dispatch:
 
 permissions:
@@ -16,7 +25,7 @@ jobs:
     runs-on: windows-latest # TODO: Use ubuntu-latest
     strategy:
       matrix:
-        python-version: [ "3.12", "3.13", "3.14t" ]
+        python-version: ["3.12", "3.13", "3.14t"]
     steps:
       - uses: actions/checkout@v6
       - name: Install uv
