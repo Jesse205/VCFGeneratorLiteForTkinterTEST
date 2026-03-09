@@ -4,8 +4,8 @@
 # VCF Generator Lite ![with Tkinter](https://img.shields.io/badge/with-Tkinter-00319C)
 
 **Repositories**:
-[![Gitee Primary Repository](https://img.shields.io/badge/Gitee-Primary_Repo-C71D23?logo=gitee)][repository-gitee]
-[![GitHub Secondary Repository](https://img.shields.io/badge/GitHub-Secondary_Repo-0969da?logo=github)][repository-github]
+[![Gitee primary repository](https://img.shields.io/badge/Gitee-primary_repo-C71D23?logo=gitee)][repository-gitee]
+[![GitHub secondary repository](https://img.shields.io/badge/GitHub-secondary_repo-0969da?logo=github)][repository-github]
 
 **Platforms**:
 [![Windows8.1+ (exe)](https://img.shields.io/badge/Windows_8.1+-exe-0078D4?logo=windows)][release-gitee]
