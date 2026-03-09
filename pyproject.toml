@@ -70,14 +70,14 @@ reportUnnecessaryIsInstance = "none"
 reportImplicitOverride = "error"
 ignore = ["typings", "build", "dist", ".venv"]
 
-[tool.pytest.ini_options]
-minversion = "6.0"
+[tool.pytest]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-v --strict-markers --strict-config"
-xfail_strict = true
+strict_config = true
+strict_markers = true
+strict_xfail = true
 filterwarnings = ["error", "ignore::DeprecationWarning"]
 log_cli = true
 log_cli_level = "INFO"
