@@ -37,22 +37,47 @@ VCF Generator Lite is a lightweight tool that quickly converts name and phone nu
 <img src="./assets/images/screenshots/main_window.zh-CN.webp" width="451" alt="Main window" />
 <img src="./assets/images/screenshots/invalid_lines_window.zh-CN.webp" width="376" alt="Invalid Lines Window" />
 
-## Get the App
+## Getting the App
 
-### Download the Packages
+### Downloading the Packages
 
-Download the software from the following channels:
+You can download the package through the following channels:
 
 - [Gitee Releases][release-gitee]
 - [GitHub Releases][release-github]
 
-Users of different systems need to download different files. You can make your selection according to the table below:
+Please select the appropriate software package for your platform:
 
-| Platform       | Package Type           | File                                                      |
-| -------------- | ---------------------- | --------------------------------------------------------- |
-| Windows        | Installer              | VCFGeneratorLite-\<version\>-**win-amd64**-*setup.exe*    |
-| Windows        | Portable               | VCFGeneratorLite-\<version\>-**win-amd64**-*portable.zip* |
-| Cross-platform | Python ZIP Application | VCFGeneratorLite-\<version\>-**py3**.*pyzw*               |
+| Platform       | Package Type           | Installation Required | File                                                      |
+| -------------- | ---------------------- | --------------------- | --------------------------------------------------------- |
+| Windows        | Installer              | Yes                   | VCFGeneratorLite-\<version\>-**win-amd64**-*setup.exe*    |
+| Windows        | Portable Version       | No                    | VCFGeneratorLite-\<version\>-**win-amd64**-*portable.zip* |
+| Cross-platform | Python Wheel           | Optional              | vcf_generator_lite-\<version\>-**py3-none-any**.*whl*     |
+| Cross-platform | Python ZIP Application | No                    | VCFGeneratorLite-\<version\>-**py3**.*pyzw*               |
+
+### Using the Python Wheel
+
+There are several ways to use a Python Wheel file. Below is an example using the [uv tool][uv-homepage].
+
+**Install into the system environment**:
+
+```bash
+uv tool install <path to whl file>
+```
+
+After installation, you can run it with:
+
+```bash
+uv tool run vcf-generator-lite
+# or
+vcf-generator-lite
+```
+
+**Run directly (without installing)**:
+
+```bash
+uvx <path to whl file>
+```
 
 ## Usage
 
@@ -179,3 +204,4 @@ limitations under the License.
 [pymanager]: https://docs.python.org/zh-cn/3.15/using/windows.html#python-install-manager
 [windows-high-contrast-support]: https://support.microsoft.com/en-us/windows/turn-high-contrast-mode-on-or-off-in-windows-909e9d89-a0f9-a3a9-b993-7a6dcee85025
 [rectify11]: https://www.rectify11.com/
+[uv-homepage]: https://docs.astral.sh/uv/

@@ -34,6 +34,7 @@
 | Windows 安装程序 | `uv run scripts/build_app.py -t innosetup` |
 | 便携包           | `uv run scripts/build_app.py -t portable`  |
 | Python ZIP 应用  | `uv run scripts/build_app.py -t zipapp`    |
+| Python Wheel     | `uv build --wheel`                         |
 
 ## 项目结构
 

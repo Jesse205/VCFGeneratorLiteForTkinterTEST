@@ -15,6 +15,10 @@ on:
         description: Build Python 3 Zip Application
         type: boolean
         default: true
+      build-python3-wheel:
+        description: Build Python 3 Wheel
+        type: boolean
+        default: true
   workflow_call:
     inputs:
       build-windows-installer:
@@ -27,6 +31,10 @@ on:
         default: false
       build-python3-zipapp:
         description: Build Python 3 Zip Application
+        type: boolean
+        default: false
+      build-python3-wheel:
+        description: Build Python 3 Wheel
         type: boolean
         default: false
 
@@ -66,3 +74,25 @@ jobs:
       python-version: 3.14t
       artifact-path: dist/*.pyzw
       artifact-name: python3-zipapp
+
+  build-python3-wheel:
+    if: ${{ inputs.build-python3-wheel }}
+    name: Build Python 3 Wheel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install uv and set the Python version
+        uses: astral-sh/setup-uv@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: ".python-version"
+      - name: Build Wheel
+        run: uv build --wheel
+      - name: Upload Wheel
+        id: upload-wheel
+        uses: actions/upload-artifact@v6
+        with:
+          name: python3-wheel
+          path: dist/*.whl
+          if-no-files-found: error
