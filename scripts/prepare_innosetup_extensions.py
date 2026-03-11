@@ -19,7 +19,7 @@ PATH_CHINESE_SIMPLIFIED = os.path.join(PATH_INNOSETUP_EXTENSION, "Languages", "C
 
 def prepare_innosetup_extensions(
     download_url: str = URL_CHINESE_SIMPLIFIED_ISL_LATEST,
-) -> int:
+):
     print("Preparing InnoSetup extensions.")
     response = requests.get(download_url)
     if response.status_code != 200:
@@ -27,7 +27,7 @@ def prepare_innosetup_extensions(
             f"Failed to download Chinese Simplified ISL: {response.status_code}",
             file=sys.stderr,
         )
-        return 1
+        sys.exit(1)
     file_text = response.text
     # 获取到的内容是 CRLF 换行的，但是 python 只能识别 LF 换行，所以需要替换一下
     file_text = file_text.replace("\r", "")
@@ -36,10 +36,9 @@ def prepare_innosetup_extensions(
     with open(PATH_CHINESE_SIMPLIFIED, "wt", encoding=response.encoding, newline="\r\n") as f:
         f.write(file_text)
     print("Downloaded Chinese Simplified ISL.")
-    return 0
 
 
-def main() -> int:
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-m",
@@ -57,8 +56,8 @@ def main() -> int:
             download_url = URL_CHINESE_SIMPLIFIED_ISL_LATEST
         case _:
             download_url = URL_CHINESE_SIMPLIFIED_ISL_URL
-    return prepare_innosetup_extensions(download_url)
+    prepare_innosetup_extensions(download_url)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

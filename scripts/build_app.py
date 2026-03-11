@@ -18,7 +18,10 @@ from vcf_generator_lite.constants import APP_COPYRIGHT
 PYTHON_VERSION = sysconfig.get_python_version()
 PLATFORM_PYTHON = f"{sys.implementation.name}-{PYTHON_VERSION}"
 PLATFORM_NATIVE = sysconfig.get_platform()
-OUTPUT_BASE_NAME_TEMPLATE = "VCFGeneratorLite-v{version}-{variant}"
+
+DISTRIBUTION_ZIPAPP_NAME = f"VCFGeneratorLite-v{APP_VERSION}-py3.pyzw"
+DISTRIBUTION_SETUP_BASE_NAME = f"VCFGeneratorLite-v{APP_VERSION}-{PLATFORM_NATIVE}-setup"
+DISTRIBUTION_PORTABLE_NAME = f"VCFGeneratorLite-v{APP_VERSION}-{PLATFORM_NATIVE}-portable.zip"
 
 
 def ensure_dist_dir():
@@ -46,43 +49,11 @@ def build_with_uv():
     subprocess.run([uv_path, "build"], check=True)
 
 
-def build_with_pdm_packer():
-    print("Building with pdm-packer...")
-    ensure_dist_dir()
-    pdm_path = shutil.which("pdm")
-    if pdm_path is None:
-        print("pdm not found.", file=sys.stderr)
-        return 1
-    subprocess.run(
-        [
-            pdm_path,
-            "pack",
-            "-m",
-            "vcf_generator_lite.__main__:main",
-            "-o",
-            os.path.join(
-                "dist",
-                OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, variant="py3") + ".pyzw",
-            ),
-            "--interpreter",
-            "/usr/bin/env python3",
-            "--compress",
-        ],
-        env={
-            **os.environ,
-            "PYTHONOPTIMIZE": "2",
-        },
-        check=True,
-    )
-    print("Building finished.")
-
-
 def pack_with_innosetup():
     print("Packaging with InnoSetup...")
     require_pyinstaller_output()
     if not os.path.isdir(PATH_INNOSETUP_EXTENSION):
-        if (result := prepare_innosetup_extensions()) != 0:
-            return result
+        prepare_innosetup_extensions()
 
     search_path = os.environ["PATH"] + os.pathsep + "C:\\Program Files (x86)\\Inno Setup 6\\"
     iscc_path = shutil.which("iscc", path=search_path)
@@ -106,10 +77,7 @@ def pack_with_innosetup():
     subprocess.run(
         [
             iscc_path,
-            "/D"
-            + f"OutputBaseFilename={
-                OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, variant=f'{PLATFORM_NATIVE}-setup')
-            }",
+            "/D" + f"OutputBaseFilename={DISTRIBUTION_SETUP_BASE_NAME}",
             "/D" + f"MyAppCopyright={APP_COPYRIGHT}",
             "/D" + f"MyAppVersion={APP_VERSION}",
             "/D" + f"ArchitecturesAllowed={architectures_allowed}",
@@ -124,10 +92,7 @@ def pack_with_innosetup():
 def pack_with_zipfile():
     print("Packaging with ZipFile...")
     require_pyinstaller_output()
-    zip_path = os.path.join(
-        "dist",
-        OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, variant=f"{PLATFORM_NATIVE}-portable") + ".zip",
-    )
+    zip_path = os.path.join("dist", DISTRIBUTION_PORTABLE_NAME)
     with ZipFile(zip_path, "w") as zip_file:
         for path, _dirs, files in os.walk(os.path.join("dist", "vcf_generator_lite")):
             for file_path in [os.path.join(path, file) for file in files]:
@@ -169,10 +134,7 @@ def build_with_zipapp():
 
     zipapp.create_archive(
         site_packages_path,
-        target=os.path.join(
-            "dist",
-            OUTPUT_BASE_NAME_TEMPLATE.format(version=APP_VERSION, variant="py3") + ".pyzw",
-        ),
+        target=os.path.join("dist", DISTRIBUTION_ZIPAPP_NAME),
         main="vcf_generator_lite.__main__:main",
         compressed=True,
     )
