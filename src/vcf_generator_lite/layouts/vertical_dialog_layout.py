@@ -14,7 +14,7 @@ class VerticalDialogLayout(WindowExtension, ABC):
         if content is not None:
             content.pack(fill="both", expand=True)
 
-        footer = self._create_actions(parent)
+        footer = self._create_footer(parent)
         if footer is not None:
             footer.pack(fill="x", side="bottom")
 
@@ -25,4 +25,4 @@ class VerticalDialogLayout(WindowExtension, ABC):
     def _create_content(self, parent: Misc) -> Widget | None: ...
 
     @abstractmethod
-    def _create_actions(self, parent: Misc) -> Widget | None: ...
+    def _create_footer(self, parent: Misc) -> Widget | None: ...

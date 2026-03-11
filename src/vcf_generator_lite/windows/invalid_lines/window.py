@@ -71,15 +71,15 @@ class InvalidLinesWindow(EhancedDialog, VerticalDialogLayout):
         return content_frame
 
     @override
-    def _create_actions(self, parent: Misc):
-        action_frame = Frame(parent)
-        sizegrip = Sizegrip(action_frame)
+    def _create_footer(self, parent: Misc):
+        footer_frame = Frame(parent)
+        sizegrip = Sizegrip(footer_frame)
         sizegrip.place(relx=1, rely=1, anchor="se")
         self.ok_button = Button(
-            action_frame,
+            footer_frame,
             text=t("button_ok"),
             default="active",
             command=lambda: self.event_generate(EVENT_EXIT),
         )
         self.ok_button.pack(side="right", padx="7p", pady="7p")
-        return action_frame
+        return footer_frame

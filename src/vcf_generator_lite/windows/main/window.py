@@ -87,22 +87,22 @@ class VCFGeneratorLiteApp(EhancedTk, VerticalDialogLayout):
         self.line_numbers.grid(pady=Text.grid_info(self.content_text).get("pady", None))
 
     @override
-    def _create_actions(self, parent: Misc):
-        action_frame = Frame(parent)
-        sizegrip = Sizegrip(action_frame)
+    def _create_footer(self, parent: Misc):
+        footer_frame = Frame(parent)
+        sizegrip = Sizegrip(footer_frame)
         sizegrip.place(relx=1, rely=1, anchor="se")
 
-        self.progress_bar = Progressbar(action_frame, orient="horizontal", length=200)
-        self.progress_label = Label(master=action_frame, text=st("label_generating"))
+        self.progress_bar = Progressbar(footer_frame, orient="horizontal", length=200)
+        self.progress_label = Label(master=footer_frame, text=st("label_generating"))
 
         self.generate_button = Button(
-            action_frame,
+            footer_frame,
             text=st("button_generate"),
             default="active",
             command=lambda: self.event_generate(EVENT_GENERATE),
         )
         self.generate_button.pack(side="right", padx="7p", pady="7p")
-        return action_frame
+        return footer_frame
 
     def _create_menu_bar(self):
         menu_bar = Menu(self, tearoff=False, name="menubar")
