@@ -4,7 +4,7 @@ import time
 from collections.abc import Callable
 from concurrent.futures import FIRST_EXCEPTION, ThreadPoolExecutor, wait
 from dataclasses import dataclass, field
-from threading import Lock, RLock, Thread
+from threading import RLock, Thread
 from typing import IO, NamedTuple, override
 
 from vcf_generator_lite.models.contact import Contact, PhoneNotFoundError, parse_contact
@@ -27,7 +27,6 @@ class VCardGeneratorState:
     progress: float = 0
     invalid_lines: list[InvalidLine] = field(default_factory=list)
     running: bool = False
-    start_time: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -74,11 +73,12 @@ class VCFGeneratorTask(Thread):
         self._result_listener = result_listener
         self._input_text = input_text
         self._output_io = output_io
+
         self._state = VCardGeneratorState()
         self._count_lock = RLock()
         self._processed_lock = RLock()
         self._progress_lock = RLock()
-        self._lock = Lock()
+
         # 使用 deque 会比原生的 queue 性能高
         self._write_queue: DequeQueue[WriteQueueItem | None] = DequeQueue(10)
         self.result: GenerateResult | None = None
@@ -86,7 +86,8 @@ class VCFGeneratorTask(Thread):
     @override
     def run(self):
         self._state.running = True
-        self._state.start_time = time.time()
+
+        start_time = time.time()
         with ThreadPoolExecutor(max_workers=2, thread_name_prefix="VCFGenerator") as pipeline_executor:
             write_future = pipeline_executor.submit(self._write_output)
             parse_future = pipeline_executor.submit(self._parse_input)
@@ -103,7 +104,7 @@ class VCFGeneratorTask(Thread):
         self.result = GenerateResult(
             invalid_lines=self._state.invalid_lines,
             exception=exception,
-            time_elapsed=end_time - self._state.start_time,
+            time_elapsed=end_time - start_time,
             total=self._state.total,
         )
         if self._result_listener:
@@ -128,13 +129,15 @@ class VCFGeneratorTask(Thread):
             except PhoneNotFoundError as e:
                 self._finish_item()
                 _logger.warning(f"Phone not found at line {position}: {e}")
-                with self._lock:
-                    self._state.invalid_lines.append(InvalidLine(row_position=position, content=line, exception=e))
+
+                # list 的 append 方法是原子的，因此不需要加锁
+                # https://docs.python.org/zh-cn/3/library/threadsafety.html#thread-safety-list
+                self._state.invalid_lines.append(InvalidLine(row_position=position, content=line, exception=e))
             except Exception as e:
                 self._finish_item()
                 _logger.warning(f"Parsing error at line {position}", exc_info=e)
-                with self._lock:
-                    self._state.invalid_lines.append(InvalidLine(row_position=position, content=line, exception=e))
+
+                self._state.invalid_lines.append(InvalidLine(row_position=position, content=line, exception=e))
 
         self._write_queue.put(None)  # 结束信号
 
@@ -145,12 +148,10 @@ class VCFGeneratorTask(Thread):
                 self._output_io.write("\n\n")
             except Exception as e:
                 _logger.warning(f"Unexpected writing error at line {item.row_position}", exc_info=e)
-                with self._lock:
-                    self._state.invalid_lines.append(
-                        InvalidLine(row_position=item.row_position, content=item.origin_content, exception=e)
-                    )
+                self._state.invalid_lines.append(
+                    InvalidLine(row_position=item.row_position, content=item.origin_content, exception=e)
+                )
             finally:
-                # self._write_queue.task_done()
                 self._finish_item()
 
     def _notify_progress(self):
