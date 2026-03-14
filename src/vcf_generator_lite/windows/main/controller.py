@@ -88,35 +88,35 @@ class MainController:
         self.window.set_generating(True)
         self.window.update()
 
+        def on_update_progress(progress: float, determinate: bool):
+            self.window.set_progress_determinate(determinate)
+            if determinate:
+                self.window.set_progress(progress)
+
+        def on_generate_file_done(result: GenerateResult):
+            self.is_generating = False
+
+            self.window.set_generating(False)
+            self.window.update()
+
+            # 在 Windows 中转换为 Windows 的路径分隔符
+            display_path = str(PurePath(file_io.name))
+            self._show_generate_done_dialog(display_path, result)
+
         def on_generate_file_result(result: GenerateResult):
-            self.window.after_idle(self.on_generate_file_done, result, file_io)
+            try:
+                file_io.close()
+            except BaseException as e:
+                logger.error("Closing file failed: {}.", e)
+            self.window.after_idle(on_generate_file_done, result)
 
         generator = VCFGeneratorTask(
             input_text=origin_text,
             output_io=file_io,
-            progress_listener=self.on_generate_file_update_progress,
+            progress_listener=on_update_progress,
             result_listener=on_generate_file_result,
         )
         generator.start()
-
-    def on_generate_file_update_progress(self, progress: float, determinate: bool):
-        self.window.set_progress_determinate(determinate)
-        if determinate:
-            self.window.set_progress(progress)
-
-    def on_generate_file_done(self, result: GenerateResult, file_io: IO[str]):
-        try:
-            file_io.close()
-        except BaseException as e:
-            logger.error("Closing file failed: {}.", e)
-        self.is_generating = False
-
-        self.window.set_generating(False)
-        self.window.update()
-
-        # 在 Windows 中转换为 Windows 的路径分隔符
-        display_path = str(PurePath(file_io.name))
-        self._show_generate_done_dialog(display_path, result)
 
     def on_exit(self, _: Event):
         if self.is_generating:
