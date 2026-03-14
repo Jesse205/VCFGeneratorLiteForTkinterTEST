@@ -6,10 +6,14 @@ source_tip = "💡Tip: Source code is hosted at {url}"
 
 [main_window]
 button_generate = "Generate"
+button_stop = "Stop"
+
 label_generating = "Generating..."
+label_stopping = "Stopping..."
 
 menu_file = "&File"
 menu_file_generate = "&Generate file..."
+menu_file_stop_generation = "&Stop generation"
 menu_file_exit = "E&xit"
 
 menu_edit = "&Edit"

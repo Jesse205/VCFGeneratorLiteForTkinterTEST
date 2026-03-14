@@ -1,5 +1,6 @@
 import binascii
 import logging
+import queue
 import time
 from collections.abc import Callable
 from concurrent.futures import FIRST_EXCEPTION, ThreadPoolExecutor, wait
@@ -78,17 +79,18 @@ class VCFGeneratorTask(Thread):
         self._processed_lock = RLock()
         self._progress_lock = RLock()
 
+        self.__stopping: bool = False
         # 使用 deque 会比原生的 queue 性能高
-        self.__canceling: bool = False
         self._write_queue: DequeQueue[WriteQueueItem | None] = DequeQueue(10)
         self.result: GenerateResult | None = None
 
     @property
-    def is_canceling(self) -> bool:
-        return self.__canceling
+    def is_stopping(self) -> bool:
+        return self.__stopping
 
-    def cancel(self):
-        self.__canceling = True
+    def stop(self):
+        self.__stopping = True
+        self._write_queue.shutdown()
 
     @override
     def run(self):
@@ -115,48 +117,57 @@ class VCFGeneratorTask(Thread):
             self._result_listener(self.result)
 
     def _parse_input(self) -> None:
-        lines = self._input_text.strip().split("\n")
-        self._state.total = len(lines)
-        self._notify_progress()
-        for index, line in enumerate(lines):
-            if self.__canceling:
-                break
-            if line.strip() == "":
-                self._skip_item()
-                continue
-            position = index + 1
-            try:
-                contact = parse_contact(line)
-                vcard = serialize_to_vcard(contact)
+        try:
+            lines = self._input_text.strip().split("\n")
+            self._state.total = len(lines)
+            self._notify_progress()
+            for index, line in enumerate(lines):
+                if self.__stopping:
+                    break
+                if line.strip() == "":
+                    self._skip_item()
+                    continue
+                position = index + 1
+                try:
+                    contact = parse_contact(line)
+                    vcard = serialize_to_vcard(contact)
 
-                self._write_queue.put(WriteQueueItem(row_position=position, origin_content=line, vcard=vcard))
-            except PhoneNotFoundError as e:
-                self._finish_item()
-                _logger.warning(f"Phone not found at line {position}: {e}")
+                    self._write_queue.put(WriteQueueItem(row_position=position, origin_content=line, vcard=vcard))
+                except queue.ShutDown:
+                    break
+                except PhoneNotFoundError as e:
+                    self._finish_item()
+                    _logger.warning(f"Phone not found at line {position}: {e}")
 
-                # list 的 append 方法是原子的，因此不需要加锁
-                # https://docs.python.org/zh-cn/3/library/threadsafety.html#thread-safety-list
-                self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
-            except Exception as e:
-                self._finish_item()
-                _logger.warning(f"Parsing error at line {position}", exc_info=e)
+                    # list 的 append 方法是原子的，因此不需要加锁
+                    # https://docs.python.org/zh-cn/3/library/threadsafety.html#thread-safety-list
+                    self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
+                except Exception as e:
+                    self._finish_item()
+                    _logger.warning(f"Parsing error at line {position}", exc_info=e)
 
-                self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
+                    self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
 
-        self._write_queue.put(None)  # 结束信号
+            self._write_queue.put(None)  # 结束信号
+        except queue.ShutDown:
+            pass
 
     def _write_output(self):
-        while not self.__canceling and ((item := self._write_queue.get()) is not None):
-            try:
-                self._output_io.write(item.vcard)
-                self._output_io.write("\n\n")
-            except Exception as e:
-                _logger.warning(f"Unexpected writing error at line {item.row_position}", exc_info=e)
-                self._state.invalid_lines.append(
-                    InvalidItem(row_position=item.row_position, raw_content=item.origin_content, exception=e)
-                )
-            finally:
-                self._finish_item()
+        try:
+            while (item := self._write_queue.get()) is not None:
+                try:
+                    self._output_io.write(item.vcard)
+                    self._output_io.write("\n\n")
+                    time.sleep(1)
+                except Exception as e:
+                    _logger.warning(f"Unexpected writing error at line {item.row_position}", exc_info=e)
+                    self._state.invalid_lines.append(
+                        InvalidItem(row_position=item.row_position, raw_content=item.origin_content, exception=e)
+                    )
+                finally:
+                    self._finish_item()
+        except queue.ShutDown:
+            pass
 
     def _notify_progress(self):
         if self._progress_listener is None:

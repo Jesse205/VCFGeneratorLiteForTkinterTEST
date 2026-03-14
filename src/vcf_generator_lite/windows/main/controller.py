@@ -13,7 +13,13 @@ from vcf_generator_lite.dialogs.invalid_items import create_invalid_items_dialog
 from vcf_generator_lite.utils.locales import t
 from vcf_generator_lite.utils.tkinter.text import search_line, select_text
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
-from vcf_generator_lite.windows.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE
+from vcf_generator_lite.windows.main.constants import (
+    EVENT_ABOUT,
+    EVENT_CLEAN_QUOTES,
+    EVENT_GENERATE,
+    EVENT_GENERATE_OR_STOP,
+    EVENT_STOP,
+)
 from vcf_generator_lite.windows.main.window import VCFGeneratorLiteApp
 
 logger = logging.getLogger(__name__)
@@ -24,10 +30,13 @@ class MainController:
         self.window = window
         self.is_generating: bool = False
         self.generate_file_name: str = "phones.vcf"
+        self.generator: VCFGeneratorTask | None = None
 
         window.bind(EVENT_ABOUT, self.on_about)
         window.bind(EVENT_CLEAN_QUOTES, self.on_clean_quotes)
         window.bind(EVENT_GENERATE, self.on_generate)
+        window.bind(EVENT_STOP, self.on_stop)
+        window.bind(EVENT_GENERATE_OR_STOP, self.on_generate_or_stop)
         window.bind("<Control-Lock-G>", self.on_generate)
         window.bind("<Control-g>", self.on_generate)
         window.bind("<Return>", self.on_return)
@@ -42,10 +51,22 @@ class MainController:
     def on_return(self, event: Event):
         if event.widget in self.window.content_text.frame.winfo_children():
             return
-        self.window.generate_button.invoke()
+        self.window.generate_or_stop_button.invoke()
 
     def on_generate(self, _: Event):
         self.generate_file()
+
+    def on_stop(self, _: Event):
+        if self.generator is None or self.generator.is_stopping:
+            return
+        self.window.set_generating("stopping")
+        self.generator.stop()
+
+    def on_generate_or_stop(self, event: Event):
+        if self.is_generating:
+            self.on_stop(event)
+        else:
+            self.on_generate(event)
 
     def pick_output_file(self) -> IO[str] | None:
         file_io: IO[str] | None = None
@@ -89,6 +110,8 @@ class MainController:
         self.window.update()
 
         def on_update_progress(progress: float, determinate: bool):
+            if self.generator and self.generator.is_stopping:
+                return
             self.window.set_progress_determinate(determinate)
             if determinate:
                 self.window.set_progress(progress)
@@ -108,15 +131,16 @@ class MainController:
                 file_io.close()
             except BaseException as e:
                 logger.error("Closing file failed: {}.", e)
+            self.generator = None
             self.window.after_idle(on_generate_file_done, result)
 
-        generator = VCFGeneratorTask(
+        self.generator = VCFGeneratorTask(
             input_text=origin_text,
             output_io=file_io,
             progress_listener=on_update_progress,
             result_listener=on_generate_file_result,
         )
-        generator.start()
+        self.generator.start()
 
     def on_exit(self, _: Event):
         if self.is_generating:

@@ -1,7 +1,7 @@
 import urllib.parse
 from tkinter import Menu, Misc, Text
 from tkinter.ttk import Button, Frame, Label, Progressbar, Sizegrip
-from typing import override
+from typing import Literal, override
 
 from ttk_text.scrolled_text import ScrolledText
 
@@ -17,7 +17,7 @@ from vcf_generator_lite.layouts.vertical_dialog_layout import VerticalDialogLayo
 from vcf_generator_lite.utils.external_app import open_url_with_fallback
 from vcf_generator_lite.utils.locales import scope, t
 from vcf_generator_lite.utils.tkinter.accelerators import get_default_accelerators
-from vcf_generator_lite.utils.tkinter.busy import tk_busy_forget, tk_buy_hold
+from vcf_generator_lite.utils.tkinter.busy import tk_busy_forget, tk_busy_hold, tk_busy_status
 from vcf_generator_lite.utils.tkinter.menu import parse_menu_label
 from vcf_generator_lite.utils.tkinter.widget import enable_auto_wrap
 from vcf_generator_lite.widgets.line_number_bar import LineNumberBar
@@ -30,13 +30,15 @@ from vcf_generator_lite.windows.main.constants import (
     EVENT_ABOUT,
     EVENT_CLEAN_QUOTES,
     EVENT_GENERATE,
+    EVENT_GENERATE_OR_STOP,
+    EVENT_STOP,
 )
 
 st = scope("main_window")
 
 
 class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
-    generate_button: Button
+    generate_or_stop_button: Button
     content_text: ScrolledText
     progress_bar: Progressbar
 
@@ -95,13 +97,13 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
         self.progress_bar = Progressbar(footer_frame, orient="horizontal", length=200)
         self.progress_label = Label(master=footer_frame, text=st("label_generating"))
 
-        self.generate_button = Button(
+        self.generate_or_stop_button = Button(
             footer_frame,
             text=st("button_generate"),
             default="active",
-            command=lambda: self.event_generate(EVENT_GENERATE),
+            command=lambda: self.event_generate(EVENT_GENERATE_OR_STOP),
         )
-        self.generate_button.pack(side="right", padx="7p", pady="7p")
+        self.generate_or_stop_button.pack(side="right", padx="7p", pady="7p")
         return footer_frame
 
     def _create_menu_bar(self):
@@ -121,12 +123,25 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
         return menu_bar
 
     def _create_file_menu(self, master: Misc):
-        file_menu = Menu(master, tearoff=False)
+        self.file_menu = file_menu = Menu(master, tearoff=False)
+
+        generate_parse_result = parse_menu_label(st("menu_file_generate"))
+        self.menu_generate_label = generate_parse_result["label"]
         file_menu.add_command(
-            **parse_menu_label(st("menu_file_generate")),
+            **generate_parse_result,
             command=lambda: self.event_generate(EVENT_GENERATE),
             accelerator=ACCELERATOR_GENERATE_AQUA if self._windowingsystem == "aqua" else ACCELERATOR_GENERATE,
         )
+
+        stop_generation_parse_result = parse_menu_label(st("menu_file_stop_generation"))
+        self.menu_stop_generation_label = stop_generation_parse_result["label"]
+        file_menu.add_command(
+            **stop_generation_parse_result,
+            command=lambda: self.event_generate(EVENT_STOP),
+            accelerator=ACCELERATOR_GENERATE_AQUA if self._windowingsystem == "aqua" else ACCELERATOR_GENERATE,
+            state="disabled",
+        )
+
         file_menu.add_separator()
         # 通常不提供退出的快捷键
         # https://learn.microsoft.com/en-us/windows/win32/uxguide/cmd-menus
@@ -254,12 +269,24 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
             self.progress_bar.configure(mode="indeterminate", maximum=10)
             self.progress_bar.start()
 
-    def set_generating(self, generating: bool):
-        if generating:
-            self.generate_button.configure(state="disabled")
-            tk_buy_hold(self.generate_button)
+    def set_generating(self, state: bool | Literal["stopping"]):
+        if state is True:
+            self.generate_or_stop_button.configure(text=st("button_stop"), state="normal")
+            if tk_busy_status(self.generate_or_stop_button):
+                tk_busy_forget(self.generate_or_stop_button)
+            self.progress_label.configure(text=st("label_generating"))
             self.show_progress()
-        else:
-            self.generate_button.configure(state="normal")
-            tk_busy_forget(self.generate_button)
+        elif state is False:
+            self.generate_or_stop_button.configure(text=st("button_generate"), state="normal")
+            if tk_busy_status(self.generate_or_stop_button):
+                tk_busy_forget(self.generate_or_stop_button)
             self.hide_progress()
+        elif state == "stopping":
+            self.generate_or_stop_button.configure(text=st("button_stop"), state="disabled")
+            if not tk_busy_status(self.generate_or_stop_button):
+                tk_busy_hold(self.generate_or_stop_button)
+            self.progress_label.configure(text=st("label_stopping"))
+            self.show_progress()
+            self.set_progress_determinate(False)
+        self.file_menu.entryconfigure(self.menu_generate_label, state="normal" if state is False else "disabled")
+        self.file_menu.entryconfigure(self.menu_stop_generation_label, state="normal" if state is True else "disabled")

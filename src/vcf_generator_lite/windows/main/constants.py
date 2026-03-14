@@ -1,6 +1,8 @@
 EVENT_ABOUT = "<<About>>"
 EVENT_CLEAN_QUOTES = "<<CleanQuotes>>"
 EVENT_GENERATE = "<<Generate>>"
+EVENT_STOP = "<<Stop>>"
+EVENT_GENERATE_OR_STOP = "<<GenerateOrStop>>"
 
 ACCELERATOR_GENERATE = "Ctrl+G"
 ACCELERATOR_GENERATE_AQUA = "⌃G"
