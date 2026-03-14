@@ -9,10 +9,10 @@ from typing import IO
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT
 from vcf_generator_lite.core.vcf_generator import GenerateResult, InvalidLine, VCFGeneratorTask
+from vcf_generator_lite.dialogs.invalid_items import create_invalid_items_dialog
 from vcf_generator_lite.utils.locales import t
 from vcf_generator_lite.utils.tkinter.text import search_line, select_text
 from vcf_generator_lite.windows.base.constants import EVENT_EXIT
-from vcf_generator_lite.windows.invalid_lines import create_invalid_lines_window
 from vcf_generator_lite.windows.main.constants import EVENT_ABOUT, EVENT_CLEAN_QUOTES, EVENT_GENERATE
 from vcf_generator_lite.windows.main.window import VCFGeneratorLiteApp
 
@@ -158,7 +158,7 @@ class MainController:
         )
 
     def _show_generate_invalid_dialog(self, display_path: str, invalid_lines: list[InvalidLine]):
-        _, invalid_lines_controller = create_invalid_lines_window(self.window, display_path, invalid_lines)
+        _, invalid_lines_controller = create_invalid_items_dialog(self.window, display_path, invalid_lines)
         invalid_lines_controller.set_line_enter_listener(self.__on_select_invalid_line)
 
     def _show_generate_success_dialog(self, display_path: str, generate_result: GenerateResult):

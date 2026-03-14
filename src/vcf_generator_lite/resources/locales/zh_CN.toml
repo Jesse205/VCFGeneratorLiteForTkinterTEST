@@ -67,7 +67,7 @@ message = "生成 vCard 文件时出现未知异常：\n\n{content}"
 title = "正在生成 vCard 文件"
 message = "请等待文件生成完成"
 
-[vcf_generate_invalid_window]
+[vcf_generate_invalid_dialog]
 title = "生成 vCard 文件完成"
 message = "已导出文件到 {path}，异常的号码已被忽略。"
 label_invalid_numbers = "异常的号码："

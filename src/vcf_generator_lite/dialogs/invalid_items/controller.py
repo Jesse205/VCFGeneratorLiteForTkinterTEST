@@ -3,8 +3,8 @@ from tkinter import Event, EventType
 
 from vcf_generator_lite.core.vcf_generator import InvalidLine
 from vcf_generator_lite.models.contact import PhoneNotFoundError
-from vcf_generator_lite.windows.invalid_lines.common import st
-from vcf_generator_lite.windows.invalid_lines.window import InvalidLinesWindow
+from vcf_generator_lite.dialogs.invalid_items.common import st
+from vcf_generator_lite.dialogs.invalid_items.dialog import InvalidItemsDialog
 
 
 def get_locale_exception(exception: BaseException):
@@ -13,19 +13,19 @@ def get_locale_exception(exception: BaseException):
     return str(exception)
 
 
-class InvalidLinesController:
+class InvalidItemsController:
     def __init__(
         self,
-        window: InvalidLinesWindow,
+        window: InvalidItemsDialog,
         display_path: str,
-        invalid_lines: list[InvalidLine],
+        invalid_items: list[InvalidLine],
     ):
         self.window = window
         self.__line_enter_listener: Callable[[int, str], None] | None = None
         window.bind("<Return>", self.__on_return)
 
         window.header_label.configure(text=st("message").format(path=display_path))
-        for item in invalid_lines:
+        for item in invalid_items:
             window.content_tree.insert(
                 parent="",
                 index="end",
