@@ -73,9 +73,9 @@ class TestVCFGeneratorIntegration:
         assert progress_history[-1][1] is True, "进度应该是确定性的"
 
         # 验证无效行
-        assert len(generator.result.invalid_lines) == self.invalid_count, f"应有 {self.invalid_count} 个无效行"
-        for item in generator.result.invalid_lines:
-            assert item.content in self.INVALID_INPUT_LIST, f"第 {item.row_position} 行数据不应为无效行"
+        assert len(generator.result.invalid_items) == self.invalid_count, f"应有 {self.invalid_count} 个无效行"
+        for item in generator.result.invalid_items:
+            assert item.raw_content in self.INVALID_INPUT_LIST, f"第 {item.row_position} 行数据不应为无效行"
 
         # 验证生成的 VCard 内容
         result_content = result_io.getvalue()
@@ -104,7 +104,7 @@ class TestVCFGeneratorIntegration:
         assert generator.result is not None, "结果监听器未被调用"
 
         assert generator.result.exception is None
-        assert len(generator.result.invalid_lines) == 0
+        assert len(generator.result.invalid_items) == 0
         assert result_io.getvalue() == ""
         # 对于空输入，可能没有进度报告，或者进度为 0（因为 total 变为 0）
         # 这是当前实现的行为，我们接受它
@@ -129,7 +129,7 @@ class TestVCFGeneratorIntegration:
         assert generator.result is not None, "结果监听器未被调用"
 
         assert generator.result.exception is None
-        assert len(generator.result.invalid_lines) == len(self.INVALID_INPUT_LIST)
+        assert len(generator.result.invalid_items) == len(self.INVALID_INPUT_LIST)
         assert result_io.getvalue() == ""
         # 应该有进度报告且最终为 1.0
         if progress_history:

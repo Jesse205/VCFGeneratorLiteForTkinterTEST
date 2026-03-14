@@ -14,9 +14,9 @@ _logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
-class InvalidLine:
+class InvalidItem:
     row_position: int
-    content: str
+    raw_content: str
     exception: BaseException
 
 
@@ -25,13 +25,12 @@ class VCardGeneratorState:
     total: int = 0
     processed: int = 0
     progress: float = 0
-    invalid_lines: list[InvalidLine] = field(default_factory=list)
-    running: bool = False
+    invalid_lines: list[InvalidItem] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
 class GenerateResult:
-    invalid_lines: list[InvalidLine]
+    invalid_items: list[InvalidItem]
     exception: BaseException | None
     time_elapsed: float
     total: int
@@ -80,20 +79,25 @@ class VCFGeneratorTask(Thread):
         self._progress_lock = RLock()
 
         # 使用 deque 会比原生的 queue 性能高
+        self.__canceling: bool = False
         self._write_queue: DequeQueue[WriteQueueItem | None] = DequeQueue(10)
         self.result: GenerateResult | None = None
 
+    @property
+    def is_canceling(self) -> bool:
+        return self.__canceling
+
+    def cancel(self):
+        self.__canceling = True
+
     @override
     def run(self):
-        self._state.running = True
-
         start_time = time.time()
         with ThreadPoolExecutor(max_workers=2, thread_name_prefix="VCFGenerator") as pipeline_executor:
             write_future = pipeline_executor.submit(self._write_output)
             parse_future = pipeline_executor.submit(self._parse_input)
             done, _ = wait([parse_future, write_future], return_when=FIRST_EXCEPTION)
         end_time = time.time()
-        self._state.running = False
 
         exception: BaseException | None = None
         for future in done:
@@ -102,7 +106,7 @@ class VCFGeneratorTask(Thread):
                 break
 
         self.result = GenerateResult(
-            invalid_lines=self._state.invalid_lines,
+            invalid_items=self._state.invalid_lines,
             exception=exception,
             time_elapsed=end_time - start_time,
             total=self._state.total,
@@ -111,11 +115,11 @@ class VCFGeneratorTask(Thread):
             self._result_listener(self.result)
 
     def _parse_input(self) -> None:
-        lines = [line.strip() for line in self._input_text.split("\n")]
+        lines = self._input_text.strip().split("\n")
         self._state.total = len(lines)
         self._notify_progress()
         for index, line in enumerate(lines):
-            if not self._state.running:
+            if self.__canceling:
                 break
             if line.strip() == "":
                 self._skip_item()
@@ -132,24 +136,24 @@ class VCFGeneratorTask(Thread):
 
                 # list 的 append 方法是原子的，因此不需要加锁
                 # https://docs.python.org/zh-cn/3/library/threadsafety.html#thread-safety-list
-                self._state.invalid_lines.append(InvalidLine(row_position=position, content=line, exception=e))
+                self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
             except Exception as e:
                 self._finish_item()
                 _logger.warning(f"Parsing error at line {position}", exc_info=e)
 
-                self._state.invalid_lines.append(InvalidLine(row_position=position, content=line, exception=e))
+                self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
 
         self._write_queue.put(None)  # 结束信号
 
     def _write_output(self):
-        while self._state.running and ((item := self._write_queue.get()) is not None):
+        while not self.__canceling and ((item := self._write_queue.get()) is not None):
             try:
                 self._output_io.write(item.vcard)
                 self._output_io.write("\n\n")
             except Exception as e:
                 _logger.warning(f"Unexpected writing error at line {item.row_position}", exc_info=e)
                 self._state.invalid_lines.append(
-                    InvalidLine(row_position=item.row_position, content=item.origin_content, exception=e)
+                    InvalidItem(row_position=item.row_position, raw_content=item.origin_content, exception=e)
                 )
             finally:
                 self._finish_item()

@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from tkinter import Event, EventType
 
-from vcf_generator_lite.core.vcf_generator import InvalidLine
+from vcf_generator_lite.core.vcf_generator import InvalidItem
 from vcf_generator_lite.models.contact import PhoneNotFoundError
 from vcf_generator_lite.dialogs.invalid_items.common import st
 from vcf_generator_lite.dialogs.invalid_items.dialog import InvalidItemsDialog
@@ -18,7 +18,7 @@ class InvalidItemsController:
         self,
         window: InvalidItemsDialog,
         display_path: str,
-        invalid_items: list[InvalidLine],
+        invalid_items: list[InvalidItem],
     ):
         self.window = window
         self.__line_enter_listener: Callable[[int, str], None] | None = None
@@ -32,7 +32,7 @@ class InvalidItemsController:
                 id=item.row_position,
                 values=(
                     st("cell_row").format(row=item.row_position),
-                    item.content,
+                    item.raw_content,
                     get_locale_exception(item.exception),
                 ),
             )
