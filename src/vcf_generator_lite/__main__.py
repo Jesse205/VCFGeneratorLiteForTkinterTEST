@@ -7,7 +7,7 @@ from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import URL_REPOSITORY
 from vcf_generator_lite.utils.dpi_aware import enable_dpi_aware
 from vcf_generator_lite.utils.locales import scope
-from vcf_generator_lite.windows.main import create_app
+from vcf_generator_lite.ui.windows.main_window import create_app
 
 try:
     from colorlog import ColoredFormatter

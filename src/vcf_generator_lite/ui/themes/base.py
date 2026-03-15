@@ -2,7 +2,7 @@ from abc import ABC
 from tkinter import Tk
 from tkinter.ttk import Style
 
-from vcf_generator_lite.themes.abs import ThemePatch
+from vcf_generator_lite.ui.themes.abs import ThemePatch
 
 
 class BaseThemePatch(ThemePatch, ABC):

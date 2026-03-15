@@ -3,8 +3,8 @@ from tkinter import Event, EventType
 
 from vcf_generator_lite.core.vcf_generator import InvalidItem
 from vcf_generator_lite.models.contact import PhoneNotFoundError
-from vcf_generator_lite.dialogs.invalid_items.common import st
-from vcf_generator_lite.dialogs.invalid_items.dialog import InvalidItemsDialog
+from vcf_generator_lite.ui.windows.invalid_items_dialog.common import st
+from vcf_generator_lite.ui.windows.invalid_items_dialog.dialog import InvalidItemsDialog
 
 
 def get_locale_exception(exception: BaseException):

@@ -4,8 +4,8 @@ from tkinter import Event, PhotoImage, Tk, Toplevel, Wm
 from tkinter.ttk import Style
 from typing import override
 
-from vcf_generator_lite.themes import create_theme_patch
-from vcf_generator_lite.themes.abs import ThemePatch
+from vcf_generator_lite.ui.themes import create_theme_patch
+from vcf_generator_lite.ui.themes.abs import ThemePatch
 from vcf_generator_lite.utils import resources
 from vcf_generator_lite.utils.tkinter.window import (
     CenterWindowExtension,
@@ -13,7 +13,7 @@ from vcf_generator_lite.utils.tkinter.window import (
     WindowExtension,
     withdraw_cm,
 )
-from vcf_generator_lite.windows.base.constants import EVENT_EXIT
+from vcf_generator_lite.ui.windows.base_window.constants import EVENT_EXIT
 
 __all__ = ["EnhancedTk", "EnhancedToplevel", "EnhancedDialog"]
 _logger = logging.getLogger(__name__)

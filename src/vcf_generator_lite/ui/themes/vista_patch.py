@@ -2,7 +2,7 @@ from tkinter import Tk
 from tkinter.font import nametofont
 from typing import override
 
-from vcf_generator_lite.themes.base import BaseThemePatch
+from vcf_generator_lite.ui.themes.base import BaseThemePatch
 
 
 class VistaThemePatch(BaseThemePatch):

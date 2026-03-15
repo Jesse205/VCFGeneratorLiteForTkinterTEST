@@ -9,18 +9,18 @@ from typing import IO
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT
 from vcf_generator_lite.core.vcf_generator import GenerateResult, InvalidItem, VCFGeneratorTask
-from vcf_generator_lite.dialogs.invalid_items import create_invalid_items_dialog
+from vcf_generator_lite.ui.windows.invalid_items_dialog import create_invalid_items_dialog
 from vcf_generator_lite.utils.locales import t
 from vcf_generator_lite.utils.tkinter.text import search_line, select_text
-from vcf_generator_lite.windows.base.constants import EVENT_EXIT
-from vcf_generator_lite.windows.main.constants import (
+from vcf_generator_lite.ui.windows.base_window.constants import EVENT_EXIT
+from vcf_generator_lite.ui.windows.main_window.constants import (
     EVENT_ABOUT,
     EVENT_CLEAN_QUOTES,
     EVENT_GENERATE,
     EVENT_GENERATE_OR_STOP,
     EVENT_STOP,
 )
-from vcf_generator_lite.windows.main.window import VCFGeneratorLiteApp
+from vcf_generator_lite.ui.windows.main_window.window import VCFGeneratorLiteApp
 
 logger = logging.getLogger(__name__)
 

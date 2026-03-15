@@ -13,18 +13,18 @@ from vcf_generator_lite.constants import (
     URL_REPORT,
     URL_REPOSITORY,
 )
-from vcf_generator_lite.layouts.vertical_dialog_layout import VerticalDialogLayout
+from vcf_generator_lite.ui.layouts.vertical_dialog_layout import VerticalDialogLayout
 from vcf_generator_lite.utils.external_app import open_url_with_fallback
 from vcf_generator_lite.utils.locales import scope, t
 from vcf_generator_lite.utils.tkinter.accelerators import get_default_accelerators
 from vcf_generator_lite.utils.tkinter.busy import tk_busy_forget, tk_busy_hold, tk_busy_status
 from vcf_generator_lite.utils.tkinter.menu import parse_menu_label
 from vcf_generator_lite.utils.tkinter.widget import enable_auto_wrap
-from vcf_generator_lite.widgets.line_number_bar import LineNumberBar
-from vcf_generator_lite.widgets.text_menu import TextContextMenu
-from vcf_generator_lite.windows.base import EnhancedTk
-from vcf_generator_lite.windows.base.constants import EVENT_EXIT
-from vcf_generator_lite.windows.main.constants import (
+from vcf_generator_lite.ui.widgets.line_number_bar import LineNumberBar
+from vcf_generator_lite.ui.widgets.text_menu import TextContextMenu
+from vcf_generator_lite.ui.windows.base_window import EnhancedTk
+from vcf_generator_lite.ui.windows.base_window.constants import EVENT_EXIT
+from vcf_generator_lite.ui.windows.main_window.constants import (
     ACCELERATOR_GENERATE,
     ACCELERATOR_GENERATE_AQUA,
     EVENT_ABOUT,

@@ -1,5 +1,5 @@
-from vcf_generator_lite.windows.main.controller import MainController
-from vcf_generator_lite.windows.main.window import VCFGeneratorLiteApp
+from vcf_generator_lite.ui.windows.main_window.controller import MainController
+from vcf_generator_lite.ui.windows.main_window.window import VCFGeneratorLiteApp
 
 
 def create_app() -> tuple[VCFGeneratorLiteApp, MainController]:

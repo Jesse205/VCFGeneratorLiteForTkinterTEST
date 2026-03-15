@@ -1,8 +1,8 @@
 from tkinter import Tk, Toplevel
 
 from vcf_generator_lite.core.vcf_generator import InvalidItem
-from vcf_generator_lite.dialogs.invalid_items.controller import InvalidItemsController
-from vcf_generator_lite.dialogs.invalid_items.dialog import InvalidItemsDialog
+from vcf_generator_lite.ui.windows.invalid_items_dialog.controller import InvalidItemsController
+from vcf_generator_lite.ui.windows.invalid_items_dialog.dialog import InvalidItemsDialog
 
 
 def create_invalid_items_dialog(

@@ -2,15 +2,15 @@ from tkinter import Misc
 from tkinter.ttk import Button, Frame, Label, Separator, Sizegrip
 from typing import override
 
-from vcf_generator_lite.layouts.vertical_dialog_layout import VerticalDialogLayout
+from vcf_generator_lite.ui.layouts.vertical_dialog_layout import VerticalDialogLayout
 from vcf_generator_lite.utils.locales import t
 from vcf_generator_lite.utils.tkinter.font import extend_font_scale
 from vcf_generator_lite.utils.tkinter.misc import scale_kw
 from vcf_generator_lite.utils.tkinter.widget import enable_auto_wrap
-from vcf_generator_lite.widgets.scrolled_treeview import ScrolledTreeview
-from vcf_generator_lite.windows.base import EnhancedDialog
-from vcf_generator_lite.windows.base.constants import EVENT_EXIT
-from vcf_generator_lite.dialogs.invalid_items.common import st
+from vcf_generator_lite.ui.widgets.scrolled_treeview import ScrolledTreeview
+from vcf_generator_lite.ui.windows.base_window import EnhancedDialog
+from vcf_generator_lite.ui.windows.base_window.constants import EVENT_EXIT
+from vcf_generator_lite.ui.windows.invalid_items_dialog.common import st
 
 
 class InvalidItemsDialog(EnhancedDialog, VerticalDialogLayout):
