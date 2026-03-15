@@ -14,7 +14,7 @@ try:
 except ImportError:
     ColoredFormatter = None
 
-APP_DESCRIPTON = "A lightweight tool that quickly converts name and phone number lists into vCard files for batch import to mobile contacts."
+APP_DESCRIPTION = "A lightweight tool that quickly converts name and phone number lists into vCard files for batch import to mobile contacts."
 
 startup_t = scope("startup")
 
@@ -70,8 +70,8 @@ def launch_gui(args: argparse.Namespace):
 
 
 def main_gui():
-    parser = argparse.ArgumentParser(description=APP_DESCRIPTON)
-    parser.description = APP_DESCRIPTON
+    parser = argparse.ArgumentParser(description=APP_DESCRIPTION)
+    parser.description = APP_DESCRIPTION
     setup_gui_argparser(parser)
     args = parser.parse_args()
     launch_gui(args)
