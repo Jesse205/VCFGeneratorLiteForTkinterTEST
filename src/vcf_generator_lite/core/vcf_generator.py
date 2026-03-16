@@ -4,7 +4,7 @@ import queue
 import time
 from collections.abc import Callable
 from concurrent.futures import FIRST_EXCEPTION, ThreadPoolExecutor, wait
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from threading import RLock, Thread
 from typing import IO, NamedTuple, override
 
@@ -21,14 +21,6 @@ class InvalidItem:
     exception: BaseException
 
 
-@dataclass
-class VCardGeneratorState:
-    total: int = 0
-    processed: int = 0
-    progress: float = 0
-    invalid_lines: list[InvalidItem] = field(default_factory=list)
-
-
 @dataclass(frozen=True)
 class GenerateResult:
     invalid_items: list[InvalidItem]
@@ -39,7 +31,7 @@ class GenerateResult:
 
 class WriteQueueItem(NamedTuple):
     row_position: int
-    origin_content: str
+    raw_content: str
     vcard: str
 
 
@@ -74,8 +66,11 @@ class VCFGeneratorTask(Thread):
         self._input_text = input_text
         self._output_io = output_io
 
-        self._state = VCardGeneratorState()
-        self._count_lock = RLock()
+        self._total: int = 0
+        self._processed: int = 0
+        self._progress: float = 0
+        self._invalid_items: list[InvalidItem] = []
+        self._total_lock = RLock()
         self._processed_lock = RLock()
         self._progress_lock = RLock()
 
@@ -110,39 +105,39 @@ class VCFGeneratorTask(Thread):
                 break
 
         self.result = GenerateResult(
-            invalid_items=self._state.invalid_lines,
+            invalid_items=self._invalid_items,
             exception=exception,
             time_elapsed=end_time - start_time,
-            saved_total=self._state.processed,
+            saved_total=self._processed,
         )
         if self._result_listener:
             self._result_listener(self.result)
 
     def _parse_input(self) -> None:
         lines = self._input_text.strip().split("\n")
-        self._state.total = len(lines)
+        self._total = len(lines)
         self._notify_progress()
-        for index, line in enumerate(lines):
+        for position, line in enumerate((line.strip() for line in lines), 1):
             if self.__stopping:
                 break
-            if line.strip() == "":
+            if not line:
                 self._skip_item()
                 continue
-            position = index + 1
+
             queue_item: WriteQueueItem | None = None
             try:
                 contact = parse_contact(line)
                 vcard = serialize_to_vcard(contact)
-                queue_item = WriteQueueItem(row_position=position, origin_content=line, vcard=vcard)
+                queue_item = WriteQueueItem(row_position=position, raw_content=line, vcard=vcard)
             except PhoneNotFoundError as e:
                 _logger.warning(f"Phone not found at line {position}: {e}")
 
                 # list 的 append 方法是原子的，因此不需要加锁
                 # https://docs.python.org/zh-cn/3/library/threadsafety.html#thread-safety-list
-                self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
+                self._invalid_items.append(InvalidItem(row_position=position, raw_content=line, exception=e))
             except Exception as e:
                 _logger.warning(f"Parsing error at line {position}", exc_info=e)
-                self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
+                self._invalid_items.append(InvalidItem(row_position=position, raw_content=line, exception=e))
 
             if queue_item:
                 self._write_queue.put(queue_item)
@@ -156,35 +151,30 @@ class VCFGeneratorTask(Thread):
             try:
                 self._output_io.write(item.vcard)
                 self._output_io.write("\n\n")
-            except Exception as e:
-                _logger.warning(f"Unexpected writing error at line {item.row_position}", exc_info=e)
-                self._state.invalid_lines.append(
-                    InvalidItem(row_position=item.row_position, raw_content=item.origin_content, exception=e)
-                )
             finally:
                 self._finish_item()
 
     def _notify_progress(self):
         if self._progress_listener is None:
             return
-        self._progress_listener(self._state.progress, self._state.total > 0)
+        self._progress_listener(self._progress, self._total > 0)
 
     def _update_progress(self):
-        if self._state.total == 0:
+        if self._total == 0:
             return
-        new_progress = round(min(self._state.processed / self._state.total, 1.0), 1)
-        if self._state.progress != new_progress:
+        new_progress = round(min(self._processed / self._total, 1.0), 1)
+        if self._progress != new_progress:
             with self._progress_lock:
-                if self._state.progress != new_progress:
-                    self._state.progress = new_progress
+                if self._progress != new_progress:
+                    self._progress = new_progress
                     self._notify_progress()
 
     def _skip_item(self):
-        with self._count_lock:
-            self._state.total -= 1
+        with self._total_lock:
+            self._total -= 1
         self._update_progress()
 
     def _finish_item(self):
         with self._processed_lock:
-            self._state.processed += 1
+            self._processed += 1
         self._update_progress()
