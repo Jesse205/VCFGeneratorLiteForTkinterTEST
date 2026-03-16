@@ -17,18 +17,18 @@ class DequeQueue[T]:
             while len(self.deque) >= self.max_size:
                 self.condition.wait()
                 if self.__shutdown:
-                    raise ShutDown
+                    raise ShutDown()
             self.deque.append(item)
             self.condition.notify_all()
 
     def get(self) -> T:
         with self.condition:
             if self.__shutdown:
-                raise ShutDown
+                raise ShutDown()
             while len(self.deque) == 0:
                 self.condition.wait()
                 if self.__shutdown:
-                    raise ShutDown
+                    raise ShutDown()
             item = self.deque.popleft()
             self.condition.notify_all()
         return item

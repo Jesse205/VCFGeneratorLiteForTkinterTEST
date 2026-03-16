@@ -34,7 +34,7 @@ class GenerateResult:
     invalid_items: list[InvalidItem]
     exception: BaseException | None
     time_elapsed: float
-    total: int
+    saved_total: int
 
 
 class WriteQueueItem(NamedTuple):
@@ -101,73 +101,68 @@ class VCFGeneratorTask(Thread):
             done, _ = wait([parse_future, write_future], return_when=FIRST_EXCEPTION)
         end_time = time.time()
 
+        self._write_queue.shutdown()
+
         exception: BaseException | None = None
         for future in done:
-            exception = future.exception()
-            if exception:
+            if (future_exception := future.exception()) and not isinstance(future_exception, queue.ShutDown):
+                exception = future_exception
                 break
 
         self.result = GenerateResult(
             invalid_items=self._state.invalid_lines,
             exception=exception,
             time_elapsed=end_time - start_time,
-            total=self._state.total,
+            saved_total=self._state.processed,
         )
         if self._result_listener:
             self._result_listener(self.result)
 
     def _parse_input(self) -> None:
-        try:
-            lines = self._input_text.strip().split("\n")
-            self._state.total = len(lines)
-            self._notify_progress()
-            for index, line in enumerate(lines):
-                if self.__stopping:
-                    break
-                if line.strip() == "":
-                    self._skip_item()
-                    continue
-                position = index + 1
-                try:
-                    contact = parse_contact(line)
-                    vcard = serialize_to_vcard(contact)
+        lines = self._input_text.strip().split("\n")
+        self._state.total = len(lines)
+        self._notify_progress()
+        for index, line in enumerate(lines):
+            if self.__stopping:
+                break
+            if line.strip() == "":
+                self._skip_item()
+                continue
+            position = index + 1
+            queue_item: WriteQueueItem | None = None
+            try:
+                contact = parse_contact(line)
+                vcard = serialize_to_vcard(contact)
+                queue_item = WriteQueueItem(row_position=position, origin_content=line, vcard=vcard)
+            except PhoneNotFoundError as e:
+                _logger.warning(f"Phone not found at line {position}: {e}")
 
-                    self._write_queue.put(WriteQueueItem(row_position=position, origin_content=line, vcard=vcard))
-                except queue.ShutDown:
-                    break
-                except PhoneNotFoundError as e:
-                    self._finish_item()
-                    _logger.warning(f"Phone not found at line {position}: {e}")
+                # list 的 append 方法是原子的，因此不需要加锁
+                # https://docs.python.org/zh-cn/3/library/threadsafety.html#thread-safety-list
+                self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
+            except Exception as e:
+                _logger.warning(f"Parsing error at line {position}", exc_info=e)
+                self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
 
-                    # list 的 append 方法是原子的，因此不需要加锁
-                    # https://docs.python.org/zh-cn/3/library/threadsafety.html#thread-safety-list
-                    self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
-                except Exception as e:
-                    self._finish_item()
-                    _logger.warning(f"Parsing error at line {position}", exc_info=e)
+            if queue_item:
+                self._write_queue.put(queue_item)
+            else:
+                self._finish_item()
 
-                    self._state.invalid_lines.append(InvalidItem(row_position=position, raw_content=line, exception=e))
-
-            self._write_queue.put(None)  # 结束信号
-        except queue.ShutDown:
-            pass
+        self._write_queue.put(None)  # 结束信号
 
     def _write_output(self):
-        try:
-            while (item := self._write_queue.get()) is not None:
-                try:
-                    self._output_io.write(item.vcard)
-                    self._output_io.write("\n\n")
-                    time.sleep(1)
-                except Exception as e:
-                    _logger.warning(f"Unexpected writing error at line {item.row_position}", exc_info=e)
-                    self._state.invalid_lines.append(
-                        InvalidItem(row_position=item.row_position, raw_content=item.origin_content, exception=e)
-                    )
-                finally:
-                    self._finish_item()
-        except queue.ShutDown:
-            pass
+        while (item := self._write_queue.get()) is not None:
+            try:
+                self._output_io.write(item.vcard)
+                self._output_io.write("\n\n")
+            except Exception as e:
+                _logger.warning(f"Unexpected writing error at line {item.row_position}", exc_info=e)
+                self._state.invalid_lines.append(
+                    InvalidItem(row_position=item.row_position, raw_content=item.origin_content, exception=e)
+                )
+            finally:
+                self._finish_item()
 
     def _notify_progress(self):
         if self._progress_listener is None:
