@@ -1,6 +1,8 @@
 import logging
 import os.path
+import platform
 import re
+import tkinter
 import traceback
 from pathlib import PurePath
 from tkinter import Event, filedialog, messagebox
@@ -161,6 +163,9 @@ class MainController:
             ),
             detail=t("about_message_box.detail").format(
                 copyright=APP_COPYRIGHT,
+                python_info=f"{platform.python_implementation()} v{platform.python_version()}",
+                tcl_info=f"v{tkinter.TclVersion}",
+                tk_info=f"v{tkinter.TkVersion}",
             ),
         )
 

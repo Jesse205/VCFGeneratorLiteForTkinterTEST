@@ -84,7 +84,12 @@ exception_phone_not_found = "未找到号码"
 [about_message_box]
 title = "关于 VCF 生成器 Lite"
 message = "VCF 生成器 Lite v{version}"
-detail = """{copyright}"""
+detail = """{copyright}
+
+环境信息：
+Python：{python_info}
+Tcl：{tcl_info}
+Tk：{tk_info}"""
 
 [open_url_failure_message_box]
 title = "打开外部应用失败"

@@ -84,7 +84,12 @@ exception_phone_not_found = "Phone number not found"
 [about_message_box]
 title = "About VCF Generator Lite"
 message = "VCF Generator Lite v{version}"
-detail = "{copyright}"
+detail = """{copyright}
+
+Environment Information:
+Python: {python_info}
+Tcl: {tcl_info}
+Tk: {tk_info}"""
 
 [open_url_failure_message_box]
 title = "Failed to Open External Application"
