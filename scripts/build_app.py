@@ -168,6 +168,7 @@ def build_with_zipapp():
         site_packages_path,
         target=os.path.join("dist", DISTRIBUTION_ZIPAPP_NAME),
         main="vcf_generator_lite.__main__:main",
+        interpreter="/usr/bin/env python3",
         compressed=True,
     )
 
