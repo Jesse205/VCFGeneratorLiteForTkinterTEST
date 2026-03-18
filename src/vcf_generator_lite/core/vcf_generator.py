@@ -26,10 +26,10 @@ class GenerateResult:
     invalid_items: list[InvalidItem]
     exception: BaseException | None
     time_elapsed: float
-    saved_total: int
+    saved_count: int
 
 
-class WriteQueueItem(NamedTuple):
+class _WriteQueueItem(NamedTuple):
     row_position: int
     raw_content: str
     vcard: str
@@ -69,14 +69,18 @@ class VCFGeneratorTask(Thread):
         self._total: int = 0
         self._processed: int = 0
         self._progress: float = 0
+        self._saved_count: int = 0
+
         self._invalid_items: list[InvalidItem] = []
+
         self._total_lock = RLock()
         self._processed_lock = RLock()
         self._progress_lock = RLock()
+        self._saved_count_lock = RLock()
 
         self.__stopping: bool = False
         # 使用 deque 会比原生的 queue 性能高
-        self._write_queue: DequeQueue[WriteQueueItem | None] = DequeQueue(10)
+        self._write_queue: DequeQueue[_WriteQueueItem | None] = DequeQueue(10)
         self.result: GenerateResult | None = None
 
     @property
@@ -108,7 +112,7 @@ class VCFGeneratorTask(Thread):
             invalid_items=self._invalid_items,
             exception=exception,
             time_elapsed=end_time - start_time,
-            saved_total=self._processed,
+            saved_count=self._saved_count,
         )
         if self._result_listener:
             self._result_listener(self.result)
@@ -124,11 +128,11 @@ class VCFGeneratorTask(Thread):
                 self._skip_item()
                 continue
 
-            queue_item: WriteQueueItem | None = None
+            queue_item: _WriteQueueItem | None = None
             try:
                 contact = parse_contact(line)
                 vcard = serialize_to_vcard(contact)
-                queue_item = WriteQueueItem(row_position=position, raw_content=line, vcard=vcard)
+                queue_item = _WriteQueueItem(row_position=position, raw_content=line, vcard=vcard)
             except PhoneNotFoundError as e:
                 _logger.warning(f"Phone not found at line {position}: {e}")
 
@@ -142,7 +146,7 @@ class VCFGeneratorTask(Thread):
             if queue_item:
                 self._write_queue.put(queue_item)
             else:
-                self._finish_item()
+                self._finish_item(success=False)
 
         self._write_queue.put(None)  # 结束信号
 
@@ -151,8 +155,10 @@ class VCFGeneratorTask(Thread):
             try:
                 self._output_io.write(item.vcard)
                 self._output_io.write("\n\n")
-            finally:
-                self._finish_item()
+            except BaseException:
+                self._finish_item(success=False)
+            else:
+                self._finish_item(success=True)
 
     def _notify_progress(self):
         if self._progress_listener is None:
@@ -174,7 +180,10 @@ class VCFGeneratorTask(Thread):
             self._total -= 1
         self._update_progress()
 
-    def _finish_item(self):
+    def _finish_item(self, success: bool = True):
         with self._processed_lock:
             self._processed += 1
+        if success:
+            with self._saved_count_lock:
+                self._saved_count += 1
         self._update_progress()

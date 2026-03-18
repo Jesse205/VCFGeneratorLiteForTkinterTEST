@@ -196,7 +196,7 @@ class MainController:
             title=t("vcf_generate_success_message_box.title"),
             message=t("vcf_generate_success_message_box.message").format(path=display_path),
             detail=t("vcf_generate_success_message_box.detail").format(
-                total=generate_result.saved_total,
+                total=generate_result.saved_count,
                 time=round(generate_result.time_elapsed, 3),
             ),
         )

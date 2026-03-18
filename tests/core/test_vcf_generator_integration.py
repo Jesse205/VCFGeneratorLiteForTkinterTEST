@@ -72,6 +72,8 @@ class TestVCFGeneratorIntegration:
         assert progress_history[-1][0] == 1.0, "末尾进度应为 1.0"
         assert progress_history[-1][1] is True, "进度应该是确定性的"
 
+        assert generator.result.saved_count == self.valid_count, f"应有 {self.valid_count} 个联系人保存成功"
+
         # 验证无效行
         assert len(generator.result.invalid_items) == self.invalid_count, f"应有 {self.invalid_count} 个无效行"
         for item in generator.result.invalid_items:
@@ -105,6 +107,7 @@ class TestVCFGeneratorIntegration:
 
         assert generator.result.exception is None
         assert len(generator.result.invalid_items) == 0
+        assert generator.result.saved_count == 0
         assert result_io.getvalue() == ""
         # 对于空输入，可能没有进度报告，或者进度为 0（因为 total 变为 0）
         # 这是当前实现的行为，我们接受它
@@ -130,6 +133,7 @@ class TestVCFGeneratorIntegration:
 
         assert generator.result.exception is None
         assert len(generator.result.invalid_items) == len(self.INVALID_INPUT_LIST)
+        assert generator.result.saved_count == 0
         assert result_io.getvalue() == ""
         # 应该有进度报告且最终为 1.0
         if progress_history:
