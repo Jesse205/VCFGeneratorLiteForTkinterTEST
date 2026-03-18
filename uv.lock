@@ -465,7 +465,7 @@ wheels = [
 
 [[package]]
 name = "vcf-generator-lite"
-version = "4.4.1"
+version = "5.0.0.dev1"
 source = { editable = "." }
 dependencies = [
     { name = "ttk-text" },
@@ -478,12 +478,14 @@ console = [
 
 [package.dev-dependencies]
 build = [
+    { name = "packaging" },
     { name = "pyinstaller" },
     { name = "pyinstaller-versionfile" },
     { name = "requests" },
 ]
 dev = [
     { name = "colorlog" },
+    { name = "packaging" },
     { name = "pyinstaller" },
     { name = "pyinstaller-versionfile" },
     { name = "pyright" },
@@ -508,12 +510,14 @@ provides-extras = ["console"]
 
 [package.metadata.requires-dev]
 build = [
+    { name = "packaging", specifier = ">=26.0" },
     { name = "pyinstaller", specifier = ">=6.17.0" },
     { name = "pyinstaller-versionfile", specifier = ">=3.0.1" },
     { name = "requests", specifier = ">=2.32.5" },
 ]
 dev = [
     { name = "colorlog", specifier = ">=6.9.0" },
+    { name = "packaging", specifier = ">=26.0" },
     { name = "pyinstaller", specifier = ">=6.17.0" },
     { name = "pyinstaller-versionfile", specifier = ">=3.0.1" },
     { name = "pyright", specifier = ">=1.1.407" },

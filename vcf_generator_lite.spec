@@ -12,6 +12,7 @@ from PyInstaller.utils.win32.versioninfo import (
     VarFileInfo,
     VarStruct,
 )
+import packaging.version
 
 from vcf_generator_lite.constants import APP_COPYRIGHT
 
@@ -22,18 +23,34 @@ app_metadata = importlib.metadata.metadata("vcf_generator_lite")
 app_author = app_metadata.get("Author")
 
 
-def get_exe_style_version() -> tuple[int, int, int, int]:
+def get_windows_file_info_version(version: str) -> tuple[int, int, int, int]:
+    parsed = packaging.version.parse(version)
+    build = 0
+    match parsed.pre:
+        case ("a", _):
+            build += 10000
+        case ("b", _):
+            build += 20000
+        case ("rc", _):
+            build += 30000
+        case _:
+            if not parsed.is_devrelease:
+                build += 40000
+    if parsed.pre:
+        build += parsed.pre[1] * 100
+    if parsed.post is not None:
+        build += parsed.post * 10
+    if parsed.dev is not None:
+        build += parsed.dev
+    return (
+        parsed.major,
+        parsed.minor,
+        parsed.micro,
+        build,
+    )
 
-    version_list: list[str] = app_version.split(".")
-    while len(version_list) < 4:
-        version_list.append("0")
 
-    # TODO: 解析 Python 包版本的其他格式，例如 1.0.0.alpha1
-    # https://packaging.python.org/en/latest/specifications/version-specifiers/
-    return (int(version_list[0]), int(version_list[1]), int(version_list[2]), 0)
-
-
-app_exe_version = get_exe_style_version()
+app_exe_version = get_windows_file_info_version(app_version)
 
 a = Analysis(
     ["./src/vcf_generator_lite/__main__.py"],

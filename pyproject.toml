@@ -1,6 +1,6 @@
 [project]
 name = "vcf-generator-lite"
-version = "4.4.1"
+version = "5.0.0.dev1"
 description = "A lightweight tool that quickly converts name and phone number lists into vCard files for batch import to mobile contacts."
 authors = [{ name = "Jesse205", email = "jesse205@qq.com" }]
 license = "Apache-2.0"
@@ -17,6 +17,7 @@ console = ["colorlog>=6.9.0"]
 test = ["pytest>=9.0.2"]
 lint = ["pyright>=1.1.407", "ruff>=0.14.10"]
 build = [
+    "packaging>=26.0",
     "pyinstaller>=6.17.0",
     "pyinstaller-versionfile>=3.0.1",
     "requests>=2.32.5",

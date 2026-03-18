@@ -10,6 +10,7 @@ import zipapp
 from zipfile import ZipFile
 
 import PyInstaller.__main__ as pyinstaller
+import packaging.version
 from prepare_innosetup_extensions import PATH_INNOSETUP_EXTENSION, prepare_innosetup_extensions
 
 from vcf_generator_lite.__version__ import __version__ as APP_VERSION
@@ -22,6 +23,36 @@ PLATFORM_NATIVE = sysconfig.get_platform()
 DISTRIBUTION_ZIPAPP_NAME = f"VCFGeneratorLite-v{APP_VERSION}-py3.pyzw"
 DISTRIBUTION_SETUP_BASE_NAME = f"VCFGeneratorLite-v{APP_VERSION}-{PLATFORM_NATIVE}-setup"
 DISTRIBUTION_PORTABLE_NAME = f"VCFGeneratorLite-v{APP_VERSION}-{PLATFORM_NATIVE}-portable.zip"
+
+
+def get_windows_file_info_version(version: str) -> tuple[int, int, int, int]:
+    parsed = packaging.version.parse(version)
+    build = 0
+    match parsed.pre:
+        case ("a", _):
+            build += 10000
+        case ("b", _):
+            build += 20000
+        case ("rc", _):
+            build += 30000
+        case _:
+            if not parsed.is_devrelease:
+                build += 40000
+    if parsed.pre:
+        build += parsed.pre[1] * 100
+    if parsed.post is not None:
+        build += parsed.post * 10
+    if parsed.dev is not None:
+        build += parsed.dev
+    return (
+        parsed.major,
+        parsed.minor,
+        parsed.micro,
+        build,
+    )
+
+
+app_windows_version = ".".join(str(part) for part in get_windows_file_info_version(APP_VERSION))
 
 
 def ensure_dist_dir():
@@ -80,6 +111,7 @@ def pack_with_innosetup():
             "/D" + f"OutputBaseFilename={DISTRIBUTION_SETUP_BASE_NAME}",
             "/D" + f"MyAppCopyright={APP_COPYRIGHT}",
             "/D" + f"MyAppVersion={APP_VERSION}",
+            "/D" + f"VersionInfoVersion={app_windows_version}",
             "/D" + f"ArchitecturesAllowed={architectures_allowed}",
             "/D" + f"ArchitecturesInstallIn64BitMode={architectures_install_in64_bit_mode}",
             os.path.abspath("vcf_generator_lite.iss"),

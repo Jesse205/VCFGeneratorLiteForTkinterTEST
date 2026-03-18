@@ -32,7 +32,7 @@ ArchitecturesInstallIn64BitMode={#ArchitecturesInstallIn64BitMode}
 AllowNoIcons=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
 VersionInfoOriginalFileName={#OutputBaseFilename}.exe
-VersionInfoVersion={#MyAppVersion}.0
+VersionInfoVersion={#VersionInfoVersion}
 VersionInfoCompany={#MyAppPublisher}
 ShowLanguageDialog=auto
 
