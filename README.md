@@ -183,7 +183,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-## Thanks
+## Credits
 
 - **AI Coding Assistants**: Parts of the code and test code in this project were generated with the assistance of AI coding assistants.
   - DeepSeek
