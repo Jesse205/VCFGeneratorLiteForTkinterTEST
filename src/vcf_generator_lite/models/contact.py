@@ -1,7 +1,6 @@
-import re
 from typing import NamedTuple
 
-CHINA_PHONE_PATTERN = re.compile(r"^1[356789]\d{9}$")
+from vcf_generator_lite.models.phone_rule import DEFAULT_PHONE_RULES, PhoneRule
 
 
 class Contact(NamedTuple):
@@ -15,23 +14,26 @@ class PhoneNotFoundError(ValueError):
         super().__init__("Phone not found")
 
 
-def is_china_mobile_phone(phone: str) -> bool:
-    return len(phone) == 11 and CHINA_PHONE_PATTERN.match(phone) is not None
+def _get_phone_index(contact_parts: list[str], rules: list[PhoneRule]) -> int:
+    for i, part in enumerate(contact_parts):
+        if len(part) > 0 and any((rule.test(part)) for rule in rules):
+            return i
+    raise PhoneNotFoundError()
 
 
-def parse_contact(contact_text: str):
+def parse_contact(contact_text: str, rules: list[PhoneRule] | None = None) -> Contact:
+    if rules is None:
+        rules = DEFAULT_PHONE_RULES
+
+    # 结果不会包含空字符串，并且字符串两侧也没有空白字符。
+    # 详见：https://docs.python.org/zh-cn/3.14/library/stdtypes.html#str.split
     parts = contact_text.split()
 
-    for i, part in enumerate(parts):
-        if is_china_mobile_phone(part):
-            phone = part
-            name_parts = parts[:i]
-            name = " ".join(name_parts) if name_parts else None
-            note_parts = parts[i + 1 :]
-            note = " ".join(note_parts) if note_parts else None
-            break
-    else:
-        raise PhoneNotFoundError
+    phone_index = _get_phone_index(parts, rules)
+
+    phone = parts[phone_index]
+    name = " ".join(parts[:phone_index]) if phone_index > 0 else None
+    note = " ".join(parts[phone_index + 1 :]) if phone_index < len(parts) - 1 else None
 
     return Contact(
         phone=phone,
