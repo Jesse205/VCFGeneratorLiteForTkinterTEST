@@ -44,15 +44,19 @@ VCFGeneratorLiteWithTkinter/
 ├── src/                            # 源代码
 │   └── vcf_generator_lite/
 │       ├── core/                   # 业务逻辑
+│       ├── models                  # 数据模型
 │       ├── resources/              # 静态资源（图标、数据等）
-│       ├── themes/                 # 应用主题
 │       ├── utils/                  # 工具类
-│       ├── widgets/                # 自定义组件（增强型输入框等）
-│       ├── windows/                # 窗口
+│       ├── ui/
+│       │   ├── layouts/            # 布局
+│       │   ├── message_boxes/      # 全局信息框
+│       │   ├── themes/             # 应用主题
+│       │   ├── widgets/            # 自定义组件（增强型输入框等）
+│       │   └── windows/            # 窗口
 │       ├── __main__.py             # 程序入口
 │       └── constants.py            # 全局常量（名称、链接等）
 ├── pyproject.toml                  # 项目配置
-├── vcf_generator_lite.iss          # InnoSetup 安装脚本
+├── vcf_generator_lite.iss          # InnoSetup 配置脚本
 ├── vcf_generator_lite.spec         # PyInstaller 配置
 └── os_notices.toml                 # 开源声明信息
 ```
