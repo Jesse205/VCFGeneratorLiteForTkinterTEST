@@ -18,7 +18,7 @@
 
 </div>
 
-VCF Generator Lite is a lightweight tool that quickly converts name and phone number lists into vCard files for batch import to mobile contacts.
+VCF Generator Lite can convert a contact list into a single vCard file, which can be batch-imported into mobile phone contacts or used for other purposes.
 
 [![License](https://img.shields.io/github/license/hellotool/VCFGeneratorLiteWithTkinter)](./LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.md)

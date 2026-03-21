@@ -1,6 +1,10 @@
 app_name = "VCF Generator Lite"
 button_ok = "OK"
 
+[app]
+name = "VCF Generator Lite"
+description = "Makes one vCard from a contact list."
+
 [startup]
 source_tip = "💡Tip: Source code is hosted at {url}"
 

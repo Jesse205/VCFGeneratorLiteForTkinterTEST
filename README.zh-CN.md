@@ -18,7 +18,7 @@
 
 </div>
 
-VCF 生成器 Lite 是一款轻量级工具，可将姓名和手机号列表快速转换为 vCard 文件，方便批量导入手机通讯录。
+VCF 生成器 Lite 可以将联系人列表转换为单个 vCard 文件，可批量导入到手机通讯录，或者用作其它用途。
 
 [![许可证](https://img.shields.io/github/license/hellotool/VCFGeneratorLiteWithTkinter?label=%E8%AE%B8%E5%8F%AF%E8%AF%81)](./LICENSE)
 [![贡献者公约](https://img.shields.io/badge/贡献者公约-2.1-4baaaa.svg)](./CODE_OF_CONDUCT.zh-CN.md)

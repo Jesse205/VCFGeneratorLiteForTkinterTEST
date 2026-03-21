@@ -1,6 +1,10 @@
 app_name = "VCF 生成器 Lite"
 button_ok = "确定"
 
+[app]
+name = "VCF 生成器 Lite"
+description = "将联系人列表转换为单个 vCard 文件。"
+
 [startup]
 source_tip = "💡提示：源码已托管到 {url}"
 

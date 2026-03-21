@@ -5,18 +5,16 @@ import sys
 
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import URL_REPOSITORY
-from vcf_generator_lite.utils.dpi_aware import enable_dpi_aware
-from vcf_generator_lite.utils.locales import scope
 from vcf_generator_lite.ui.windows.main_window import create_app
+from vcf_generator_lite.utils.dpi_aware import enable_dpi_aware
+from vcf_generator_lite.utils.locales import t
 
 try:
     from colorlog import ColoredFormatter
 except ImportError:
     ColoredFormatter = None
 
-APP_DESCRIPTION = "A lightweight tool that quickly converts name and phone number lists into vCard files for batch import to mobile contacts."
-
-startup_t = scope("startup")
+APP_DESCRIPTION = "Makes one vCard from a contact list."
 
 
 def fix_home_env():
@@ -42,7 +40,8 @@ def setup_logging():
     )
 
 
-def setup_common_argparser(parser: argparse.ArgumentParser):
+def setup_common_parser(parser: argparse.ArgumentParser):
+    parser.description = t("app.description")
     parser.add_argument(
         "-v",
         "--version",
@@ -51,8 +50,8 @@ def setup_common_argparser(parser: argparse.ArgumentParser):
     )
 
 
-def setup_gui_argparser(parser: argparse.ArgumentParser):
-    setup_common_argparser(parser)
+def setup_gui_parser(parser: argparse.ArgumentParser):
+    setup_common_parser(parser)
 
 
 def launch_gui(args: argparse.Namespace):
@@ -61,7 +60,7 @@ def launch_gui(args: argparse.Namespace):
     enable_dpi_aware()
 
     logging.info("Starting VCF Generator...")
-    print(startup_t("source_tip").format(url=URL_REPOSITORY))
+    print(t("startup.source_tip").format(url=URL_REPOSITORY))
 
     app, _ = create_app()
     app.mainloop()
@@ -70,9 +69,8 @@ def launch_gui(args: argparse.Namespace):
 
 
 def main_gui():
-    parser = argparse.ArgumentParser(description=APP_DESCRIPTION)
-    parser.description = APP_DESCRIPTION
-    setup_gui_argparser(parser)
+    parser = argparse.ArgumentParser()
+    setup_gui_parser(parser)
     args = parser.parse_args()
     launch_gui(args)
 
