@@ -150,7 +150,7 @@ class LineNumberBar(Text):
         text_widget = self._bound_text.widget
 
         self.__last_pressed_row = click_row = int(text_widget.index(f"@{event.x},{event.y}").split(".")[0])
-        select_lines(text_widget, click_row, click_row)
+        select_lines(text_widget, click_row, click_row, see=False)
 
     def __on_primary_button_motion(self, event: Event):
         if self.__last_pressed_row is None or self._bound_text is None:
@@ -160,7 +160,7 @@ class LineNumberBar(Text):
         click_row = int(text_widget.index(f"@{event.x},{event.y}").split(".")[0])
         min_row = min(self.__last_pressed_row, click_row)
         max_row = max(self.__last_pressed_row, click_row)
-        select_lines(text_widget, min_row, max_row)
+        select_lines(text_widget, min_row, max_row, see=False)
 
     def __on_primary_button_release(self, event: Event):
         self.__last_pressed_row = None

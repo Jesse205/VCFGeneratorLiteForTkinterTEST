@@ -25,14 +25,16 @@ def get_display_lines_fast(text: Text, index1: str, index2: str):
     return round((index2_y - index1_y) / line_height)
 
 
-def select_text(text: Text, first: str, last: str):
+def select_text(text: Text, first: str, last: str, see=True):
     text.tag_remove("sel", "1.0", "end")
     text.tag_add("sel", first, last)
     text.mark_set("insert", last)
+    if see:
+        text.see("insert")
 
 
-def select_lines(text: Text, first_row: int, last_row: int):
-    select_text(text, f"{first_row}.0", f"{last_row + 1}.0")
+def select_lines(text: Text, first_row: int, last_row: int, see=True):
+    select_text(text, f"{first_row}.0", f"{last_row + 1}.0", see=see)
 
 
 def search_line(text: Text, search_text: str, near_row: int, max_offset: int = 20, strip=True) -> int | None:
