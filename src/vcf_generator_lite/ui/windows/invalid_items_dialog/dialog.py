@@ -77,7 +77,7 @@ class InvalidItemsDialog(EnhancedDialog, VerticalDialogLayout):
         sizegrip.place(relx=1, rely=1, anchor="se")
         self.ok_button = Button(
             footer_frame,
-            text=t("button_ok"),
+            text=t("common.button_ok"),
             default="active",
             command=lambda: self.event_generate(EVENT_EXIT),
         )

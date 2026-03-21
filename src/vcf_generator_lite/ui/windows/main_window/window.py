@@ -48,7 +48,7 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
     @override
     def _configure_ui_withdraw(self):
         super()._configure_ui_withdraw()
-        self.title(t("app_name"))
+        self.title(t("app.name"))
         self.wm_minsize_pt(300, 300)
         self.wm_size_pt(450, 450)
         self._create_widgets(self)

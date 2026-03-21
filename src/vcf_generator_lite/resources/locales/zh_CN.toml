@@ -1,4 +1,4 @@
-app_name = "VCF 生成器 Lite"
+[common]
 button_ok = "确定"
 
 [app]

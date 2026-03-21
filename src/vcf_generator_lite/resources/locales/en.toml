@@ -1,4 +1,4 @@
-app_name = "VCF Generator Lite"
+[common]
 button_ok = "OK"
 
 [app]
