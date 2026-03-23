@@ -6,22 +6,6 @@ from vcf_generator_lite.core.vcf_generator import GenerateResult
 from vcf_generator_lite.utils.locales import t
 
 
-def get_cli_input(file_path: str | None) -> TextIO:
-    if file_path:
-        return open(file_path, encoding="utf8")
-    elif sys.stdin is not None:
-        return sys.stdin
-    raise ValueError("没有任何输入源")
-
-
-def get_cli_output(file_path: str | None) -> TextIO:
-    if file_path:
-        return open(file_path, mode="w", encoding="utf8")
-    elif sys.stdout is not None:
-        return sys.stdout
-    raise ValueError("没有任何输出源")
-
-
 def get_cli_parent_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         parents=[],
@@ -104,8 +88,7 @@ def launch_cli(args: argparse.Namespace):
 
 
 def main_cli():
-    from vcf_generator_lite.entries.common import setup_common
-    from vcf_generator_lite.entries.common import get_common_parent_parser
+    from vcf_generator_lite.entries.common import get_common_parent_parser, setup_common
 
     parser = argparse.ArgumentParser(
         parents=[
