@@ -102,16 +102,20 @@ class VCFGeneratorTask(Thread):
         with ThreadPoolExecutor(max_workers=2, thread_name_prefix="VCFGenerator") as pipeline_executor:
             write_future = pipeline_executor.submit(self._write_output)
             parse_future = pipeline_executor.submit(self._parse_input)
-            done, _ = wait([parse_future, write_future], return_when=FIRST_EXCEPTION)
-        end_time = time.time()
+            done, not_done = wait([parse_future, write_future], return_when=FIRST_EXCEPTION)
+            if not_done:
+                # 在线程未结束的情况下，executor 会等待线程执行完成，因此需要退出所有线程。
+                self.stop()
 
-        self._write_queue.shutdown()
+        end_time = time.time()
 
         exception: BaseException | None = None
         for future in done:
             if (future_exception := future.exception()) and not isinstance(future_exception, queue.ShutDown):
                 exception = future_exception
                 break
+        if exception:
+            _logger.error("An error occurred during VCF generation:", exc_info=exception)
 
         self.result = GenerateResult(
             invalid_items=self._invalid_items,
