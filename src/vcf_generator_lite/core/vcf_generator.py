@@ -61,6 +61,7 @@ class VCFGeneratorTask(Thread):
         progress_listener: Callable[[float, bool], None] | None = None,
         result_listener: Callable[[GenerateResult], None] | None = None,
         phone_rules: list[PhoneRule] | None = None,
+        part_delimiter: str | None = None,
     ):
         super().__init__()
         self._progress_listener = progress_listener
@@ -68,6 +69,7 @@ class VCFGeneratorTask(Thread):
         self._input_text = input_text
         self._output_io = output_io
         self._phone_rules = phone_rules
+        self._part_delimiter = part_delimiter
 
         self._total: int = 0
         self._processed: int = 0
@@ -133,7 +135,7 @@ class VCFGeneratorTask(Thread):
 
             queue_item: _WriteQueueItem | None = None
             try:
-                contact = parse_contact(contact_text=line, rules=self._phone_rules)
+                contact = parse_contact(contact_text=line, rules=self._phone_rules, delimiter=self._part_delimiter)
                 vcard = serialize_to_vcard(contact)
                 queue_item = _WriteQueueItem(row_position=position, raw_content=line, vcard=vcard)
             except PhoneNotFoundError as e:
