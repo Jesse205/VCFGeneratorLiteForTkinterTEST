@@ -2,6 +2,7 @@ import argparse
 import sys
 from typing import TextIO
 
+from vcf_generator_lite.core.vcf_generator import GenerateResult
 from vcf_generator_lite.utils.locales import t
 
 
@@ -43,18 +44,65 @@ def get_cli_parent_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def print_result(result: GenerateResult, output_path: str | None):
+    if result.exception:
+        print(t("cli.info_generation_error").format(exception=result.exception))
+    elif len(result.invalid_items) > 0:
+        if output_path:
+            print(t("cli.info_generation_invalid").format(path=output_path))
+        else:
+            print(t("cli.info_generation_invalid_stdout"))
+    else:
+        if output_path:
+            print(t("cli.info_generation_success").format(path=output_path))
+        else:
+            print(t("cli.info_generation_success_stdout"))
+
+    print()
+    print(t("cli.info_success_count").format(count=result.saved_count))
+    print(t("cli.info_invalid_count").format(count=len(result.invalid_items)))
+    print(t("cli.info_time_elapsed").format(time=result.time_elapsed))
+
+    if result.invalid_items:
+        print()
+        print(t("cli.info_invalid_items_detail"))
+        for item in result.invalid_items:
+            print(
+                t("cli.info_line").format(
+                    row=item.row_position,
+                    raw_content=item.raw_content,
+                    exception=item.exception,
+                )
+            )
+
+
 def launch_cli(args: argparse.Namespace):
     from vcf_generator_lite.core.vcf_generator import VCFGeneratorTask
 
-    with get_cli_input(args.input) as input_io, get_cli_output(args.output) as output_io:
-        input_io = get_cli_input(args.input)
-        output_io = get_cli_output(args.output)
-        if input_io.isatty():
-            print("请以每行“姓名 号码 备注”（备注可忽略）的格式输入（按 Ctrl+Z 可结束）：")
+    input_io: TextIO | None = None
+    output_io: TextIO | None = None
+    if args.input:
+        input_io = open(args.input, encoding="utf8")
+    if args.output:
+        output_io = open(args.output, mode="w", encoding="utf8")
 
-        task = VCFGeneratorTask(input_text=input_io.read(), output_io=output_io)
+    try:
+        if input_io is None:
+            print(t("cli.prompt_contact_list").format(finish_keys="Ctrl+Z"))
+
+        task = VCFGeneratorTask(input_text=(input_io or sys.stdin).read(), output_io=output_io or sys.stdout)
         task.start()
         task.join()
+    finally:
+        if input_io:
+            input_io.close()
+        if output_io:
+            output_io.close()
+    result = task.result
+    if result is None:
+        print(t("cli.info_generation_cancelled"))
+        return
+    print_result(result, args.output)
 
 
 def main_cli():

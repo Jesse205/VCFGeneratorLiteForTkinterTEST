@@ -34,7 +34,7 @@ def get_common_parent_parser() -> argparse.ArgumentParser:
         "-V",
         "--verbose",
         action="store_true",
-        help=t("cli.verbose_help"),
+        help=t("cli.help_option_verbose"),
     )
     parser.add_argument(
         "-v",

@@ -1,31 +1,32 @@
 import argparse
 
-from vcf_generator_lite.entries.cli import launch_cli
 from vcf_generator_lite.utils.locales import t
 
 
 def get_union_parent_parser() -> argparse.ArgumentParser:
+    from vcf_generator_lite.entries.cli import get_cli_parent_parser
     from vcf_generator_lite.entries.common import get_common_parent_parser
     from vcf_generator_lite.entries.gui import get_gui_parent_parser
 
     parser = argparse.ArgumentParser(parents=[get_common_parent_parser()], add_help=False)
-    subparsers = parser.add_subparsers(help="启动模式", dest="launch_mode")
+    subparsers = parser.add_subparsers(help=t("cli.help_argument_launch_mode"), dest="launch_mode")
     subparsers.add_parser(
         "cli",
-        parents=[],
-        help=t("cli.cli_help"),
-        description=t("cli.cli_help"),
+        parents=[get_cli_parent_parser()],
+        help=t("cli.help_command_cli"),
+        description=t("cli.help_command_cli"),
     )
     subparsers.add_parser(
         "gui",
         parents=[get_gui_parent_parser()],
-        help=t("cli.gui_help"),
-        description=t("cli.gui_help"),
+        help=t("cli.help_command_gui"),
+        description=t("cli.help_command_gui"),
     )
     return parser
 
 
 def main():
+    from vcf_generator_lite.entries.cli import launch_cli
     from vcf_generator_lite.entries.common import setup_common
     from vcf_generator_lite.entries.gui import launch_gui
 
