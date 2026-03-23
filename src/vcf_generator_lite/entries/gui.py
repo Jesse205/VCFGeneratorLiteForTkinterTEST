@@ -12,10 +12,8 @@ def fix_home_env():
 
 
 def get_gui_parent_parser() -> argparse.ArgumentParser:
-    from vcf_generator_lite.entries.common import get_common_parent_parser
-
     parser = argparse.ArgumentParser(
-        parents=[get_common_parent_parser()],
+        parents=[],
         add_help=False,
     )
     return parser
@@ -36,10 +34,13 @@ def launch_gui(args: argparse.Namespace):
 
 
 def main_gui():
-    from vcf_generator_lite.entries.common import setup_common
+    from vcf_generator_lite.entries.common import get_common_parent_parser, setup_common
 
     parser = argparse.ArgumentParser(
-        parents=[get_gui_parent_parser()],
+        parents=[
+            get_common_parent_parser(),
+            get_gui_parent_parser(),
+        ],
         description=t("app.description"),
     )
     args = parser.parse_args()

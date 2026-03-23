@@ -64,12 +64,12 @@ message = "系统错误：{reason}"
 [vcf_generate_success_message_box]
 title = "生成 vCard 文件成功"
 message = "已导出文件到 {path}。"
-detail = """名片数量：{total}
-消耗时间：{time} 秒"""
+detail = """成功生成：{count:n} 个
+消耗时间：{time:.3f} 秒"""
 
 [vcf_generate_error_message_box]
 title = "生成 vCard 文件失败"
-message = "生成 vCard 文件时出现未知异常：\n\n{content}"
+message = "生成 vCard 文件时出现未知异常：\n\n{exception}"
 
 [vcf_generating_exit_message_box]
 title = "正在生成 vCard 文件"
@@ -125,7 +125,7 @@ help_command_gui = "启动图形界面"
 info_generation_success = "已导出文件到 {path}。"
 info_generation_success_stdout = "生成成功。"
 info_generation_error = "生成 vCard 文件时出现未知异常：\n\n{exception}"
-info_generation_cancelled = "生成已取消。"
+info_generation_stopped = "生成已停止。"
 info_generation_invalid = "已导出文件到 {path}，异常的号码已被忽略。"
 info_generation_invalid_stdout = "生成完成，但存在无效条目。"
 info_invalid_items_detail = "无效条目详情："

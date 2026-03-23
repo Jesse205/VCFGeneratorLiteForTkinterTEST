@@ -23,10 +23,8 @@ def get_cli_output(file_path: str | None) -> TextIO:
 
 
 def get_cli_parent_parser() -> argparse.ArgumentParser:
-    from vcf_generator_lite.entries.common import get_common_parent_parser
-
     parser = argparse.ArgumentParser(
-        parents=[get_common_parent_parser()],
+        parents=[],
         add_help=False,
     )
     parser.add_argument(
@@ -100,16 +98,20 @@ def launch_cli(args: argparse.Namespace):
             output_io.close()
     result = task.result
     if result is None:
-        print(t("cli.info_generation_cancelled"))
+        print(t("cli.info_generation_stopped"))
         return
     print_result(result, args.output)
 
 
 def main_cli():
     from vcf_generator_lite.entries.common import setup_common
+    from vcf_generator_lite.entries.common import get_common_parent_parser
 
     parser = argparse.ArgumentParser(
-        parents=[get_cli_parent_parser()],
+        parents=[
+            get_common_parent_parser(),
+            get_cli_parent_parser(),
+        ],
         description=t("app.description"),
     )
     args = parser.parse_args()

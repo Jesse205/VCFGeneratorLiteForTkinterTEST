@@ -182,7 +182,7 @@ class MainController:
             parent=self.window,
             title=t("vcf_generate_error_message_box.title"),
             message=t("vcf_generate_error_message_box.message").format(
-                content="\n".join(traceback.format_exception(exception)),
+                exception="\n".join(traceback.format_exception(exception)),
             ),
         )
 
@@ -196,8 +196,8 @@ class MainController:
             title=t("vcf_generate_success_message_box.title"),
             message=t("vcf_generate_success_message_box.message").format(path=display_path),
             detail=t("vcf_generate_success_message_box.detail").format(
-                total=generate_result.saved_count,
-                time=round(generate_result.time_elapsed, 3),
+                count=generate_result.saved_count,
+                time=generate_result.time_elapsed,
             ),
         )
 
