@@ -22,7 +22,7 @@ VCF Generator Lite can convert a contact list into a single vCard file, which ca
 
 > [!NOTE]
 >
-> - Tabs will be automatically converted to spaces, and you can use both tabs and spaces to separate the name and phone number.
+> - You can use both tabs and spaces to separate the name and phone number.
 > - The program will automatically remove extra spaces from the text field.
 >
 > For example, ` Han Meimei   13333333333   A   well-known girl` will be recognized as
