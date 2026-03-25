@@ -16,13 +16,13 @@ def get_cli_parent_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-i",
         "--input",
-        help="输入文件路径",
+        help=t("cli.help_option_input"),
         required=sys.stdin is None,
     )
     parser.add_argument(
         "-o",
         "--output",
-        help="输出文件路径",
+        help=t("cli.help_option_output"),
         required=sys.stdout is None,
     )
     return parser
