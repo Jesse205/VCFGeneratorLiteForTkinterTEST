@@ -84,7 +84,6 @@ heading_row = "Position"
 heading_original = "Original Content"
 heading_reason = "Reason"
 cell_row = "Row {row}"
-exception_phone_not_found = "Phone number not found"
 
 [about_message_box]
 title = "About VCF Generator Lite"
@@ -134,3 +133,6 @@ info_success_count = "Successfully generated: {count:n} items"
 info_invalid_count = "Invalid entries: {count:n} items"
 info_time_elapsed = "Time elapsed: {time:.3f} seconds"
 info_line = "Line {row}: {raw_content} - {exception}"
+
+[exception]
+phone_not_found = "Phone number not found"

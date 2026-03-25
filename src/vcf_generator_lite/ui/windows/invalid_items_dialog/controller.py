@@ -2,15 +2,9 @@ from collections.abc import Callable
 from tkinter import Event, EventType
 
 from vcf_generator_lite.core.vcf_generator import InvalidItem
-from vcf_generator_lite.models.contact import PhoneNotFoundError
 from vcf_generator_lite.ui.windows.invalid_items_dialog.common import st
 from vcf_generator_lite.ui.windows.invalid_items_dialog.dialog import InvalidItemsDialog
-
-
-def get_locale_exception(exception: BaseException):
-    if isinstance(exception, PhoneNotFoundError):
-        return st("exception_phone_not_found")
-    return str(exception)
+from vcf_generator_lite.utils.localized_exception import get_localized_exception_msg
 
 
 class InvalidItemsController:
@@ -33,7 +27,7 @@ class InvalidItemsController:
                 values=(
                     st("cell_row").format(row=item.row_position),
                     item.raw_content,
-                    get_locale_exception(item.exception),
+                    get_localized_exception_msg(item.exception),
                 ),
             )
         window.content_tree.bind("<Double-Button-1>", self.__on_tree_view_enter)

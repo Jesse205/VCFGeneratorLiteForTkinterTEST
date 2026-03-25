@@ -8,6 +8,7 @@ from typing import TextIO
 
 from vcf_generator_lite.core.vcf_generator import GenerateResult
 from vcf_generator_lite.utils.locales import t
+from vcf_generator_lite.utils.localized_exception import get_localized_exception_msg
 
 
 def get_cli_parent_parser() -> argparse.ArgumentParser:
@@ -56,7 +57,7 @@ def print_result(result: GenerateResult, output_path: str | None):
                 t("cli.info_line").format(
                     row=item.row_position,
                     raw_content=item.raw_content,
-                    exception=item.exception,
+                    exception=get_localized_exception_msg(item.exception),
                 ),
             )
 
