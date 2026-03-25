@@ -3,9 +3,8 @@ import platform
 import re
 import tkinter
 import traceback
-from pathlib import PurePath
+from pathlib import Path
 from tkinter import Event, filedialog, messagebox
-from typing import IO
 
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT
@@ -69,38 +68,37 @@ class MainController:
         else:
             self.on_generate(event)
 
-    def pick_output_file(self) -> IO[str] | None:
-        file_io: IO[str] | None = None
+    def generate_file(self):
+        if self.is_generating:
+            return
+
+        file_path_str = filedialog.asksaveasfilename(
+            title=t("save_vcf_window.title"),
+            parent=self.window,
+            initialfile=self.generate_file_name,
+            filetypes=[(t("save_vcf_window.label_type_vcf"), ".vcf")],
+            defaultextension=".vcf",
+        )
+        if not file_path_str:
+            return
+        file_path = Path(file_path_str)
         try:
-            file_io = filedialog.asksaveasfile(
-                title=t("save_vcf_window.title"),
-                parent=self.window,
-                initialfile=self.generate_file_name,
-                filetypes=[(t("save_vcf_window.label_type_vcf"), ".vcf")],
-                defaultextension=".vcf",
-            )
+            file_io = file_path.open("w", encoding="utf-8", newline="\r\n")
         except PermissionError:
             messagebox.showerror(
                 title=t("save_vcf_permission_denied_message_box.title"),
                 message=t("save_vcf_permission_denied_message_box.message"),
             )
+            return
         except OSError as e:
             messagebox.showerror(
                 title=t("save_vcf_os_error_message_box.title"),
                 message=t("save_vcf_os_error_message_box.message").format(reason=str(e)),
             )
-        return file_io
-
-    def generate_file(self):
-        if self.is_generating:
-            return
-
-        file_io = self.pick_output_file()
-        if file_io is None:
             return
 
         origin_text = self.window.get_text_content()
-        self.generate_file_name = PurePath(file_io.name).name
+        self.generate_file_name = file_path.name
         self.is_generating = True
 
         self.window.set_progress(progress=0)
@@ -123,9 +121,7 @@ class MainController:
             self.window.set_generating(False)
             self.window.update()
 
-            # 在 Windows 中转换为 Windows 的路径分隔符
-            display_path = str(PurePath(file_io.name))
-            self._show_generate_done_dialog(display_path, result)
+            self._show_generate_done_dialog(str(file_path), result)
 
         def on_generate_file_result(result: GenerateResult):
             file_io.close()
