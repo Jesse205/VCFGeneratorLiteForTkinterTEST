@@ -150,6 +150,7 @@ def build_with_zipapp():
     subprocess.run(  # noqa: S603
         ["uv", "pip", "sync", "-", "--no-cache", "--target", site_packages_path],  # noqa: S607
         input=export_result.stdout,
+        text=True,
         check=True,
     )
 
