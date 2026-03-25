@@ -60,7 +60,7 @@ class Translator:
             if isinstance(result, str):
                 return result
         while self.fallback_traversable_list:
-            translations = self.load_translation()
+            translations = self.load_translation(self.fallback_traversable_list.pop(0))
             result = deep_get(translations, split_keys)
             if isinstance(result, str):
                 return result
@@ -68,11 +68,10 @@ class Translator:
         msg = f"Key {key} not found in translations"
         raise KeyError(msg)
 
-    def load_translation(self):
-        traversable = self.fallback_traversable_list.pop(0)
+    def load_translation(self, traversable: Traversable):
         with traversable.open("rb") as f:
             result = tomllib.load(f)
-            self.loaded_translations.append(result)
+        self.loaded_translations.append(result)
         return result
 
     def scope(self, scope: str):
