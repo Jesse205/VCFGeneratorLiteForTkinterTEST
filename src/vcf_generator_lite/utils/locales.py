@@ -65,8 +65,7 @@ class Translator:
             if isinstance(result, str):
                 return result
 
-        msg = f"Key {key} not found in translations"
-        raise KeyError(msg)
+        raise KeyError(f"Key {key} not found in translations")
 
     def load_translation(self, traversable: Traversable):
         with traversable.open("rb") as f:

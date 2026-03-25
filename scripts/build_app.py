@@ -64,8 +64,7 @@ def ensure_dist_dir():
 
 def require_pyinstaller_output():
     if not PATH_DIST.joinpath("vcf_generator_lite").is_dir():
-        msg = "PyInstaller build not found."
-        raise RuntimeError(msg)
+        raise RuntimeError("PyInstaller build not found.")
 
 
 def build_with_pyinstaller():
@@ -103,8 +102,7 @@ def pack_with_innosetup():
             architectures_allowed = "arm64"
             architectures_install_in64_bit_mode = "win64"
         case _:
-            msg = f"Invalid platform: {PLATFORM_NATIVE}"
-            raise ValueError(msg)
+            raise ValueError(f"Invalid platform: {PLATFORM_NATIVE}")
 
     subprocess.run(  # noqa: S603
         [
@@ -204,8 +202,7 @@ def main():
         case "zipapp":
             build_with_zipapp()
         case _:
-            msg = f"Invalid type: {type_}"
-            raise ValueError(msg)
+            raise ValueError(f"Invalid type: {type_}")
 
 
 if __name__ == "__main__":

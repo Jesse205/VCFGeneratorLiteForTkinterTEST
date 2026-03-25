@@ -65,8 +65,7 @@ class CenterWindowExtension(WindowExtension, ABC):
 
     def center_reference_master(self):
         if self.master is None:
-            msg = "master is None"
-            raise ValueError(msg)
+            raise ValueError("master is None")
         self.center_reference_rect(
             rect_x=self.master.winfo_rootx(),
             rect_y=self.master.winfo_rooty(),

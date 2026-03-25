@@ -82,6 +82,9 @@ ignore = [
     "ANN202",
     "ANN204",
     "COM812", # 可能与 Formatter 冲突
+    "TRY003", # 没有必要
+    "EM101",
+    "EM102",
 ]
 select = ["ALL"]
 exclude = ["tests/**"]
