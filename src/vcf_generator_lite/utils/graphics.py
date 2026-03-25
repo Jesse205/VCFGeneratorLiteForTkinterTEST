@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 from tkinter import Misc
-from typing import NamedTuple
+from typing import TYPE_CHECKING, NamedTuple
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 class Offset(NamedTuple):
@@ -34,17 +37,18 @@ class FPixelPadding:
         )
 
     def to_tuple(self) -> tuple[float, float, float, float]:
-        return (self.left, self.top, self.right, self.bottom)
+        return self.left, self.top, self.right, self.bottom
 
 
-def parse_padding(master: Misc, value: str | float | tuple[str | int | float, ...]) -> FPixelPadding:
-    padding = value
-    if isinstance(padding, str):
-        padding = padding.split()
-    elif isinstance(padding, (int, float)):
-        padding = (padding,)
-    left = master.winfo_fpixels(str(padding[0])) if len(padding) >= 1 else 0
-    top = master.winfo_fpixels(str(padding[1])) if len(padding) >= 2 else left
-    right = master.winfo_fpixels(str(padding[2])) if len(padding) >= 3 else left
-    bottom = master.winfo_fpixels(str(padding[3])) if len(padding) >= 4 else top
+def parse_ttk_padding(master: Misc, value: str | float | tuple[str | int | float, ...]) -> FPixelPadding:
+    if isinstance(value, (int, float)):
+        return FPixelPadding(value, value, value, value)
+
+    parts: Sequence[str | int | float] = value.split() if isinstance(value, str) else value
+    padding = (*map(master.winfo_fpixels, parts), None, None, None, None)
+
+    left = padding[0] if padding[0] is not None else 0
+    top = padding[1] if padding[1] is not None else left
+    right = padding[2] if padding[2] is not None else left
+    bottom = padding[3] if padding[3] is not None else top
     return FPixelPadding(left, top, right, bottom)

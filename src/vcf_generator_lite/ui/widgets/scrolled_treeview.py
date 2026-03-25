@@ -1,7 +1,7 @@
 from tkinter import Misc
 from tkinter.ttk import Scrollbar, Style, Treeview
 
-from vcf_generator_lite.utils.graphics import FPixelPadding, parse_padding
+from vcf_generator_lite.utils.graphics import FPixelPadding, parse_ttk_padding
 from vcf_generator_lite.utils.tkinter.misc import scale
 
 
@@ -32,9 +32,7 @@ class ScrolledTreeview(Treeview):
             self.vbar.configure(command=self.yview)
             self.vbar.pack(side="right", fill="y", pady="1.5p", padx="1.5p")
             self.configure(yscrollcommand=self.vbar.set)
-            self.insets += FPixelPadding(
-                right=self.vbar.winfo_reqwidth() + scale(self, 1.5),
-            )
+            self.insets += FPixelPadding(right=self.vbar.winfo_reqwidth() + scale(self, 3))
 
     def _get_current_padding(self) -> FPixelPadding:
         padding = self.cget("padding")
@@ -42,4 +40,4 @@ class ScrolledTreeview(Treeview):
             padding = Style(self).lookup(self.cget("style") or "Treeview", "padding")
         if not padding:
             padding = 0
-        return parse_padding(self, padding)
+        return parse_ttk_padding(self, padding)
