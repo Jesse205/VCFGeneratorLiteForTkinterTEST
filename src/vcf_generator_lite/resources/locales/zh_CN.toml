@@ -52,6 +52,7 @@ usage = """使用说明：
 [save_vcf_window]
 title = "选择文件保存位置"
 label_type_vcf = "vCard 文件 (*.vcf)"
+default_file_name = "我的联系人.vcf"
 
 [save_vcf_permission_denied_message_box]
 title = "保存失败"

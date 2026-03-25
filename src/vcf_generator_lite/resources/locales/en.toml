@@ -52,6 +52,7 @@ usage = """Instructions:
 [save_vcf_window]
 title = "Select File Save Location"
 label_type_vcf = "vCard File (*.vcf)"
+default_file_name = "My Contacts.vcf"
 
 [save_vcf_permission_denied_message_box]
 title = "Save Failed"

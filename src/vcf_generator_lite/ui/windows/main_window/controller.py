@@ -1,10 +1,13 @@
 import logging
 import platform
 import re
+import signal
 import tkinter
 import traceback
 from pathlib import Path
 from tkinter import Event, filedialog, messagebox
+from types import FrameType
+from typing import TextIO
 
 from vcf_generator_lite.__version__ import __version__
 from vcf_generator_lite.constants import APP_COPYRIGHT
@@ -29,8 +32,10 @@ class MainController:
     def __init__(self, window: VCFGeneratorLiteApp):
         self.window = window
         self.is_generating: bool = False
-        self.generate_file_name: str = "phones.vcf"
+        self.is_exiting = False
         self.generator: VCFGeneratorTask | None = None
+        self.generation_file: Path | None = None
+        self.generation_io: TextIO | None = None
 
         window.bind(EVENT_ABOUT, self.on_about)
         window.bind(EVENT_CLEAN_QUOTES, self.on_clean_quotes)
@@ -41,6 +46,8 @@ class MainController:
         window.bind("<Control-g>", self.on_generate)
         window.bind("<Return>", self.on_return)
         window.bind(EVENT_EXIT, self.on_exit)
+
+        signal.signal(signal.SIGINT, self.signal_handler)
 
     def on_about(self, _: Event):
         self._show_about_message_box()
@@ -57,10 +64,7 @@ class MainController:
         self.generate_file()
 
     def on_stop(self, _: Event):
-        if self.generator is None or self.generator.is_stopping:
-            return
-        self.window.set_generating("stopping")
-        self.generator.stop()
+        self.stop()
 
     def on_generate_or_stop(self, event: Event):
         if self.is_generating:
@@ -68,37 +72,41 @@ class MainController:
         else:
             self.on_generate(event)
 
-    def generate_file(self):
-        if self.is_generating:
-            return
-
+    def pick_and_open_file(self) -> None | TextIO:
         file_path_str = filedialog.asksaveasfilename(
             title=t("save_vcf_window.title"),
             parent=self.window,
-            initialfile=self.generate_file_name,
+            initialfile=self.generation_file.name if self.generation_file else t("save_vcf_window.default_file_name"),
             filetypes=[(t("save_vcf_window.label_type_vcf"), ".vcf")],
             defaultextension=".vcf",
         )
         if not file_path_str:
-            return
-        file_path = Path(file_path_str)
+            return None
+        self.generation_file = Path(file_path_str)
         try:
-            file_io = file_path.open("w", encoding="utf-8", newline="\r\n")
+            file_io = self.generation_file.open("w", encoding="utf-8", newline="\r\n")
         except PermissionError:
             messagebox.showerror(
                 title=t("save_vcf_permission_denied_message_box.title"),
                 message=t("save_vcf_permission_denied_message_box.message"),
             )
-            return
+            return None
         except OSError as e:
             messagebox.showerror(
                 title=t("save_vcf_os_error_message_box.title"),
                 message=t("save_vcf_os_error_message_box.message").format(reason=str(e)),
             )
-            return
+            return None
+        self.generation_io = file_io
+        return file_io
 
+    def generate_file(self):
+        if self.is_generating:
+            return
+        file_io = self.pick_and_open_file()
+        if not file_io:
+            return
         origin_text = self.window.get_text_content()
-        self.generate_file_name = file_path.name
         self.is_generating = True
 
         self.window.set_progress(progress=0)
@@ -108,42 +116,66 @@ class MainController:
         self.window.set_generating(True)
         self.window.update()
 
-        def on_update_progress(progress: float, determinate: bool):
-            if self.generator and self.generator.is_stopping:
-                return
-            self.window.set_progress_determinate(determinate)
-            if determinate:
-                self.window.set_progress(progress)
-
-        def on_generate_file_done(result: GenerateResult):
-            self.is_generating = False
-
-            self.window.set_generating(False)
-            self.window.update()
-
-            self._show_generate_done_dialog(str(file_path), result)
-
-        def on_generate_file_result(result: GenerateResult):
-            file_io.close()
-
-            self.generator = None
-            self.window.after_idle(on_generate_file_done, result)
-
         self.generator = VCFGeneratorTask(
             input_text=origin_text,
             output_io=file_io,
-            progress_listener=on_update_progress,
-            result_listener=on_generate_file_result,
+            progress_listener=self.on_generation_update_progress,
+            result_listener=self.on_generation_file_result,
         )
         self.generator.start()
 
-    def on_exit(self, _: Event):
-        if self.is_generating:
-            messagebox.showwarning(
-                parent=self.window,
-                title=t("vcf_generating_exit_message_box.title"),
-                message=t("vcf_generating_exit_message_box.message"),
+    def on_generation_update_progress(self, progress: float, determinate: bool):
+        if not self.generator:
+            raise RuntimeError("Invoke callback without generating.")
+
+        if self.generator.is_stopping:
+            return
+
+        self.window.set_progress_determinate(determinate)
+        if determinate:
+            self.window.set_progress(progress)
+
+    def on_generation_file_done(self, result: GenerateResult):
+        if not self.is_generating or not self.generation_file:
+            raise RuntimeError("Invoke callback without generating.")
+
+        self.is_generating = False
+        self.generator = None
+
+        self.window.set_generating(False)
+        self.window.update()
+
+        if not self.is_exiting:
+            self._show_generate_done_dialog(
+                display_path=str(self.generation_file.name),
+                generate_result=result,
             )
+        else:
+            self.window.event_generate(EVENT_EXIT)
+
+    def on_generation_file_result(self, result: GenerateResult):
+        if not self.generation_io:
+            raise RuntimeError("Invoke callback without generating.")
+        self.generation_io.close()
+        self.generation_io = None
+
+        self.window.after_idle(self.on_generation_file_done, result)
+
+    def signal_handler(self, sig_num: int, _frame: FrameType | None):
+        if sig_num == signal.SIGINT:
+            self.window.event_generate(EVENT_EXIT)
+
+    def stop(self):
+        if self.generator is None or self.generator.is_stopping:
+            return
+
+        self.window.set_generating("stopping")
+        self.generator.stop()
+
+    def on_exit(self, _: Event):
+        self.is_exiting = True
+        if self.is_generating:
+            self.stop()
         else:
             self.window.destroy()
 
