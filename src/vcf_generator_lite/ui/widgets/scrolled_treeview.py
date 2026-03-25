@@ -1,4 +1,3 @@
-import dataclasses
 from tkinter import Misc
 from tkinter.ttk import Scrollbar, Style, Treeview
 
@@ -30,13 +29,12 @@ class ScrolledTreeview(Treeview):
     def _create_vertical_scrollbar(self):
         if not self.vbar:
             self.vbar = Scrollbar(self, orient="vertical")
+            self.vbar.configure(command=self.yview)
             self.vbar.pack(side="right", fill="y", pady="1.5p", padx="1.5p")
             self.configure(yscrollcommand=self.vbar.set)
-            self.insets = dataclasses.replace(
-                self._insets,
+            self.insets += FPixelPadding(
                 right=self.vbar.winfo_reqwidth() + scale(self, 1.5),
             )
-            self.vbar.configure(command=self.yview)
 
     def _get_current_padding(self) -> FPixelPadding:
         padding = self.cget("padding")
