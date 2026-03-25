@@ -1,6 +1,5 @@
 import binascii
 import logging
-import queue
 import time
 from collections.abc import Callable
 from concurrent.futures import FIRST_EXCEPTION, ThreadPoolExecutor, wait
@@ -10,7 +9,7 @@ from typing import IO, NamedTuple, override
 
 from vcf_generator_lite.models.contact import Contact, PhoneNotFoundError, parse_contact
 from vcf_generator_lite.models.phone_rule import PhoneRule
-from vcf_generator_lite.utils.deque_queue import DequeQueue
+from vcf_generator_lite.utils.deque_queue import DequeQueue, ShutDownError
 
 _logger = logging.getLogger(__name__)
 
@@ -112,7 +111,7 @@ class VCFGeneratorTask(Thread):
 
         exception: BaseException | None = None
         for future in done:
-            if (future_exception := future.exception()) and not isinstance(future_exception, queue.ShutDown):
+            if (future_exception := future.exception()) and not isinstance(future_exception, ShutDownError):
                 exception = future_exception
                 break
         if exception:

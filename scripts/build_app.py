@@ -148,14 +148,15 @@ def build_with_zipapp():
         check=True,
     )
     subprocess.run(  # noqa: S603
-        ["uv", "pip", "sync", "-", "--no-cache", "--target", site_packages_path],  # noqa: S607
+        ["uv", "pip", "sync", "--no-cache", "--target", site_packages_path, "--link-mode", "copy", "-"],  # noqa: S607
         input=export_result.stdout,
         text=True,
         check=True,
     )
 
     # 清理无用内容
-    shutil.rmtree(site_packages_path / "bin")
+    if (bin_path := site_packages_path / "bin").is_dir():
+        shutil.rmtree(bin_path)
     site_packages_path.joinpath(".lock").unlink()
     site_packages_path.glob("*.dist-info")
     for info_dir_paths in site_packages_path.glob("*.dist-info"):
@@ -166,9 +167,12 @@ def build_with_zipapp():
                 else:
                     shutil.rmtree(file)
 
+    archive_path = PATH_DIST.joinpath(DISTRIBUTION_ZIPAPP_NAME)
+    if archive_path.exists():
+        archive_path.unlink()
     zipapp.create_archive(
         site_packages_path,
-        target=PATH_INNOSETUP_EXTENSION.joinpath(DISTRIBUTION_ZIPAPP_NAME),
+        target=archive_path,
         main="vcf_generator_lite.__main__:main",
         interpreter="/usr/bin/env python3",
         compressed=True,
