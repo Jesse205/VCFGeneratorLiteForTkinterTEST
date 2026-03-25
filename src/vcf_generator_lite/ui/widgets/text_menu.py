@@ -25,9 +25,10 @@ class TextContextMenu(Menu):
     def is_selected(self):
         try:
             self.master.index(SEL_FIRST)
-            return True
         except TclError:
             return False
+        else:
+            return True
 
     def show(self, x: int, y: int):
         self.master.focus()

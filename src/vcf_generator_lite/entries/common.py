@@ -11,7 +11,7 @@ def setup_logging(verbose: bool):
         from colorlog import ColoredFormatter
     except ImportError:
         # noinspection PyPep8Naming
-        ColoredFormatter = None
+        ColoredFormatter = None  # noqa: N806
 
     handler = logging.StreamHandler()
     handler.setStream(sys.stdout)

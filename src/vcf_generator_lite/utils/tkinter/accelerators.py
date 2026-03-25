@@ -22,7 +22,7 @@ def get_default_accelerators(master: Misc) -> DefaultAccelerators:
 
     default_accelerators: DefaultAccelerators | None = None
 
-    match root._windowingsystem:
+    match root._windowingsystem:  # noqa: SLF001
         case "win32":
             default_accelerators = DefaultAccelerators(
                 undo="Ctrl+Z",

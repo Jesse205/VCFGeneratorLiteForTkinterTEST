@@ -58,6 +58,7 @@ class VCFGeneratorTask(Thread):
         self,
         input_text: str,
         output_io: IO[str],
+        *,
         progress_listener: Callable[[float, bool], None] | None = None,
         result_listener: Callable[[GenerateResult], None] | None = None,
         phone_rules: list[PhoneRule] | None = None,
@@ -115,7 +116,7 @@ class VCFGeneratorTask(Thread):
                 exception = future_exception
                 break
         if exception:
-            _logger.error("An error occurred during VCF generation:", exc_info=exception)
+            _logger.exception("An error occurred during VCF generation:", exc_info=exception)
 
         self.result = GenerateResult(
             invalid_items=self._invalid_items,
@@ -143,19 +144,16 @@ class VCFGeneratorTask(Thread):
                 vcard = serialize_to_vcard(contact)
                 queue_item = _WriteQueueItem(row_position=position, raw_content=line, vcard=vcard)
             except PhoneNotFoundError as e:
-                _logger.warning(f"Phone not found at line {position}: {e}")
+                _logger.warning("Phone not found at line %s: %s", position, e)
 
                 # list 的 append 方法是原子的，因此不需要加锁
                 # https://docs.python.org/zh-cn/3/library/threadsafety.html#thread-safety-list
                 self._invalid_items.append(InvalidItem(row_position=position, raw_content=line, exception=e))
-            except Exception as e:
-                _logger.warning(f"Parsing error at line {position}", exc_info=e)
-                self._invalid_items.append(InvalidItem(row_position=position, raw_content=line, exception=e))
-
-            if queue_item:
-                self._write_queue.put(queue_item)
-            else:
-                self._finish_item(success=False)
+            finally:
+                if queue_item:
+                    self._write_queue.put(queue_item)
+                else:
+                    self._finish_item(success=False)
 
         self._write_queue.put(None)  # 结束信号
 
@@ -166,6 +164,7 @@ class VCFGeneratorTask(Thread):
                 self._output_io.write("\n\n")
             except BaseException:
                 self._finish_item(success=False)
+                raise
             else:
                 self._finish_item(success=True)
 
@@ -189,7 +188,7 @@ class VCFGeneratorTask(Thread):
             self._total -= 1
         self._update_progress()
 
-    def _finish_item(self, success: bool = True):
+    def _finish_item(self, *, success: bool = True):
         with self._processed_lock:
             self._processed += 1
         if success:

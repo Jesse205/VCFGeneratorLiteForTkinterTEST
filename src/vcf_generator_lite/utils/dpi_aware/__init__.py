@@ -7,10 +7,9 @@ def create_dpi_aware() -> DpiAware:
         from vcf_generator_lite.utils.dpi_aware.windows_impl import WindowsDpiAware
 
         return WindowsDpiAware()
-    else:
-        from vcf_generator_lite.utils.dpi_aware.null_impl import NullDpiAware
+    from vcf_generator_lite.utils.dpi_aware.null_impl import NullDpiAware
 
-        return NullDpiAware()
+    return NullDpiAware()
 
 
 _dpi_aware = create_dpi_aware()

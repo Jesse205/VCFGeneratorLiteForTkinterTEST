@@ -1,6 +1,6 @@
 import argparse
-import os
 import sys
+from pathlib import Path
 
 import requests
 
@@ -13,8 +13,8 @@ URL_CHINESE_SIMPLIFIED_ISL_LATEST = (
 # 国内使用 GitCode 加速下载
 # ***** GitCode!
 
-PATH_INNOSETUP_EXTENSION = "./.innosetup"
-PATH_CHINESE_SIMPLIFIED = os.path.join(PATH_INNOSETUP_EXTENSION, "Languages", "ChineseSimplified.isl")
+PATH_INNOSETUP_EXTENSION = Path("./.innosetup")
+PATH_CHINESE_SIMPLIFIED = PATH_INNOSETUP_EXTENSION.joinpath("Languages", "ChineseSimplified.isl")
 
 
 def prepare_innosetup_extensions(
@@ -32,8 +32,8 @@ def prepare_innosetup_extensions(
     # 获取到的内容是 CRLF 换行的，但是 python 只能识别 LF 换行，所以需要替换一下
     file_text = file_text.replace("\r", "")
 
-    os.makedirs(os.path.dirname(PATH_CHINESE_SIMPLIFIED), exist_ok=True)
-    with open(PATH_CHINESE_SIMPLIFIED, "wt", encoding=response.encoding, newline="\r\n") as f:
+    PATH_CHINESE_SIMPLIFIED.parent.mkdir(parents=True, exist_ok=True)
+    with PATH_CHINESE_SIMPLIFIED.open("w", encoding=response.encoding, newline="\r\n") as f:
         f.write(file_text)
     print("Downloaded Chinese Simplified ISL.")
 

@@ -1,4 +1,5 @@
 import dataclasses
+from tkinter import Misc
 from tkinter.ttk import Scrollbar, Style, Treeview
 
 from vcf_generator_lite.utils.graphics import FPixelPadding, parse_padding
@@ -6,7 +7,7 @@ from vcf_generator_lite.utils.tkinter.misc import scale
 
 
 class ScrolledTreeview(Treeview):
-    def __init__(self, master=None, vertical=True, **kw):
+    def __init__(self, master: Misc | None = None, *, vertical: bool = True, **kw):
         super().__init__(master, **kw)
         self.vbar: Scrollbar | None = None
         self._insets: FPixelPadding = FPixelPadding()

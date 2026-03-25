@@ -1,5 +1,6 @@
 import pytest
-from vcf_generator_lite.models.contact import PhoneNotFoundError, parse_contact, Contact
+
+from vcf_generator_lite.models.contact import Contact, PhoneNotFoundError, parse_contact
 
 FAKE_PHONES = [
     "18445522522",

@@ -1,5 +1,7 @@
 import argparse
 import sys
+from contextlib import ExitStack
+from pathlib import Path
 from typing import TextIO
 
 from vcf_generator_lite.core.vcf_generator import GenerateResult
@@ -34,11 +36,10 @@ def print_result(result: GenerateResult, output_path: str | None):
             print(t("cli.info_generation_invalid").format(path=output_path))
         else:
             print(t("cli.info_generation_invalid_stdout"))
+    elif output_path:
+        print(t("cli.info_generation_success").format(path=output_path))
     else:
-        if output_path:
-            print(t("cli.info_generation_success").format(path=output_path))
-        else:
-            print(t("cli.info_generation_success_stdout"))
+        print(t("cli.info_generation_success_stdout"))
 
     print()
     print(t("cli.info_success_count").format(count=result.saved_count))
@@ -54,32 +55,30 @@ def print_result(result: GenerateResult, output_path: str | None):
                     row=item.row_position,
                     raw_content=item.raw_content,
                     exception=item.exception,
-                )
+                ),
             )
 
 
 def launch_cli(args: argparse.Namespace):
     from vcf_generator_lite.core.vcf_generator import VCFGeneratorTask
 
-    input_io: TextIO | None = None
-    output_io: TextIO | None = None
-    if args.input:
-        input_io = open(args.input, encoding="utf8")
-    if args.output:
-        output_io = open(args.output, mode="w", encoding="utf8")
+    with ExitStack() as stack:
+        input_io: TextIO | None = None
+        output_io: TextIO | None = None
+        input_io = stack.enter_context(Path(args.input).open(encoding="utf8")) if args.input else sys.stdin
+        output_io = (
+            stack.enter_context(Path(args.output).open(mode="w", encoding="utf8")) if args.output else sys.stdout
+        )
+        if input_io is None or output_io is None:
+            sys.exit(1)
 
-    try:
-        if input_io is None:
+        if not args.input:
             print(t("cli.prompt_contact_list").format(finish_keys="Ctrl+Z"))
 
-        task = VCFGeneratorTask(input_text=(input_io or sys.stdin).read(), output_io=output_io or sys.stdout)
+        task = VCFGeneratorTask(input_text=input_io.read(), output_io=output_io)
         task.start()
         task.join()
-    finally:
-        if input_io:
-            input_io.close()
-        if output_io:
-            output_io.close()
+
     result = task.result
     if result is None:
         print(t("cli.info_generation_stopped"))

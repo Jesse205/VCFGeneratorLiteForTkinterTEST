@@ -2,9 +2,10 @@ import importlib.metadata
 import runpy
 import sys
 import tomllib
+from pathlib import Path
 from typing import TypedDict
 
-PATH_OS_NOTICE_DATA = "os-notices.toml"
+PATH_OS_NOTICE_DATA = Path("os-notices.toml")
 
 Notice = TypedDict(
     "Notice",
@@ -18,7 +19,11 @@ Notice = TypedDict(
     },
 )
 
-NoticesConfig = TypedDict("NoticesConfig", {"template": str, "output": str, "notices": list[Notice]})
+
+class NoticesConfig(TypedDict):
+    template: str
+    output: str
+    notices: list[Notice]
 
 
 def format_url(url: str, notice: Notice) -> str:
@@ -32,14 +37,14 @@ def generate_notices(config: NoticesConfig):
 
 
 def main() -> int:
-    with open(PATH_OS_NOTICE_DATA, "rb") as f:
+    with PATH_OS_NOTICE_DATA.open("rb") as f:
         config = NoticesConfig(**tomllib.load(f))
 
-    with open(config["output"], "w", encoding="utf-8") as f:
-        output = runpy.run_path(
+    with Path(config["output"]).open("w", encoding="utf-8") as f:
+        make = runpy.run_path(
             config["template"],
-            init_globals={"notices": generate_notices(config)},
-        )["output"]
+        )["make"]
+        output = make(generate_notices(config))
         f.write(output)
     return 0
 

@@ -2,10 +2,9 @@ import logging
 from abc import ABC
 from tkinter import Event, PhotoImage, Tk, Toplevel, Wm
 from tkinter.ttk import Style
-from typing import override
+from typing import TYPE_CHECKING, override
 
 from vcf_generator_lite.ui.themes import create_theme_patch
-from vcf_generator_lite.ui.themes.abs import ThemePatch
 from vcf_generator_lite.ui.windows.base_window.constants import EVENT_EXIT
 from vcf_generator_lite.utils import resources
 from vcf_generator_lite.utils.tkinter.window import (
@@ -15,7 +14,10 @@ from vcf_generator_lite.utils.tkinter.window import (
     withdraw_cm,
 )
 
-__all__ = ["EnhancedTk", "EnhancedToplevel", "EnhancedDialog"]
+if TYPE_CHECKING:
+    from vcf_generator_lite.ui.themes.abs import ThemePatch
+
+__all__ = ["EnhancedDialog", "EnhancedTk", "EnhancedToplevel"]
 _logger = logging.getLogger(__name__)
 
 
@@ -25,8 +27,7 @@ class AppWindowExtension(
     WindowExtension,
     ABC,
 ):
-    """
-    应用程序窗口扩展基类，集成多个窗口功能扩展
+    """应用程序窗口扩展基类，集成多个窗口功能扩展
 
     特性：
     - 继承 GeometryWindowExtension: 提供基于物理/虚拟像素的窗口尺寸控制
@@ -44,8 +45,8 @@ class AppWindowExtension(
 
     def _configure_ui_withdraw(self):
         # 为了在系统主题切换时正确更新背景而浪费系统资源没必要，并且还要其他地方不会更新配色，用户只能重启解决。
-        # self.root_frame = Frame(self)
-        # self.root_frame.place(relwidth=1, relheight=1)
+        # self.root_frame = Frame(self)  # noqa: ERA001
+        # self.root_frame.place(relwidth=1, relheight=1)  # noqa: ERA001
         self.__apply_default_events()
 
     def _configure_ui(self):

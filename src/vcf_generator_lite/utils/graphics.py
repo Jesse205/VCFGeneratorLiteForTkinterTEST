@@ -16,6 +16,7 @@ class FPixelPadding:
     bottom: float = 0
 
     def __add__(self, other: "FPixelPadding") -> "FPixelPadding":
+        """合并四周边距"""
         return FPixelPadding(
             left=self.left + other.left,
             top=self.top + other.top,
@@ -24,6 +25,7 @@ class FPixelPadding:
         )
 
     def __sub__(self, other: "FPixelPadding") -> "FPixelPadding":
+        """减去四周边距"""
         return FPixelPadding(
             left=self.left - other.left,
             top=self.top - other.top,
@@ -35,7 +37,7 @@ class FPixelPadding:
         return (self.left, self.top, self.right, self.bottom)
 
 
-def parse_padding(master: Misc, value: str | int | float | tuple[str | int | float, ...]) -> FPixelPadding:
+def parse_padding(master: Misc, value: str | float | tuple[str | int | float, ...]) -> FPixelPadding:
     padding = value
     if isinstance(padding, str):
         padding = padding.split()

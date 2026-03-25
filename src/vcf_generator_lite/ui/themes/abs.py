@@ -1,5 +1,2 @@
-from abc import ABC
-
-
-class ThemePatch(ABC):
+class ThemePatch:
     pass

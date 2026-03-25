@@ -21,6 +21,6 @@ def read_scaled_binary(
 ) -> bytes:
     if scaling in resources:
         return read_binary(resources[scaling])
-    available: list[float] = [scaled for scaled in resources.keys() if scaled <= scaling or scaled == 1.0]
+    available: list[float] = [scaled for scaled in resources if scaled <= scaling or scaled == 1.0]
     closest = min(available, key=lambda scaled: scaling - scaled)
     return read_binary(resources[closest])

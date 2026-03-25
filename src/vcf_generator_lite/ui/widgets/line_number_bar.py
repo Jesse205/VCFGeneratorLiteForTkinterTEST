@@ -129,7 +129,7 @@ class LineNumberBar(Text):
         self.yview(0)
         self.yview_scroll(-first_index_dlineinfo[1], "pixels")
 
-    def __on_y_scroll_command(self, start: float, end: float):
+    def __on_y_scroll_command(self, _: float, __: float):
         if self._bound_text is None:
             return
         self.update_display_offset()
@@ -162,5 +162,5 @@ class LineNumberBar(Text):
         max_row = max(self.__last_pressed_row, click_row)
         select_lines(text_widget, min_row, max_row, see=False)
 
-    def __on_primary_button_release(self, event: Event):
+    def __on_primary_button_release(self, _: Event):
         self.__last_pressed_row = None

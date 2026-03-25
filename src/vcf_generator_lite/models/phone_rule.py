@@ -14,9 +14,7 @@ class PhoneRule:
         ):
             return False
 
-        if not self.regex.match(phone):
-            return False
-        return True
+        return self.regex.match(phone) is not None
 
 
 DEFAULT_PHONE_RULES = [

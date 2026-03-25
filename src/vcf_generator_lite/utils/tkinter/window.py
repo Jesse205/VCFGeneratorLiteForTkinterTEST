@@ -9,21 +9,19 @@ type Window = Tk | Toplevel
 
 
 class WindowExtension(Misc, Wm, ABC):
-    pass
+    """窗口方法扩展基类"""
 
 
 type WindowOrExtension = Window | WindowExtension
 
 
 class GeometryWindowExtension(WindowExtension, ABC):
+    """带缩放的窗口尺寸方法扩展"""
+
     def wm_size(self, width: int, height: int):
         self.wm_geometry(f"{width}x{height}")
 
     def wm_size_pt(self, width: int, height: int):
-        """
-        设置窗口大小
-        注：窗口大小单位为虚拟像素
-        """
         self.wm_size(*scale_args(self, width, height))
 
     def wm_minsize_pt(self, width: int, height: int) -> None:
@@ -50,7 +48,8 @@ class CenterWindowExtension(WindowExtension, ABC):
         client_x = max(min(client_x, client_x_max), client_x_min)
         client_y = rect_y + (rect_height - self.winfo_height()) // 2
         client_y = max(min(client_y, client_y_max), client_y_min)
-        # 在 Windows 上，winfo_x/y 是窗口坐标，而 winfo_rootx/y 是工作区坐标，geometry 接收窗口坐标，所以需要将工作区坐标转换为窗口坐标。
+        # 在 Windows 上，winfo_x/y 是窗口坐标，而 winfo_rootx/y 是工作区坐标，geometry 接收窗口坐标，
+        # 所以需要将工作区坐标转换为窗口坐标。
         geometry_offset = get_client_to_geometry_offset(self)
         window_x = client_x + geometry_offset.x
         window_y = client_y + geometry_offset.y
@@ -66,7 +65,8 @@ class CenterWindowExtension(WindowExtension, ABC):
 
     def center_reference_master(self):
         if self.master is None:
-            raise ValueError("master is None")
+            msg = "master is None"
+            raise ValueError(msg)
         self.center_reference_rect(
             rect_x=self.master.winfo_rootx(),
             rect_y=self.master.winfo_rooty(),
@@ -75,6 +75,7 @@ class CenterWindowExtension(WindowExtension, ABC):
         )
 
     def center(self):
+        """如果 `master` 为 `None`，则居中于屏幕；否则居中于 master 窗口。"""
         if self.master is None:
             self.center_reference_screen()
         else:
@@ -83,8 +84,7 @@ class CenterWindowExtension(WindowExtension, ABC):
 
 @contextmanager
 def withdraw_cm(wm: Wm):
-    """
-    窗口隐藏上下文管理器
+    """窗口隐藏上下文管理器。
 
     专门解决 Tkinter 窗口初始化时因设置属性导致的闪烁问题。通过上下文管理器在初始化期间隐藏窗口，
     所有属性配置完成后再显示窗口，避免窗口在左上角短暂闪现的异常现象。

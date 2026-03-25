@@ -16,8 +16,7 @@ def scaling(master: Misc, factor: None = None) -> float: ...
 @overload
 def scaling(master: Misc, factor: float) -> None: ...
 def scaling(master: Misc, factor: float | None = None) -> float | None:
-    """
-    设置或获取 GUI 缩放比例因子
+    """设置或获取 GUI 缩放比例因子
 
     当传入 factor 参数时，设置当前缩放比例并应用新的缩放因子到 Tkinter 窗口。
     不传入参数时返回当前缩放比例因子。
@@ -31,13 +30,12 @@ def scaling(master: Misc, factor: float | None = None) -> float | None:
         master.tk.call("tk", "scaling", factor)
         setattr(root, ATTR_SCALING_CACHED, factor)
         return None
-    else:
-        if hasattr(root, ATTR_SCALING_CACHED):
-            return getattr(root, ATTR_SCALING_CACHED)
+    if hasattr(root, ATTR_SCALING_CACHED):
+        return getattr(root, ATTR_SCALING_CACHED)
 
-        factor = master.tk.call("tk", "scaling")
-        setattr(root, ATTR_SCALING_CACHED, factor)
-        return factor
+    factor = master.tk.call("tk", "scaling")
+    setattr(root, ATTR_SCALING_CACHED, factor)
+    return factor
 
 
 @overload
@@ -46,20 +44,19 @@ def scale(master: Misc, value: int) -> int: ...
 def scale(master: Misc, value: float) -> float: ...
 
 
-def scale(master: Misc, value: int | float) -> int | float:
+def scale(master: Misc, value: float) -> int | float:
     if isinstance(value, int):
         return int(scaling(master) * value)
-    else:
-        return float(scaling(master) * value)
+    return float(scaling(master) * value)
 
 
 @overload
 def scale_args(master: Misc, *args: int) -> tuple[int, ...]: ...
 @overload
 def scale_args(master: Misc, *args: float) -> tuple[float, ...]: ...
-def scale_args(master: Misc, *args: int | float) -> tuple[Any, ...]:
+def scale_args(master: Misc, *args: float) -> tuple[Any, ...]:
     return tuple(scale(master, value) for value in args)
 
 
-def scale_kw(master: Misc, **kwargs: int | float) -> dict[str, Any]:
+def scale_kw(master: Misc, **kwargs: float) -> dict[str, Any]:
     return {key: scale(master, value) for key, value in kwargs.items()}

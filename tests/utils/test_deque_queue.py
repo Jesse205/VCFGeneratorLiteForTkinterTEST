@@ -1,5 +1,6 @@
 import threading
 import time
+
 from vcf_generator_lite.utils.deque_queue import DequeQueue
 
 

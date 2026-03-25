@@ -12,7 +12,7 @@ def tk_busy_hold(widget: Misc):
 def tk_busy_forget(widget: Misc):
     if hasattr(widget, "tk_busy_forget"):
         # noinspection PyUnresolvedReferences
-        widget.tk_busy_forget()  # pyright: ignore[reportAttributeAccessIssue]
+        widget.tk_busy_forget()  # pyright: ignore[reportAttributeAccessIssue, reportCallIssue]
     else:
         widget.tk.call("tk", "busy", "forget", str(widget))
 
@@ -20,6 +20,5 @@ def tk_busy_forget(widget: Misc):
 def tk_busy_status(widget: Misc) -> bool:
     if hasattr(widget, "tk_busy_status"):
         # noinspection PyUnresolvedReferences
-        return widget.tk_busy_status()  # pyright: ignore
-    else:
-        return widget.tk.getboolean(widget.tk.call("tk", "busy", "status", str(widget)))
+        return widget.tk_busy_status()  # pyright: ignore[reportAttributeAccessIssue, reportCallIssue]
+    return widget.tk.getboolean(widget.tk.call("tk", "busy", "status", str(widget)))

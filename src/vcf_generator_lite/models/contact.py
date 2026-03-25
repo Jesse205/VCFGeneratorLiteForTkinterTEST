@@ -18,7 +18,7 @@ def _get_phone_index(contact_parts: list[str], rules: list[PhoneRule]) -> int:
     for i, part in enumerate(contact_parts):
         if len(part) > 0 and any((rule.test(part)) for rule in rules):
             return i
-    raise PhoneNotFoundError()
+    raise PhoneNotFoundError
 
 
 def parse_contact(contact_text: str, rules: list[PhoneRule] | None = None, delimiter: str | None = None) -> Contact:
