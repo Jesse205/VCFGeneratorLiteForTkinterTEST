@@ -1,7 +1,9 @@
 import argparse
+import signal
 import sys
 from contextlib import ExitStack
 from pathlib import Path
+from types import FrameType
 from typing import TextIO
 
 from vcf_generator_lite.core.vcf_generator import GenerateResult
@@ -59,9 +61,17 @@ def print_result(result: GenerateResult, output_path: str | None):
             )
 
 
+def _signal_handler(sig_num: int, _frame: FrameType | None):
+    if sig_num == signal.SIGINT:
+        sys.exit(1)
+
+
 def launch_cli(args: argparse.Namespace):
     from vcf_generator_lite.core.vcf_generator import VCFGeneratorTask
 
+    signal.signal(signal.SIGINT, _signal_handler)
+
+    is_exiting = False
     with ExitStack() as stack:
         input_io: TextIO | None = None
         output_io: TextIO | None = None
@@ -77,7 +87,17 @@ def launch_cli(args: argparse.Namespace):
 
         task = VCFGeneratorTask(input_text=input_io.read(), output_io=output_io)
         task.start()
+
+        def stop_signal_handler(sig_num: int, _frame: FrameType | None):
+            nonlocal is_exiting
+            if sig_num == signal.SIGINT:
+                is_exiting = True
+                task.stop()
+
+        signal.signal(signal.SIGINT, stop_signal_handler)
         task.join()
+    if is_exiting:
+        sys.exit(1)
 
     result = task.result
     if result is None:
