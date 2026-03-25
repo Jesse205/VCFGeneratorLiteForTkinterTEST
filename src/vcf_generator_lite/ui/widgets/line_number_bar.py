@@ -138,6 +138,7 @@ class LineNumberBar(Text):
         if self._bound_text is None:
             return
         self.tk.call(self._bound_text.yscrollcommand_cmd, start, end)
+        self.update_lines()
         self.update_display_debounce()
 
     def __on_focus_in(self, _: Event):
