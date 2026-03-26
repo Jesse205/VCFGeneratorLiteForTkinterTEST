@@ -110,29 +110,8 @@ menu_delete = "&Delete"
 menu_select_all = "Select &All"
 
 [cli]
-prompt_contact_list = "Please enter data in the format 'Name Phone Remark' per line (Remark is optional). Press {finish_keys} to finish:"
-
-help_option_verbose = "Enable verbose mode to display more processing information"
-help_option_input = "Input file path (reads from stdin if not specified)"
-help_option_output = "Output file path (writes to stdout if not specified)"
-help_option_input_encoding = "Input file encoding (default: utf8)"
-help_option_delimiter = "Input file delimiter (default: space)"
-
-help_argument_launch_mode = "Launch mode"
-help_command_cli = "Start command-line interface"
-help_command_gui = "Start graphical user interface"
-
-info_generation_success = "File exported successfully to {path}."
-info_generation_success_stdout = "Generation successful."
-info_generation_error = "An unknown exception occurred while generating vCard file:\n\n{exception}"
-info_generation_stopped = "Generation stopped."
-info_generation_invalid = "File exported to {path}, invalid numbers were ignored."
-info_generation_invalid_stdout = "Generation complete, but invalid entries exist."
-info_invalid_items_detail = "Invalid entry details:"
-info_success_count = "Successfully generated: {count:n} items"
-info_invalid_count = "Invalid entries: {count:n} items"
-info_time_elapsed = "Time elapsed: {time:.3f} seconds"
-info_line = "Line {row}: {raw_content} - {exception}"
+help_option_verbose = "Show details"
+help_option_quiet = "Quiet mode"
 
 [exception]
 phone_not_found = "Phone number not found"

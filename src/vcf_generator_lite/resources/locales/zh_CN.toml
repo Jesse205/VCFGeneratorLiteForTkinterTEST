@@ -110,29 +110,8 @@ menu_delete = "删除(&D)"
 menu_select_all = "全选(&A)"
 
 [cli]
-prompt_contact_list = "请以每行“姓名 电话 备注”（备注可忽略）的格式输入（按 {finish_keys} 结束）："
-
-help_option_verbose = "启用详细模式，显示更多处理信息"
-help_option_input = "输入文件路径，若未指定则从标准输入读取"
-help_option_output = "输出文件路径，若未指定则输出到标准输出"
-help_option_input_encoding = "输入文件编码 (默认: utf8)"
-help_option_delimiter = "输入文件分隔符 (默认: 空格)"
-
-help_argument_launch_mode = "启动模式"
-help_command_cli = "启动命令行界面"
-help_command_gui = "启动图形界面"
-
-info_generation_success = "已导出文件到 {path}。"
-info_generation_success_stdout = "生成成功。"
-info_generation_error = "生成 vCard 文件时出现未知异常：\n\n{exception}"
-info_generation_stopped = "生成已停止。"
-info_generation_invalid = "已导出文件到 {path}，异常的号码已被忽略。"
-info_generation_invalid_stdout = "生成完成，但存在无效条目。"
-info_invalid_items_detail = "无效条目详情："
-info_success_count = "成功生成：{count:n} 个"
-info_invalid_count = "无效条目：{count:n} 个"
-info_time_elapsed = "消耗时间：{time:.3f} 秒"
-info_line = "第 {row} 行：{raw_content} - {exception}"
+help_option_verbose = "显示详细信息"
+help_option_quiet = "静默模式"
 
 [exception]
 phone_not_found = "未找到号码"

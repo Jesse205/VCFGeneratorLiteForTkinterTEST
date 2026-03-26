@@ -95,7 +95,7 @@ uvx <path to whl file>
 > - You can use both tabs and spaces to separate the name and phone number.
 > - The program will automatically remove extra spaces from the text field.
 >
-> For example, ` Han Meimei   13333333333   A   well-known girl` will be recognized as
+> For example, `Han Meimei   13333333333   A well-known girl` will be recognized as
 >
 >
 > > - Name: Han Meimei

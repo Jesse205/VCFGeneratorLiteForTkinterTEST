@@ -35,13 +35,8 @@ Repository = "https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter"
 Github = "https://github.com/hellotool/VCFGeneratorLiteWithTkinter"
 Issues = "https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/issues/new/choose"
 
-[project.scripts]
-# 主入口，可能是 GUI，也可能是 CLI。虽然默认启动的是 GUI，但依旧需要使用命令行入口。
-vcf-generator-lite = "vcf_generator_lite.__main__:main"
-vcf-generator-lite-cli = "vcf_generator_lite.__main__:main_cli"
-
 [project.gui-scripts]
-vcf-generator-lite-gui = "vcf_generator_lite.__main__:main_gui"
+vcf-generator-lite = "vcf_generator_lite.__main__:main"
 
 [build-system]
 requires = ["uv_build>=0.10.1,<0.11.0"]
