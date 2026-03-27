@@ -97,10 +97,11 @@ VCFGeneratorLiteWithTkinter/
 
 ### 资源路径
 
-| 路径                                                  | 尺寸（px）      | 备注     |
-| ----------------------------------------------------- | --------------- | -------- |
-| `assets/images/icon.svg`                              | `48x48`（矢量） | 文档展示 |
-| `src/vcf_generator_lite/resources/images/icon-48.png` | `48x48`         | 窗口图标 |
+| 路径                                                  | 尺寸（px）      | 备注               |
+| ----------------------------------------------------- | --------------- | ------------------ |
+| `assets/images/icon.svg`                              | `48x48`（矢量） | 文档展示           |
+| `assets/images/icon.ico`                              | 多种尺寸        | Windows 端应用图标 |
+| `src/vcf_generator_lite/resources/images/icon-48.png` | `48x48`         | 窗口图标           |
 
 ## UI 设计
 
