@@ -2,7 +2,7 @@
 
 ## 技术栈
 
-- **IDE**: [Visual Studio Code](https://code.visualstudio.com/) 或者 [PyCharm 2025.3.1](https://www.jetbrains.com/zh-cn/pycharm/)
+- **IDE**: [Visual Studio Code][vscode-homepage] 或者 [PyCharm 2025.3][pycharm-homepage]
 - **开发语言**: [Python 3.12+][python-homepage]
 - **UI 框架**: [Tkinter][tkinter-homepage]
 - **包管理工具**: [uv][uv-homepage]
@@ -10,18 +10,19 @@
 - **格式化工具**: [Ruff][ruff-formatter-homepage]
 - **代码检查工具**: [Ruff][ruff-linter-homepage]、[Pyright][pyright-homepage]
 - **构建工具**:
-  - Windows: [PyInstaller](https://pyinstaller.org/en/stable/)、[InnoSetup 6.6+][innosetup-homepage]、[UPX](https://upx.github.io/)
-  - ZIP 应用：[zipapp](https://docs.python.org/zh-cn/3/library/zipapp.html)
+  - Windows: [PyInstaller][pyinstaller-homepage]、[InnoSetup 6.6+][innosetup-homepage]、[UPX][upx-homepage]
+  - ZIP 应用：[zipapp][python-docs-zipapp]（Python 标准库）
 
 ## 🛠️ 开发准备
 
 ### 环境配置
 
 1. **安装基础工具**：
-   - 下载并安装 Python 3.12+ 和 Tkinter
-   - [安装 uv][uv-installation]
-   - （可选）安装 UPX
-   - 安装 InnoSetup（仅 Windows）
+   - **Python**: 安装 Python 3.12+ (确保包含 Tkinter 支持)。
+   - **uv**: 安装 [uv][uv-installation] 作为包管理器。
+   - **可选工具**:
+     - **UPX**: 用于压缩可执行文件。
+     - **Inno Setup**: 仅 Windows，用于生成安装程序。
 2. **安装依赖项**：
    ```bash
    uv sync
@@ -85,7 +86,37 @@ VCFGeneratorLiteWithTkinter/
   - `12p` 为 `16epx`
 - **布局原则**：
   - 尽量使用 `pack` 布局管理器，创建响应式 UI；
-  - 组件间距统一使用 `padx=7p, pady=7p`。
+  - 组件间距统一使用 `7p`。
+
+## 主题与图标
+
+- **应用主题**：跟随系统主题自动切换。
+- **系统图标**：使用 Emoji 替代传统图标。Emoji 具有以下优点：
+  - Emoji 图标跟随系统，风格统一。
+  - 天然适配缩放，无需手动处理，性能好。
+
+### 资源路径
+
+| 路径                                                  | 尺寸（px）      | 备注     |
+| ----------------------------------------------------- | --------------- | -------- |
+| `assets/images/icon.svg`                              | `48x48`（矢量） | 文档展示 |
+| `src/vcf_generator_lite/resources/images/icon-48.png` | `48x48`         | 窗口图标 |
+
+## UI 设计
+
+### 应用图标
+
+遵循 [Windows 11 图标设计规范](https://learn.microsoft.com/zh-cn/windows/apps/design/style/iconography/overview)。
+
+- **配色**：采用 [2014 Material Design 调色板](https://m2.material.io/design/color/the-color-system.html#tools-for-picking-colors)。
+- **设计文件**：`assets/design/icon.svg`，使用 Inkscape 编辑。
+
+#### 生成应用图标 ICO 文件
+
+使用 PhotoDemon 创建导出具有以下图标的 ICO 文件：
+
+- PNG：`256x256`
+- 32-bpp：`64x64`、`48x48`、`32x32`、`16x16`
 
 ## 版本
 
@@ -129,6 +160,9 @@ D = 基础偏移 + 预发布号 × 100 + 后发布号 × 10 + （开发号 或 9
 | `1.2.3.post1.dev2`   | `1.2.3.40012`      | 40000 + 0 + 1×10 + 2     |
 | `1.2.3.post1`        | `1.2.3.40019`      | 40000 + 0 + 1×10 + 9     |
 
+[vscode-homepage]: https://code.visualstudio.com/
+[pycharm-homepage]: https://www.jetbrains.com/zh-cn/pycharm/
+
 [python-homepage]: https://www.python.org/
 [uv-homepage]: https://docs.astral.sh/uv/
 [uv-installation]: https://docs.astral.sh/uv/getting-started/installation/
@@ -138,3 +172,7 @@ D = 基础偏移 + 预发布号 × 100 + 后发布号 × 10 + （开发号 或 9
 [innosetup-homepage]: https://jrsoftware.org/isinfo.php
 [pyright-homepage]: https://microsoft.github.io/pyright
 [python-packaging-version-specifiers]: https://packaging.python.org/en/latest/specifications/version-specifiers/
+[pyinstaller-homepage]: https://pyinstaller.org/en/stable/
+[upx-homepage]: https://upx.github.io/
+
+[python-docs-zipapp]: https://docs.python.org/zh-cn/3/library/zipapp.html
