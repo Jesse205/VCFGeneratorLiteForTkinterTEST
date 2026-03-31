@@ -2,7 +2,7 @@ from vcf_generator_lite.__version__ import __version__
 
 APP_COPYRIGHT = "Copyright © 2023-2026 Jesse205"
 
-SOURCE_REFERENCE = "master" if __debug__ else "v" + __version__
+SOURCE_REFERENCE = f"v{__version__}"
 
 URL_REPOSITORY = "https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter"
 URL_RELEASES = f"{URL_REPOSITORY}/releases"
