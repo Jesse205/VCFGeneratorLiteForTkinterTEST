@@ -3,7 +3,7 @@ from tkinter.constants import SEL_FIRST
 from typing import Literal
 
 from vcf_generator_lite.utils.locales import scope
-from vcf_generator_lite.utils.tkinter.menu import parse_menu_label
+from vcf_generator_lite.utils.tkinter.menu import parse_underline_label
 
 st = scope("entry_widget")
 
@@ -36,37 +36,37 @@ class TextContextMenu(Menu):
         is_master_editable = state_to_boolean(self.master.cget("state"))
         if is_master_editable:
             self.add_command(
-                **parse_menu_label(st("menu_undo")),
+                **parse_underline_label(st("menu_undo")),
                 command=lambda: self.master.event_generate("<<Undo>>"),
             )
             self.add_command(
-                **parse_menu_label(st("menu_redo")),
+                **parse_underline_label(st("menu_redo")),
                 command=lambda: self.master.event_generate("<<Redo>>"),
             )
             self.add_separator()
             self.add_command(
-                **parse_menu_label(st("menu_cut")),
+                **parse_underline_label(st("menu_cut")),
                 command=lambda: self.master.event_generate("<<Cut>>"),
                 state=state_by_selected,
             )
         self.add_command(
-            **parse_menu_label(st("menu_copy")),
+            **parse_underline_label(st("menu_copy")),
             command=lambda: self.master.event_generate("<<Copy>>"),
             state=state_by_selected,
         )
         if is_master_editable:
             self.add_command(
-                **parse_menu_label(st("menu_paste")),
+                **parse_underline_label(st("menu_paste")),
                 command=lambda: self.master.event_generate("<<Paste>>"),
             )
             self.add_command(
-                **parse_menu_label(st("menu_delete")),
+                **parse_underline_label(st("menu_delete")),
                 command=lambda: self.master.event_generate("<<Clear>>"),
                 state=state_by_selected,
             )
         self.add_separator()
         self.add_command(
-            **parse_menu_label(st("menu_select_all")),
+            **parse_underline_label(st("menu_select_all")),
             command=lambda: self.master.event_generate("<<SelectAll>>"),
         )
         self.tk_popup(x, y)

@@ -4,13 +4,15 @@ from tkinter.ttk import Scrollbar, Style, Treeview
 from vcf_generator_lite.utils.graphics import FPixelPadding, parse_ttk_padding
 from vcf_generator_lite.utils.tkinter.misc import scale
 
+ASSUMED_BORDER_WIDTH = 1
+PADDING_OFFSET_RIGHT = ASSUMED_BORDER_WIDTH
+
 
 class ScrolledTreeview(Treeview):
     def __init__(self, master: Misc | None = None, *, vertical: bool = True, **kw):
         super().__init__(master, **kw)
         self.vbar: Scrollbar | None = None
         self._insets: FPixelPadding = FPixelPadding()
-
         if vertical:
             self._create_vertical_scrollbar()
 
@@ -30,9 +32,11 @@ class ScrolledTreeview(Treeview):
         if not self.vbar:
             self.vbar = Scrollbar(self, orient="vertical")
             self.vbar.configure(command=self.yview)
-            self.vbar.pack(side="right", fill="y", pady="1.5p", padx="1.5p")
+            self.vbar.pack(side="right", fill="y", pady="1.5p", padx=(0, "1.5p"))
             self.configure(yscrollcommand=self.vbar.set)
-            self.insets += FPixelPadding(right=self.vbar.winfo_reqwidth() + scale(self, 3))
+            self.insets += FPixelPadding(
+                right=self.vbar.winfo_reqwidth() + scale(self, 3) - ASSUMED_BORDER_WIDTH - PADDING_OFFSET_RIGHT
+            )
 
     def _get_current_padding(self) -> FPixelPadding:
         padding = self.cget("padding")

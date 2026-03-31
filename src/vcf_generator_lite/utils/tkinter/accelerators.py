@@ -1,4 +1,4 @@
-from tkinter import Misc
+from tkinter import Misc, Tk
 from typing import NamedTuple
 
 from vcf_generator_lite.utils.tkinter.misc import get_root
@@ -15,16 +15,10 @@ class DefaultAccelerators(NamedTuple):
     select_all: str
 
 
-def get_default_accelerators(master: Misc) -> DefaultAccelerators:
-    root = get_root(master)
-    if hasattr(root, ATTR_DEFAULT_ACCELERATORS_CACHED):
-        return getattr(root, ATTR_DEFAULT_ACCELERATORS_CACHED)
-
-    default_accelerators: DefaultAccelerators | None = None
-
+def _create_default_accelerators(root: Tk) -> DefaultAccelerators:
     match root._windowingsystem:  # noqa: SLF001
         case "win32":
-            default_accelerators = DefaultAccelerators(
+            return DefaultAccelerators(
                 undo="Ctrl+Z",
                 redo="Ctrl+Y",
                 cut="Ctrl+X",
@@ -33,7 +27,7 @@ def get_default_accelerators(master: Misc) -> DefaultAccelerators:
                 select_all="Ctrl+A",
             )
         case "aqua":
-            default_accelerators = DefaultAccelerators(
+            return DefaultAccelerators(
                 undo="⌘Z",
                 redo="⇧⌘Z",
                 cut="⌘X",
@@ -42,7 +36,7 @@ def get_default_accelerators(master: Misc) -> DefaultAccelerators:
                 select_all="⌘A",
             )
         case _:
-            default_accelerators = DefaultAccelerators(
+            return DefaultAccelerators(
                 undo="Ctrl+Z",
                 redo="Ctrl+Shift+Z",
                 cut="Ctrl+X",
@@ -51,5 +45,12 @@ def get_default_accelerators(master: Misc) -> DefaultAccelerators:
                 select_all="Ctrl+/",
             )
 
+
+def get_default_accelerators(master: Misc) -> DefaultAccelerators:
+    root = get_root(master)
+    if hasattr(root, ATTR_DEFAULT_ACCELERATORS_CACHED):
+        return getattr(root, ATTR_DEFAULT_ACCELERATORS_CACHED)
+
+    default_accelerators: DefaultAccelerators = _create_default_accelerators(root)
     setattr(root, ATTR_DEFAULT_ACCELERATORS_CACHED, default_accelerators)
     return default_accelerators

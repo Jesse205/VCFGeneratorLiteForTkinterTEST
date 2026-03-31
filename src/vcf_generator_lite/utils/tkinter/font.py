@@ -1,14 +1,4 @@
 from tkinter.font import nametofont
-from typing import Literal, TypedDict
-
-
-class FontConfig(TypedDict, total=False):
-    family: str
-    size: int
-    weight: Literal["normal", "bold"]
-    slant: Literal["roman", "italic"]
-    underline: bool
-    overstrike: bool
 
 
 def extend_font_scale(origin_name: str, scale: float):

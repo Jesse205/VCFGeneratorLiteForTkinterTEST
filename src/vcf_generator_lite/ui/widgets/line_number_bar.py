@@ -103,13 +103,13 @@ class LineNumberBar(Text):
                 line_texts.append(str(row))
             else:
                 line_texts.append("")
-            display_lines = get_display_lines_fast(
+            row_display_lines = get_display_lines_fast(
                 text_widget,
                 first_index if row == first_row else f"{row}.0",
                 last_index if row == last_row else f"{row}.end",
             )
-            if display_lines > 0:
-                line_texts.append("\n" * (display_lines - 1))
+            if row_display_lines > 0:
+                line_texts.append("\n" * (row_display_lines - 1))
 
         if line_texts != self.__last_line_texts:
             self.configure(state="normal")

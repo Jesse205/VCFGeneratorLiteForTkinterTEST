@@ -31,7 +31,7 @@ from vcf_generator_lite.utils.external_app import open_url_with_fallback
 from vcf_generator_lite.utils.locales import scope, t
 from vcf_generator_lite.utils.tkinter.accelerators import get_default_accelerators
 from vcf_generator_lite.utils.tkinter.busy import tk_busy_forget, tk_busy_hold, tk_busy_status
-from vcf_generator_lite.utils.tkinter.menu import parse_menu_label
+from vcf_generator_lite.utils.tkinter.menu import parse_underline_label
 from vcf_generator_lite.utils.tkinter.widget import enable_auto_wrap
 
 st = scope("main_window")
@@ -109,15 +109,15 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
     def _create_menu_bar(self):
         menu_bar = Menu(self, tearoff=False, name="menubar")
         menu_bar.add_cascade(
-            **parse_menu_label(st("menu_file")),
+            **parse_underline_label(st("menu_file")),
             menu=self._create_file_menu(menu_bar),
         )
         menu_bar.add_cascade(
-            **parse_menu_label(st("menu_edit")),
+            **parse_underline_label(st("menu_edit")),
             menu=self._create_edit_menu(menu_bar),
         )
         menu_bar.add_cascade(
-            **parse_menu_label(st("menu_help")),
+            **parse_underline_label(st("menu_help")),
             menu=self._create_help_menu(menu_bar),
         )
         return menu_bar
@@ -125,7 +125,7 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
     def _create_file_menu(self, master: Misc):
         self.file_menu = file_menu = Menu(master, tearoff=False)
 
-        generate_parse_result = parse_menu_label(st("menu_file_generate"))
+        generate_parse_result = parse_underline_label(st("menu_file_generate"))
         self.menu_generate_label = generate_parse_result["label"]
         file_menu.add_command(
             **generate_parse_result,
@@ -133,7 +133,7 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
             accelerator=ACCELERATOR_GENERATE_AQUA if self._windowingsystem == "aqua" else ACCELERATOR_GENERATE,
         )
 
-        stop_generation_parse_result = parse_menu_label(st("menu_file_stop_generation"))
+        stop_generation_parse_result = parse_underline_label(st("menu_file_stop_generation"))
         self.menu_stop_generation_label = stop_generation_parse_result["label"]
         file_menu.add_command(
             **stop_generation_parse_result,
@@ -146,7 +146,7 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
         # 通常不提供退出的快捷键
         # https://learn.microsoft.com/en-us/windows/win32/uxguide/cmd-menus
         file_menu.add_command(
-            **parse_menu_label(st("menu_file_exit")),
+            **parse_underline_label(st("menu_file_exit")),
             command=lambda: self.event_generate(EVENT_EXIT),
         )
         return file_menu
@@ -156,39 +156,39 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
 
         edit_menu = Menu(master, tearoff=False)
         edit_menu.add_command(
-            **parse_menu_label(st("menu_edit_undo")),
+            **parse_underline_label(st("menu_edit_undo")),
             command=lambda: self.__generate_focus_event("<<Undo>>"),
             accelerator=default_accelerators.undo,
         )
         edit_menu.add_command(
-            **parse_menu_label(st("menu_edit_redo")),
+            **parse_underline_label(st("menu_edit_redo")),
             command=lambda: self.__generate_focus_event("<<Redo>>"),
             accelerator=default_accelerators.redo,
         )
         edit_menu.add_separator()
         edit_menu.add_command(
-            **parse_menu_label(st("menu_edit_cut")),
+            **parse_underline_label(st("menu_edit_cut")),
             command=lambda: self.__generate_focus_event("<<Cut>>"),
             accelerator=default_accelerators.cut,
         )
         edit_menu.add_command(
-            **parse_menu_label(st("menu_edit_copy")),
+            **parse_underline_label(st("menu_edit_copy")),
             command=lambda: self.__generate_focus_event("<<Copy>>"),
             accelerator=default_accelerators.copy,
         )
         edit_menu.add_command(
-            **parse_menu_label(st("menu_edit_paste")),
+            **parse_underline_label(st("menu_edit_paste")),
             command=lambda: self.__generate_focus_event("<<Paste>>"),
             accelerator=default_accelerators.paste,
         )
         edit_menu.add_command(
-            **parse_menu_label(st("menu_edit_select_all")),
+            **parse_underline_label(st("menu_edit_select_all")),
             command=lambda: self.__generate_focus_event("<<SelectAll>>"),
             accelerator=default_accelerators.select_all,
         )
         edit_menu.add_separator()
         edit_menu.add_command(
-            **parse_menu_label(st("menu_edit_clean_quotes")),
+            **parse_underline_label(st("menu_edit_clean_quotes")),
             command=lambda: self.event_generate(EVENT_CLEAN_QUOTES),
         )
         return edit_menu
@@ -196,20 +196,20 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
     def _create_help_menu(self, master: Misc):
         help_menu = Menu(master, tearoff=False, name="help")
         help_menu.add_command(
-            **parse_menu_label(st("menu_help_repository")),
+            **parse_underline_label(st("menu_help_repository")),
             command=lambda: open_url_with_fallback(self, URL_REPOSITORY),
         )
         help_menu.add_command(
-            **parse_menu_label(st("menu_help_release")),
+            **parse_underline_label(st("menu_help_release")),
             command=lambda: open_url_with_fallback(self, URL_RELEASES),
         )
         help_menu.add_separator()
         help_menu.add_command(
-            **parse_menu_label(st("menu_help_feedback")),
+            **parse_underline_label(st("menu_help_feedback")),
             command=lambda: open_url_with_fallback(self, URL_REPORT),
         )
         help_menu.add_command(
-            **parse_menu_label(st("menu_help_contact")),
+            **parse_underline_label(st("menu_help_contact")),
             command=lambda: open_url_with_fallback(
                 parent=self,
                 url=urllib.parse.SplitResult(
@@ -223,16 +223,16 @@ class VCFGeneratorLiteApp(EnhancedTk, VerticalDialogLayout):
         )
         help_menu.add_separator()
         help_menu.add_command(
-            **parse_menu_label(st("menu_help_license")),
+            **parse_underline_label(st("menu_help_license")),
             command=lambda: open_url_with_fallback(self, URL_LICENSE),
         )
         help_menu.add_command(
-            **parse_menu_label(st("menu_help_os_notices")),
+            **parse_underline_label(st("menu_help_os_notices")),
             command=lambda: open_url_with_fallback(self, URL_OS_NOTICES),
         )
         help_menu.add_separator()
         help_menu.add_command(
-            **parse_menu_label(st("menu_help_about")),
+            **parse_underline_label(st("menu_help_about")),
             command=lambda: self.event_generate(EVENT_ABOUT),
         )
         return help_menu

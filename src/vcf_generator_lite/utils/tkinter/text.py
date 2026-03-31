@@ -41,7 +41,6 @@ def search_line(text: Text, search_text: str, near_row: int, max_offset: int = 2
     为了防止数据过大时卡顿，默认会限制最大 20 的搜索范围。
 
     :return: 行号，未找到时返回 ``None``
-    :rtype: int | None
     """
     if strip:
         search_text = search_text.strip()
