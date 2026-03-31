@@ -27,8 +27,7 @@ class TextContextMenu(Menu):
             self.master.index(SEL_FIRST)
         except TclError:
             return False
-        else:
-            return True
+        return True
 
     def show(self, x: int, y: int):
         self.master.focus()
