@@ -114,4 +114,4 @@ help_option_verbose = "Show details"
 help_option_quiet = "Quiet mode"
 
 [exception]
-phone_not_found = "Phone number not found"
+missing_number = "Missing number or number is incorrect"

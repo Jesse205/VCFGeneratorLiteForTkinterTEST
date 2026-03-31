@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from threading import RLock, Thread
 from typing import IO, NamedTuple, override
 
-from vcf_generator_lite.models.contact import Contact, PhoneNotFoundError, parse_contact
+from vcf_generator_lite.models.contact import Contact, MissingNumberError, parse_contact
 from vcf_generator_lite.models.phone_rule import PhoneRule
 from vcf_generator_lite.utils.deque_queue import DequeQueue, ShutDownError
 
@@ -142,7 +142,7 @@ class VCFGeneratorTask(Thread):
                 contact = parse_contact(contact_text=line, rules=self._phone_rules, delimiter=self._part_delimiter)
                 vcard = serialize_to_vcard(contact)
                 queue_item = _WriteQueueItem(row_position=position, raw_content=line, vcard=vcard)
-            except PhoneNotFoundError as e:
+            except MissingNumberError as e:
                 _logger.warning("Phone not found at line %s: %s", position, e)
 
                 # list 的 append 方法是原子的，因此不需要加锁

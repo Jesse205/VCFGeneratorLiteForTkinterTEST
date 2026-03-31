@@ -11,10 +11,10 @@
 [gil]: https://docs.python.org/zh-cn/3.13/glossary.html#term-global-interpreter-lock
 [free-threaded-cpython]: https://docs.python.org/zh-cn/3.14/whatsnew/3.13.html#whatsnew313-free-threaded-cpython
 
-## 为什么提示“未找到号码”？
+## 为什么提示“缺失号码或号码不正确”？
 
 目前软件只支持识别 11 位中国大陆手机号。
 
-如果输入的不是这种号码（比如固话、短号、其他国家手机号），就会提示“未找到号码”。
+如果输入的不是这种号码（比如固话、短号、其他国家手机号），就会提示“缺失号码或号码不正确”。
 
 后续可能会扩展支持更多号码类型，敬请关注更新。

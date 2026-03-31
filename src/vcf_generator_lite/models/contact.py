@@ -9,16 +9,16 @@ class Contact(NamedTuple):
     note: str | None = None
 
 
-class PhoneNotFoundError(ValueError):
+class MissingNumberError(ValueError):
     def __init__(self) -> None:
-        super().__init__("Phone not found")
+        super().__init__("No phone number found.")
 
 
 def _get_phone_index(contact_parts: list[str], rules: list[PhoneRule]) -> int:
     for i, part in enumerate(contact_parts):
         if len(part) > 0 and any((rule.test(part)) for rule in rules):
             return i
-    raise PhoneNotFoundError
+    raise MissingNumberError
 
 
 def parse_contact(contact_text: str, rules: list[PhoneRule] | None = None, delimiter: str | None = None) -> Contact:

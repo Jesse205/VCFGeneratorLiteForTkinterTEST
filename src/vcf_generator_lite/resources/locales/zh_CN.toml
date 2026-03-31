@@ -114,4 +114,4 @@ help_option_verbose = "显示详细信息"
 help_option_quiet = "静默模式"
 
 [exception]
-phone_not_found = "未找到号码"
+missing_number = "缺失号码或号码不正确"
