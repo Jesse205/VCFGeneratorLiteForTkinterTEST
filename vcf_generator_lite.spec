@@ -1,54 +1,27 @@
-# -*- mode: python ; coding: utf-8 -*-
 import importlib.metadata
+import sys
 
-from PyInstaller.building.api import EXE, PYZ, COLLECT
+from PyInstaller.building.api import COLLECT, EXE, PYZ
 from PyInstaller.building.build_main import Analysis
 from PyInstaller.utils.win32.versioninfo import (
+    FixedFileInfo,
     StringFileInfo,
     StringStruct,
     StringTable,
-    VSVersionInfo,
-    FixedFileInfo,
     VarFileInfo,
     VarStruct,
+    VSVersionInfo,
 )
-import packaging.version
-
-from vcf_generator_lite.constants import APP_COPYRIGHT
 
 from vcf_generator_lite.__version__ import __version__ as app_version
+from vcf_generator_lite.constants import APP_COPYRIGHT
 
+sys.path.insert(0, "")
+
+from scripts.build_app import get_windows_file_info_version
 
 app_metadata = importlib.metadata.metadata("vcf_generator_lite")
 app_author = app_metadata.get("Author")
-
-
-def get_windows_file_info_version(version: str) -> tuple[int, int, int, int]:
-    parsed = packaging.version.parse(version)
-    build = 0
-    match parsed.pre:
-        case ("a", _):
-            build += 10000
-        case ("b", _):
-            build += 20000
-        case ("rc", _):
-            build += 30000
-        case _:
-            if not parsed.is_devrelease:
-                build += 40000
-    if parsed.pre:
-        build += parsed.pre[1] * 100
-    if parsed.post is not None:
-        build += parsed.post * 10
-    if parsed.dev is not None:
-        build += parsed.dev
-    return (
-        parsed.major,
-        parsed.minor,
-        parsed.micro,
-        build,
-    )
-
 
 app_exe_version = get_windows_file_info_version(app_version)
 
