@@ -1,6 +1,6 @@
 import pytest
 
-from vcf_generator_lite.models.contact import Contact, PhoneNotFoundError, parse_contact
+from vcf_generator_lite.models.contact import Contact, MissingNumberError, parse_contact
 
 FAKE_PHONES = [
     "18445522522",
@@ -56,10 +56,10 @@ class TestParseContact:
     # 异常情况测试
     def test_missing_valid_phone(self):
         """测试缺少有效手机号的情况"""
-        with pytest.raises(PhoneNotFoundError):
+        with pytest.raises(MissingNumberError):
             parse_contact("张三 1844 工程师")
 
     def test_missing_phone(self):
         """测试缺失电话号码的情况"""
-        with pytest.raises(PhoneNotFoundError):
+        with pytest.raises(MissingNumberError):
             parse_contact("张三")
