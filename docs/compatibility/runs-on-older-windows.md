@@ -13,7 +13,7 @@
 
 ## 方案一：使用 [PythonWin7][pythonwin7_repository_github] ![Windows 7、Windows 8](https://img.shields.io/badge/Windows_7、Windows_8-0078D4)
 
-**对于安装包、便携包用户：**
+**对于安装程序、便携包用户：**
 
 您需要使用 PythonWin7 内的文件替换本应用的文件。
 
@@ -23,7 +23,7 @@
    - `python314.dll`
    - `api-ms-win-core-path-l1-1-0.dll`
 3. **修补程序**：
-   1. 对于安装程序类型：完成应用安装。
+   1. 对于安装版类型：完成应用安装。
    2. 打开本软件目录下的 `_internal` 文件夹。
    3. 将下载的两个 DLL 文件覆盖到该目录。
 
@@ -31,14 +31,14 @@
 
 您只需要安装 PythonWin7 提供的 Python。
 
-1. **获取 Python 安装包**：从 [PythonWin7][pythonwin7_repository_github] 仓库下载：
+1. **获取 Python 安装程序**：从 [PythonWin7][pythonwin7_repository_github] 仓库下载：
    - 64 位系统：`python-3.14.x-amd64-full.exe`
    - 32 位系统：`python-3.14.x-full.exe`
 2. **安装 Python**：运行安装程序，按照提示进行安装。
 
 ## 方案二：使用 VxKex NEXT 兼容层 ![Windows 7](https://img.shields.io/badge/Windows_7-0078D4)
 
-**对于安装包、便携包用户：**
+**对于安装程序、便携包用户：**
 
 1. **安装 VxKex NEXT**：从 [VxKex NEXT Release][vxkex-next_release_github] 下载最新版本并安装。
 2. **配置应用**：

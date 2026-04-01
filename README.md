@@ -51,15 +51,15 @@ Please select the appropriate software package for your platform:
 | Platform       | Package Type           | Installation Required | File                                                      |
 | -------------- | ---------------------- | --------------------- | --------------------------------------------------------- |
 | Windows        | Installer              | Yes                   | VCFGeneratorLite-\<version\>-**win-amd64**-*setup.exe*    |
-| Windows        | Portable Version       | No                    | VCFGeneratorLite-\<version\>-**win-amd64**-*portable.zip* |
+| Windows        | Portable Package       | No                    | VCFGeneratorLite-\<version\>-**win-amd64**-*portable.zip* |
 | Cross-platform | Python Wheel           | Optional              | vcf_generator_lite-\<version\>-**py3-none-any**.*whl*     |
 | Cross-platform | Python ZIP Application | No                    | VCFGeneratorLite-\<version\>-**py3**.*pyzw*               |
 
 ### Using the Python Wheel
 
-There are several ways to use a Python Wheel file. Below is an example using the [uv tool][uv-homepage].
+There are several ways to use a Python Wheel file.
 
-**Install into the system environment**:
+**Global Installation**:
 
 ```bash
 uv tool install <path to whl file>
@@ -68,8 +68,6 @@ uv tool install <path to whl file>
 After installation, you can run it with:
 
 ```bash
-uv tool run vcf-generator-lite
-# or
 vcf-generator-lite
 ```
 
@@ -138,10 +136,10 @@ uvx <path to whl file>
 
 ### System Requirements
 
-| Software Package Type        | System Requirements           |
-| ---------------------------- | ----------------------------- |
-| Windows Installer & Portable | Windows 8.1 or later          |
-| Python ZIP Application       | Python 3.12 or later, Tkinter |
+| Software Package Type                | System Requirements           |
+| ------------------------------------ | ----------------------------- |
+| Windows Installer & Portable Package | Windows 8.1 or later          |
+| Python ZIP Application               | Python 3.12 or later, Tkinter |
 
 If you wish to use this application on Windows 8 or earlier versions, please see [Running on Older Windows](./docs/compatibility/runs-on-older-windows.md).
 

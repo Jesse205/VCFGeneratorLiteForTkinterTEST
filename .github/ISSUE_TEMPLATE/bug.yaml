@@ -63,11 +63,11 @@ body:
     id: package-types
     attributes:
       label: 软件包类型
-      description: 您当前正在使用我们应用的什么软件包类型？
+      description: 您使用的是什么软件包类型？
       multiple: true
       options:
         - Windows 安装程序 (*_win-amd64_setup.exe)
-        - Windows 便携版（压缩包）(*_win-amd64_portable.zip)
+        - Windows 便携包 (*_win-amd64_portable.zip)
         - Python ZIP 应用 (*_zipapp.pyzw)
         - 我不知道
     validations:

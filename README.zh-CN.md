@@ -51,15 +51,15 @@ VCF 生成器 Lite 可以将联系人列表转换为单个 vCard 文件，可批
 | 平台    | 软件包类型      | 需要安装 | 文件                                                       |
 | ------- | --------------- | -------- | ---------------------------------------------------------- |
 | Windows | 安装程序        | 是       | VCFGeneratorLite-\<应用版本\>-**win-amd64**-*setup.exe*    |
-| Windows | 便携版          | 否       | VCFGeneratorLite-\<应用版本\>-**win-amd64**-*portable.zip* |
+| Windows | 便携包          | 否       | VCFGeneratorLite-\<应用版本\>-**win-amd64**-*portable.zip* |
 | 跨平台  | Python Wheel    | 可选     | vcf_generator_lite-\<应用版本\>-**py3-none-any**.*whl*     |
 | 跨平台  | Python ZIP 应用 | 否       | VCFGeneratorLite-\<应用版本\>-**py3**.*pyzw*               |
 
 ### 使用 Python Wheel
 
-您可以通过多种方式使用 Python Wheel 文件，以下介绍使用 [uv 工具][uv-homepage]的方法。
+您可以通过多种方式使用 Python Wheel 文件。
 
-**安装到系统环境**：
+**全局安装**：
 
 ```bash
 uv tool install <whl 文件路径>
@@ -68,12 +68,10 @@ uv tool install <whl 文件路径>
 安装完成后，可通过以下命令运行：
 
 ```bash
-uv tool run vcf-generator-lite
-# 或
 vcf-generator-lite
 ```
 
-**直接运行（不安装）**：
+**直接运行（无需安装）**：
 
 ```bash
 uvx <whl 文件路径>
