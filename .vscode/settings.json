@@ -11,4 +11,7 @@
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
   "files.eol": "\n",
+  "files.associations": {
+    "*.spec": "python"
+  }
 }
