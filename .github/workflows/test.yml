@@ -35,5 +35,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Update .python-version file
+        run: uv python pin ${{ matrix.python-version }}
       - name: Test with pytest
         run: uv run poe test
