@@ -426,6 +426,9 @@ console = [
 ]
 
 [package.dev-dependencies]
+basic = [
+    { name = "poethepoet" },
+]
 build = [
     { name = "packaging" },
     { name = "pyinstaller" },
@@ -457,6 +460,7 @@ requires-dist = [
 provides-extras = ["console"]
 
 [package.metadata.requires-dev]
+basic = [{ name = "poethepoet", specifier = ">=0.42.1" }]
 build = [
     { name = "packaging", specifier = ">=26.0" },
     { name = "pyinstaller", specifier = ">=6.17.0" },

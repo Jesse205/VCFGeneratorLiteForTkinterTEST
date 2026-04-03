@@ -27,6 +27,8 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.12", "3.13", "3.14t"]
+    env:
+      UV_NO_DEFAULT_GROUPS: true
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v8.0.0
@@ -37,5 +39,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Update .python-version file
         run: uv python pin ${{ matrix.python-version }}
+
       - name: Test with pytest
-        run: uv run poe test
+        run: uv run --group test --group basic poe test

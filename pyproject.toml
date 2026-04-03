@@ -14,20 +14,11 @@ import-names = ["vcf_generator_lite"]
 console = ["colorlog>=6.9.0"]
 
 [dependency-groups]
+basic = ["poethepoet>=0.42.1"]
 test = ["pytest>=9.0.2"]
 lint = ["pyright>=1.1.407", "ruff>=0.14.10"]
-build = [
-    "packaging>=26.0",
-    "pyinstaller>=6.17.0",
-    "requests>=2.32.5",
-]
-dev = [
-    "colorlog>=6.9.0",
-    "poethepoet>=0.42.1",
-    { include-group = "lint" },
-    { include-group = "test" },
-    { include-group = "build" },
-]
+build = ["packaging>=26.0", "pyinstaller>=6.17.0", "requests>=2.32.5"]
+dev = ["colorlog>=6.9.0"]
 
 
 [project.urls]
@@ -57,6 +48,7 @@ build-wheel = "uv build --wheel"
 
 [tool.uv]
 required-version = ">=0.10.1"
+default-groups = "all"
 
 [tool.uv.pip]
 universal = true
