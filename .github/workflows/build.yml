@@ -1,70 +1,139 @@
-name: Build App
+name: Build Packages
 
 on:
+  workflow_dispatch:
+    inputs:
+      build-windows-installer:
+        description: Build Windows Installer
+        type: boolean
+        default: true
+      build-windows-portable:
+        description: Build Windows Portable
+        type: boolean
+        default: true
+      build-python3-zipapp:
+        description: Build Python 3 Zip Application
+        type: boolean
+        default: true
+      build-python3-wheel:
+        description: Build Python 3 Wheel
+        type: boolean
+        default: true
   workflow_call:
     inputs:
-      os:
-        description: Operating System
-        type: string
-        required: true
-      package-type:
-        description: Package Type
-        type: string
-        required: true
-      python-version:
-        description: Python Version
-        type: string
-      artifact-path:
-        description: Artifact Path
-        type: string
-        required: true
-      artifact-name:
-        description: Artifact Name
-        type: string
-        required: true
-    outputs:
-      artifact-id:
-        value: ${{ jobs.build.outputs.artifact-id }}
-      artifact-url:
-        value: ${{ jobs.build.outputs.artifact-url }}
-      artifact-digest:
-        value: ${{ jobs.build.outputs.artifact-digest }}
+      build-windows-installer:
+        description: Build Windows Installer
+        type: boolean
+        default: false
+      build-windows-portable:
+        description: Build Windows Portable
+        type: boolean
+        default: false
+      build-python3-zipapp:
+        description: Build Python 3 Zip Application
+        type: boolean
+        default: false
+      build-python3-wheel:
+        description: Build Python 3 Wheel
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 jobs:
-  build:
-    runs-on: ${{ inputs.os }}
-    name: Build ${{ inputs.artifact-name }}
+  build-windows-installer:
+    if: ${{ inputs.build-windows-installer }}
+    name: Build Windows Installer
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Install uv and set the Python version
-        uses: astral-sh/setup-uv@v7
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v6
         with:
           python-version-file: ".python-version"
 
-      - name: Install Dependencies
-        run: uv sync
-      
-      # Do not use UPX for speed.
-      # - name: Prepare UPX for Windows
-      #   if: ${{ startsWith(inputs.os, 'windows') && (inputs.package-type == 'portable' || inputs.package-type == 'installer') }}
-      #   run: choco install upx
-
-      - name: Build Package
-        run: uv run scripts/build_app.py -t ${{ inputs.package-type }}
+      - name: Build Portable Package
+        run: uv run poe build-installer
 
       - name: Upload Package
         id: upload-package
         uses: actions/upload-artifact@v6
         with:
-          name: ${{ inputs.artifact-name }}
-          path: ${{ inputs.artifact-path }}
+          name: windows-installer
+          path: dist/*-setup.exe
           if-no-files-found: error
-    outputs:
-      artifact-id: ${{ steps.upload-package.outputs.artifact-id }}
-      artifact-url: ${{ steps.upload-package.outputs.artifact-url }}
-      artifact-digest: ${{ steps.upload-package.outputs.artifact-digest }}
+
+  build-windows-portable:
+    if: ${{ inputs.build-windows-portable }}
+    name: Build Windows Portable Package
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version-file: ".python-version"
+
+      - name: Build Portable Package
+        run: uv run poe build-portable
+
+      - name: Upload Package
+        id: upload-package
+        uses: actions/upload-artifact@v6
+        with:
+          name: windows-portable
+          path: dist/*-portable.zip
+          if-no-files-found: error
+
+  build-python3-zipapp:
+    if: ${{ inputs.build-python3-zipapp }}
+    name: Build Python 3 Zip Application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version-file: ".python-version"
+
+      - name: Build Zipapp
+        run: uv run poe build-zipapp
+
+      - name: Upload Package
+        id: upload-package
+        uses: actions/upload-artifact@v6
+        with:
+          name: python3-zipapp
+          path: dist/*.pyzw
+          if-no-files-found: error
+
+  build-python3-wheel:
+    if: ${{ inputs.build-python3-wheel }}
+    name: Build Python 3 Wheel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version-file: ".python-version"
+
+      - name: Build Wheel
+        run: uv run poe build-wheel
+
+      - name: Upload Wheel
+        id: upload-wheel
+        uses: actions/upload-artifact@v6
+        with:
+          name: python3-wheel
+          path: dist/*.whl
+          if-no-files-found: error

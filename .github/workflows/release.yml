@@ -3,33 +3,55 @@ name: Release App
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
+  workflow_dispatch:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   test:
     uses: ./.github/workflows/test.yml
-    secrets: inherit
     name: Test
-    permissions:
-      contents: read
-      pull-requests: read
+
   build-apps:
-    uses: ./.github/workflows/build_all.yml
+    uses: ./.github/workflows/build.yml
     name: Build All Apps
     needs: test
-    secrets: inherit
     with:
       build-windows-installer: true
       build-windows-portable: true
       build-python3-zipapp: true
       build-python3-wheel: true
+
+  metadata:
+    name: Get Metadata
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - name: Get Project Version
+        id: get-version
+        run: |
+          # Get the short version output (e.g., "5.0.0.dev1")
+          VERSION=$(uv version --short)
+          echo "Version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
   release:
     name: Release
-    needs: build-apps
+    needs: [build-apps, metadata]
     runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ case(github.event_name == 'workflow_dispatch', needs.metadata.outputs.version, github.ref_name) }}
     permissions:
       contents: write
     steps:
@@ -38,12 +60,27 @@ jobs:
         with:
           merge-multiple: true
       - name: Release Upload Assets
+        id: release-upload-assets
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload ${{ github.event.release.tag_name }} \
+          gh release upload $VERSION \
             *-portable.zip \
             *-setup.exe \
             *.pyzw \
             *.whl \
             --clobber --repo $GITHUB_REPOSITORY
+      - name: Create Release if not exists
+        if: steps.release-upload-assets.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create $VERSION \
+            *-portable.zip \
+            *-setup.exe \
+            *.pyzw \
+            *.whl \
+            --repo $GITHUB_REPOSITORY \
+            --draft \
+            --title "VCF Generator Lite $VERSION" \

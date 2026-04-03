@@ -6,36 +6,36 @@
 - **开发语言**: [Python 3.12+][python-homepage]
 - **UI 框架**: [Tkinter][tkinter-homepage]
 - **包管理工具**: [uv][uv-homepage]
-- **测试工具**: [pytest](https://docs.pytest.org/en/7.4.x/)
-- **格式化工具**: [Ruff][ruff-formatter-homepage]
-- **代码检查工具**: [Ruff][ruff-linter-homepage]、[Pyright][pyright-homepage]
+- **任务运行器**: [poethepoet][poethepoet-homepage]
+- **代码质量**:
+  - **测试工具**: [pytest](https://docs.pytest.org/en/7.4.x/)
+  - **格式化工具**: [Ruff][ruff-formatter-homepage]
+  - **代码检查工具**: [Ruff][ruff-linter-homepage]、[Pyright][pyright-homepage]
 - **构建工具**:
-  - Windows: [PyInstaller][pyinstaller-homepage]、[InnoSetup 6.6+][innosetup-homepage]、[UPX][upx-homepage]
-  - ZIP 应用：[zipapp][python-docs-zipapp]（Python 标准库）
+  - **创建可执行文件**：[PyInstaller][pyinstaller-homepage]
+  - **体积优化工具**：[UPX][upx-homepage]
+  - **创建安装程序（仅 Windows 平台）**：[InnoSetup 6.6+][innosetup-homepage]
+  - **创建 ZIP 应用**：[zipapp][python-docs-zipapp]（Python 标准库）
 
 ## 🛠️ 开发准备
 
-### 环境配置
-
 1. **安装基础工具**：
-   - **Python**: 安装 Python 3.12+ (确保包含 Tkinter 支持)。
-   - **uv**: 安装 [uv][uv-installation] 作为包管理器。
-   - **可选工具**:
-     - **UPX**: 用于压缩可执行文件。
-     - **Inno Setup**: 仅 Windows，用于生成安装程序。
-2. **安装依赖项**：
-   ```bash
-   uv sync
-   ```
+   - **Python 解释器**：Python 3.12+ (确保包含 Tkinter 支持)
+   - **包管理工具**：[uv][uv-installation]
+2. **安装依赖项**：执行命令 `uv sync`。
 
 ## 📦 构建应用
 
-| 软件包类型       | 命令                                       |
-| ---------------- | ------------------------------------------ |
-| Windows 安装程序 | `uv run scripts/build_app.py -t innosetup` |
-| 便携包           | `uv run scripts/build_app.py -t portable`  |
-| Python ZIP 应用  | `uv run scripts/build_app.py -t zipapp`    |
-| Python Wheel     | `uv build --wheel`                         |
+1. 完成开发准备。
+2. 根据软件包类型，安装额外工具。
+3. 执行对应的构建命令。
+
+| 软件包类型       | 额外工具                                                          | 构建命令                     |
+| ---------------- | ----------------------------------------------------------------- | ---------------------------- |
+| Windows 安装程序 | [InnoSetup 6.6+][innosetup-homepage]、[UPX][upx-homepage]（可选） | `uv run poe build-installer` |
+| Windows 便携包   | [UPX][upx-homepage]（可选）                                       | `uv run poe build-portable`  |
+| Python ZIP 应用  | 无                                                                | `uv run poe build-zipapp`    |
+| Python Wheel     | 无                                                                | `uv run poe build-wheel`     |
 
 ## 项目结构
 
@@ -67,10 +67,9 @@ VCFGeneratorLiteWithTkinter/
 | 命令                                 | 描述                           |
 | ------------------------------------ | ------------------------------ |
 | `uv run vcf-generator-lite`          | 运行应用                       |
-| `uv run pytest`                      | 测试应用                       |
-| `uv run ruff format`                 | 格式化所有代码                 |
-| `uv run ruff check`                  | 检查所有代码                   |
-| `uv run scripts/build_app.py`        | 构建应用                       |
+| `uv run poe test`                    | 测试应用                       |
+| `uv run poe format`                  | 格式化所有代码                 |
+| `uv run poe lint`                    | 检查所有代码                   |
 | `uv version`                         | 查看当前版本                   |
 | `uv version 1.2.3`                   | 更新版本号为 `1.2.3`           |
 | `uv version --bump patch --bump dev` | 更新补丁版本，并更新为开发版本 |
@@ -175,5 +174,6 @@ D = 基础偏移 + 预发布号 × 100 + 后发布号 × 10 + （开发号 或 9
 [python-packaging-version-specifiers]: https://packaging.python.org/en/latest/specifications/version-specifiers/
 [pyinstaller-homepage]: https://pyinstaller.org/en/stable/
 [upx-homepage]: https://upx.github.io/
+[poethepoet-homepage]: https://poethepoet.natn.io/
 
 [python-docs-zipapp]: https://docs.python.org/zh-cn/3/library/zipapp.html

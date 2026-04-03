@@ -1,5 +1,4 @@
 import importlib.metadata
-import sys
 
 from PyInstaller.building.api import COLLECT, EXE, PYZ
 from PyInstaller.building.build_main import Analysis
@@ -13,17 +12,12 @@ from PyInstaller.utils.win32.versioninfo import (
     VSVersionInfo,
 )
 
-from vcf_generator_lite.__version__ import __version__ as app_version
+from scripts.version import app_version, app_windows_ffi_version
 from vcf_generator_lite.constants import APP_COPYRIGHT
-
-sys.path.insert(0, "")
-
-from scripts.build_app import get_windows_file_info_version
 
 app_metadata = importlib.metadata.metadata("vcf_generator_lite")
 app_author = app_metadata.get("Author")
 
-app_exe_version = get_windows_file_info_version(app_version)
 
 a = Analysis(
     ["./src/vcf_generator_lite/__main__.py"],
@@ -64,8 +58,8 @@ exe = EXE(
         ffi=FixedFileInfo(
             # filevers and prodvers should be always a tuple with four items: (1, 2, 3, 4)
             # Set not needed items to zero 0. Must always contain 4 elements.
-            filevers=app_exe_version,
-            prodvers=app_exe_version,
+            filevers=app_windows_ffi_version,
+            prodvers=app_windows_ffi_version,
             # Contains a bitmask that specifies the valid bits 'flags'r
             mask=0x3F,
             # Contains a bitmask that specifies the Boolean attributes of the file.

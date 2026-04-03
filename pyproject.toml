@@ -23,6 +23,7 @@ build = [
 ]
 dev = [
     "colorlog>=6.9.0",
+    "poethepoet>=0.42.1",
     { include-group = "lint" },
     { include-group = "test" },
     { include-group = "build" },
@@ -40,6 +41,19 @@ vcf-generator-lite = "vcf_generator_lite.__main__:main"
 [build-system]
 requires = ["uv_build>=0.10.1,<0.11.0"]
 build-backend = "uv_build"
+
+[tool.poe]
+executor = "uv"
+
+[tool.poe.tasks]
+test = "pytest"
+lint = "ruff check"
+format = "ruff format"
+
+build-installer.script = "scripts.build_app:build_installer"
+build-portable.script = "scripts.build_app:build_portable"
+build-zipapp.script = "scripts.build_app:build_zipapp"
+build-wheel = "uv build --wheel"
 
 [tool.uv]
 required-version = ">=0.10.1"

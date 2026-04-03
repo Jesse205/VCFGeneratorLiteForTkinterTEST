@@ -8,53 +8,22 @@ import zipapp
 from pathlib import Path
 from zipfile import ZipFile
 
-import packaging.version
 import PyInstaller.__main__ as pyinstaller
-from prepare_innosetup_extensions import PATH_INNOSETUP_EXTENSION, prepare_innosetup_extensions
 
-from vcf_generator_lite.__version__ import __version__
+from scripts.prepare_innosetup_extensions import PATH_INNOSETUP_EXTENSION, prepare_innosetup_extensions
+from scripts.version import app_version, app_windows_version
 from vcf_generator_lite.constants import APP_COPYRIGHT
 
 PYTHON_VERSION = sysconfig.get_python_version()
 PLATFORM_PYTHON = f"{sys.implementation.name}-{PYTHON_VERSION}"
 PLATFORM_NATIVE = sysconfig.get_platform()
 
-DISTRIBUTION_ZIPAPP_NAME = f"VCFGeneratorLite-v{__version__}-py3.pyzw"
-DISTRIBUTION_SETUP_BASE_NAME = f"VCFGeneratorLite-v{__version__}-{PLATFORM_NATIVE}-setup"
-DISTRIBUTION_PORTABLE_NAME = f"VCFGeneratorLite-v{__version__}-{PLATFORM_NATIVE}-portable.zip"
+DISTRIBUTION_ZIPAPP_NAME = f"VCFGeneratorLite-v{app_version}-py3.pyzw"
+DISTRIBUTION_SETUP_BASE_NAME = f"VCFGeneratorLite-v{app_version}-{PLATFORM_NATIVE}-setup"
+DISTRIBUTION_PORTABLE_NAME = f"VCFGeneratorLite-v{app_version}-{PLATFORM_NATIVE}-portable.zip"
 
 PATH_DIST = Path("dist").resolve()
 PATH_BUILD = Path("build").resolve()
-
-
-def get_windows_file_info_version(version: str) -> tuple[int, int, int, int]:
-    parsed = packaging.version.parse(version)
-    build = 0
-    match parsed.pre:
-        case ("a", _):
-            build += 10000
-        case ("b", _):
-            build += 20000
-        case ("rc", _):
-            build += 30000
-        case _:
-            if not parsed.is_devrelease:
-                build += 40000
-    if parsed.pre:
-        build += parsed.pre[1] * 100
-    if parsed.post is not None:
-        build += parsed.post * 10
-    if parsed.dev is not None:
-        build += parsed.dev
-    return (
-        parsed.major,
-        parsed.minor,
-        parsed.micro,
-        build,
-    )
-
-
-app_windows_version = ".".join(str(part) for part in get_windows_file_info_version(__version__))
 
 
 def ensure_dist_dir():
@@ -72,10 +41,6 @@ def build_with_pyinstaller():
     ensure_dist_dir()
     pyinstaller.run(["vcf_generator_lite.spec", "--noconfirm"])
     print("Building finished.")
-
-
-def build_with_uv():
-    subprocess.run(["uv", "build"], check=True)  # noqa: S607
 
 
 def pack_with_innosetup():
@@ -109,7 +74,7 @@ def pack_with_innosetup():
             iscc_path,
             "/D" + f"OutputBaseFilename={DISTRIBUTION_SETUP_BASE_NAME}",
             "/D" + f"MyAppCopyright={APP_COPYRIGHT}",
-            "/D" + f"MyAppVersion={__version__}",
+            "/D" + f"MyAppVersion={app_version}",
             "/D" + f"VersionInfoVersion={app_windows_version}",
             "/D" + f"ArchitecturesAllowed={architectures_allowed}",
             "/D" + f"ArchitecturesInstallIn64BitMode={architectures_install_in64_bit_mode}",
@@ -179,21 +144,35 @@ def build_with_zipapp():
     print("Building finished.")
 
 
+def build_installer():
+    build_with_pyinstaller()
+    pack_with_innosetup()
+
+
+def build_portable():
+    build_with_pyinstaller()
+    pack_with_zipfile()
+
+
+def build_zipapp():
+    build_with_zipapp()
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-t",
         "--type",
         type=str,
-        default="innosetup",
-        choices=["innosetup", "portable", "zipapp"],
+        default="installer",
+        choices=["installer", "portable", "zipapp"],
         help="软件包类型（默认：%(default)s）",
     )
     args = parser.parse_args()
 
     type_ = args.type
     match type_:
-        case "innosetup":
+        case "installer":
             build_with_pyinstaller()
             pack_with_innosetup()
         case "portable":
