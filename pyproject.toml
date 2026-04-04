@@ -1,6 +1,6 @@
 [project]
 name = "vcf-generator-lite"
-version = "5.0.0.dev1"
+version = "5.0.0"
 description = "Makes one vCard from a contact list."
 authors = [{ name = "Jesse205", email = "jesse205@qq.com" }]
 license = "Apache-2.0"
@@ -30,7 +30,7 @@ Issues = "https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/issues/new/cho
 vcf-generator-lite = "vcf_generator_lite.__main__:main"
 
 [build-system]
-requires = ["uv_build>=0.10.1,<0.11.0"]
+requires = ["uv_build>=0.11.3,<0.12"]
 build-backend = "uv_build"
 
 [tool.poe]

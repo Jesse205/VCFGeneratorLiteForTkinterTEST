@@ -414,7 +414,7 @@ wheels = [
 
 [[package]]
 name = "vcf-generator-lite"
-version = "5.0.0.dev1"
+version = "5.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "ttk-text" },
@@ -436,13 +436,6 @@ build = [
 ]
 dev = [
     { name = "colorlog" },
-    { name = "packaging" },
-    { name = "poethepoet" },
-    { name = "pyinstaller" },
-    { name = "pyright" },
-    { name = "pytest" },
-    { name = "requests" },
-    { name = "ruff" },
 ]
 lint = [
     { name = "pyright" },
@@ -466,16 +459,7 @@ build = [
     { name = "pyinstaller", specifier = ">=6.17.0" },
     { name = "requests", specifier = ">=2.32.5" },
 ]
-dev = [
-    { name = "colorlog", specifier = ">=6.9.0" },
-    { name = "packaging", specifier = ">=26.0" },
-    { name = "poethepoet", specifier = ">=0.42.1" },
-    { name = "pyinstaller", specifier = ">=6.17.0" },
-    { name = "pyright", specifier = ">=1.1.407" },
-    { name = "pytest", specifier = ">=9.0.2" },
-    { name = "requests", specifier = ">=2.32.5" },
-    { name = "ruff", specifier = ">=0.14.10" },
-]
+dev = [{ name = "colorlog", specifier = ">=6.9.0" }]
 lint = [
     { name = "pyright", specifier = ">=1.1.407" },
     { name = "ruff", specifier = ">=0.14.10" },
