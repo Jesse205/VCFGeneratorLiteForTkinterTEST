@@ -45,11 +45,11 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
   release:
-    name: Release
+    name: Upload Release
     needs: [build-apps, metadata]
     runs-on: ubuntu-latest
     env:
-      VERSION: ${{ case(github.event_name == 'workflow_dispatch', needs.metadata.outputs.version, github.ref_name) }}
+      VERSION_TAG: ${{ case(github.event_name == 'workflow_dispatch', format('v{0}', needs.metadata.outputs.version), github.ref_name) }}
     permissions:
       contents: write
     steps:
@@ -63,7 +63,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload $VERSION \
+          gh release upload $VERSION_TAG \
             *-portable.zip \
             *-setup.exe \
             *.pyzw \
@@ -74,11 +74,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create $VERSION \
+          gh release create $VERSION_TAG \
             *-portable.zip \
             *-setup.exe \
             *.pyzw \
             *.whl \
             --repo $GITHUB_REPOSITORY \
             --draft \
-            --title "VCF Generator Lite $VERSION" \
+            --title "VCF Generator Lite $VERSION_TAG" \
