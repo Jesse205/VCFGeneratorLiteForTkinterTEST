@@ -22,7 +22,7 @@ permissions:
   pull-requests: read
 
 jobs:
-  build:
+  test:
     runs-on: windows-latest # TODO: Use ubuntu-latest
     strategy:
       matrix:
