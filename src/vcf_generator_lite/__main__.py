@@ -13,16 +13,15 @@ __all__ = ["main"]
 
 def setup_logging(verbose: bool):
     try:
-        from colorlog import ColoredFormatter
+        import colorlog
     except ImportError:
-        # noinspection PyPep8Naming
-        ColoredFormatter = None  # noqa: N806
+        colorlog = None
 
     handler = logging.StreamHandler()
     handler.setStream(sys.stdout)
     log_format = "{asctime} {levelname:8} {name:50.50} {message}"
-    if ColoredFormatter:
-        formatter = ColoredFormatter("{log_color}" + log_format, style="{")
+    if colorlog:
+        formatter = colorlog.ColoredFormatter("{log_color}" + log_format, style="{")
     else:
         formatter = logging.Formatter(log_format, style="{")
 
