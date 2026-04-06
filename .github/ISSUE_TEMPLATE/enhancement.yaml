@@ -1,5 +1,5 @@
 name: "Improvement Suggestion"
-description: Suggest an improvement for this project
+description: Suggest an improvement for this project.
 title: "[Improvement]: "
 labels:
   - enhancement
