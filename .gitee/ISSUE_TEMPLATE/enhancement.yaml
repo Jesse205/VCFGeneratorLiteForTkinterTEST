@@ -1,0 +1,36 @@
+name: "改进建议"
+description: 对本项目提出一个改进建议
+title: "[改进建议]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: 感谢提出改进建议，我们将仔细考虑！
+  - type: textarea
+    id: related-problem
+    attributes:
+      label: 相关问题
+      description: 这个问题让你感到困扰的场景是什么？
+  - type: textarea
+    id: desired-solution
+    attributes:
+      label: 期望方案
+      description: 你希望看到什么改变？
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 替代方案
+      description: 你考虑过哪些其他方案？
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 补充信息
+      description: 相关截图或额外说明
+  - type: checkboxes
+    attributes:
+      label: 参与贡献
+      options:
+        - label: 我愿意贡献代码实现此功能

@@ -1,0 +1,4 @@
+contact_links:
+  - name: Submit feedback on Gitee
+    url: https://gitee.com/hellotool/VCFGeneratorLiteWithTkinter/issues/new/choose
+    about: If you don't have a GitHub account, you can submit feedback on Gitee.

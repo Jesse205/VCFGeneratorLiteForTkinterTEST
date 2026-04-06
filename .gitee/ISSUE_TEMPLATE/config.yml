@@ -1,0 +1,4 @@
+contact_links:
+  - name: 在 GitHub 中提交反馈
+    url: https://github.com/hellotool/VCFGeneratorLiteWithTkinter/issues/new/choose
+    about: 如果您没有 Gitee 账号，您可以在 GitHub 中提交反馈。
