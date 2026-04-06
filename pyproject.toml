@@ -7,7 +7,7 @@ license = "Apache-2.0"
 license-files = ["LICENSE"]
 readme = "README_pypi.md"
 requires-python = ">=3.12"
-dependencies = ["ttk-text==0.3.1"]
+dependencies = ["ttk-text==0.3.2.post1"]
 import-names = ["vcf_generator_lite"]
 
 [project.optional-dependencies]
@@ -66,8 +66,6 @@ ignore = [
     "D104",
     "D107",
     "D400", # 不支持中文标点
-    # "D417",
-    # "TRY003",
     "PLC0415", # 为了防止兼容性问题或者不必要的代码运行，需要将导入放到函数内。
     "FBT001",  # 在设置单个值时不需要命名参数
     "FBT003",
@@ -76,7 +74,6 @@ ignore = [
     "PLR0913", # 参数多不是问题，问题是参数多且没使用命名参数
     "PLR2004", # 有时候，一些长度判断、常见状态码不需要常量
     "S113",    # 万一就是要等很长时间
-    # "S607",
     "ANN003", # 无法做到
     "ANN201", # 为了保持简洁，None 类型不写返回类型
     "ANN202",
