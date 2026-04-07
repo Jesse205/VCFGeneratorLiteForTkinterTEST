@@ -1,9 +1,6 @@
-name: Release
+name: Prepare Release
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
 
 permissions:
@@ -27,7 +24,6 @@ jobs:
 
   metadata:
     name: Get Metadata
-    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get-version.outputs.version }}
@@ -49,7 +45,7 @@ jobs:
     needs: [build-apps, metadata]
     runs-on: ubuntu-latest
     env:
-      VERSION_TAG: ${{ case(github.event_name == 'workflow_dispatch', format('v{0}', needs.metadata.outputs.version), github.ref_name) }}
+      VERSION_TAG: ${{ format('v{0}', needs.metadata.outputs.version) }}
     permissions:
       contents: write
     steps:
