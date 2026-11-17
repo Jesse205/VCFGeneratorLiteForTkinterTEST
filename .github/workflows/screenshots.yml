@@ -38,8 +38,8 @@ jobs:
           path: screenshots/linux
 
   macos:
-    # macos-latest 已指向 macos-26，runner 排队异常；固定仍在支持期的 macos-15。
-    runs-on: macos-15
+    # macos-latest 已指向 macos-26；arm64 池排队拥堵，改用独立容量的 Intel 池。
+    runs-on: macos-15-intel
     env:
       UV_NO_DEFAULT_GROUPS: true
     steps:
