@@ -61,12 +61,12 @@ lint = [
   "tombi>=1.11.1",
   { include-group = "basic" },
 ]
-test = [
-  "pytest>=9.2.0",
-  { include-group = "basic" },
-]
 screenshot = [
   "pillow>=11.0.0",
+  { include-group = "basic" },
+]
+test = [
+  "pytest>=9.2.0",
   { include-group = "basic" },
 ]
 
