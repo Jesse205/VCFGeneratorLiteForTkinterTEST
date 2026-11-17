@@ -1,6 +1,7 @@
 """构建截图场景并输出 PNG / WebP。"""
 
 import time
+from functools import partial
 from pathlib import Path
 from tkinter import Menu, filedialog
 from typing import override
@@ -37,20 +38,9 @@ class ScreenshotApp(VCFGeneratorLiteApp):
         # 示例号码为中国号段；默认按语言territory选规则会让 en-US 下全部行无效。
         self.selected_phone_detectors_ids = set(self.phone_detectors_ids)
         self.menu_bar.set_phone_formats_selection(True, dict.fromkeys(self.phone_detectors_ids, True))
-        self._strip_menu_underlines(self.menu_bar)
+        _strip_menu_underlines(self.menu_bar)
         self.set_screenshot_size(self, MAIN_WINDOW_WIDTH_PT, MAIN_WINDOW_HEIGHT_PT, MAIN_WINDOW_MIN_SIZE_PT)
         self._replace_invalid_row()
-
-    @staticmethod
-    def _strip_menu_underlines(menu: Menu):
-        # X11 的 Tk 菜单常显助记符下划线，Windows 参考截图没有。
-        for index in range(menu.index("end") + 1):
-            entry_type = menu.type(index)
-            if entry_type not in {"command", "cascade", "checkbutton", "radiobutton"}:
-                continue
-            menu.entryconfigure(index, underline=-1)
-            if entry_type == "cascade":
-                ScreenshotApp._strip_menu_underlines(menu.nametowidget(menu.entrycget(index, "menu")))
 
     def set_screenshot_size(
         self, window: VCFGeneratorLiteApp | InvalidItemsDialog, width_pt: int, height_pt: int, min_pt: int
@@ -72,6 +62,20 @@ class ScreenshotApp(VCFGeneratorLiteApp):
         self.layout.content_text.edit_modified(False)
         # 参考截图带插入光标；关闭闪烁避免截到隐藏相位。
         self.layout.content_text.configure(insertofftime=0)
+
+
+def _strip_menu_underlines(menu: Menu):
+    # X11 的 Tk 菜单常显助记符下划线，Windows 参考截图没有。
+    end = menu.index("end")
+    if end is None:
+        return
+    for index in range(int(end) + 1):
+        entry_type = menu.type(index)
+        if entry_type not in {"command", "cascade", "checkbutton", "radiobutton"}:
+            continue
+        menu.entryconfigure(index, underline=-1)
+        if entry_type == "cascade":
+            _strip_menu_underlines(menu.nametowidget(menu.entrycget(index, "menu")))
 
 
 def capture_language(
@@ -109,7 +113,7 @@ def capture_language(
             if isinstance(child, InvalidItemsDialog):
                 app.set_screenshot_size(child, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT, DIALOG_MIN_SIZE_PT)
                 child.attributes("-topmost", True)
-                app.after(500, lambda: capture_dialog(child))
+                app.after(500, partial(capture_dialog, child))
                 return
         app.after(100, wait_dialog)
 
