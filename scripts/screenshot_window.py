@@ -119,6 +119,13 @@ def capture_language(
 
     def start_generate():
         nonlocal dialog_deadline
+        # WM 焦点策略不一，显式索取焦点保证插入光标可见。
+        app.focus_force()
+        app.layout.content_text.focus_set()
+        app.after(300, capture_main_and_generate)
+
+    def capture_main_and_generate():
+        nonlocal dialog_deadline
         _assert_scaling(app, platform, scale)
         _assert_size(app, MAIN_WINDOW_WIDTH_PT, MAIN_WINDOW_HEIGHT_PT)
         _capture(app, output_dir / f"main_window.{lang}.png", platform)
