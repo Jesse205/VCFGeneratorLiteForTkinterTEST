@@ -6,20 +6,29 @@ let main = CGMainDisplayID()
 if let mode = CGDisplayCopyDisplayMode(main) {
     print("current: points=\(mode.width)x\(mode.height) pixels=\(mode.pixelWidth)x\(mode.pixelHeight)")
 }
-let options = [kCGDisplayShowDuplicateLowResolutionModesOptionKey: true] as CFDictionary
-let modes = (CGDisplayCopyAllDisplayModes(main, options) as? [CGDisplayMode]) ?? []
-let hidpi = modes.filter { $0.pixelWidth > $0.width }
-for mode in hidpi {
+let modes = (CGDisplayCopyAllDisplayModes(main, nil) as? [CGDisplayMode]) ?? []
+var hidpi: [CGDisplayMode] = []
+for mode in modes where mode.pixelWidth > mode.width {
+    hidpi.append(mode)
     print("hidpi: points=\(mode.width)x\(mode.height) pixels=\(mode.pixelWidth)x\(mode.pixelHeight)")
 }
 if CommandLine.arguments.count > 1 && CommandLine.arguments[1] == "set" {
-    guard let target = hidpi.first(where: { $0.pixelWidth == $0.width * 2 && $0.width >= 1280 }) else {
+    var target: CGDisplayMode? = nil
+    for mode in hidpi {
+        let is2x: Bool = mode.pixelWidth == mode.width * 2
+        let wideEnough: Bool = mode.width >= 1280
+        if is2x && wideEnough {
+            target = mode
+            break
+        }
+    }
+    guard let chosen = target else {
         print("no usable 2x mode")
         exit(1)
     }
     var config: CGDisplayConfigRef?
     guard CGBeginDisplayConfiguration(&config) == .success else { exit(1) }
-    guard CGConfigureDisplayWithDisplayMode(config, main, target, nil) == .success else { exit(1) }
+    guard CGConfigureDisplayWithDisplayMode(config, main, chosen, nil) == .success else { exit(1) }
     guard CGCompleteDisplayConfiguration(config, .permanently) == .success else { exit(1) }
-    print("set: points=\(target.width)x\(target.height) pixels=\(target.pixelWidth)x\(target.pixelHeight)")
+    print("set: points=\(chosen.width)x\(chosen.height) pixels=\(chosen.pixelWidth)x\(chosen.pixelHeight)")
 }
