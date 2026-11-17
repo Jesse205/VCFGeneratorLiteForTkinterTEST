@@ -55,10 +55,25 @@ jobs:
           python-version: "3.12"
       - name: Install open-source fonts
         run: brew install --cask font-noto-sans font-noto-sans-cjk-sc
-      - name: Probe and set HiDPI 2x
+      - name: Probe display scaling
+        run: swift scripts/screenshot_macos_display.swift
+      - name: Set HiDPI 2x natively
+        id: native_hidpi
+        continue-on-error: true
+        run: swift scripts/screenshot_macos_display.swift set
+      - name: Fallback to BetterDisplay virtual HiDPI screen
+        if: steps.native_hidpi.outcome != 'success'
         run: |
-          swift scripts/screenshot_macos_display.swift
-          swift scripts/screenshot_macos_display.swift set || true
+          brew install --cask betterdisplay
+          open -a BetterDisplay
+          sleep 8
+          CLI=/Applications/BetterDisplay.app/Contents/MacOS/BetterDisplay
+          "$CLI" create -type=VirtualScreen -virtualScreenName=ShotDisplay \
+            -virtualScreenHiDPI=on -useResolutionList=on -resolutionList=1920x1080
+          sleep 3
+          "$CLI" set -name=ShotDisplay -resolution=1920x1080 -hiDPI=on
+          "$CLI" set -name=ShotDisplay -main=on
+          sleep 3
           swift scripts/screenshot_macos_display.swift
       - name: Take screenshots
         run: |
