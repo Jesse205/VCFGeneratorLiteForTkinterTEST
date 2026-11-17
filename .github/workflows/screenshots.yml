@@ -12,7 +12,7 @@ jobs:
     env:
       UV_NO_DEFAULT_GROUPS: true
       # uv 独立 Python 自带的 Tk 9 无 Xft/fontconfig，无法使用 Noto 字体；改用系统 Tk 8.6。
-      UV_PYTHON: /usr/bin/python3.12
+      UV_PYTHON: /usr/bin/python3
     steps:
       - uses: actions/checkout@v6
       - uses: astral-sh/setup-uv@v8.0.0
@@ -24,7 +24,7 @@ jobs:
         run: sudo locale-gen zh_CN.UTF-8 en_US.UTF-8
       - name: Create environment with system Tk
         run: |
-          uv venv --python /usr/bin/python3.12 --system-site-packages
+          uv venv --python /usr/bin/python3 --system-site-packages
           uv sync --group screenshot
       - name: Take screenshots
         run: |
