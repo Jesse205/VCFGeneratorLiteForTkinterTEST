@@ -93,16 +93,10 @@ def apply_tk_fonts(root: Misc, family: str) -> None:
 
     for name in FONT_NAMES:
         try:
-            tkinter.font.nametofont(name, root=root).configure(family=family)
+            # 9pt 与 Windows 参考截图的系统字体字号一致。
+            tkinter.font.nametofont(name, root=root).configure(family=family, size=9)
         except tkinter.TclError:
             continue
-
-
-def pump(window: Misc, seconds: float) -> None:
-    deadline = time.monotonic() + seconds
-    while time.monotonic() < deadline:
-        window.update()
-        time.sleep(0.03)
 
 
 def capture_window(window: Misc, output: Path, platform: str) -> Path:

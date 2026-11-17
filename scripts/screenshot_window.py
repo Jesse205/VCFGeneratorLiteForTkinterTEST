@@ -2,10 +2,10 @@
 
 import time
 from pathlib import Path
-from tkinter import filedialog
+from tkinter import Menu, filedialog
 from typing import override
 
-from scripts.screenshot_support import apply_tk_fonts, capture_window, pump, save_capture_as_webp
+from scripts.screenshot_support import apply_tk_fonts, capture_window, save_capture_as_webp
 from vcf_generator_lite.ui.windows.invalid_items_dialog import InvalidItemsDialog
 from vcf_generator_lite.ui.windows.main_window import VCFGeneratorLiteApp
 
@@ -34,8 +34,23 @@ class ScreenshotApp(VCFGeneratorLiteApp):
 
             Style(self).theme_use("clam")
         super()._configure_ui_withdraw()
+        # 示例号码为中国号段；默认按语言territory选规则会让 en-US 下全部行无效。
+        self.selected_phone_detectors_ids = set(self.phone_detectors_ids)
+        self.menu_bar.set_phone_formats_selection(True, dict.fromkeys(self.phone_detectors_ids, True))
+        self._strip_menu_underlines(self.menu_bar)
         self.set_screenshot_size(self, MAIN_WINDOW_WIDTH_PT, MAIN_WINDOW_HEIGHT_PT, MAIN_WINDOW_MIN_SIZE_PT)
         self._replace_invalid_row()
+
+    @staticmethod
+    def _strip_menu_underlines(menu: Menu):
+        # X11 的 Tk 菜单常显助记符下划线，Windows 参考截图没有。
+        for index in range(menu.index("end") + 1):
+            entry_type = menu.type(index)
+            if entry_type not in {"command", "cascade", "checkbutton", "radiobutton"}:
+                continue
+            menu.entryconfigure(index, underline=-1)
+            if entry_type == "cascade":
+                ScreenshotApp._strip_menu_underlines(menu.nametowidget(menu.entrycget(index, "menu")))
 
     def set_screenshot_size(
         self, window: VCFGeneratorLiteApp | InvalidItemsDialog, width_pt: int, height_pt: int, min_pt: int
@@ -52,9 +67,11 @@ class ScreenshotApp(VCFGeneratorLiteApp):
         lines = self.layout.get_text_content().split("\n")
         name = lines[INVALID_ROW - 1].split("\t")[0]
         lines[INVALID_ROW - 1] = f"{name}\t{INVALID_PHONE_PLACEHOLDER}"
-        self.layout.set_text_content("\n".join(lines) + "\n")
+        self.layout.set_text_content("\n".join(lines))
         self.layout.content_text.edit_reset()
         self.layout.content_text.edit_modified(False)
+        # 参考截图带插入光标；关闭闪烁避免截到隐藏相位。
+        self.layout.content_text.configure(insertofftime=0)
 
 
 def capture_language(
@@ -77,33 +94,40 @@ def capture_language(
         return str(save_path)
 
     filedialog.asksaveasfilename = fake_ask_saveasfilename
-    try:
-        app.attributes("-topmost", True)
-        pump(app, wait)
+    # 生成线程会回调 Tk，必须跑真实 mainloop；update() 泵消息会让跨线程调用抛 RuntimeError。
+    dialog_deadline = 0.0
+
+    def capture_dialog(dialog: InvalidItemsDialog):
+        _assert_size(dialog, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT)
+        _capture(dialog, output_dir / f"invalid_lines_window.{lang}.png", platform)
+        app.destroy()
+
+    def wait_dialog():
+        if time.monotonic() > dialog_deadline:
+            raise SystemExit("等待无效号码弹窗超时。")
+        for child in app.children.values():
+            if isinstance(child, InvalidItemsDialog):
+                app.set_screenshot_size(child, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT, DIALOG_MIN_SIZE_PT)
+                child.attributes("-topmost", True)
+                app.after(500, lambda: capture_dialog(child))
+                return
+        app.after(100, wait_dialog)
+
+    def start_generate():
+        nonlocal dialog_deadline
         _assert_scaling(app, platform, scale)
         _assert_size(app, MAIN_WINDOW_WIDTH_PT, MAIN_WINDOW_HEIGHT_PT)
         _capture(app, output_dir / f"main_window.{lang}.png", platform)
-
+        dialog_deadline = time.monotonic() + DIALOG_TIMEOUT
         app.on_generate()
-        dialog = _wait_for_dialog(app)
-        app.set_screenshot_size(dialog, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT, DIALOG_MIN_SIZE_PT)
-        dialog.attributes("-topmost", True)
-        pump(dialog, 0.5)
-        _assert_size(dialog, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT)
-        _capture(dialog, output_dir / f"invalid_lines_window.{lang}.png", platform)
+        app.after(100, wait_dialog)
+
+    app.attributes("-topmost", True)
+    app.after(int(wait * 1000), start_generate)
+    try:
+        app.mainloop()
     finally:
         filedialog.asksaveasfilename = original_ask_saveasfilename
-        app.destroy()
-
-
-def _wait_for_dialog(app: ScreenshotApp) -> InvalidItemsDialog:
-    deadline = time.monotonic() + DIALOG_TIMEOUT
-    while time.monotonic() < deadline:
-        pump(app, 0.1)
-        for child in app.children.values():
-            if isinstance(child, InvalidItemsDialog):
-                return child
-    raise SystemExit("等待无效号码弹窗超时。")
 
 
 def _capture(window: ScreenshotApp | InvalidItemsDialog, output: Path, platform: str) -> None:

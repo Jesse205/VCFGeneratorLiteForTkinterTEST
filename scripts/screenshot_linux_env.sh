@@ -19,7 +19,8 @@ set_property() {
     xfconf-query -c xfwm4 -p "$1" -n -t "$2" -s "$3"
 }
 set_property /general/theme string Default-xhdpi
-set_property /general/title_font string "Noto Sans 9"
+# xfwm4 不跟随 Xft.dpi，标题栏字号直接给 2x（9pt × 2）。
+set_property /general/title_font string "Noto Sans 18"
 set_property /general/title_alignment string left
 set_property /general/button_layout string "O|HMC"
 set_property /general/use_compositing bool false

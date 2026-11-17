@@ -28,7 +28,7 @@ jobs:
           uv sync --group screenshot
       - name: Take screenshots
         run: |
-          xvfb-run -a -s "-screen 0 1600x1200x24 -dpi 192" \
+          xvfb-run -a -s "-screen 0 1600x1600x24 -dpi 192" \
             dbus-run-session -- bash scripts/screenshot_linux_env.sh \
             uv run --group screenshot python -m scripts.screenshot \
             --platform linux --output-dir screenshots/linux
