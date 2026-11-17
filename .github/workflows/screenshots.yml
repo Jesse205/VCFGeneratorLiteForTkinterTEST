@@ -38,7 +38,8 @@ jobs:
           path: screenshots/linux
 
   macos:
-    runs-on: macos-latest
+    # macos-latest 已指向 macos-26，runner 排队异常；固定仍在支持期的 macos-15。
+    runs-on: macos-15
     env:
       UV_NO_DEFAULT_GROUPS: true
     steps:
