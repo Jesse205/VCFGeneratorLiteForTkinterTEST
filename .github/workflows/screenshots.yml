@@ -2,6 +2,12 @@ name: Screenshots
 
 on:
   workflow_dispatch:
+    inputs:
+      macos_runner:
+        description: macOS runner 标签（容量波动时换池重试）
+        required: false
+        default: macos-15-intel
+        type: string
 
 permissions:
   contents: read
@@ -38,8 +44,8 @@ jobs:
           path: screenshots/linux
 
   macos:
-    # macos-latest 已指向 macos-26；arm64 池排队拥堵，改用独立容量的 Intel 池。
-    runs-on: macos-15-intel
+    # macos-latest 已指向 macos-26；runner 容量波动大，标签可经 dispatch 输入换池。
+    runs-on: ${{ inputs.macos_runner || 'macos-15-intel' }}
     env:
       UV_NO_DEFAULT_GROUPS: true
     steps:
