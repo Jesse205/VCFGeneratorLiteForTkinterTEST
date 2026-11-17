@@ -7,8 +7,12 @@ if let mode = CGDisplayCopyDisplayMode(main) {
     print("current: points=\(mode.width)x\(mode.height) pixels=\(mode.pixelWidth)x\(mode.pixelHeight)")
 }
 let modes = (CGDisplayCopyAllDisplayModes(main, nil) as? [CGDisplayMode]) ?? []
+// Swift 未 bridging 该 CFString 常量，直接用键名字符串；部分虚拟显示器仅在此选项下暴露 HiDPI 模式。
+let options = ["kCGDisplayShowDuplicateLowResolutionModesOptionKey": true] as CFDictionary
+let modesWithOptions = (CGDisplayCopyAllDisplayModes(main, options) as? [CGDisplayMode]) ?? []
+print("mode counts: nil=\(modes.count) withOption=\(modesWithOptions.count)")
 var hidpi: [CGDisplayMode] = []
-for mode in modes where mode.pixelWidth > mode.width {
+for mode in modes + modesWithOptions where mode.pixelWidth > mode.width {
     hidpi.append(mode)
     print("hidpi: points=\(mode.width)x\(mode.height) pixels=\(mode.pixelWidth)x\(mode.pixelHeight)")
 }
