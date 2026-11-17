@@ -65,6 +65,10 @@ test = [
   "pytest>=9.2.0",
   { include-group = "basic" },
 ]
+screenshot = [
+  "pillow>=11.0.0",
+  { include-group = "basic" },
+]
 
 [build-system]
 requires = ["uv_build>=0.13.7,<0.14"]

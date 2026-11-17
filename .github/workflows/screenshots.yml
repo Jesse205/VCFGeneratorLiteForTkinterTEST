@@ -1,0 +1,63 @@
+name: Screenshots
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    env:
+      UV_NO_DEFAULT_GROUPS: true
+      # uv 独立 Python 自带的 Tk 9 无 Xft/fontconfig，无法使用 Noto 字体；改用系统 Tk 8.6。
+      UV_PYTHON: /usr/bin/python3.12
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v8.0.0
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb xfwm4 xfconf dbus x11-utils x11-xserver-utils fonts-noto-core fonts-noto-cjk locales python3-tk
+      - name: Generate locales
+        run: sudo locale-gen zh_CN.UTF-8 en_US.UTF-8
+      - name: Create environment with system Tk
+        run: |
+          uv venv --python /usr/bin/python3.12 --system-site-packages
+          uv sync --group screenshot
+      - name: Take screenshots
+        run: |
+          xvfb-run -a -s "-screen 0 1600x1200x24 -dpi 192" \
+            dbus-run-session -- bash scripts/screenshot_linux_env.sh \
+            uv run --group screenshot python -m scripts.screenshot \
+            --platform linux --output-dir screenshots/linux
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-linux
+          path: screenshots/linux
+
+  macos:
+    runs-on: macos-latest
+    env:
+      UV_NO_DEFAULT_GROUPS: true
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v8.0.0
+        with:
+          python-version: "3.12"
+      - name: Install open-source fonts
+        run: brew install --cask font-noto-sans font-noto-sans-cjk-sc
+      - name: Probe and set HiDPI 2x
+        run: |
+          swift scripts/screenshot_macos_display.swift
+          swift scripts/screenshot_macos_display.swift set || true
+          swift scripts/screenshot_macos_display.swift
+      - name: Take screenshots
+        run: |
+          uv run --group screenshot python -m scripts.screenshot \
+            --platform macos --output-dir screenshots/macos
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-macos
+          path: screenshots/macos
