@@ -20,7 +20,8 @@ permissions:
 jobs:
   linux:
     if: ${{ inputs.platform == 'all' || inputs.platform == 'linux' }}
-    runs-on: ubuntu-latest
+    # 固定 24.04：系统 python3.12 + cmake3，与 WSL 验证环境一致（26.04 的 cmake4 拒编 tksvg）。
+    runs-on: ubuntu-24.04
     env:
       UV_NO_DEFAULT_GROUPS: true
       # uv 独立 Python 自带的 Tk 9 无 Xft/fontconfig，无法使用 Noto 字体；改用系统 Tk 8.6。
