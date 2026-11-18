@@ -75,15 +75,25 @@ jobs:
       - name: Fallback to BetterDisplay virtual HiDPI screen
         if: steps.native_hidpi.outcome != 'success'
         run: |
+          set -x
           brew install --cask betterdisplay
           open /Applications/BetterDisplay.app
-          sleep 8
           CLI=/Applications/BetterDisplay.app/Contents/MacOS/BetterDisplay
-          "$CLI" create -type=VirtualScreen -virtualScreenName=ShotDisplay \
+          # macOS 无 timeout；用 perl alarm 限每命令时长，避免 CLI 等待应用就绪时无限挂起。
+          run_limited() { perl -e 'alarm shift; exec @ARGV' "$@"; }
+          for i in $(seq 1 30); do
+            if run_limited 10 "$CLI" get -identifiers >/tmp/bd-ready.json 2>/tmp/bd-ready.err; then
+              echo "betterdisplay ready after ${i} probes"
+              break
+            fi
+            sleep 2
+          done
+          cat /tmp/bd-ready.json || true
+          run_limited 60 "$CLI" create -type=VirtualScreen -virtualScreenName=ShotDisplay \
             -virtualScreenHiDPI=on -useResolutionList=on -resolutionList=1920x1080
           sleep 3
-          "$CLI" set -name=ShotDisplay -resolution=1920x1080 -hiDPI=on
-          "$CLI" set -name=ShotDisplay -main=on
+          run_limited 30 "$CLI" set -name=ShotDisplay -resolution=1920x1080 -hiDPI=on
+          run_limited 30 "$CLI" set -name=ShotDisplay -main=on
           sleep 3
           swift scripts/screenshot_macos_display.swift
       - name: Take screenshots
