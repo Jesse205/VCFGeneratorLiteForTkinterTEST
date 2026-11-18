@@ -17,6 +17,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--font-family", required=True)
     parser.add_argument("--scale", type=float, required=True)
     parser.add_argument("--wait", type=float, required=True)
+    parser.add_argument("--ttk-theme", required=True)
+    parser.add_argument("--theme-dir", action="append", default=[])
     return parser.parse_args()
 
 
@@ -35,6 +37,8 @@ def main() -> None:
         platform=args.platform,
         lang=args.lang,
         font_family=args.font_family,
+        ttk_theme=args.ttk_theme,
+        theme_dirs=args.theme_dir,
         scale=args.scale,
         wait=args.wait,
     )

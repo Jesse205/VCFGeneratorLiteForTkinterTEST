@@ -15,6 +15,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=Path("screenshots"), help="输出目录")
     parser.add_argument("--scale", type=float, default=2.0, help="缩放倍率")
     parser.add_argument("--wait", type=float, default=1.0, help="每次截图前的渲染等待秒数")
+    parser.add_argument("--ttk-theme", default="clam", help="ttk 主题名（Linux）")
+    parser.add_argument("--theme-dir", action="append", default=[], help="外部 ttk 主题目录（可重复）")
     return parser.parse_args()
 
 
@@ -43,6 +45,9 @@ def main() -> None:
             str(args.scale),
             "--wait",
             str(args.wait),
+            "--ttk-theme",
+            args.ttk_theme,
+            *([item for directory in args.theme_dir for item in ("--theme-dir", directory)]),
         ]
         subprocess.run(command, check=True)  # ruff: ignore[subprocess-without-shell-equals-true]
 

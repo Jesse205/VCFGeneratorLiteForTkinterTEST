@@ -3,6 +3,11 @@ name: Screenshots
 on:
   workflow_dispatch:
     inputs:
+      platform:
+        description: 要跑的平台（macOS 调试时选 macos，避免浪费 Linux runner）
+        type: choice
+        options: [all, linux, macos]
+        default: all
       macos_runner:
         description: macOS runner 标签（容量波动时换池重试）
         required: false
@@ -14,6 +19,7 @@ permissions:
 
 jobs:
   linux:
+    if: ${{ inputs.platform == 'all' || inputs.platform == 'linux' }}
     runs-on: ubuntu-latest
     env:
       UV_NO_DEFAULT_GROUPS: true
@@ -25,26 +31,30 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb xfwm4 xfconf dbus x11-utils x11-xserver-utils fonts-noto-core fonts-noto-cjk locales python3-tk
+          sudo apt-get install -y xvfb xfwm4 xfconf dbus x11-utils x11-xserver-utils \
+            fonts-noto-core fonts-noto-cjk locales python3-tk xfwm4-theme-breeze arc-theme \
+            imagemagick cmake tk-dev tcl-dev unzip
       - name: Generate locales
         run: sudo locale-gen zh_CN.UTF-8 en_US.UTF-8
       - name: Create environment with system Tk
         run: |
           uv venv --python /usr/bin/python3 --system-site-packages
           uv sync --group screenshot
-      - name: Take screenshots
+      - name: Build tksvg (svg ttk themes need it; no cp312 wheel)
         run: |
-          xvfb-run -a -s "-screen 0 1600x1600x24 -dpi 192" \
-            dbus-run-session -- bash scripts/screenshot_linux_env.sh \
-            uv run --group screenshot python -m scripts.screenshot \
-            --platform linux --output-dir screenshots/linux
+          uv pip install --python .venv/bin/python scikit-build
+          uv pip install --python .venv/bin/python --no-build-isolation tksvg
+      - name: Prepare theme assets
+        run: bash scripts/screenshot_linux_prepare.sh
+      - name: Take screenshots (all combos)
+        run: bash scripts/screenshot_linux_combos.sh screenshots/linux
       - uses: actions/upload-artifact@v4
         with:
           name: screenshots-linux
           path: screenshots/linux
 
   macos:
-    # macos-latest 已指向 macos-26；runner 容量波动大，标签可经 dispatch 输入换池。
+    if: ${{ inputs.platform == 'all' || inputs.platform == 'macos' }}
     runs-on: ${{ inputs.macos_runner || 'macos-15-intel' }}
     env:
       UV_NO_DEFAULT_GROUPS: true
@@ -65,7 +75,7 @@ jobs:
         if: steps.native_hidpi.outcome != 'success'
         run: |
           brew install --cask betterdisplay
-          open -a BetterDisplay
+          open /Applications/BetterDisplay.app
           sleep 8
           CLI=/Applications/BetterDisplay.app/Contents/MacOS/BetterDisplay
           "$CLI" create -type=VirtualScreen -virtualScreenName=ShotDisplay \

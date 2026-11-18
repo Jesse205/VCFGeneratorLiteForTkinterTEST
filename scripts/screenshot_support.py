@@ -15,6 +15,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from tkinter import Misc
 
+    from PIL import Image
 
 FONT_NAMES = (
     "TkDefaultFont",
@@ -99,14 +100,11 @@ def apply_tk_fonts(root: Misc, family: str) -> None:
             continue
 
 
-def capture_window(window: Misc, output: Path, platform: str) -> Path:
-    """截取窗口（含装饰、不含阴影），输出带 alpha 通道的 PNG。"""
-    output.parent.mkdir(parents=True, exist_ok=True)
+def grab_window(window: Misc, platform: str) -> Image.Image:
+    """抓取窗口（含装饰、不含阴影）；Linux 为不透明矩形，macOS 自带透明圆角。"""
     if platform == "macos":
-        _capture_macos(window, output)
-    else:
-        _capture_linux(window, output)
-    return output
+        return _grab_macos(window)
+    return _grab_linux(window)
 
 
 def _window_id_macos(window: Misc) -> int:
@@ -127,14 +125,23 @@ def _window_id_macos(window: Misc) -> int:
     return int(result.stdout.strip().splitlines()[0])
 
 
-def _capture_macos(window: Misc, output: Path) -> None:
+def _grab_macos(window: Misc) -> Image.Image:
+    from PIL import Image
+
     # -o 去除窗口阴影；窗口截图自带圆角外的透明像素。
     screencapture = require_executable("screencapture")
     window_id = _window_id_macos(window)
-    subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
-        [screencapture, "-o", "-x", "-l", str(window_id), str(output)],
-        check=True,
-    )
+    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as target:
+        target_path = Path(target.name)
+    try:
+        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+            [screencapture, "-o", "-x", "-l", str(window_id), str(target_path)],
+            check=True,
+        )
+        with Image.open(target_path) as image:
+            return image.convert("RGBA")
+    finally:
+        target_path.unlink(missing_ok=True)
 
 
 def _open_x11() -> tuple[ctypes.CDLL, ctypes.c_void_p]:
@@ -185,7 +192,7 @@ def _linux_frame_id(x11: ctypes.CDLL, display: ctypes.c_void_p, window: Misc) ->
     raise SystemExit("未找到窗口管理器装饰，请先启动 xfwm4 等窗口管理器。")
 
 
-def _capture_linux(window: Misc, output: Path) -> None:
+def _grab_linux(window: Misc) -> Image.Image:
     from PIL import Image
 
     x11, display = _open_x11()
@@ -243,21 +250,52 @@ def _capture_linux(window: Misc, output: Path) -> None:
             if image.bits_per_pixel != 32:
                 raise SystemExit(f"不支持的像素深度：{image.bits_per_pixel} bpp。")
             buffer = ctypes.string_at(image.data, image.bytes_per_line * image.height)
-            # 装饰为直角矩形，X11 无逐像素 alpha；统一补不透明 alpha 通道。
             result = Image.frombuffer(
                 "RGBA", (image.width, image.height), buffer, "raw", "BGRA", image.bytes_per_line, 1
             )
             result.putalpha(255)
-            result.save(output, format="png")
+            return result
         finally:
             x11.XDestroyImage(image_ptr)
     finally:
         x11.XCloseDisplay(display)
 
 
-def save_capture_as_webp(source: Path, output: Path) -> None:
+def derive_transparent(light: Image.Image, dark: Image.Image) -> Image.Image:
+    """由亮/暗背景两版抓取反推逐像素 alpha 与前景色。
+
+    亮底 L = F*a + 255*(1-a)，暗底 D = F*a，故 a = 255 - (L - D)。
+    """
     from PIL import Image
 
+    if light.size != dark.size:
+        raise SystemExit("亮暗两版尺寸不一致，无法反推透明。")
+    light_rgb = light.convert("RGB")
+    dark_rgb = dark.convert("RGB")
+    lb = light_rgb.tobytes()
+    db = dark_rgb.tobytes()
+    out = bytearray(len(lb) // 3 * 4)
+    for i in range(0, len(lb), 3):
+        alpha = 255 - (lb[i] - db[i])
+        alpha = max(0, min(255, alpha))
+        j = i // 3 * 4
+        if alpha:
+            out[j] = db[i] * 255 // alpha
+            out[j + 1] = db[i + 1] * 255 // alpha
+            out[j + 2] = db[i + 2] * 255 // alpha
+        out[j + 3] = alpha
+    return Image.frombytes("RGBA", light_rgb.size, bytes(out))
+
+
+def composite_over(image: Image.Image, color: str) -> Image.Image:
+    from PIL import Image
+
+    background = Image.new("RGBA", image.size, color)
+    return Image.alpha_composite(background, image.convert("RGBA")).convert("RGB")
+
+
+def save_image(image: Image.Image, output: Path) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    with Image.open(source) as image:
-        image.convert("RGBA").save(output, format="WEBP", quality=100, method=6, lossless=True)
+    image.save(output, format="png")
+    image.save(output.with_suffix(".webp"), format="WEBP", quality=100, method=6, lossless=True)
+    print(f"已保存：{output}", flush=True)
