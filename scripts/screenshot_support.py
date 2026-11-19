@@ -242,7 +242,9 @@ def _grab_linux(window: Misc) -> Image.Image:
         x11.XGetImage.restype = ctypes.POINTER(XImage)
         x11.XDestroyImage.argtypes = [ctypes.POINTER(XImage)]
         x11.XDestroyImage.restype = ctypes.c_int
-        image_ptr = x11.XGetImage(display, frame, 0, 0, width, height, ALL_PLANES, ZPIXMAP)
+        # 抓 root 窗口上 frame 所占区域：形状外（圆角）像素才能带上根背景色，
+        # 亮/暗两版由此产生差异并反推 alpha；抓 frame 自身缓冲则形状外恒为黑。
+        image_ptr = x11.XGetImage(display, root, x, y, width, height, ALL_PLANES, ZPIXMAP)
         if not image_ptr:
             raise SystemExit("XGetImage 失败。")
         try:

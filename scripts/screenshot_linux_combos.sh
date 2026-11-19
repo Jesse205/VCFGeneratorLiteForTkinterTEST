@@ -21,10 +21,11 @@ shot() { # name dpi wm layout font scale ttk themedir
 }
 
 shot clam-1x-xfce42 96 Xfce42-Default 'O|STHMC' 'Noto Sans 9' 1.0 clam NONE
-shot breeze-maxperl-2x 192 Breeze-2x 'O|HMC' 'Noto Sans 18' 2.0 Breeze "$TTK/maxperl"
-shot breeze-thindil-2x 192 Breeze-2x 'O|HMC' 'Noto Sans 18' 2.0 breeze "$TTK/thindil"
-shot awbreeze-2x 192 Breeze-2x 'O|HMC' 'Noto Sans 18' 2.0 awbreeze "$TTK/awthemes"
-shot arc-2x 192 Arc-2x 'O|HMC' 'Noto Sans 18' 2.0 arc "$TTK/sgolovan-arc/ttk-themes/themes/Arc"
+# breeze 仅保留 maxperl；浅色用浅色装饰，黑 breeze 用深色 Breeze-2x 装饰。
+shot breeze-maxperl-2x 192 Breeze-Light-2x 'O|HMC' 'Noto Sans 18' 2.0 Breeze "$TTK/maxperl"
+shot breeze-dark-2x 192 Breeze-2x 'O|HMC' 'Noto Sans 18' 2.0 Breeze "$TTK/maxperl"
+# arc 白配最浅装饰；arc-dark 为黑 arc。
+shot arc-2x 192 Arc-Lighter-2x 'O|HMC' 'Noto Sans 18' 2.0 arc "$TTK/sgolovan-arc/ttk-themes/themes/Arc"
 shot arc-dark-2x 192 Arc-Dark-2x 'O|HMC' 'Noto Sans 18' 2.0 arc "$TTK/sgolovan-arc/ttk-themes/themes/Arc"
 shot arc-darker-2x 192 Arc-Darker-2x 'O|HMC' 'Noto Sans 18' 2.0 arc "$TTK/sgolovan-arc/ttk-themes/themes/Arc"
 shot arc-lighter-2x 192 Arc-Lighter-2x 'O|HMC' 'Noto Sans 18' 2.0 arc "$TTK/sgolovan-arc/ttk-themes/themes/Arc"

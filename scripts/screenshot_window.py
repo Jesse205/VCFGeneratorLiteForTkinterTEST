@@ -4,9 +4,8 @@ import importlib
 import subprocess
 import time
 from contextlib import suppress
-from functools import partial
 from pathlib import Path
-from tkinter import Menu, TclError, filedialog
+from tkinter import TclError
 from typing import override
 
 from scripts.screenshot_support import (
@@ -17,6 +16,8 @@ from scripts.screenshot_support import (
     require_executable,
     save_image,
 )
+from vcf_generator_lite.core.vcf_generator import InvalidItem
+from vcf_generator_lite.models.contact import MissingNumberError
 from vcf_generator_lite.ui.windows.invalid_items_dialog import InvalidItemsDialog
 from vcf_generator_lite.ui.windows.main_window import VCFGeneratorLiteApp
 
@@ -27,8 +28,12 @@ DIALOG_WIDTH_PT = 360
 DIALOG_HEIGHT_PT = 320
 DIALOG_MIN_SIZE_PT = 225
 INVALID_ROW = 4
-INVALID_PHONE_PLACEHOLDER = "x" * 11
-DIALOG_TIMEOUT = 20.0
+# Windows 参考截图把无效行的号码统一打码为 11 个星号（主窗与弹窗一致）。
+INVALID_PHONE_PLACEHOLDER = "*" * 11
+# ttk-text 官方示例固定取 5，而非从 TEntry padding 推导。
+TEXT_PADDING = 5
+# KDE Breeze 输入框为白底；maxperl ttk Breeze 默认灰底需按样式覆盖。
+BREEZE_FIELD_BACKGROUND = "#fcfcfc"
 BACKGROUNDS = (("light", "#ffffff"), ("dark", "#000000"))
 
 
@@ -47,12 +52,9 @@ class ScreenshotApp(VCFGeneratorLiteApp):
             self._load_external_themes()
             self._use_ttk_theme()
         super()._configure_ui_withdraw()
-        if self._screenshot_platform == "linux":
-            self._patch_text_style()
         # 示例号码为中国号段；默认按语言 territory 选规则会让 en-US 下全部行无效。
         self.selected_phone_detectors_ids = set(self.phone_detectors_ids)
         self.menu_bar.set_phone_formats_selection(True, dict.fromkeys(self.phone_detectors_ids, True))
-        _strip_menu_underlines(self.menu_bar)
         self.set_screenshot_size(self, MAIN_WINDOW_WIDTH_PT, MAIN_WINDOW_HEIGHT_PT, MAIN_WINDOW_MIN_SIZE_PT)
         self._replace_invalid_row()
 
@@ -106,32 +108,12 @@ class ScreenshotApp(VCFGeneratorLiteApp):
                 font.Font(root=self, name=str(spec), family=self._screenshot_font_family, size=size, weight=weight)
             )
             existing.add(str(spec))
-
-    def _patch_text_style(self):
-        # ttk-text 的核心 Text 不随 ttk 主题；按 TEntry 取值补齐，使观感与正常 entry 一致。
-        from tkinter.ttk import Style
-
-        style = Style(self)
-        text = self.layout.content_text
-        background = style.lookup("TEntry", "fieldbackground") or style.lookup("TEntry", "background") or "#ffffff"
-        foreground = style.lookup("TEntry", "foreground") or "#000000"
-        select_background = style.lookup("TEntry", "selectbackground") or background
-        select_foreground = style.lookup("TEntry", "selectforeground") or foreground
-        border_color = style.lookup("TEntry", "bordercolor") or background
-        focus_color = style.lookup("TEntry", "bordercolor", state=["focus"]) or border_color
-        text.configure(
-            background=background,
-            foreground=foreground,
-            selectbackground=select_background,
-            selectforeground=select_foreground,
-            insertbackground=foreground,
-            relief="flat",
-            borderwidth=0,
-            highlightthickness=1,
-            highlightbackground=border_color,
-            highlightcolor=focus_color,
-        )
-        self.layout.line_numbers.update_style()
+        # ttk-text 自述文件：Text 内边距经 ThemedText.TEntry 的 textpadding 供给，固定用官方示例的 5。
+        style.configure("ThemedText.TEntry", textpadding=TEXT_PADDING)
+        # maxperl Breeze 的 fieldbackground 为灰色；按 KDE Breeze 在样式层覆盖为白底。
+        # 必须在样式层设置，widget 级 configure 会因回退到主题 background 而重新变灰。
+        if target == "Breeze":
+            style.configure("ThemedText.TEntry", fieldbackground=BREEZE_FIELD_BACKGROUND)
 
     def set_screenshot_size(
         self, window: VCFGeneratorLiteApp | InvalidItemsDialog, width_pt: int, height_pt: int, min_pt: int
@@ -155,23 +137,11 @@ class ScreenshotApp(VCFGeneratorLiteApp):
         self.layout.content_text.configure(insertofftime=0)
 
 
-def _strip_menu_underlines(menu: Menu):
-    # X11 的 Tk 菜单常显助记符下划线，Windows 参考截图没有。
-    end = menu.index("end")
-    if end is None:
-        return
-    for index in range(int(end) + 1):
-        entry_type = menu.type(index)
-        if entry_type not in {"command", "cascade", "checkbutton", "radiobutton"}:
-            continue
-        menu.entryconfigure(index, underline=-1)
-        if entry_type == "cascade":
-            _strip_menu_underlines(menu.nametowidget(menu.entrycget(index, "menu")))
-
-
-def _settle(window: VCFGeneratorLiteApp | InvalidItemsDialog):
-    window.update()
-    time.sleep(0.2)
+def _settle(window: VCFGeneratorLiteApp | InvalidItemsDialog, seconds: float = 0.2):
+    deadline = time.monotonic() + seconds
+    while time.monotonic() < deadline:
+        window.update()
+        time.sleep(0.03)
     window.update()
 
 
@@ -216,56 +186,42 @@ def capture_language(
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     app = ScreenshotApp(platform=platform, font_family=font_family, ttk_theme=ttk_theme, theme_dirs=theme_dirs)
-    desktop = Path.home() / "Desktop"
-    desktop.mkdir(parents=True, exist_ok=True)
-    save_path = desktop / app.save_vcf_file_name
-    original_ask_saveasfilename = filedialog.asksaveasfilename
-
-    def fake_ask_saveasfilename(**_kwargs: object) -> str:
-        return str(save_path)
-
-    filedialog.asksaveasfilename = fake_ask_saveasfilename
-    # 生成线程会回调 Tk，必须跑真实 mainloop；update() 泵消息会让跨线程调用抛 RuntimeError。
-    dialog_deadline = 0.0
-
-    def capture_dialog(dialog: InvalidItemsDialog):
-        _assert_size(dialog, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT)
-        _capture_scene(dialog, "invalid_lines_window", output_dir, lang, platform)
-        app.destroy()
-
-    def wait_dialog():
-        if time.monotonic() > dialog_deadline:
-            raise SystemExit("等待无效号码弹窗超时。")
-        for child in app.children.values():
-            if isinstance(child, InvalidItemsDialog):
-                app.set_screenshot_size(child, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT, DIALOG_MIN_SIZE_PT)
-                child.attributes("-topmost", True)
-                child.focus_force()
-                app.after(500, partial(capture_dialog, child))
-                return
-        app.after(100, wait_dialog)
-
-    def capture_main_and_generate():
-        nonlocal dialog_deadline
-        _assert_scaling(app, platform, scale)
-        _assert_size(app, MAIN_WINDOW_WIDTH_PT, MAIN_WINDOW_HEIGHT_PT)
-        _capture_scene(app, "main_window", output_dir, lang, platform)
-        dialog_deadline = time.monotonic() + DIALOG_TIMEOUT
-        app.on_generate()
-        app.after(100, wait_dialog)
-
-    def start_generate():
+    dialog = None
+    try:
+        app.attributes("-topmost", True)
         # WM 焦点策略不一，显式索取焦点保证插入光标可见。
         app.focus_force()
         app.layout.content_text.focus_set()
-        app.after(300, capture_main_and_generate)
+        _settle(app, wait)
+        _assert_scaling(app, platform, scale)
+        _assert_size(app, MAIN_WINDOW_WIDTH_PT, MAIN_WINDOW_HEIGHT_PT)
+        _capture_scene(app, "main_window", output_dir, lang, platform)
 
-    app.attributes("-topmost", True)
-    app.after(int(wait * 1000), start_generate)
-    try:
-        app.mainloop()
+        # 直接构造无效号码弹窗，不走 on_generate 的线程回调与异步轮询。
+        dialog = _create_dialog(app, platform, lang)
+        _assert_size(dialog, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT)
+        _capture_scene(dialog, "invalid_lines_window", output_dir, lang, platform)
     finally:
-        filedialog.asksaveasfilename = original_ask_saveasfilename
+        if dialog is not None:
+            dialog.destroy()
+        app.destroy()
+
+
+def _create_dialog(app: ScreenshotApp, platform: str, lang: str) -> InvalidItemsDialog:
+    filename = "我的联系人.vcf" if lang == "zh-CN" else "My Contacts.vcf"
+    display_path = f"/Users/User/Desktop/{filename}" if platform == "macos" else f"/home/user/Desktop/{filename}"
+    # 弹窗原始内容直接取自主窗无效行，与 Windows 参考截图一致（同一姓名 + 同一掩码）。
+    raw_content = app.layout.get_text_content().split("\n")[INVALID_ROW - 1]
+    dialog = InvalidItemsDialog(
+        app,
+        display_path=display_path,
+        invalid_items=[InvalidItem(row_position=INVALID_ROW, raw_content=raw_content, exception=MissingNumberError())],
+    )
+    app.set_screenshot_size(dialog, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT, DIALOG_MIN_SIZE_PT)
+    dialog.attributes("-topmost", True)
+    dialog.focus_force()
+    _settle(dialog, 0.5)
+    return dialog
 
 
 def _assert_scaling(app: ScreenshotApp, platform: str, scale: float) -> None:

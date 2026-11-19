@@ -32,20 +32,20 @@ for theme in Breeze Arc Arc-Dark Arc-Darker Arc-Lighter; do
     fi
 done
 
+# Debian 的 xfwm4-theme-breeze 为深色单变体；浅色版取 mjkim0727/xfwm4-breeze（Plasma 5.22）。
+if [ ! -d "$THEMES/Breeze-Light-2x/xfwm4" ]; then
+    curl -fsSL --retry 3 -o /tmp/xfwm4-breeze-mjkim.tar.gz \
+        https://codeload.github.com/mjkim0727/xfwm4-breeze/tar.gz/refs/heads/master
+    tar xzf /tmp/xfwm4-breeze-mjkim.tar.gz -C /tmp
+    mkdir -p "$THEMES/Breeze-Light-2x"
+    cp -r /tmp/mjkim0727-xfwm4-breeze-*/xfwm-breeze-light/xfwm4 "$THEMES/Breeze-Light-2x/"
+    python3 "$(dirname "$0")/scale_xpm.py" 2 "$THEMES/Breeze-Light-2x/xfwm4"
+fi
+
 if [ ! -d "$TTK/maxperl" ]; then
     curl -fsSL --retry 3 -o /tmp/ttk-breeze.tar.gz https://codeload.github.com/MaxPerl/ttk-Breeze/tar.gz/refs/heads/master
     mkdir -p "$TTK/maxperl"
     tar xzf /tmp/ttk-breeze.tar.gz -C "$TTK/maxperl" --strip-components=1
-fi
-if [ ! -d "$TTK/thindil" ]; then
-    curl -fsSL --retry 3 -o /tmp/tkbreeze.tar.gz https://codeload.github.com/thindil/tkBreeze/tar.gz/refs/heads/master
-    mkdir -p "$TTK/thindil"
-    tar xzf /tmp/tkbreeze.tar.gz -C "$TTK/thindil" --strip-components=1
-fi
-if [ ! -d "$TTK/awthemes" ]; then
-    curl -fsSL --retry 3 -o /tmp/awthemes.zip https://sourceforge.net/projects/tcl-awthemes/files/latest/download
-    mkdir -p "$TTK/awthemes"
-    unzip -q -o /tmp/awthemes.zip -d "$TTK/awthemes"
 fi
 if [ ! -d "$TTK/sgolovan-arc" ]; then
     curl -fsSL --retry 3 -o /tmp/ttk-themes.zip "https://chiselapp.com/user/sgolovan/repository/ttk-themes/zip/ttk-themes.zip?ci=tip"
