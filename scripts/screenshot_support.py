@@ -108,10 +108,10 @@ def unify_warning_symbol_font(widget: Misc, family: str) -> None:
     """把 widget 内所有 U+26A0 警告符号的字体族统一为 family。
 
     截图脚本按语言设置不同 Tk 字体族：zh-CN 用 Noto Sans CJK SC（自带该符号，粗描边圆角），
-    en-US 用 Noto Sans（不含该符号，回退到 DejaVu Sans，细描边空心），导致同一符号两语种渲染不一致。
+    en-US 用 Noto Sans（不含该符号，回退到 DejaVu Sans，细描边尖角），导致同一符号两语种渲染不一致。
     仅把 family 设成 en-US 的 Noto Sans 还不够：zh_CN locale 下 fontconfig 会优先回退到同样含该字形的
-    Noto Sans CJK SC（粗描边圆角），而非 DejaVu Sans。因此按符号字符本身定位 Label，直接锁定 family
-    为含该字形且细描边空心的 DejaVu Sans，两语种都命中同一字体，贴近 Windows 参考图且不改运行时代码。
+    Noto Sans CJK SC。因此按符号字符本身定位 Label，直接锁定 family 为两语言 locale 都能解析到的同一
+    Noto 家族字体（当前为 Noto Sans CJK SC），两语种都命中同一字形，且不改运行时代码。
     """
     import tkinter.font
 

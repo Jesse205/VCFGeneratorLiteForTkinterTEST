@@ -36,9 +36,13 @@ TEXT_PADDING = 5
 # KDE Breeze 输入框为白底；maxperl ttk Breeze 默认灰底需按样式覆盖。
 BREEZE_FIELD_BACKGROUND = "#fcfcfc"
 BACKGROUNDS = (("light", "#ffffff"), ("dark", "#000000"))
-# 警告符号 ⚠ 锁定到 DejaVu Sans：该族自带细描边空心字形，避免 zh_CN locale 下回退到
-# Noto Sans CJK SC（粗描边圆角）导致与 en-US 截图不一致。
-WARNING_SYMBOL_FONT = "DejaVu Sans"
+# 警告符号 ⚠ 锁定到 Noto Sans CJK SC：它是三端都已安装的 Noto 家族字体，自带 U+26A0
+# （WSL 本地 / CI Linux 的 fonts-noto-cjk / CI macOS 的 font-noto-sans-cjk-sc），零额外依赖。
+# en-US 默认 Noto Sans 不含该符号会回退到 DejaVu Sans（细描边尖角），zh-CN 则由 Noto Sans CJK SC
+# 渲染（粗描边圆角）；显式锁定本族后两语种都解析到同一 Noto 字形，消除截图差异。
+# 不用 Noto Sans Symbols 2：虽同样含该符号且字形接近细描边，但 Ubuntu apt 无对应包，
+# CI Linux 无法可靠获得，用它会破坏两语种一致性。
+WARNING_SYMBOL_FONT = "Noto Sans CJK SC"
 
 
 class ScreenshotApp(VCFGeneratorLiteApp):
