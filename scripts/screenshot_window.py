@@ -15,6 +15,7 @@ from scripts.screenshot_support import (
     grab_window,
     require_executable,
     save_image,
+    unify_warning_symbol_font,
 )
 from vcf_generator_lite.core.vcf_generator import InvalidItem
 from vcf_generator_lite.models.contact import MissingNumberError
@@ -35,6 +36,9 @@ TEXT_PADDING = 5
 # KDE Breeze 输入框为白底；maxperl ttk Breeze 默认灰底需按样式覆盖。
 BREEZE_FIELD_BACKGROUND = "#fcfcfc"
 BACKGROUNDS = (("light", "#ffffff"), ("dark", "#000000"))
+# 警告符号 ⚠ 锁定到 DejaVu Sans：该族自带细描边空心字形，避免 zh_CN locale 下回退到
+# Noto Sans CJK SC（粗描边圆角）导致与 en-US 截图不一致。
+WARNING_SYMBOL_FONT = "DejaVu Sans"
 
 
 class ScreenshotApp(VCFGeneratorLiteApp):
@@ -217,6 +221,8 @@ def _create_dialog(app: ScreenshotApp, platform: str, lang: str) -> InvalidItems
         display_path=display_path,
         invalid_items=[InvalidItem(row_position=INVALID_ROW, raw_content=raw_content, exception=MissingNumberError())],
     )
+    # 统一警告符号字体，消除 en-US 与 zh-CN 截图中 U+26A0 的渲染差异。
+    unify_warning_symbol_font(dialog, WARNING_SYMBOL_FONT)
     app.set_screenshot_size(dialog, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT, DIALOG_MIN_SIZE_PT)
     dialog.attributes("-topmost", True)
     dialog.focus_force()
