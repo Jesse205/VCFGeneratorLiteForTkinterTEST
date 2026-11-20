@@ -65,7 +65,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install open-source fonts
-        run: brew install --cask font-noto-sans font-noto-sans-cjk-sc
+        run: brew install --cask font-noto-sans font-noto-sans-cjk-sc font-noto-sans-symbols-2
       - name: Probe display scaling
         run: swift scripts/screenshot_macos_display.swift
       - name: Set HiDPI 2x natively

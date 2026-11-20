@@ -36,13 +36,14 @@ TEXT_PADDING = 5
 # KDE Breeze 输入框为白底；maxperl ttk Breeze 默认灰底需按样式覆盖。
 BREEZE_FIELD_BACKGROUND = "#fcfcfc"
 BACKGROUNDS = (("light", "#ffffff"), ("dark", "#000000"))
-# 警告符号 ⚠ 锁定到 Noto Sans CJK SC：它是三端都已安装的 Noto 家族字体，自带 U+26A0
-# （WSL 本地 / CI Linux 的 fonts-noto-cjk / CI macOS 的 font-noto-sans-cjk-sc），零额外依赖。
-# en-US 默认 Noto Sans 不含该符号会回退到 DejaVu Sans（细描边尖角），zh-CN 则由 Noto Sans CJK SC
-# 渲染（粗描边圆角）；显式锁定本族后两语种都解析到同一 Noto 字形，消除截图差异。
-# 不用 Noto Sans Symbols 2：虽同样含该符号且字形接近细描边，但 Ubuntu apt 无对应包，
-# CI Linux 无法可靠获得，用它会破坏两语种一致性。
-WARNING_SYMBOL_FONT = "Noto Sans CJK SC"
+# 警告符号 ⚠ 锁定到 Noto Sans Symbols 2：它是专门的 Noto 符号字体，cmap 精确含 U+26A0，
+# 由 fonts-noto-core 提供（Ubuntu 24.04 main 默认安装，CI Linux 已装，WSL 验证亦可用）。
+# Noto Sans 基本族与 NotoSansSymbols（无 "2"）家族均不含该符号，会回退到 DejaVu Sans；
+# 只有 Symbols 2 能稳定命中该字形。CI macOS 已加对应 cask（font-noto-sans-symbols-2）。
+# 符号字形为细描边尖角空心（近 DejaVu Sans），已确认并接受；按符号定位 Label、两语种锁定同一
+# 字体的机制保持不变（见 unify_warning_symbol_font），使 en-US / zh-CN 都解析到同一字形，
+# 消除截图差异。
+WARNING_SYMBOL_FONT = "Noto Sans Symbols 2"
 
 
 class ScreenshotApp(VCFGeneratorLiteApp):
