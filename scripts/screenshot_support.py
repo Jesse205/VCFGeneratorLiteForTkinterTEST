@@ -13,13 +13,9 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import tkinter.font
     from tkinter import Misc
 
     from PIL import Image
-
-# 持有重建的命名字体，避免 Font 析构时删除字体导致符号回退到默认字体。
-_SYMBOL_FONTS: dict[int, list[tkinter.font.Font]] = {}
 
 FONT_NAMES = (
     "TkDefaultFont",
@@ -102,47 +98,6 @@ def apply_tk_fonts(root: Misc, family: str) -> None:
             tkinter.font.nametofont(name, root=root).configure(family=family, size=9)
         except tkinter.TclError:
             continue
-
-
-def unify_warning_symbol_font(widget: Misc, family: str) -> None:
-    """把 widget 内所有 U+26A0 警告符号的字体族统一为 family。
-
-    截图脚本按语言设置不同 Tk 字体族：zh-CN 用 Noto Sans CJK SC（自带该符号，粗描边圆角），
-    en-US 用 Noto Sans（不含该符号，回退到 DejaVu Sans，细描边尖角），导致同一符号两语种渲染不一致。
-    仅把 family 设成 en-US 的 Noto Sans 还不够：zh_CN locale 下 fontconfig 会优先回退到同样含该字形的
-    Noto Sans CJK SC。因此按符号字符本身定位 Label，直接锁定 family 为两语言 locale 都能解析到的同一
-    字体（当前为专门的 Noto Sans Symbols 2，由 fonts-noto-core 提供，cmap 含 U+26A0），两语种都命中
-    同一字形，且不改运行时代码。
-    """
-    import tkinter.font
-
-    symbol = "\u26a0"
-    labels: list[Misc] = []
-
-    def walk(node: Misc) -> None:
-        for child in node.winfo_children():
-            try:
-                is_symbol = str(child.cget("text")) == symbol
-            except tkinter.TclError:
-                is_symbol = False
-            if is_symbol:
-                labels.append(child)
-            walk(child)
-
-    walk(widget)
-    if not labels:
-        raise SystemExit(f"未找到文本为 {symbol!r} 的 Label，无法统一警告符号字体。")
-
-    # 原 Label 字体是匿名 Font，其 Python 对象析构后命名字体会从 font names 中消失；
-    # Font(font=...) 内部走 font actual 仍能读到其完整配置，据此复制并仅替换 family，保留原 size。
-    # 用模块级表持有新字体，防止 Font 析构删除命名字体导致符号回退到默认字体。
-    fonts: list[tkinter.font.Font] = []
-    for label in labels:
-        font = tkinter.font.Font(font=label.cget("font"))
-        font.configure(family=family)
-        label["font"] = font
-        fonts.append(font)
-    _SYMBOL_FONTS[id(widget)] = fonts
 
 
 def grab_window(window: Misc, platform: str) -> Image.Image:

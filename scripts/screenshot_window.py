@@ -15,7 +15,6 @@ from scripts.screenshot_support import (
     grab_window,
     require_executable,
     save_image,
-    unify_warning_symbol_font,
 )
 from vcf_generator_lite.core.vcf_generator import InvalidItem
 from vcf_generator_lite.models.contact import MissingNumberError
@@ -36,14 +35,6 @@ TEXT_PADDING = 5
 # KDE Breeze 输入框为白底；maxperl ttk Breeze 默认灰底需按样式覆盖。
 BREEZE_FIELD_BACKGROUND = "#fcfcfc"
 BACKGROUNDS = (("light", "#ffffff"), ("dark", "#000000"))
-# 警告符号 ⚠ 锁定到 Noto Sans Symbols 2：它是专门的 Noto 符号字体，cmap 精确含 U+26A0，
-# 由 fonts-noto-core 提供（Ubuntu 24.04 main 默认安装，CI Linux 已装，WSL 验证亦可用）。
-# Noto Sans 基本族与 NotoSansSymbols（无 "2"）家族均不含该符号，会回退到 DejaVu Sans；
-# 只有 Symbols 2 能稳定命中该字形。CI macOS 已加对应 cask（font-noto-sans-symbols-2）。
-# 符号字形为细描边尖角空心（近 DejaVu Sans），已确认并接受；按符号定位 Label、两语种锁定同一
-# 字体的机制保持不变（见 unify_warning_symbol_font），使 en-US / zh-CN 都解析到同一字形，
-# 消除截图差异。
-WARNING_SYMBOL_FONT = "Noto Sans Symbols 2"
 
 
 class ScreenshotApp(VCFGeneratorLiteApp):
@@ -226,8 +217,6 @@ def _create_dialog(app: ScreenshotApp, platform: str, lang: str) -> InvalidItems
         display_path=display_path,
         invalid_items=[InvalidItem(row_position=INVALID_ROW, raw_content=raw_content, exception=MissingNumberError())],
     )
-    # 统一警告符号字体，消除 en-US 与 zh-CN 截图中 U+26A0 的渲染差异。
-    unify_warning_symbol_font(dialog, WARNING_SYMBOL_FONT)
     app.set_screenshot_size(dialog, DIALOG_WIDTH_PT, DIALOG_HEIGHT_PT, DIALOG_MIN_SIZE_PT)
     dialog.attributes("-topmost", True)
     dialog.focus_force()
