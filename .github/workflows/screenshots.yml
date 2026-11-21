@@ -94,11 +94,23 @@ jobs:
             sleep 2
           done
           cat /tmp/bd-ready.json || true
+          # 创建虚拟 HiDPI 屏；CLI 可能静默失败，后续靠轮询确认。
           run_limited 60 "$CLI" create -type=VirtualScreen -virtualScreenName=ShotDisplay \
-            -virtualScreenHiDPI=on -useResolutionList=on -resolutionList=1920x1080
+            -virtualScreenHiDPI=on -useResolutionList=on -resolutionList=1920x1080 || true
+          # 轮询确认虚拟屏已出现（最长约 60s），未出现则降级 1x 继续。
+          ready=""
+          for i in $(seq 1 30); do
+            if run_limited 10 "$CLI" get -identifiers 2>/dev/null | grep -q ShotDisplay; then
+              ready=1
+              echo "ShotDisplay visible after ${i} polls"
+              break
+            fi
+            sleep 2
+          done
+          [ -n "$ready" ] || echo "WARN: ShotDisplay 未出现，后续以 1x 截图"
           sleep 3
-          run_limited 30 "$CLI" set -name=ShotDisplay -resolution=1920x1080 -hiDPI=on
-          run_limited 30 "$CLI" set -name=ShotDisplay -main=on
+          run_limited 30 "$CLI" set -name=ShotDisplay -resolution=1920x1080 -hiDPI=on || true
+          run_limited 30 "$CLI" set -name=ShotDisplay -main=on || true
           sleep 3
           swift scripts/screenshot_macos_display.swift
       - name: Take screenshots
