@@ -76,11 +76,14 @@ jobs:
         if: steps.native_hidpi.outcome != 'success'
         run: |
           set -x
-          brew install --cask betterdisplay
-          open /Applications/BetterDisplay.app
-          CLI=/Applications/BetterDisplay.app/Contents/MacOS/BetterDisplay
-          # macOS 无 timeout；用 perl alarm 限每命令时长，避免 CLI 等待应用就绪时无限挂起。
+          # --no-quarantine：headless 环境无人点 Gatekeeper 确认框，带隔离属性的 app 会让 open 永久挂起。
+          brew install --cask --no-quarantine betterdisplay
+          xattr -dr com.apple.quarantine /Applications/BetterDisplay.app 2>/dev/null || true
+          CLI=/usr/local/bin/betterdisplaycli
+          # macOS 无 timeout；用 perl alarm 限每命令时长，避免等待应用就绪时无限挂起。
           run_limited() { perl -e 'alarm shift; exec @ARGV' "$@"; }
+          # -g -j 不置前/不激活；即便仍被阻塞也有超时兜底，不挂死整个 job。
+          run_limited 30 open -g -j /Applications/BetterDisplay.app || true
           for i in $(seq 1 30); do
             if run_limited 10 "$CLI" get -identifiers >/tmp/bd-ready.json 2>/tmp/bd-ready.err; then
               echo "betterdisplay ready after ${i} probes"
