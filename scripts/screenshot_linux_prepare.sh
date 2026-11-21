@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# 准备 Linux 对比截图所需主题资产：Xfce42 原 1x 装饰、Breeze/Arc 系 2x 装饰、外部 ttk 主题源码。
-# 依赖（apt）：xfwm4 xfwm4-theme-breeze arc-theme imagemagick curl unzip python3。
+# 准备 Linux 对比截图所需主题资产：Xfce42 原 1x 装饰、白arc（Arc）2x 装饰、白breeze 下载装饰、外部 ttk 主题源码。
+# 依赖（apt）：xfwm4 arc-theme imagemagick curl unzip python3。
 set -euo pipefail
 
 THEMES="$HOME/.themes"
@@ -18,7 +18,8 @@ if [ ! -d "$THEMES/Xfce42-Default/xfwm4" ]; then
     mv "$THEMES/Xfce42-Default/xfwm4/title-1-inactive.xpm" "$THEMES/Xfce42-Default/xfwm4/title-1-inactive.xpm.broken"
 fi
 
-for theme in Breeze Arc Arc-Dark Arc-Darker Arc-Lighter; do
+# 2x 装饰缩放：最终只对比白breeze（下方下载的 Breeze-Light）与白arc（apt 的 Arc）两个主题。
+for theme in Arc; do
     target="$THEMES/$theme-2x/xfwm4"
     if [ ! -d "$target" ]; then
         mkdir -p "$target"
@@ -35,7 +36,7 @@ done
 # Debian 的 xfwm4-theme-breeze 为深色单变体；浅色版取 mjkim0727/xfwm4-breeze（Plasma 5.22）。
 if [ ! -d "$THEMES/Breeze-Light-2x/xfwm4" ]; then
     curl -fsSL --retry 3 -o /tmp/xfwm4-breeze-mjkim.tar.gz \
-        https://codeload.github.com/mjkim0727/xfwm4-breeze/tar.gz/refs/heads/master
+        https://codeload.github.com/mjkim0727/xfwm4-breeze/tar.gz/refs/heads/main
     tar xzf /tmp/xfwm4-breeze-mjkim.tar.gz -C /tmp
     mkdir -p "$THEMES/Breeze-Light-2x"
     cp -r /tmp/mjkim0727-xfwm4-breeze-*/xfwm-breeze-light/xfwm4 "$THEMES/Breeze-Light-2x/"

@@ -19,13 +19,8 @@ shot() { # name dpi wm layout font scale ttk themedir
     echo "$name exit=$?"
 }
 
+# 最终对比组合：clam 1x + 白breeze（maxperl ttk + Breeze-Light 浅色装饰）+ 白arc（arc ttk + 同名 Arc 装饰）。
 shot clam-1x-xfce42 96 Xfce42-Default 'O|STHMC' 'Noto Sans 9' 1.0 clam NONE
-# breeze 仅保留 maxperl；浅色用浅色装饰，黑 breeze 用深色 Breeze-2x 装饰。
 shot breeze-maxperl-2x 192 Breeze-Light-2x 'O|HMC' 'Noto Sans 18' 2.0 Breeze "$TTK/maxperl"
-shot breeze-dark-2x 192 Breeze-2x 'O|HMC' 'Noto Sans 18' 2.0 Breeze "$TTK/maxperl"
-# arc 白配最浅装饰；arc-dark 为黑 arc。
-shot arc-2x 192 Arc-Lighter-2x 'O|HMC' 'Noto Sans 18' 2.0 arc "$TTK/sgolovan-arc/ttk-themes/themes/Arc"
-shot arc-dark-2x 192 Arc-Dark-2x 'O|HMC' 'Noto Sans 18' 2.0 arc "$TTK/sgolovan-arc/ttk-themes/themes/Arc"
-shot arc-darker-2x 192 Arc-Darker-2x 'O|HMC' 'Noto Sans 18' 2.0 arc "$TTK/sgolovan-arc/ttk-themes/themes/Arc"
-shot arc-lighter-2x 192 Arc-Lighter-2x 'O|HMC' 'Noto Sans 18' 2.0 arc "$TTK/sgolovan-arc/ttk-themes/themes/Arc"
+shot arc-2x 192 Arc-2x 'O|HMC' 'Noto Sans 18' 2.0 arc "$TTK/sgolovan-arc/ttk-themes/themes/Arc"
 echo COMBOS_DONE

@@ -6,7 +6,7 @@ on:
       platform:
         description: 要跑的平台（调试单个平台可避免浪费其它 runner）
         type: choice
-        options: [all, linux, macos, windows]
+        options: [all, linux, macos] # windows 暂停：虚拟显示器不支持 200% 缩放
         default: all
       macos_runner:
         description: macOS runner 标签（容量波动时换池重试）
@@ -33,7 +33,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb xfwm4 xfconf dbus x11-utils x11-xserver-utils \
-            fonts-noto-core fonts-noto-cjk locales python3-tk xfwm4-theme-breeze arc-theme \
+            fonts-noto-core fonts-noto-cjk locales python3-tk arc-theme \
             imagemagick cmake tk-dev tcl-dev unzip
       - name: Generate locales
         run: sudo locale-gen zh_CN.UTF-8 en_US.UTF-8
@@ -105,7 +105,8 @@ jobs:
           name: screenshots-macos
           path: screenshots/macos
   windows:
-    if: ${{ inputs.platform == 'all' || inputs.platform == 'windows' }}
+    # 暂停：CI 虚拟显示器仅支持 100%~125% 缩放，无法应用 200% 系统级 DPI（脚本已具备，恢复时改回下方条件）。
+    if: false # ${{ inputs.platform == 'all' || inputs.platform == 'windows' }}
     runs-on: windows-latest
     env:
       UV_NO_DEFAULT_GROUPS: true
