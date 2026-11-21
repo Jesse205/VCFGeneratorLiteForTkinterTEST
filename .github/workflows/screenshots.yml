@@ -77,7 +77,9 @@ jobs:
         run: |
           set -x
           # --no-quarantine：headless 环境无人点 Gatekeeper 确认框，带隔离属性的 app 会让 open 永久挂起。
-          brew install --cask --no-quarantine betterdisplay
+          # 新版 brew 不再接受命令行旗标，改用 HOMEBREW_CASK_OPTS；失败则普通安装，事后 xattr 清隔离。
+          HOMEBREW_CASK_OPTS="--no-quarantine" brew install --cask betterdisplay || \
+            brew install --cask betterdisplay || true
           xattr -dr com.apple.quarantine /Applications/BetterDisplay.app 2>/dev/null || true
           CLI=/usr/local/bin/betterdisplaycli
           # macOS 无 timeout；用 perl alarm 限每命令时长，避免等待应用就绪时无限挂起。
