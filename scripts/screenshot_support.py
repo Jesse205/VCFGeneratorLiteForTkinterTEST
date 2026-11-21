@@ -17,18 +17,6 @@ if TYPE_CHECKING:
 
     from PIL import Image
 
-FONT_NAMES = (
-    "TkDefaultFont",
-    "TkTextFont",
-    "TkFixedFont",
-    "TkMenuFont",
-    "TkHeadingFont",
-    "TkCaptionFont",
-    "TkSmallCaptionFont",
-    "TkIconFont",
-    "TkTooltipFont",
-)
-
 SWIFT_WINDOW_ID = """
 import CoreGraphics
 import Foundation
@@ -83,27 +71,14 @@ def require_executable(name: str) -> str:
     return path
 
 
-def apply_tk_fonts(root: Misc, family: str) -> None:
-    """在创建控件前统一替换 Tk 内置命名字体。"""
-    import tkinter.font
-
-    families = set(tkinter.font.families(root))
-    if family not in families:
-        sample = ", ".join(sorted(families)[:20])
-        raise SystemExit(f"找不到字体 {family!r}。当前可用字体示例：{sample}")
-
-    for name in FONT_NAMES:
-        try:
-            # 9pt 与 Windows 参考截图的系统字体字号一致。
-            tkinter.font.nametofont(name, root=root).configure(family=family, size=9)
-        except tkinter.TclError:
-            continue
-
-
 def grab_window(window: Misc, platform: str) -> Image.Image:
-    """抓取窗口（含装饰、不含阴影）；Linux 为不透明矩形，macOS 自带透明圆角。"""
+    """抓取窗口（含装饰、不含阴影）；Linux 为不透明矩形，macOS 自带透明圆角，Windows 走 PrintWindow。"""
     if platform == "macos":
         return _grab_macos(window)
+    if platform == "windows":
+        from scripts.screenshot_windows import grab_window_windows
+
+        return grab_window_windows(window)
     return _grab_linux(window)
 
 

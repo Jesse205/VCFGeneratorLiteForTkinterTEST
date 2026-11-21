@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       platform:
-        description: 要跑的平台（macOS 调试时选 macos，避免浪费 Linux runner）
+        description: 要跑的平台（调试单个平台可避免浪费其它 runner）
         type: choice
-        options: [all, linux, macos]
+        options: [all, linux, macos, windows]
         default: all
       macos_runner:
         description: macOS runner 标签（容量波动时换池重试）
@@ -104,3 +104,37 @@ jobs:
         with:
           name: screenshots-macos
           path: screenshots/macos
+  windows:
+    if: ${{ inputs.platform == 'all' || inputs.platform == 'windows' }}
+    runs-on: windows-latest
+    env:
+      UV_NO_DEFAULT_GROUPS: true
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v8.0.0
+        with:
+          python-version: "3.12"
+      - name: Download Noto Sans fonts
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/fonts"
+          for weight in Regular Bold Italic BoldItalic; do
+            curl -fsSL --retry 3 --retry-delay 2 \
+              "https://raw.githubusercontent.com/notofonts/noto-fonts/main/hinted/ttf/NotoSans/NotoSans-${weight}.ttf" \
+              -o "$RUNNER_TEMP/fonts/NotoSans-${weight}.ttf"
+          done
+          for weight in Regular Bold; do
+            curl -fsSL --retry 3 --retry-delay 2 \
+              "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-${weight}.otf" \
+              -o "$RUNNER_TEMP/fonts/NotoSansCJKsc-${weight}.otf"
+          done
+      - name: Take screenshots
+        shell: bash
+        run: |
+          uv run --group screenshot python -m scripts.screenshot \
+            --platform windows --output-dir screenshots/windows \
+            --scale 2 --font-dir "$RUNNER_TEMP/fonts"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-windows
+          path: screenshots/windows
