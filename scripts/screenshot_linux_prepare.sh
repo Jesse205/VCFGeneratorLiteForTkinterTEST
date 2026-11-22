@@ -39,7 +39,8 @@ if [ ! -d "$THEMES/Breeze-Light-2x/xfwm4" ]; then
         https://codeload.github.com/mjkim0727/xfwm4-breeze/tar.gz/refs/heads/main
     tar xzf /tmp/xfwm4-breeze-mjkim.tar.gz -C /tmp
     mkdir -p "$THEMES/Breeze-Light-2x"
-    cp -r /tmp/mjkim0727-xfwm4-breeze-*/xfwm-breeze-light/xfwm4 "$THEMES/Breeze-Light-2x/"
+    # codeload 压缩包顶层目录为 xfwm4-breeze-main（仓库-分支，无 owner 前缀）。
+    cp -r /tmp/xfwm4-breeze-*/xfwm-breeze-light/xfwm4 "$THEMES/Breeze-Light-2x/"
     python3 "$(dirname "$0")/scale_xpm.py" 2 "$THEMES/Breeze-Light-2x/xfwm4"
 fi
 
