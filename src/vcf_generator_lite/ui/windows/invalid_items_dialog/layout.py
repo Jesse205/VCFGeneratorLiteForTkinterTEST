@@ -27,7 +27,7 @@ class InvalidItemsLayout(VerticalDialogLayout):
         super().__init__()
         self.display_path = display_path
         self.listener = listener
-        self._create_widgets(parent)
+        self._create_widgets(parent, header_separator=True)
 
         parent.bind("<Return>", self.on_return)
 
