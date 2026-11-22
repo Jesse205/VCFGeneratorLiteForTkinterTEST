@@ -25,6 +25,15 @@ let pid = Int32(CommandLine.arguments[1])!
 let targetWidth = Double(CommandLine.arguments[2])!
 let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
 let windows = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] ?? []
+// 始终 dump 窗口列表到 stderr，便于在 CI 日志中核查匹配过程。
+for window in windows {
+    let number = window[kCGWindowNumber as String] ?? "?"
+    let owner = window[kCGWindowOwnerPID as String] ?? "?"
+    let layer = window[kCGWindowLayer as String] ?? "?"
+    let bounds = window[kCGWindowBounds as String] ?? "?"
+    fputs("window number=\\(number) pid=\\(owner) layer=\\(layer) bounds=\\(bounds)\\n", stderr)
+}
+fputs("target pid=\\(pid) width=\\(targetWidth)\\n", stderr)
 for window in windows {
     guard let owner = window[kCGWindowOwnerPID as String] as? Int, owner == Int(pid) else { continue }
     // Tk 8.6 在 macOS 上的窗口 CG layer 为 19（utility 层），不能用 layer == 0 过滤；
