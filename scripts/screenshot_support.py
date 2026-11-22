@@ -13,10 +13,10 @@ import time
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from PIL import Image
+
 if TYPE_CHECKING:
     from tkinter import Misc
-
-    from PIL import Image
 
 SWIFT_GRAB_WINDOW = """
 import CoreGraphics
@@ -275,26 +275,27 @@ def _grab_linux(window: Misc) -> Image.Image:
 def derive_transparent(light: Image.Image, dark: Image.Image) -> Image.Image:
     """由亮/暗背景两版抓取反推逐像素 alpha 与前景色。
 
-    亮底 L = F*a + 255*(1-a)，暗底 D = F*a，故 a = 255 - (L - D)。
+    混合模型 C = F*a + bg*(1-a)：三通道各自隐含 alpha = 1-(L-D)/255，取最大者
+    （即最保守的 alpha），前景 F = (D-bg)/a + bg（暗底 bg=0 即 F=D/a），
+    alpha 近 0 处保留原色。算法与 lab/transparent-window-img 的 core.process 一致。
     """
-    from PIL import Image
-
-    if light.size != dark.size:
-        raise SystemExit("亮暗两版尺寸不一致，无法反推透明。")
     light_rgb = light.convert("RGB")
     dark_rgb = dark.convert("RGB")
     lb = light_rgb.tobytes()
     db = dark_rgb.tobytes()
     out = bytearray(len(lb) // 3 * 4)
     for i in range(0, len(lb), 3):
-        alpha = 255 - (lb[i] - db[i])
-        alpha = max(0, min(255, alpha))
+        max_gap = max(lb[i] - db[i], lb[i + 1] - db[i + 1], lb[i + 2] - db[i + 2])
+        alpha = (255 - max_gap) / 255
         j = i // 3 * 4
-        if alpha:
-            out[j] = db[i] * 255 // alpha
-            out[j + 1] = db[i + 1] * 255 // alpha
-            out[j + 2] = db[i + 2] * 255 // alpha
-        out[j + 3] = alpha
+        if alpha > 0.001:
+            for k in range(3):
+                out[j + k] = min(255, max(0, round(db[i + k] / alpha)))
+            out[j + 3] = min(255, round(alpha * 255))
+        else:
+            out[j] = db[i]
+            out[j + 1] = db[i + 1]
+            out[j + 2] = db[i + 2]
     return Image.frombytes("RGBA", light_rgb.size, bytes(out))
 
 
