@@ -68,61 +68,11 @@ jobs:
         run: brew install --cask font-noto-sans font-noto-sans-cjk-sc
       - name: Probe display scaling
         run: swift scripts/screenshot_macos_display.swift
-      - name: Set HiDPI 2x natively
-        id: native_hidpi
-        continue-on-error: true
-        run: swift scripts/screenshot_macos_display.swift set
-      - name: Fallback to BetterDisplay virtual HiDPI screen
-        if: steps.native_hidpi.outcome != 'success'
-        run: |
-          set -x
-          # --no-quarantine：headless 环境无人点 Gatekeeper 确认框，带隔离属性的 app 会让 open 永久挂起。
-          # 新版 brew 不再接受命令行旗标，改用 HOMEBREW_CASK_OPTS；失败则普通安装，事后 xattr 清隔离。
-          HOMEBREW_CASK_OPTS="--no-quarantine" brew install --cask betterdisplay || \
-            brew install --cask betterdisplay || true
-          xattr -dr com.apple.quarantine /Applications/BetterDisplay.app 2>/dev/null || true
-          CLI=/usr/local/bin/betterdisplaycli
-          # macOS 无 timeout；用 perl alarm 限每命令时长，避免等待应用就绪时无限挂起。
-          run_limited() { perl -e 'alarm shift; exec @ARGV' "$@"; }
-          # -g -j 不置前/不激活；即便仍被阻塞也有超时兜底，不挂死整个 job。
-          run_limited 30 open -g -j /Applications/BetterDisplay.app || true
-          for i in $(seq 1 30); do
-            if run_limited 10 "$CLI" get -identifiers >/tmp/bd-ready.json 2>/tmp/bd-ready.err; then
-              echo "betterdisplay ready after ${i} probes"
-              break
-            fi
-            sleep 2
-          done
-          cat /tmp/bd-ready.json || true
-          # 创建虚拟 HiDPI 屏；CLI 可能静默失败，后续靠轮询确认。
-          run_limited 60 "$CLI" create -type=VirtualScreen -virtualScreenName=ShotDisplay \
-            -virtualScreenHiDPI=on || true
-          # 轮询确认虚拟屏已出现（最长约 60s），未出现则降级 1x 继续。
-          ready=""
-          for i in $(seq 1 30); do
-            if run_limited 10 "$CLI" get -identifiers 2>/dev/null | grep -q ShotDisplay; then
-              ready=1
-              echo "ShotDisplay visible after ${i} polls"
-              break
-            fi
-            sleep 2
-          done
-          [ -n "$ready" ] || echo "WARN: ShotDisplay 未出现，后续以 1x 截图"
-          # 诊断：完整 identifiers 与系统扩展状态（判断虚拟屏驱动是否真正挂载）。
-          run_limited 10 "$CLI" get -identifiers > /tmp/bd-after.json || true
-          cat /tmp/bd-after.json || true
-          systemextensionsctl list || true
-          sleep 3
-          # set 各命令容错：任一失败不影响后续（最终状态以 swift 探测为准）。
-          run_limited 30 "$CLI" set -name=ShotDisplay -resolution=1920x1080 -hiDPI=on || true
-          run_limited 30 "$CLI" set -name=ShotDisplay -main=on || true
-          sleep 3
-          swift scripts/screenshot_macos_display.swift
+      # 托管 runner 无 HiDPI 可用：原生无 2x 模式；BetterDisplay 虚拟屏驱动（DriverKit）需 GUI
+      # 批准，headless 下 displayID=0/UUID=UNKNOWN 无法挂载，set 全部失败（此前多轮已实测）。
+      # 2x 截图需自托管 runner 或租用真 Mac；此处固定 1x。
       - name: Take screenshots
         run: |
-          # 托管 runner 无 HiDPI 可用：原生无 2x 模式；BetterDisplay 虚拟屏驱动（DriverKit）
-          # 需 GUI 批准，headless 下 displayID=0/UUID=UNKNOWN 无法挂载，set 全部失败。
-          # 2x 截图需本机 Retina Mac 或自托管 runner；此处降级 1x。
           uv run --group screenshot python -m scripts.screenshot \
             --platform macos --output-dir screenshots/macos --scale 1
       - uses: actions/upload-artifact@v4

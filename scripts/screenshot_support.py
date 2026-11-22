@@ -35,6 +35,15 @@ for window in windows {
         exit(0)
     }
 }
+// 未命中时 dump 全部窗口到 stderr，便于在 CI 日志中定位匹配失败原因。
+fputs("no window matched pid=\\(pid) width=\\(targetWidth), all on-screen windows:\\n", stderr)
+for window in windows {
+    let number = window[kCGWindowNumber as String] ?? "?"
+    let owner = window[kCGWindowOwnerPID as String] ?? "?"
+    let layer = window[kCGWindowLayer as String] ?? "?"
+    let bounds = window[kCGWindowBounds as String] ?? "?"
+    fputs("window number=\\(number) pid=\\(owner) layer=\\(layer) bounds=\\(bounds)\\n", stderr)
+}
 exit(1)
 """
 
@@ -95,6 +104,10 @@ def _window_id_macos(window: Misc) -> int:
             capture_output=True,
             text=True,
         )
+    except subprocess.CalledProcessError as error:
+        raise SystemExit(
+            f"Swift 未找到匹配窗口（pid={os.getpid()}，width={width}）：\n{error.stderr}"
+        ) from error
     finally:
         source_path.unlink(missing_ok=True)
     return int(result.stdout.strip().splitlines()[0])
