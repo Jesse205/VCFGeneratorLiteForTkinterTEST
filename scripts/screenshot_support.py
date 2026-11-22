@@ -27,7 +27,9 @@ let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
 let windows = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] ?? []
 for window in windows {
     guard let owner = window[kCGWindowOwnerPID as String] as? Int, owner == Int(pid) else { continue }
-    guard let layer = window[kCGWindowLayer as String] as? Int, layer == 0 else { continue }
+    // Tk 8.6 在 macOS 上的窗口 CG layer 为 19（utility 层），不能用 layer == 0 过滤；
+    // 仅排除菜单栏(24)/状态栏(25)等系统层，靠 pid + 宽度匹配锁定目标窗口。
+    guard let layer = window[kCGWindowLayer as String] as? Int, layer < 24 else { continue }
     guard let boundsDict = window[kCGWindowBounds as String] as? NSDictionary,
           let bounds = CGRect(dictionaryRepresentation: boundsDict as CFDictionary) else { continue }
     if abs(bounds.width - targetWidth) <= 16, let number = window[kCGWindowNumber as String] as? Int {
