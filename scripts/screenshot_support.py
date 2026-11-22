@@ -121,6 +121,8 @@ def grab_window(window: Misc, platform: str) -> Image.Image:
 
 def _grab_macos(window: Misc) -> Image.Image:
     """用 Swift 调 CGWindowListCreateImage 抓当前窗口位图（含装饰、去阴影、圆角外透明）。"""
+    from PIL import Image
+
     swift = require_executable("swift")
     width = window.winfo_width()
     with tempfile.NamedTemporaryFile("w", suffix=".swift", delete=False, encoding="utf-8") as source:
