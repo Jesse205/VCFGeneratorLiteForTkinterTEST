@@ -7,6 +7,7 @@ import ctypes.util
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
 from pathlib import Path
@@ -121,6 +122,7 @@ def _window_id_macos(window: Misc) -> int:
         ) from error
     finally:
         source_path.unlink(missing_ok=True)
+    sys.stderr.write(result.stderr)
     return int(result.stdout.strip().splitlines()[0])
 
 
