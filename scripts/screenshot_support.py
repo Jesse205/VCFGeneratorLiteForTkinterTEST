@@ -5,6 +5,7 @@ from __future__ import annotations
 import ctypes
 import ctypes.util
 import os
+import platform
 import shutil
 import subprocess
 import tempfile
@@ -63,11 +64,13 @@ guard let image = CGWindowListCreateImage(
     exit(2)
 }
 let url = URL(fileURLWithPath: outputPath) as CFURL
-guard let destination = CGImageDestinationCreateWithURL(url, "public.png" as CFString, 1, nil),
-      CGImageDestinationAddImage(destination, image, nil),
-      CGImageDestinationFinalize(destination)
-else {
-    fputs("failed to write PNG to \\(outputPath)\\n", stderr)
+guard let destination = CGImageDestinationCreateWithURL(url, "public.png" as CFString, 1, nil) else {
+    fputs("failed to create image destination for \\(outputPath)\\n", stderr)
+    exit(3)
+}
+CGImageDestinationAddImage(destination, image, nil)
+guard CGImageDestinationFinalize(destination) else {
+    fputs("failed to finalize PNG at \\(outputPath)\\n", stderr)
     exit(3)
 }
 """
@@ -126,8 +129,11 @@ def _grab_macos(window: Misc) -> Image.Image:
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as target:
         target_path = Path(target.name)
     try:
+        # CGWindowListCreateImage 在 macOS 15 SDK 标记 obsoleted；把 deployment target 降到 14
+        # 使其降级为警告（runner 为 Intel，机器架构动态获取）。运行时系统仍保留该 shim。
+        target_triple = f"{platform.machine()}-apple-macos14.0"
         subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
-            [swift, str(source_path), str(os.getpid()), str(width), str(target_path)],
+            [swift, "-target", target_triple, str(source_path), str(os.getpid()), str(width), str(target_path)],
             check=True,
             capture_output=True,
             text=True,
