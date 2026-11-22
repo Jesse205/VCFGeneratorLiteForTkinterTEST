@@ -7,7 +7,6 @@ import ctypes.util
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import time
 from pathlib import Path
@@ -18,14 +17,16 @@ if TYPE_CHECKING:
 
     from PIL import Image
 
-SWIFT_WINDOW_ID = """
+SWIFT_GRAB_WINDOW = """
 import CoreGraphics
 import Foundation
+import ImageIO
 
 let pid = Int32(CommandLine.arguments[1])!
 let targetWidth = Double(CommandLine.arguments[2])!
-let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
-let windows = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] ?? []
+let outputPath = CommandLine.arguments[3]
+let windows = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID)
+    as? [[String: Any]] ?? []
 // 始终 dump 窗口列表到 stderr，便于在 CI 日志中核查匹配过程。
 for window in windows {
     let number = window[kCGWindowNumber as String] ?? "?"
@@ -35,6 +36,7 @@ for window in windows {
     fputs("window number=\\(number) pid=\\(owner) layer=\\(layer) bounds=\\(bounds)\\n", stderr)
 }
 fputs("target pid=\\(pid) width=\\(targetWidth)\\n", stderr)
+var matched: CGWindowID?
 for window in windows {
     guard let owner = window[kCGWindowOwnerPID as String] as? Int, owner == Int(pid) else { continue }
     // Tk 8.6 在 macOS 上的窗口 CG layer 为 19（utility 层），不能用 layer == 0 过滤；
@@ -42,21 +44,32 @@ for window in windows {
     guard let layer = window[kCGWindowLayer as String] as? Int, layer < 24 else { continue }
     guard let boundsDict = window[kCGWindowBounds as String] as? NSDictionary,
           let bounds = CGRect(dictionaryRepresentation: boundsDict as CFDictionary) else { continue }
-    if abs(bounds.width - targetWidth) <= 16, let number = window[kCGWindowNumber as String] as? Int {
-        print(number)
-        exit(0)
+    if abs(bounds.width - targetWidth) <= 16, let number = window[kCGWindowNumber as String] {
+        matched = CGWindowID(number as! Int)
+        break
     }
 }
-// 未命中时 dump 全部窗口到 stderr，便于在 CI 日志中定位匹配失败原因。
-fputs("no window matched pid=\\(pid) width=\\(targetWidth), all on-screen windows:\\n", stderr)
-for window in windows {
-    let number = window[kCGWindowNumber as String] ?? "?"
-    let owner = window[kCGWindowOwnerPID as String] ?? "?"
-    let layer = window[kCGWindowLayer as String] ?? "?"
-    let bounds = window[kCGWindowBounds as String] ?? "?"
-    fputs("window number=\\(number) pid=\\(owner) layer=\\(layer) bounds=\\(bounds)\\n", stderr)
+guard let windowID = matched else {
+    fputs("no window matched pid=\\(pid) width=\\(targetWidth)\\n", stderr)
+    exit(1)
 }
-exit(1)
+// 直接抓窗口位图：抓取自身进程的窗口无需屏幕录制 TCC 权限（screencapture 子进程无权限时
+// 会降级为屏幕区域截屏，弹窗场景会混入背后主窗内容）。optionIncludingWindow 只取单窗，
+// boundsIgnoreFraming 去阴影留白，图像自带圆角外透明像素。API 虽自 10.11 标记废弃，仍可用。
+guard let image = CGWindowListCreateImage(
+    .null, .optionIncludingWindow, windowID, [.boundsIgnoreFraming, .bestResolution]
+) else {
+    fputs("CGWindowListCreateImage returned nil for window \\(windowID)\\n", stderr)
+    exit(2)
+}
+let url = URL(fileURLWithPath: outputPath) as CFURL
+guard let destination = CGImageDestinationCreateWithURL(url, "public.png" as CFString, 1, nil),
+      CGImageDestinationAddImage(destination, image, nil),
+      CGImageDestinationFinalize(destination)
+else {
+    fputs("failed to write PNG to \\(outputPath)\\n", stderr)
+    exit(3)
+}
 """
 
 ZPIXMAP = 2
@@ -103,42 +116,29 @@ def grab_window(window: Misc, platform: str) -> Image.Image:
     return _grab_linux(window)
 
 
-def _window_id_macos(window: Misc) -> int:
+def _grab_macos(window: Misc) -> Image.Image:
+    """用 Swift 调 CGWindowListCreateImage 抓当前窗口位图（含装饰、去阴影、圆角外透明）。"""
     swift = require_executable("swift")
     width = window.winfo_width()
     with tempfile.NamedTemporaryFile("w", suffix=".swift", delete=False, encoding="utf-8") as source:
-        source.write(SWIFT_WINDOW_ID)
+        source.write(SWIFT_GRAB_WINDOW)
         source_path = Path(source.name)
+    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as target:
+        target_path = Path(target.name)
     try:
-        result = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
-            [swift, str(source_path), str(os.getpid()), str(width)],
+        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+            [swift, str(source_path), str(os.getpid()), str(width), str(target_path)],
             check=True,
             capture_output=True,
             text=True,
         )
     except subprocess.CalledProcessError as error:
         raise SystemExit(
-            f"Swift 未找到匹配窗口（pid={os.getpid()}，width={width}）：\n{error.stderr}"
+            f"Swift 抓窗失败（pid={os.getpid()}，width={width}）：\n{error.stderr}"
         ) from error
     finally:
         source_path.unlink(missing_ok=True)
-    sys.stderr.write(result.stderr)
-    return int(result.stdout.strip().splitlines()[0])
-
-
-def _grab_macos(window: Misc) -> Image.Image:
-    from PIL import Image
-
-    # -o 去除窗口阴影；窗口截图自带圆角外的透明像素。
-    screencapture = require_executable("screencapture")
-    window_id = _window_id_macos(window)
-    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as target:
-        target_path = Path(target.name)
     try:
-        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
-            [screencapture, "-o", "-x", "-l", str(window_id), str(target_path)],
-            check=True,
-        )
         with Image.open(target_path) as image:
             return image.convert("RGBA")
     finally:
