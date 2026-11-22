@@ -120,8 +120,11 @@ jobs:
           swift scripts/screenshot_macos_display.swift
       - name: Take screenshots
         run: |
+          # 托管 runner 无 HiDPI 可用：原生无 2x 模式；BetterDisplay 虚拟屏驱动（DriverKit）
+          # 需 GUI 批准，headless 下 displayID=0/UUID=UNKNOWN 无法挂载，set 全部失败。
+          # 2x 截图需本机 Retina Mac 或自托管 runner；此处降级 1x。
           uv run --group screenshot python -m scripts.screenshot \
-            --platform macos --output-dir screenshots/macos
+            --platform macos --output-dir screenshots/macos --scale 1
       - uses: actions/upload-artifact@v4
         with:
           name: screenshots-macos
